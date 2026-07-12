@@ -423,17 +423,23 @@ img {
   background: #f7f7f5;
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
-  gap: 80px;
+  grid-template-areas:
+    "heading image"
+    "body    image";
+  column-gap: 80px;
+  row-gap: 44px;
   align-items: center;
 }
 
-.strengths__text {
+.strengths__body {
+  grid-area: body;
   display: flex;
   flex-direction: column;
   gap: 44px;
 }
 
 .strengths__heading {
+  grid-area: heading;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -482,6 +488,7 @@ img {
 }
 
 .strengths__image {
+  grid-area: image;
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(20,20,18,0.12);
@@ -971,6 +978,7 @@ img {
 
 .subhero__title {
   margin: 0;
+  max-width: 100%;
   font-weight: 700;
   font-family: 'Shippori Mincho', serif;
   color: #ffffff;
@@ -1928,7 +1936,7 @@ img {
   .hero { height: 620px; }
   .hero__title { font-size: 60px; }
 
-  .strengths { grid-template-columns: 1fr; }
+  .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 32px; }
   .strengths__list { width: 100%; height: auto; }
   .strengths__image img { width: 100%; height: auto; object-fit: contain; }
   .feature-photo { height: auto !important; object-fit: contain !important; }
@@ -2017,7 +2025,7 @@ img {
   .subhero__content { padding-left: 20px !important; padding-right: 20px !important; }
 
   .services { padding-top: 72px !important; padding-bottom: 56px !important; }
-  .strengths { padding-top: 72px !important; padding-bottom: 72px !important; gap: 40px !important; }
+  .strengths { padding-top: 72px !important; padding-bottom: 72px !important; gap: 28px !important; }
   .works { padding-top: 72px !important; padding-bottom: 64px !important; }
   .flow { padding-top: 64px !important; padding-bottom: 72px !important; }
   .cta { padding-top: 72px !important; padding-bottom: 72px !important; }
@@ -2031,9 +2039,16 @@ img {
   .grid-6,
   .flow__grid { grid-template-columns: 1fr !important; gap: 32px !important; }
 
-  .strengths { grid-template-columns: 1fr; }
+  /* Services.html: tighten the gap between each service's photo and its
+     text block, and soften the photo's shadow, so the two read as one
+     unified block instead of two disconnected pieces on mobile. */
+  .service-block-grid { gap: 20px !important; }
+  .service-photo-frame { box-shadow: 0 10px 24px rgba(20,20,18,0.08); }
+
+  .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; }
   .strengths__list { width: 100%; height: auto; gap: 24px; }
   .strengths__image img { width: 100%; height: auto; object-fit: contain; }
+  .strengths__image { box-shadow: 0 12px 28px rgba(20,20,18,0.10); }
 
   .flow-step--top, .flow-step--bottom { padding: 24px 0 !important; border-right: none !important; }
   .flow-step--bordered { border-right: none; }
