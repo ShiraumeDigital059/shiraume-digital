@@ -396,16 +396,16 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  margin-top: 10px;
-  font-size: 11px;
+  gap: 8px;
+  margin-top: 40px;
+  font-size: 15px;
   letter-spacing: 0.18em;
   color: #9a9a95;
   animation: introScrollFloat 2.2s ease-in-out infinite;
 }
 
 .intro-screen__arrow {
-  font-size: 13px;
+  font-size: 18px;
 }
 
 /* ---------- Plum blossom brand accent (branch + falling petals) ---------- */
@@ -416,13 +416,13 @@ img {
 .plum-branch {
   position: fixed;
   top: 84px;
-  left: -36px;
-  width: 260px;
-  height: auto;
+  left: -60px;
+  height: 45vh;
+  width: auto;
+  max-width: 460px;
   z-index: 12;
   pointer-events: none;
   user-select: none;
-  opacity: 0.92;
 }
 
 .petal-layer {
@@ -2173,7 +2173,7 @@ img {
   .about-intro-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 24px; }
   .service-block-grid { grid-template-columns: 1fr; grid-template-areas: "heading" "photo" "body"; row-gap: 18px; }
 
-  .plum-branch { width: 220px; top: 96px; left: -26px; }
+  .plum-branch { height: 38vh; top: 92px; left: -46px; max-width: 380px; }
 }
 
 /* Mobile: single-column layouts, hamburger nav, smaller type */
@@ -2325,7 +2325,7 @@ img {
 
   .intro-screen__logo { font-size: 24px; }
   .intro-screen__mark { width: 30px; height: 30px; }
-  .plum-branch { width: 148px; top: 78px; left: -18px; }
+  .plum-branch { height: 30vh; top: 78px; left: -34px; max-width: 260px; }
 
   .works-grid-card__image { height: 160px; }
 
