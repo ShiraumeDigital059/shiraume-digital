@@ -111,3 +111,107 @@
     });
   });
 })();
+
+/**
+ * TOP page only: scroll intro screen.
+ * Shows a centered "Shiraume Digital" wordmark + Scroll cue over the Hero
+ * on first paint; fades out once the visitor scrolls down ~50-80px, then
+ * the Hero fades/scales in underneath it. No-ops on any page without these
+ * elements (About/Services/etc. are untouched).
+ */
+(function () {
+  var intro = document.getElementById('introScreen');
+  var hero = document.getElementById('heroSection');
+  if (!intro || !hero) return;
+
+  var revealed = false;
+  var threshold = 64; // within the requested 50-80px range
+
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    intro.classList.add('intro-screen--hidden');
+    hero.classList.add('is-revealed');
+    window.removeEventListener('scroll', onTrigger);
+    window.removeEventListener('wheel', onTrigger);
+    window.removeEventListener('touchmove', onTrigger);
+    window.setTimeout(function () {
+      intro.style.display = 'none';
+    }, 850);
+  }
+
+  function onTrigger() {
+    if (window.scrollY >= threshold) reveal();
+  }
+
+  window.addEventListener('scroll', onTrigger, { passive: true });
+  window.addEventListener('wheel', onTrigger, { passive: true });
+  window.addEventListener('touchmove', onTrigger, { passive: true });
+})();
+
+/**
+ * TOP page only: falling plum-blossom petals.
+ * Reads 10 petal sprites (5 columns x 2 rows) from
+ * assets/images/plum-petals.png via the .petal background-image declared
+ * in style.css, and picks one at random per petal. Purely decorative
+ * (aria-hidden, pointer-events: none) and stays off entirely when the
+ * visitor has requested reduced motion - only the static branch remains.
+ */
+(function () {
+  var layer = document.getElementById('petalLayer');
+  if (!layer) return;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  var MIN_PETALS = 5;
+  var MAX_PETALS = 8;
+  var SPRITE_COLS = 5;
+  var SPRITE_ROWS = 2;
+  var active = 0;
+
+  function rand(min, max) { return Math.random() * (max - min) + min; }
+
+  function spawnPetal() {
+    if (active >= MAX_PETALS) return;
+    active++;
+
+    var petal = document.createElement('div');
+    petal.className = 'petal';
+
+    var size = rand(12, 24);
+    var col = Math.floor(rand(0, SPRITE_COLS));
+    var row = Math.floor(rand(0, SPRITE_ROWS));
+    var duration = rand(9, 16);
+    var drift = rand(-70, 90);
+    var spin = rand(0, 360) * (Math.random() < 0.5 ? 1 : -1);
+    var opacity = rand(0.6, 1);
+    var startLeft = rand(0, 260);
+
+    petal.style.width = size + 'px';
+    petal.style.height = size + 'px';
+    petal.style.left = startLeft + 'px';
+    petal.style.opacity = opacity;
+    petal.style.backgroundPosition = (col / (SPRITE_COLS - 1) * 100) + '% ' + (row / (SPRITE_ROWS - 1) * 100) + '%';
+    petal.style.setProperty('--petal-drift', drift + 'px');
+    petal.style.setProperty('--petal-spin', spin + 'deg');
+    petal.style.animationDuration = duration + 's';
+
+    petal.addEventListener('animationend', function () {
+      petal.remove();
+      active--;
+    });
+
+    layer.appendChild(petal);
+  }
+
+  // Seed an initial batch so the effect is already present on load.
+  for (var i = 0; i < MIN_PETALS; i++) {
+    window.setTimeout(spawnPetal, i * 500);
+  }
+
+  window.setInterval(function () {
+    var target = MIN_PETALS + Math.floor(Math.random() * (MAX_PETALS - MIN_PETALS + 1));
+    if (active < target) spawnPetal();
+  }, 1400);
+})();
