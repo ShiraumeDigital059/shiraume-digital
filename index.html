@@ -42,8 +42,25 @@
     <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
 
+  <!-- SCROLL INTRO (first-view only; fades out once the visitor scrolls) -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-screen__content">
+      <span class="intro-screen__logo">Shiraume Digital</span>
+      <div class="intro-screen__scroll">
+        <span>Scroll</span>
+        <span class="intro-screen__arrow">↓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLUM BLOSSOM BRAND ACCENT (decorative branch + falling petals) -->
+  <img class="plum-branch" src="assets/images/plum-branch.png" alt="" aria-hidden="true">
+  <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
+
+  <noscript><style>.intro-screen{display:none!important;}.hero{opacity:1!important;transform:none!important;}</style></noscript>
+
   <!-- HERO -->
-  <header class="hero">
+  <header class="hero" id="heroSection">
     <img class="hero__bg" src="assets/images/42337b81732b9a5ac161deac968f36dcd88c0a685dd68c5df317637dfecfe237-0f24652b.png" alt="">
     <div class="hero__overlay"></div>
     <div class="hero__content">
@@ -153,7 +170,8 @@
       <p class="section-heading__desc">これまで手がけたプロジェクトの一部をご紹介します。</p>
     </div>
     <div class="works__track-wrap">
-      <div class="works-track">
+      <!-- Row 1: flows left -->
+      <div class="works-track works-track--row1">
         <div class="work-card">
           <div class="work-card__image">
             <img src="assets/images/meeting-photo.png" alt="コーポレートサイト実績">
@@ -223,6 +241,60 @@
           </div>
           <div class="work-card__category">SNS MARKETING</div>
           <div class="work-card__title">SNS運用マーケティング</div>
+        </div>
+      </div>
+
+      <!-- Row 2: flows right. Frames only — photos to be added later. -->
+      <div class="works-track works-track--row2">
+        <div class="work-card work-card--placeholder">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder" aria-hidden="true">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder" aria-hidden="true">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder" aria-hidden="true">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder" aria-hidden="true">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
+        </div>
+        <div class="work-card work-card--placeholder" aria-hidden="true">
+          <div class="work-card__image work-card__image--placeholder"><span>+</span></div>
+          <div class="work-card__category">COMING SOON</div>
+          <div class="work-card__title">実績追加予定</div>
         </div>
       </div>
     </div>
