@@ -359,6 +359,11 @@ img {
 
 /* ---------- Scroll intro (first view, fades away on scroll) ---------- */
 
+.intro-spacer {
+  width: 100%;
+  pointer-events: none;
+}
+
 .intro-screen {
   position: fixed;
   inset: 0;

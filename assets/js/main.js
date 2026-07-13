@@ -138,12 +138,16 @@
 (function () {
   var intro = document.getElementById('introScreen');
   var hero = document.getElementById('heroSection');
+  var spacer = document.getElementById('introSpacer');
+  var nav = document.getElementById('siteNav');
   var branch = document.querySelector('.plum-branch');
-  if (!intro || !hero) return;
+  if (!intro || !hero || !spacer) return;
 
   // ~4.5x the original 64px threshold - a long, unhurried scroll before
-  // the Hero fully takes over.
+  // the Hero fully takes over. Must match the spacer's inline fallback
+  // height in index.html (kept as a plain no-JS fallback only).
   var INTRO_RANGE = 420;
+  spacer.style.height = INTRO_RANGE + 'px';
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -155,14 +159,36 @@
     return p * p * (3 - 2 * p);
   }
 
-  function lockRevealed() {
+  // Collapses the reserved scroll distance and compensates scrollY by the
+  // exact same amount, so the visible frame doesn't jump: the Hero's own
+  // top was already sitting at the top of the viewport at this instant
+  // (that's the whole point of the spacer), and it stays exactly there
+  // after the spacer disappears. This also means scrolling back up
+  // afterward has no intro-distance left to scroll back into - the intro
+  // and petals are gone for good until the page is reloaded.
+  //
+  // hideBranch is false for the reduced-motion path: that skips the
+  // animated intro immediately, but per the original brief the static
+  // branch should keep showing for reduced-motion visitors (only the
+  // falling-petals motion is the thing being suppressed).
+  function lockRevealed(hideBranch) {
     if (locked) return;
     locked = true;
 
+    var removedHeight = spacer.offsetHeight;
+    var newScrollY = Math.max(0, window.scrollY - removedHeight);
+
+    spacer.style.height = '0px';
+    window.scrollTo(0, newScrollY);
+
     hero.style.opacity = '1';
     hero.style.transform = 'scale(1)';
+    if (nav) {
+      nav.style.opacity = '1';
+      nav.style.pointerEvents = 'auto';
+    }
     intro.style.display = 'none';
-    if (branch) branch.style.display = 'none';
+    if (branch && hideBranch) branch.style.display = 'none';
 
     window.removeEventListener('scroll', onScroll);
     window.dispatchEvent(new Event('shiraume:hero-revealed'));
@@ -173,15 +199,24 @@
     if (locked) return;
 
     var raw = Math.max(0, Math.min(1, window.scrollY / INTRO_RANGE));
-    var progress = reduceMotion ? 1 : ease(raw);
+    var progress = ease(raw);
 
     intro.style.opacity = String(1 - progress);
     intro.style.transform = 'translateY(' + (-progress * 60) + 'px)';
 
+    // Hero fades/scales in as one unified block (background, copy and
+    // buttons all live inside it) rather than switching on abruptly.
     hero.style.opacity = String(progress);
     hero.style.transform = 'scale(' + (1.03 - progress * 0.03) + ')';
 
-    if (raw >= 1) lockRevealed();
+    // The fixed header stays out of the way during the brand moment and
+    // arrives together with the Hero, instead of sitting over the intro.
+    if (nav) {
+      nav.style.opacity = String(progress);
+      nav.style.pointerEvents = progress > 0.9 ? 'auto' : 'none';
+    }
+
+    if (raw >= 1) lockRevealed(true);
   }
 
   function onScroll() {
@@ -190,8 +225,13 @@
     window.requestAnimationFrame(apply);
   }
 
-  apply();
-  window.addEventListener('scroll', onScroll, { passive: true });
+  if (reduceMotion) {
+    // Skip the scroll-driven intro entirely; keep the branch static.
+    lockRevealed(false);
+  } else {
+    apply();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
 })();
 
 /**
