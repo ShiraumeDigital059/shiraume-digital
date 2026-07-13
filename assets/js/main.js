@@ -152,20 +152,14 @@
   var INTRO_DURATION = 2600;
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var html = document.documentElement;
-  var body = document.body;
 
   var started = false;
   var locked = false;
+  var pinning = false;
 
   // Smoothstep: eases in and out rather than a straight linear fade.
   function ease(p) {
     return p * p * (3 - 2 * p);
-  }
-
-  function setScrollLocked(isLocked) {
-    html.style.overflow = isLocked ? 'hidden' : '';
-    body.style.overflow = isLocked ? 'hidden' : '';
   }
 
   function paint(progress) {
@@ -186,6 +180,16 @@
     if (branch) branch.style.opacity = String(1 - progress);
   }
 
+  // While the fixed-speed reveal plays, any scrolling the visitor does is
+  // immediately cancelled (scrollY snapped back to 0) every frame, so the
+  // page visually stays put and the animation is the only thing moving -
+  // regardless of input device (wheel, trackpad, touch, keyboard,
+  // scrollbar drag all simply produce native "scroll" events, which is
+  // the one thing every input method has in common).
+  function onScrollWhilePinned() {
+    if (pinning && window.scrollY !== 0) window.scrollTo(0, 0);
+  }
+
   // hideBranch is false for the reduced-motion path: that skips the
   // animated intro immediately, but per the original brief the static
   // branch should keep showing for reduced-motion visitors (only the
@@ -193,12 +197,13 @@
   function finish(hideBranch) {
     if (locked) return;
     locked = true;
+    pinning = false;
 
     paint(1);
     if (nav) nav.style.pointerEvents = 'auto';
     intro.style.display = 'none';
     if (branch && hideBranch) branch.style.display = 'none';
-    setScrollLocked(false);
+    window.removeEventListener('scroll', onScrollWhilePinned);
 
     // Kicks off the staggered top-to-bottom / left-to-right cascade for
     // the Hero copy and buttons (see .hero-fade / .hero-fade--text in
@@ -226,21 +231,11 @@
     window.requestAnimationFrame(frame);
   }
 
-  function beginOnce(e) {
+  function beginOnce() {
     if (started) return;
     started = true;
-    if (e && e.cancelable) e.preventDefault();
-
-    window.removeEventListener('wheel', beginOnce);
-    window.removeEventListener('touchmove', beginOnce);
-    window.removeEventListener('keydown', onKeydownTrigger);
-
+    if (window.scrollY !== 0) window.scrollTo(0, 0);
     runFixedSpeedReveal();
-  }
-
-  var SCROLL_KEYS = { 32: true, 33: true, 34: true, 35: true, 36: true, 37: true, 38: true, 39: true, 40: true };
-  function onKeydownTrigger(e) {
-    if (SCROLL_KEYS[e.keyCode]) beginOnce(e);
   }
 
   if (reduceMotion) {
@@ -250,10 +245,16 @@
   } else {
     if (nav) nav.style.pointerEvents = 'none';
     paint(0);
-    setScrollLocked(true);
-    window.addEventListener('wheel', beginOnce, { passive: false });
-    window.addEventListener('touchmove', beginOnce, { passive: false });
-    window.addEventListener('keydown', onKeydownTrigger);
+    pinning = true;
+    // The first "scroll" event - from wheel, trackpad, touch, keyboard,
+    // or dragging the scrollbar, it makes no difference - is the one and
+    // only "go" signal. Passive: cheapest possible listener, and pinning
+    // during playback is handled by onScrollWhilePinned above.
+    window.addEventListener('scroll', function onFirstScroll() {
+      window.removeEventListener('scroll', onFirstScroll);
+      beginOnce();
+    }, { passive: true });
+    window.addEventListener('scroll', onScrollWhilePinned, { passive: true });
   }
 })();
 
