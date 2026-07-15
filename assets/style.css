@@ -96,60 +96,19 @@ img {
   100% { transform: translate3d(var(--petal-dx4, 0px), 106vh, 0) rotate(var(--petal-spin, 220deg)); }
 }
 
-/* Hero copy/buttons stay hidden (opacity 0) until .hero carries
-   is-content-revealed - added by main.js at the exact moment the Hero
-   finishes scrolling into place - at which point each piece cascades in
-   top-to-bottom (staggered by the --N delay classes below). Plain
-   .hero-fade elements (the button row) fade + rise; .hero-fade--text
-   elements (eyebrow/title/description) additionally wipe in from left
-   to right via clip-path, matching the "文字は左から右に" reveal. */
+/* Hero copy/buttons are painted directly from scroll progress by main.js
+   (see the [data-reveal] elements below) rather than CSS keyframes - this
+   default hidden state is just the pre-JS/first-paint fallback so nothing
+   flashes fully visible before the first scroll-progress frame runs. */
 
-.hero-fade {
+[data-reveal] {
   opacity: 0;
-  transform: translateY(24px);
 }
 
-.hero-fade--text {
-  clip-path: inset(0 100% 0 0);
-}
-
-.hero.is-content-revealed .hero-fade {
-  animation: fadeInUp 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-
-.hero.is-content-revealed .hero-fade--text {
-  animation: heroTextReveal 1.6s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-
-.hero-fade--1 { animation-delay: 0.1s; }
-.hero-fade--3 { animation-delay: 2.8s; }
-
-/* Buttons: a quick, plain fade with no rise, starting almost immediately
-   with the rest of the Hero content instead of waiting on the title or
-   description to finish - the CTAs need to be usable right away. */
-.hero.is-content-revealed .hero-fade--4 {
-  animation: heroFadeIn 0.5s ease-out forwards;
-  animation-delay: 0.2s;
-}
-
-/* Title: each line unveils from the top, one after the other - slower
-   and more deliberate than the rest of the Hero copy, but tightened so
-   the whole cascade (and the CTA buttons after it) resolves sooner. */
 .hero-title-line {
   display: inline-block;
-  opacity: 0;
-  clip-path: inset(0 0 100% 0);
 }
 
-.hero.is-content-revealed .hero-title-line {
-  animation: heroTitleReveal 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
-}
-
-.hero-title-line--1 { animation-delay: 0.4s; }
-.hero-title-line--2 { animation-delay: 1.6s; }
-
-/* Buttons only appear once every line of copy above has fully settled
-   (eyebrow -> both title lines -> description), then rise in together. */
 .hero__actions { margin-top: 26px; }
 
 .works-track--row1 {
@@ -294,15 +253,22 @@ img {
 
 /* ---------- Hero ---------- */
 
-.hero {
+/* .hero-scrub reserves extra scroll height beyond the Hero's own height;
+   scrolling through that extra room is what drives the pinned photo/copy
+   reveal (see main.js) while .hero itself stays stuck to the viewport top. */
+.hero-scrub {
   position: relative;
+  height: calc(760px + 60vh);
+}
+
+.hero {
+  position: sticky;
+  top: 0;
   height: 760px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  opacity: 0;
-  transform: scale(1.03);
 }
 
 .hero__bg {
@@ -311,14 +277,35 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.62);
-  animation: heroKenBurns 16s ease-in-out infinite alternate;
+  filter: brightness(0.34);
+  transform: translateX(-6%) scale(1.08);
+  will-change: transform, filter;
 }
 
 .hero__overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(10,16,13,0.35) 0%, rgba(10,16,13,0.55) 60%, rgba(10,16,13,0.85) 100%);
+}
+
+/* Large, pale "白梅" watermark behind the copy - the plum-blossom brand
+   motif standing in for the reference site's giant logo treatment, kept
+   quiet and paper-like rather than loud. Fades out early via main.js. */
+.hero__ghost {
+  position: absolute;
+  right: 4%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 0;
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 260px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
 }
 
 .hero__content {
@@ -420,69 +407,10 @@ img {
   opacity: 0.8;
 }
 
-/* ---------- Scroll intro (first view, fades away on scroll) ---------- */
-
-.intro-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.intro-screen__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-}
-
-.intro-screen__mark {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  image-rendering: -webkit-optimize-contrast;
-}
-
-.intro-screen__logo {
-  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
-  font-size: 39px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: #141412;
-}
-
-.intro-screen__tagline {
-  margin-top: -9px;
-  font-size: 12.5px;
-  letter-spacing: 0.14em;
-  color: #9a9a95;
-  white-space: nowrap;
-}
-
-.intro-screen__scroll {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 68px;
-  font-size: 15px;
-  letter-spacing: 0.18em;
-  color: #9a9a95;
-  animation: introScrollFloat 2.2s ease-in-out infinite;
-}
-
-.intro-screen__arrow {
-  font-size: 18px;
-}
-
 /* ---------- Plum blossom brand accent (branch + falling petals) ---------- */
-/* z-index sits above the intro-screen's white backdrop and above the Hero,
-   so the branch is part of the first-view composition immediately (visible
-   through the intro) and simply remains in place once the intro fades. */
+/* Fixed above the Hero; fades out as the visitor scrolls through the pinned
+   reveal (see main.js), same brand-accent role the intro screen used to
+   play before the reveal was rebuilt as a scroll-scrub. */
 
 .plum-branch {
   position: fixed;
@@ -517,12 +445,10 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro-screen__scroll { animation: none !important; }
   .petal-layer { display: none; }
-  .hero-fade,
-  .hero-fade--text,
-  .hero-title-line {
-    animation: none !important;
+  .hero { position: relative; }
+  .hero__bg { transform: none !important; filter: brightness(0.62) !important; }
+  [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
     clip-path: none !important;
@@ -995,6 +921,123 @@ img {
   color: #132a1f;
   transform: translateY(-3px);
   box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+}
+
+/* ---------- CTA (TOP page only): photo-backed, referencing findrealestate's
+   hero-photo-plus-copy treatment for the bottom conversion section, using
+   the same brand-green overlay and pill button as the Hero. New scoped
+   classes so nothing on other pages (which still use .cta/.btn-cta) changes. ---------- */
+
+.cta-home {
+  position: relative;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  padding: 0 56px;
+  overflow: hidden;
+}
+
+.cta-home__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.cta-home__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, rgba(19,42,31,0.92) 0%, rgba(19,42,31,0.76) 34%, rgba(19,42,31,0.24) 66%, rgba(19,42,31,0.06) 100%);
+}
+
+.cta-home__content {
+  position: relative;
+  z-index: 1;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cta-home__eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  color: #9fd1b3;
+  font-weight: 500;
+}
+
+.cta-home__title {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  font-family: 'Shippori Mincho', serif;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.cta-home__desc {
+  margin: 0;
+  font-size: 15px;
+  color: #dce7e0;
+  line-height: 1.9;
+}
+
+/* ---------- Pill buttons (TOP page only: Hero CTAs + photo CTA section,
+   referencing findrealestate.com's capsule-shaped buttons) ---------- */
+
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 30px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.btn-pill__arrow {
+  font-size: 15px;
+  transition: transform 0.3s ease;
+}
+
+.btn-pill:hover .btn-pill__arrow {
+  transform: translateX(3px);
+}
+
+.btn-pill--solid {
+  background: rgba(20,20,18,0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #ffffff;
+}
+
+.btn-pill--solid:hover {
+  color: #ffffff;
+  background: rgba(20,20,18,0.74);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.3);
+}
+
+.btn-pill--ghost {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.4);
+  color: #ffffff;
+}
+
+.btn-pill--ghost:hover {
+  color: #ffffff;
+  background: rgba(255,255,255,0.16);
+  border-color: #ffffff;
+}
+
+.btn-pill--lg {
+  padding: 18px 40px;
+  font-size: 15.5px;
 }
 
 /* ---------- Footer ---------- */
@@ -2230,6 +2273,7 @@ img {
   .works,
   .flow,
   .cta,
+  .cta-home,
   .footer,
   .fade-section,
   .simple-hero { padding-left: 32px !important; padding-right: 32px !important; }
@@ -2238,8 +2282,10 @@ img {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .grid-6 { grid-template-columns: repeat(3, 1fr); }
 
+  .hero-scrub { height: calc(620px + 55vh); }
   .hero { height: 620px; }
   .hero__title { font-size: 60px; }
+  .hero__ghost { font-size: 180px; }
 
   .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 32px; }
   .strengths__list { width: 100%; height: auto; }
@@ -2299,7 +2345,9 @@ img {
   .nav-link::after { display: none; }
 
   /* Hero */
+  .hero-scrub { height: calc(580px + 45vh); }
   .hero { height: 580px; }
+  .hero__ghost { display: none; }
   .hero__content { padding-left: 20px !important; padding-right: 20px !important; gap: 22px; }
   .hero__eyebrow { font-size: 12px; }
   .hero__title { font-size: 46px; line-height: 1.35; }
@@ -2345,6 +2393,9 @@ img {
   .works { padding-top: 72px !important; padding-bottom: 64px !important; }
   .flow { padding-top: 64px !important; padding-bottom: 72px !important; }
   .cta { padding-top: 72px !important; padding-bottom: 72px !important; }
+  .cta-home { min-height: 420px; padding-left: 32px !important; padding-right: 32px !important; padding-top: 64px; padding-bottom: 64px; }
+  .cta-home__title { font-size: 27px; }
+  .cta-home__desc { font-size: 13.5px; }
 
   /* Grids collapse to a single column */
   .services__grid,
@@ -2402,8 +2453,6 @@ img {
   .work-card__image img { height: 190px; }
   .work-card__image--placeholder { height: 190px; }
 
-  .intro-screen__logo { font-size: 24px; }
-  .intro-screen__mark { width: 30px; height: 30px; }
   .plum-branch { height: 30vh; top: 78px; left: -34px; max-width: 260px; }
 
   .works-grid-card__image { height: 160px; }
@@ -2420,12 +2469,15 @@ img {
 }
 
 @media (max-width: 480px) {
+  .hero-scrub { height: calc(540px + 40vh); }
   .hero { height: 540px; }
   .hero__title { font-size: 40px; }
   .subhero__title--46, .subhero__title--42 { font-size: 20px; }
   .simple-hero__title--38, .simple-hero__title--36 { font-size: 26px; }
   .section-heading__title { font-size: 26px; }
   .cta__title { font-size: 23px; }
+  .cta-home__title { font-size: 23px; }
+  .cta-home { min-height: 380px; }
   .block-title--45,
   .block-title--32,
   .block-title--30,
