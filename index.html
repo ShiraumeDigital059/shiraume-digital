@@ -49,54 +49,49 @@
     </div>
   </nav>
 
-  <noscript><style>.hero{position:relative!important;}.stage-intro{display:none!important;}[data-reveal]{opacity:1!important;transform:none!important;clip-path:none!important;}.hero__bg{filter:brightness(0.62)!important;transform:none!important;}.nav__links{display:flex!important;position:static!important;box-shadow:none!important;padding:0!important;}</style></noscript>
+  <noscript><style>.fade-section{opacity:1!important;transform:none!important;}.nav__links{display:flex!important;position:static!important;box-shadow:none!important;padding:0!important;}</style></noscript>
 
-  <!-- HERO (pinned/scrubbed: scrolling through #heroScrub's extra height
-       fades Stage 1 (English minimal intro) out and Stage 2 (the existing
-       Japanese photo hero) in - see main.js) -->
-  <div class="hero-scrub" id="heroScrub">
-    <header class="hero" id="heroSection">
-      <img class="hero__bg" src="assets/images/42337b81732b9a5ac161deac968f36dcd88c0a685dd68c5df317637dfecfe237-0f24652b.png" alt="">
-      <div class="hero__overlay"></div>
+  <!-- STAGE 1: minimal English first view. A plain, full-height (100vh)
+       section - not pinned, no scroll-driven JS math involved - so it
+       always renders correctly regardless of browser/device. Scrolls away
+       naturally as the visitor scrolls down, taking the branch/petals
+       with it. -->
+  <header class="stage-intro" id="stageIntro">
+    <img class="plum-branch" src="assets/images/plum-branch.png" alt="" aria-hidden="true">
+    <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
 
-      <!-- STAGE 1: minimal English first view, fades out early in the scrub.
-           The plum branch + petals live INSIDE Stage 1, painted before the
-           text content so they sit behind the copy (not on top of it), and
-           fade away together with Stage 1 as the visitor scrolls. The Scroll
-           indicator is pinned to the bottom edge of the stage (not part of
-           the centered content stack) so the first view always reads as one
-           full screen with the cue anchored at the very bottom. -->
-      <div class="stage-intro" id="stageIntro">
-        <img class="plum-branch" src="assets/images/plum-branch.png" alt="" aria-hidden="true">
-        <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
-
-        <div class="stage-intro__content">
-          <h1 class="stage-intro__title">
-            <span class="c-ink">Designing </span><span class="c-brand">Growth,</span><br>
-            <span class="c-ink">Building </span><span class="c-brand">Trust.</span>
-          </h1>
-          <p class="stage-intro__subtitle">Web Design &amp; Development</p>
-          <p class="stage-intro__services">ホームページ制作　｜　LP制作　｜　LINE構築<br>SNS運用サポート　｜　SEO　｜　AI導入支援</p>
-          <a href="Contact.html" class="btn-pill btn-pill--dark">お問い合わせはこちら<span class="btn-pill__arrow">→</span></a>
-        </div>
-
-        <div class="stage-intro__scroll">
-          <span>Scroll</span>
-          <span class="stage-intro__scroll-line"></span>
-        </div>
+    <div class="stage-intro__content">
+      <h1 class="stage-intro__title">
+        <span class="c-ink">Designing </span><span class="c-brand">Growth,</span><br>
+        <span class="c-ink">Building </span><span class="c-brand">Trust.</span>
+      </h1>
+      <p class="stage-intro__subtitle">Web Design &amp; Development</p>
+      <p class="stage-intro__services">ホームページ制作　｜　LP制作　｜　LINE構築<br>SNS運用サポート　｜　SEO　｜　AI導入支援</p>
+      <a href="Contact.html" class="btn-pill btn-pill--dark">お問い合わせはこちら<span class="btn-pill__arrow">→</span></a>
+      <div class="stage-intro__scroll">
+        <span>Scroll</span>
+        <span class="stage-intro__scroll-line"></span>
       </div>
+    </div>
+  </header>
 
-      <!-- STAGE 2: existing Japanese hero, fades/cascades in via scroll progress -->
-      <div class="hero__content">
-        <span class="hero__eyebrow" data-reveal="0.22,0.42" data-reveal-mode="wipe">SHIRAUME DIGITAL</span>
-        <h2 class="hero__title"><span class="hero-title-line hero-title-line--1" data-reveal="0.3,0.5" data-reveal-mode="wipe-down">ともに、</span><br><span class="hero-title-line hero-title-line--2" data-reveal="0.42,0.62" data-reveal-mode="wipe-down">未来を、作ろう。</span></h2>
-        <p class="hero__desc" data-reveal="0.55,0.72" data-reveal-mode="wipe">シンプルで洗練されたデザインと、成果につながる<br class="br-desktop">Web制作・デジタル支援を。新世代のデジタルパートナー。</p>
-        <div class="hero__actions hero__actions--single" data-reveal="0.65,0.82" data-reveal-mode="fade">
-          <a href="Services.html" class="btn-pill btn-pill--ghost">サービスを見る<span class="btn-pill__arrow">→</span></a>
-        </div>
+  <!-- STAGE 2: the Japanese photo hero. A normal section directly below
+       Stage 1, revealed with the exact same fade-section pattern used by
+       every other section on the site (see the IntersectionObserver in
+       main.js) instead of a scroll-pinned scrub - guaranteed to appear
+       when scrolled into view, on any browser. -->
+  <section class="hero fade-section" id="heroSection">
+    <img class="hero__bg" src="assets/images/42337b81732b9a5ac161deac968f36dcd88c0a685dd68c5df317637dfecfe237-0f24652b.png" alt="">
+    <div class="hero__overlay"></div>
+    <div class="hero__content">
+      <span class="hero__eyebrow">SHIRAUME DIGITAL</span>
+      <h2 class="hero__title">ともに、<br>未来を、作ろう。</h2>
+      <p class="hero__desc">シンプルで洗練されたデザインと、成果につながる<br class="br-desktop">Web制作・デジタル支援を。新世代のデジタルパートナー。</p>
+      <div class="hero__actions hero__actions--single">
+        <a href="Services.html" class="btn-pill btn-pill--ghost">サービスを見る<span class="btn-pill__arrow">→</span></a>
       </div>
-    </header>
-  </div>
+    </div>
+  </section>
 
   <!-- SERVICES -->
   <section class="services fade-section" id="services">
