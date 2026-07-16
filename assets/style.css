@@ -251,6 +251,102 @@ img {
 .nav__toggle.is-active span:nth-child(2) { opacity: 0; }
 .nav__toggle.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* ---------- Nav, minimal variant (TOP page only) ----------
+   Apple/Linear/Vercel-style hamburger-first nav: brand on the left, just
+   "JP | EN" + the hamburger on the right at every width. The full link
+   list (About/Services/Works/Pricing/Contact) moves into the same
+   dropdown the other pages already use on mobile, reusing that existing
+   toggle behavior instead of a new mechanism, just always-on here. Scoped
+   entirely to .nav--minimal so every other page's header is untouched. */
+
+.nav--minimal .nav__brand {
+  gap: 10px;
+}
+
+.nav--minimal .nav__brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.nav--minimal .nav__brand-name {
+  font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #111111;
+}
+
+.nav--minimal .nav__brand-sub {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: #4D6652;
+}
+
+.nav--minimal .nav__right {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav--minimal .nav__lang {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: #4a4a48;
+}
+
+.nav--minimal .nav__lang-sep {
+  margin: 0 8px;
+  color: #E9E9E9;
+}
+
+.nav--minimal .nav__toggle {
+  display: flex;
+}
+
+.nav--minimal .nav__toggle span {
+  background: #4D6652;
+}
+
+.nav--minimal .nav__links {
+  position: absolute;
+  top: 84px;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-bottom: 1px solid #E9E9E9;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 8px 56px 20px;
+  display: none;
+  box-shadow: 0 16px 32px rgba(20,20,18,0.08);
+}
+
+.nav--minimal .nav__links.nav__links--open {
+  display: flex;
+}
+
+.nav--minimal .nav__links a.nav-link,
+.nav--minimal .nav__links a.btn-nav-cta {
+  width: 100%;
+}
+
+.nav--minimal .nav__links a.nav-link {
+  padding: 14px 0;
+  border-bottom: 1px solid #f2f2f0;
+}
+
+.nav--minimal .nav-link::after {
+  display: none;
+}
+
+.nav--minimal .nav__links a.btn-nav-cta {
+  margin-top: 14px;
+  text-align: center;
+}
+
 /* ---------- Hero ---------- */
 
 /* .hero-scrub reserves extra scroll height beyond the Hero's own height;
@@ -291,21 +387,75 @@ img {
 /* Large, pale "白梅" watermark behind the copy - the plum-blossom brand
    motif standing in for the reference site's giant logo treatment, kept
    quiet and paper-like rather than loud. Fades out early via main.js. */
-.hero__ghost {
+/* ---------- Stage 1: minimal English first view ----------
+   Opaque panel sitting above the photo/Stage-2 content, filling .hero.
+   Fades out early in the scroll-scrub (see main.js) to reveal Stage 2
+   (the existing Japanese photo hero) underneath. */
+
+.stage-intro {
   position: absolute;
-  right: 4%;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 0;
-  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
-  font-size: 260px;
-  line-height: 1;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FAFAFA;
+}
+
+.stage-intro__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 22px;
+  max-width: 640px;
+  padding: 0 32px;
+}
+
+.stage-intro__title {
+  margin: 0;
+  font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+}
+
+.stage-intro__title .c-ink { color: #111111; }
+.stage-intro__title .c-brand { color: #4D6652; }
+
+.stage-intro__subtitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 300;
   letter-spacing: 0.08em;
-  color: #ffffff;
-  opacity: 0;
-  pointer-events: none;
-  user-select: none;
-  white-space: nowrap;
+  color: #111111;
+}
+
+.stage-intro__services {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 2;
+  color: #6a6a66;
+  letter-spacing: 0.01em;
+}
+
+.stage-intro__scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: #8a8a86;
+  animation: introScrollFloat 2.4s ease-in-out infinite;
+}
+
+.stage-intro__scroll-line {
+  width: 1px;
+  height: 30px;
+  background: #4D6652;
 }
 
 .hero__content {
@@ -1038,6 +1188,19 @@ img {
 .btn-pill--lg {
   padding: 18px 40px;
   font-size: 15.5px;
+}
+
+/* Solid black pill for light (Stage 1) backgrounds. */
+.btn-pill--dark {
+  background: #111111;
+  border: none;
+  color: #ffffff;
+}
+
+.btn-pill--dark:hover {
+  color: #ffffff;
+  transform: scale(1.04);
+  box-shadow: 0 14px 30px rgba(17,17,17,0.28);
 }
 
 /* ---------- Footer ---------- */
@@ -2285,7 +2448,7 @@ img {
   .hero-scrub { height: calc(620px + 55vh); }
   .hero { height: 620px; }
   .hero__title { font-size: 60px; }
-  .hero__ghost { font-size: 180px; }
+  .stage-intro__title { font-size: 42px; }
 
   .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 32px; }
   .strengths__list { width: 100%; height: auto; }
@@ -2323,6 +2486,10 @@ img {
   /* Nav → hamburger */
   .nav { padding-left: 20px !important; padding-right: 20px !important; height: 68px; }
   .nav__brand-name { font-size: 15px; }
+  .nav--minimal .nav__brand-name { font-size: 16px; }
+  .nav--minimal .nav__lang { font-size: 12px; }
+  .nav--minimal .nav__right { gap: 14px; }
+  .nav--minimal .nav__links { top: 68px; padding: 8px 20px 20px; }
   .nav__toggle { display: flex; }
   .nav__links {
     position: absolute;
@@ -2347,12 +2514,15 @@ img {
   /* Hero */
   .hero-scrub { height: calc(580px + 45vh); }
   .hero { height: 580px; }
-  .hero__ghost { display: none; }
   .hero__content { padding-left: 20px !important; padding-right: 20px !important; gap: 22px; }
   .hero__eyebrow { font-size: 12px; }
   .hero__title { font-size: 46px; line-height: 1.35; }
   .hero__desc { font-size: 15px; max-width: 100%; }
   .hero__actions { flex-direction: column; width: 100%; gap: 12px; margin-top: 4px; }
+  .stage-intro__content { padding: 0 24px; gap: 18px; }
+  .stage-intro__title { font-size: 32px; }
+  .stage-intro__subtitle { font-size: 13px; }
+  .stage-intro__services { font-size: 12.5px; }
   .hero__actions a { text-align: center; width: 100%; padding-top: 18px; padding-bottom: 18px; }
 
   .subhero--460, .subhero--420 { height: 340px; }
