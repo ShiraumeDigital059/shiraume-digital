@@ -96,15 +96,6 @@ img {
   100% { transform: translate3d(var(--petal-dx4, 0px), 106vh, 0) rotate(var(--petal-spin, 220deg)); }
 }
 
-/* Hero copy/buttons are painted directly from scroll progress by main.js
-   (see the [data-reveal] elements below) rather than CSS keyframes - this
-   default hidden state is just the pre-JS/first-paint fallback so nothing
-   flashes fully visible before the first scroll-progress frame runs. */
-
-[data-reveal] {
-  opacity: 0;
-}
-
 .hero-title-line {
   display: inline-block;
 }
@@ -357,58 +348,20 @@ img {
 
 /* ---------- Hero ---------- */
 
-/* .hero-scrub reserves extra scroll height beyond the Hero's own height;
-   scrolling through that extra room is what drives the pinned photo/copy
-   reveal (see main.js) while .hero itself stays stuck to the viewport top. */
-.hero-scrub {
-  position: relative;
-  height: calc(100vh + 140vh);
-  height: calc(100dvh + 140vh);
-}
+/* ---------- Stage 1: minimal English first view ----------
+   A plain, full-height (100vh) section - not pinned, no scroll-driven JS
+   math. It just sits at the top of the page and scrolls away naturally,
+   which is what makes it reliable on every browser/device: nothing has to
+   "successfully" pin or unpin for the rest of the page to show up. */
 
-.hero {
-  position: sticky;
-  top: 0;
+.stage-intro {
+  position: relative;
   height: 100vh;
   height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-.hero__bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.34);
-  transform: translateX(-6%) scale(1.08);
-  will-change: transform, filter;
-}
-
-.hero__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(10,16,13,0.35) 0%, rgba(10,16,13,0.55) 60%, rgba(10,16,13,0.85) 100%);
-}
-
-/* Large, pale "白梅" watermark behind the copy - the plum-blossom brand
-   motif standing in for the reference site's giant logo treatment, kept
-   quiet and paper-like rather than loud. Fades out early via main.js. */
-/* ---------- Stage 1: minimal English first view ----------
-   Opaque panel sitting above the photo/Stage-2 content, filling .hero.
-   Fades out early in the scroll-scrub (see main.js) to reveal Stage 2
-   (the existing Japanese photo hero) underneath. */
-
-.stage-intro {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: #FAFAFA;
 }
 
@@ -452,16 +405,15 @@ img {
   letter-spacing: 0.01em;
 }
 
+/* In normal flow, directly under the CTA button - not pinned to the
+   viewport edge - so it can never be clipped by a browser's dynamic
+   address-bar chrome; it just sits right below the button. */
 .stage-intro__scroll {
-  position: absolute;
-  left: 50%;
-  bottom: 64px;
-  transform: translateX(-50%);
-  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  margin-top: 4px;
   font-size: 11px;
   letter-spacing: 0.22em;
   color: #8a8a86;
@@ -472,6 +424,36 @@ img {
   width: 1px;
   height: 30px;
   background: #4D6652;
+}
+
+/* ---------- Stage 2: the Japanese photo hero ----------
+   A normal section directly below Stage 1, revealed by the same
+   .fade-section pattern used everywhere else on the site (see main.js) -
+   no scroll-pinning, so it is guaranteed to render when scrolled to. */
+
+.hero {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.62);
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,16,13,0.35) 0%, rgba(10,16,13,0.55) 60%, rgba(10,16,13,0.85) 100%);
 }
 
 .hero__content {
@@ -614,13 +596,7 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   .petal-layer { display: none; }
-  .hero { position: relative; }
-  .hero__bg { transform: none !important; filter: brightness(0.62) !important; }
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    clip-path: none !important;
-  }
+  .stage-intro__scroll { animation: none; }
 }
 
 /* ---------- Section heading ---------- */
@@ -2531,8 +2507,6 @@ img {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .grid-6 { grid-template-columns: repeat(3, 1fr); }
 
-  .hero-scrub { height: calc(100vh + 120vh); height: calc(100dvh + 120vh); }
-  .hero { height: 100vh; height: 100dvh; }
   .hero__title { font-size: 60px; }
   .stage-intro__title { font-size: 42px; }
 
@@ -2598,8 +2572,6 @@ img {
   .nav-link::after { display: none; }
 
   /* Hero */
-  .hero-scrub { height: calc(100vh + 100vh); height: calc(100dvh + 100vh); }
-  .hero { height: 100vh; height: 100dvh; }
   .hero__content { padding-left: 20px !important; padding-right: 20px !important; gap: 22px; }
   .hero__eyebrow { font-size: 12px; }
   .hero__title { font-size: 46px; line-height: 1.35; }
@@ -2726,8 +2698,6 @@ img {
 }
 
 @media (max-width: 480px) {
-  .hero-scrub { height: calc(100vh + 90vh); height: calc(100dvh + 90vh); }
-  .hero { height: 100vh; height: 100dvh; }
   .hero__title { font-size: 40px; }
   .subhero__title--46, .subhero__title--42 { font-size: 20px; }
   .simple-hero__title--38, .simple-hero__title--36 { font-size: 26px; }
