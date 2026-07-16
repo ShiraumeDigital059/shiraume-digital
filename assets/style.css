@@ -143,7 +143,15 @@ img {
   max-width: 1440px;
   margin: 0 auto;
   background: #ffffff;
-  overflow: hidden;
+  /* NOT overflow:hidden - a plain div with overflow:hidden becomes a
+     clipping/scroll container of its own, which silently breaks
+     position:sticky on descendants (the nav bar, the pinned hero) in most
+     browsers, since sticky needs to reference the real viewport scroller.
+     Horizontal overflow is already clipped globally by html/body below
+     (overflow-x:hidden on <html>/<body> gets special viewport propagation
+     that does NOT break sticky/fixed), and .hero and .works__track-wrap
+     each clip their own decorative overflow locally, so nothing needs
+     .page itself to clip. */
 }
 
 /* ---------- Nav ---------- */
@@ -447,7 +455,7 @@ img {
 .stage-intro__scroll {
   position: absolute;
   left: 50%;
-  bottom: 40px;
+  bottom: 64px;
   transform: translateX(-50%);
   z-index: 1;
   display: flex;
@@ -748,18 +756,40 @@ img {
 .strengths__list {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
   width: 597px;
-  height: 341px;
+  height: auto;
 }
 
+/* Each strength is its own bordered, shadowed card (number + icon badge +
+   copy) rather than a bare row - a more considered, premium presentation
+   than a plain icon list. */
 .strength-item {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 26px 28px;
+  border: 1px solid #ececea;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(20,20,18,0.03);
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.strength-item__num {
+  font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #a9b6ac;
+}
+
+.strength-item__row {
   display: flex;
   gap: 20px;
   align-items: flex-start;
-  opacity: 0;
-  transform: translateX(-32px);
-  transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
 }
 
 /* Alternating slide direction per item - left, right, left, right - so the
@@ -782,10 +812,12 @@ img {
 
 .strength-item:hover {
   transform: translateX(6px);
+  box-shadow: 0 16px 34px rgba(20,20,18,0.08);
+  border-color: #d4ddd7;
 }
 
 .strengths.is-visible .strength-item:hover {
-  transition: transform 0.35s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 .strength-item__icon-wrap {
@@ -2655,7 +2687,8 @@ img {
   /* Strengths: heading → photo → detail list, stacked (matches the
      About page sections above for a consistent mobile feel). */
   .strengths { grid-template-columns: 1fr; grid-template-areas: "heading" "image" "body"; row-gap: 24px; }
-  .strengths__list { width: 100%; height: auto; gap: 20px; }
+  .strengths__list { width: 100%; height: auto; gap: 16px; }
+  .strength-item { padding: 20px 20px; }
   .strengths__heading .section-heading__title { font-size: 22px; }
   .strengths__image img { width: 100%; height: auto; object-fit: contain; }
   .strengths__image { box-shadow: 0 12px 28px rgba(20,20,18,0.10); }
