@@ -765,8 +765,19 @@ img {
   align-items: center;
   gap: 18px;
   text-align: center;
-  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease, border-color 0.35s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
+
+/* Cards cascade in one by one (rather than all popping in together) once
+   the whole Services section (a .fade-section) has scrolled into view. */
+.services.is-visible .service-card { opacity: 1; transform: translateY(0); }
+.service-card:nth-child(1) { transition-delay: 0.05s; }
+.service-card:nth-child(2) { transition-delay: 0.16s; }
+.service-card:nth-child(3) { transition-delay: 0.27s; }
+.service-card:nth-child(4) { transition-delay: 0.38s; }
+.service-card:nth-child(5) { transition-delay: 0.49s; }
 
 .service-card:hover {
   transform: translateY(-8px);
