@@ -791,6 +791,63 @@ img {
   color: #767672;
 }
 
+/* Photo-backed variant: the card's own photo fills the whole card behind
+   the icon/copy, with a dark gradient overlay for legibility. Icon
+   inverts to white; the rest of the card layout (centered column) is
+   unchanged from the plain icon cards, so both variants sit in the same
+   grid without looking mismatched in spacing. */
+.service-card--photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  justify-content: flex-end;
+  border-color: transparent;
+}
+
+.service-card__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+
+.service-card--photo:hover .service-card__photo {
+  transform: scale(1.06);
+}
+
+.service-card__overlay {
+  position: absolute;
+  inset: 0;
+  /* Darkens earlier and much more heavily than a subtle vignette would,
+     so white text stays legible no matter how bright the source photo
+     is (light desks, glowing monitors, etc.) - contrast is guaranteed,
+     not just hoped for. */
+  background: linear-gradient(180deg, rgba(15,15,14,0.18) 0%, rgba(15,15,14,0.40) 32%, rgba(15,15,14,0.88) 62%, rgba(15,15,14,0.94) 100%);
+}
+
+.service-card--photo .service-card__icon {
+  position: relative;
+  z-index: 1;
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
+}
+
+.service-card--photo .service-card__title {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.45);
+}
+
+.service-card--photo .service-card__desc {
+  position: relative;
+  z-index: 1;
+  color: rgba(255,255,255,0.86);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+}
+
 /* ---------- Strengths / About ---------- */
 
 .strengths {
@@ -2625,6 +2682,11 @@ img {
   .simple-hero { padding-left: 32px !important; padding-right: 32px !important; }
 
   .services__grid { grid-template-columns: repeat(3, 1fr); }
+  /* At 3 columns the cards are noticeably narrower than the 5-column
+     desktop layout; keeping the same 4:5 ratio here would stretch every
+     card too tall relative to its width, so tablet gets a shorter,
+     better-proportioned ratio instead of just scaling the same shape. */
+  .service-card--photo { aspect-ratio: 3 / 4; }
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .grid-6 { grid-template-columns: repeat(3, 1fr); }
 
@@ -2755,6 +2817,17 @@ img {
   .grid-4,
   .grid-6,
   .flow__grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+
+  /* Single-column mobile: a full-width card at the old 4:5 portrait ratio
+     would be nearly the height of the screen (too tall, looks broken).
+     Square reads as a deliberate, compact card instead. Padding/gap is
+     also tightened so icon + title + 2-line description never crowd or
+     clip against the shorter card. */
+  .service-card--photo {
+    aspect-ratio: 1 / 1;
+    padding: 24px 22px;
+    gap: 12px;
+  }
 
   /* Services.html: stack each block as heading → photo → body, with
      a tightened gap and a softer shadow so the photo and text read as
