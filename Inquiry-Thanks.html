@@ -26,20 +26,27 @@
 
 <div class="page">
 
-  <!-- NAV -->
-  <nav class="nav">
+    <!-- NAV (minimal: brand left, JP|EN + hamburger right; full links live in
+       the hamburger dropdown, reusing the same toggle used on other pages) -->
+  <nav class="nav nav--minimal" id="siteNav">
     <a href="index.html" class="nav__brand">
       <img class="nav__logo" src="assets/images/shiraume-symbol-mark.png" alt="Shiraume Digital">
-      <span class="nav__brand-name">Shiraume Digital</span>
+      <span class="nav__brand-text">
+        <span class="nav__brand-name">Shiraume</span>
+        <span class="nav__brand-sub">DIGITAL</span>
+      </span>
     </a>
+    <div class="nav__right">
+      <span class="nav__lang">JP<span class="nav__lang-sep">|</span>EN</span>
+      <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
     <div class="nav__links">
       <a href="About.html" class="nav-link">About</a>
       <a href="Services.html" class="nav-link">Services</a>
       <a href="Works.html" class="nav-link">Works</a>
       <a href="Pricing.html" class="nav-link">Pricing</a>
-      <a href="Contact.html" style="padding:11px 26px;background:#141412;color:#ffffff;border-radius:2px;font-size:14px;font-weight:500;">お問い合わせ</a>
+      <a href="Contact.html" class="btn-nav-cta">お問い合わせ</a>
     </div>
-    <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
   </nav>
 
   <!-- THANKS -->
@@ -51,7 +58,7 @@
     <a href="index.html" class="btn-more" style="margin-top:16px;"><span>トップページへ戻る</span><span class="btn-more__arrow">→</span></a>
   </section>
 
-  <!-- FOOTER -->
+    <!-- FOOTER -->
   <footer class="footer">
     <div class="footer__top">
       <div class="footer__brand">
@@ -70,10 +77,20 @@
           <a href="Pricing.html">Pricing</a>
         </div>
         <div class="footer__col">
+          <span class="footer__col-title">Resources</span>
+          <a href="index.html#flow">Flow</a>
+          <a href="index.html#blog">Blog</a>
+          <a href="index.html#faq">FAQ</a>
+        </div>
+        <div class="footer__col">
           <span class="footer__col-title">Contact</span>
           <div class="footer__contact-row">
             <img src="assets/images/mail-envelope.png" alt="">
-            <span style="font-size:12.5px;color:#8a8a86;">contact.shiraumedigital@gmail.com</span>
+            <a href="mailto:contact.shiraumedigital@gmail.com">contact.shiraumedigital@gmail.com</a>
+          </div>
+          <div class="footer__contact-row">
+            <img src="assets/images/phone-call.png" alt="">
+            <span>+61 433-527-825(Austlalia)</span>
           </div>
           <div class="footer__socials">
             <a href="https://www.instagram.com/shiraume.digital_?igsh=eXQ5eXh2MjRrM2pj" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon"><img src="assets/images/instagram-icon.png" alt=""></a>
@@ -84,6 +101,7 @@
     </div>
     <div class="footer__bottom">
       <span class="footer__copyright">© 2026 Shiraume Digital. All rights reserved.</span>
+      <a href="privacy.html" style="font-size:11.5px;color:#a3a39f;">Privacy Policy</a>
     </div>
   </footer>
 
