@@ -113,124 +113,58 @@
 })();
 
 /**
- * TOP page only: scroll-scrubbed Hero reveal (reference: findrealestate.com's
- * pinned hero where a photo and wordmark transform continuously as you
- * scroll, rather than a one-shot timed intro).
- *
- * .hero sits inside a taller wrapper (#heroScrub) and is pinned to the top
- * of the viewport via position:sticky (CSS) for the extra height of that
- * wrapper. Progress (0-1) is derived purely from how far the visitor has
- * scrolled into that pinned range - a plain function of scroll position,
- * so it can never get "stuck" partway regardless of how fast, slow, or
- * far the visitor scrolls, and it responds identically to every input
- * device since it just reads native scroll position each frame.
- *
- * Each Hero element carries data-reveal="start,end" (a sub-range of the
- * 0-1 progress) and data-reveal-mode ("wipe" / "wipe-down" / "fade"),
- * painted directly from scroll position - no CSS keyframe animations or
- * timers involved. The background photo enters from the left and
- * brightens; a large, pale "白梅" watermark (the plum-blossom brand
- * motif) sits behind the copy and fades away early, giving the quiet,
- * paper-like arrival the brief asked for instead of literally copying
- * the reference site's giant logo treatment.
- *
- * Dispatches "shiraume:hero-revealed" once progress first reaches ~1,
- * which the petal effect below listens for to stop spawning for good
- * (scrolling back up afterward does not bring it back - only a reload
- * does). No-ops on any page without these elements.
+ * TOP page only: Stage 1 (#stageIntro, the minimal English intro) and
+ * Stage 2 (#heroSection, the Japanese photo hero) are both plain, static
+ * full-height sections now - Stage 2 carries .fade-section like every
+ * other section on the page, so the generic IntersectionObserver at the
+ * top of this file reveals it the same proven way. There is deliberately
+ * no bespoke scroll-pinning/scrub JS here anymore: an earlier scroll-
+ * pinned version was fragile across browsers (Stage 2 could fail to
+ * appear at all), so this was rebuilt on the same simple, reliable
+ * mechanism already used elsewhere on the site.
+ */
+
+/**
+ * TOP page only: a subtle scroll-parallax on Stage 2's photo.
+ * Deliberately NOT a scroll-pin/scrub setup (see note above on why that
+ * was removed) - just a plain scroll listener nudging a translateY offset
+ * on `.hero__bg-wrap`, throttled to one requestAnimationFrame per scroll
+ * event. The wrapper is oversized (see CSS) so this small movement never
+ * reveals an edge. Skipped entirely under reduced-motion.
  */
 (function () {
-  var scrub = document.getElementById('heroScrub');
-  var hero = document.getElementById('heroSection');
-  var branch = document.querySelector('.plum-branch');
-  var bg = hero ? hero.querySelector('.hero__bg') : null;
-  var ghost = hero ? hero.querySelector('.hero__ghost') : null;
-  if (!scrub || !hero) return;
+  var wrap = document.querySelector('.hero .hero__bg-wrap');
+  var section = document.querySelector('.hero');
+  if (!wrap || !section) return;
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fadeEls = Array.prototype.slice.call(hero.querySelectorAll('[data-reveal]'));
-  var settled = false;
+  if (reduceMotion) return;
+
   var ticking = false;
 
-  // Smoothstep: eases in and out rather than a straight linear fade.
-  function ease(p) {
-    return p * p * (3 - 2 * p);
-  }
-
-  // Maps p into the 0-1 sub-range [a,b], clamped at both ends.
-  function seg(p, a, b) {
-    if (p <= a) return 0;
-    if (p >= b) return 1;
-    return (p - a) / (b - a);
-  }
-
-  function paint(p) {
-    var e = ease(p);
-
-    // Photo: enters from the left with a slight scale-down and starts
-    // noticeably dimmer, settling into its normal brightness and position.
-    if (bg) {
-      bg.style.transform = 'translateX(' + ((1 - e) * -6) + '%) scale(' + (1.08 - e * 0.08) + ')';
-      bg.style.filter = 'brightness(' + (0.34 + e * 0.28) + ')';
-    }
-
-    // The pale "白梅" watermark fades out early, like it's dissolving
-    // into the photo as the real copy takes over.
-    if (ghost) {
-      var g = 1 - seg(e, 0, 0.4);
-      ghost.style.opacity = String(g * 0.16);
-      ghost.style.transform = 'scale(' + (1 + (1 - g) * 0.05) + ')';
-    }
-
-    // Branch fades out as the Hero settles in, same as before.
-    if (branch) branch.style.opacity = String(1 - seg(e, 0.15, 0.55));
-
-    fadeEls.forEach(function (el) {
-      var range = (el.getAttribute('data-reveal') || '0,1').split(',').map(Number);
-      var v = ease(seg(e, range[0], range[1]));
-      el.style.opacity = String(v);
-      var mode = el.getAttribute('data-reveal-mode');
-      if (mode === 'wipe') {
-        el.style.clipPath = 'inset(0 ' + (100 - v * 100) + '% 0 0)';
-        el.style.transform = 'translateY(' + ((1 - v) * 16) + 'px)';
-      } else if (mode === 'wipe-down') {
-        el.style.clipPath = 'inset(0 0 ' + (100 - v * 100) + '% 0)';
-        el.style.transform = 'translateY(' + ((1 - v) * 10) + 'px)';
-      }
-      // mode === 'fade' (buttons): opacity only, no motion, no clip.
-    });
-
-    if (p >= 0.98 && !settled) {
-      settled = true;
-      window.dispatchEvent(new Event('shiraume:hero-revealed'));
-    }
-  }
-
   function update() {
-    var range = scrub.offsetHeight - hero.offsetHeight;
-    var scrolled = -scrub.getBoundingClientRect().top;
-    var p = range > 0 ? Math.min(1, Math.max(0, scrolled / range)) : 1;
-    paint(p);
+    var rect = section.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    // 0 when the section's top has just reached the bottom of the
+    // viewport, 1 when its bottom has just reached the top - i.e. how far
+    // through its own scroll journey the section currently is.
+    var progress = (vh - rect.top) / (vh + rect.height);
+    progress = Math.max(0, Math.min(1, progress));
+    var offset = (progress - 0.5) * 50; // a restrained ±25px drift, not a full parallax scene
+    wrap.style.transform = 'translateY(' + offset.toFixed(1) + 'px)';
+    ticking = false;
   }
 
-  if (reduceMotion) {
-    // Skip the scrub entirely; show the settled state immediately, but
-    // keep the branch static per the original brief.
-    paint(1);
-    if (branch) branch.style.opacity = '1';
-    window.dispatchEvent(new Event('shiraume:hero-revealed'));
-  } else {
-    window.addEventListener('scroll', function () {
-      if (ticking) return;
+  function onScroll() {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
       ticking = true;
-      window.requestAnimationFrame(function () {
-        update();
-        ticking = false;
-      });
-    }, { passive: true });
-    window.addEventListener('resize', update);
-    update();
+    }
   }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
 })();
 
 /**
@@ -240,11 +174,12 @@
  * into its own transparent PNG at assets/images/petals/petal-01.png
  * through petal-10.png. One is picked at random per falling petal, and
  * they drift near the top-left branch with a gentle side-to-side sway.
- * Petals only spawn while the intro is still showing; once the Hero has
- * fully scrolled into view ("shiraume:hero-revealed") spawning stops for
- * good and any still-falling petals fade out. Purely decorative
- * (aria-hidden, pointer-events: none) and never starts at all when the
- * visitor has requested reduced motion - only the static branch remains.
+ * Petals only spawn while Stage 1 (#stageIntro) is still on screen; a
+ * small IntersectionObserver below stops spawning for good the moment
+ * #stageIntro scrolls fully out of view (scrolling back up afterward does
+ * not bring it back - only a reload does), and any still-falling petals
+ * fade out. Purely decorative (aria-hidden, pointer-events: none) and
+ * never starts at all when the visitor has requested reduced motion.
  */
 (function () {
   var layer = document.getElementById('petalLayer');
@@ -328,5 +263,17 @@
     if (active < target) spawnPetal();
   }, 900);
 
-  window.addEventListener('shiraume:hero-revealed', stopPetals);
+  // Stop spawning once Stage 1 has fully scrolled out of view.
+  var stageIntro = document.getElementById('stageIntro');
+  if (stageIntro && window.IntersectionObserver) {
+    var stageObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) {
+          stopPetals();
+          stageObserver.disconnect();
+        }
+      });
+    }, { threshold: 0 });
+    stageObserver.observe(stageIntro);
+  }
 })();

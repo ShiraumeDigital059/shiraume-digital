@@ -109,6 +109,19 @@ img {
 
 .hero__actions { margin-top: 26px; }
 
+/* will-change + backface-visibility force these onto their own GPU layer
+   for the whole animation instead of only while actively compositing -
+   without it, some browsers (notably Safari/iOS) intermittently drop the
+   layer mid-scroll and repaint a blank/half-rendered frame, which reads
+   as a photo "disappearing" for an instant during the loop. */
+.works-track--row1,
+.works-track--row2 {
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
 .works-track--row1 {
   animation: worksMarquee 32s linear infinite;
 }
@@ -337,13 +350,41 @@ img {
   align-items: flex-start;
   gap: 0;
   padding: 8px 56px 20px;
-  display: none;
+  display: flex;
   box-shadow: 0 16px 32px rgba(20,20,18,0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1), transform 0.28s cubic-bezier(0.16,1,0.3,1), visibility 0s linear 0.28s;
 }
 
 .nav--minimal .nav__links.nav__links--open {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.28s cubic-bezier(0.16,1,0.3,1), transform 0.28s cubic-bezier(0.16,1,0.3,1);
 }
+
+/* Each item eases in with a slight stagger right after the dropdown
+   itself starts opening, instead of the whole list just popping in. */
+.nav--minimal .nav__links a {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.nav--minimal .nav__links.nav__links--open a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav--minimal .nav__links.nav__links--open a:nth-child(1) { transition-delay: 0.03s; }
+.nav--minimal .nav__links.nav__links--open a:nth-child(2) { transition-delay: 0.07s; }
+.nav--minimal .nav__links.nav__links--open a:nth-child(3) { transition-delay: 0.11s; }
+.nav--minimal .nav__links.nav__links--open a:nth-child(4) { transition-delay: 0.15s; }
+.nav--minimal .nav__links.nav__links--open a:nth-child(5) { transition-delay: 0.19s; }
 
 .nav--minimal .nav__links a.nav-link,
 .nav--minimal .nav__links a.btn-nav-cta {
@@ -375,10 +416,13 @@ img {
 .stage-intro {
   position: relative;
   /* .page already reserves 84px of padding-top for the fixed nav, so
-     subtract that here - nav (84px, fixed) + this = exactly one full
-     screen, matching "first view = one screen" on any device. */
-  height: calc(100vh - 84px);
-  height: calc(100dvh - 84px);
+     subtract that here for the full remaining screen height, then take
+     ~78% of it - the last ~22% is left deliberately short so Stage 2's
+     photo already peeks in from the bottom of the very first view. This
+     is what makes the hand-off feel like a continuation of the same
+     scene rather than a hard cut into a new page. */
+  height: calc((100vh - 84px) * 0.78);
+  height: calc((100dvh - 84px) * 0.78);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -477,6 +521,18 @@ img {
   overflow: hidden;
 }
 
+/* Oversized (extends past the section's own top/bottom edges) and clipped
+   by .hero's overflow:hidden, so the JS scroll-parallax below can nudge
+   this wrapper up/down a little without ever revealing a gap at the
+   section's edges. */
+.hero__bg-wrap {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  bottom: -40px;
+}
+
 .hero__bg {
   position: absolute;
   inset: 0;
@@ -484,6 +540,21 @@ img {
   height: 100%;
   object-fit: cover;
   filter: brightness(0.62);
+}
+
+/* Fades the very top of the photo back into Stage 1's off-white
+   background, so the seam between the two sections blends rather than
+   cuts - this is what actually sells the "one continuous scene" feel
+   together with the height overlap above. */
+.hero__top-fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26vh;
+  background: linear-gradient(180deg, #FAFAFA 0%, rgba(250,250,250,0.7) 35%, rgba(250,250,250,0) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .hero__overlay {
@@ -581,11 +652,13 @@ img {
    whole hand-off from Stage 1 reads as one deliberate, cinematic beat
    instead of a static backdrop the text just appears in front of. */
 .hero__bg {
+  opacity: 0;
   transform: scale(1.1);
-  transition: transform 1.8s cubic-bezier(0.16,1,0.3,1);
+  transition: transform 1.8s cubic-bezier(0.16,1,0.3,1), opacity 0.7s cubic-bezier(0.16,1,0.3,1);
 }
 
 .hero.is-visible .hero__bg {
+  opacity: 1;
   transform: scale(1);
 }
 
@@ -743,27 +816,27 @@ img {
 /* ---------- Services ---------- */
 
 .services {
-  padding: 140px 56px 120px;
+  padding: 104px 56px 92px;
 }
 
 .services__heading {
-  margin-bottom: 72px;
+  margin-bottom: 52px;
 }
 
 .services__grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  gap: 16px;
 }
 
 .service-card {
   border: 1px solid #ececea;
   border-radius: 4px;
-  padding: 36px 22px;
+  padding: 26px 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: 13px;
   text-align: center;
   opacity: 0;
   transform: translateY(30px);
@@ -786,19 +859,19 @@ img {
 }
 
 .service-card__icon {
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
 }
 
 .service-card__title {
-  font-size: 15px;
+  font-size: 13.5px;
   font-weight: 600;
 }
 
 .service-card__desc {
-  font-size: 12.5px;
-  line-height: 1.7;
+  font-size: 11.5px;
+  line-height: 1.6;
   color: #767672;
 }
 
@@ -810,7 +883,7 @@ img {
 .service-card--photo {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 / 4.5;
   justify-content: flex-end;
   border-color: transparent;
 }
@@ -862,25 +935,25 @@ img {
 /* ---------- Strengths / About ---------- */
 
 .strengths {
-  padding: 120px 56px;
+  padding: 92px 56px;
   background: #f7f7f5;
   display: flex;
   flex-direction: column;
-  gap: 44px;
+  gap: 32px;
 }
 
 .strengths__body {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 44px;
+  gap: 32px;
 }
 
 .strengths__heading {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .strengths__heading .section-heading__title {
@@ -890,7 +963,7 @@ img {
 .strengths__list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 14px;
   width: 100%;
   height: auto;
 }
@@ -901,7 +974,7 @@ img {
 .strength-item {
   display: flex;
   align-items: stretch;
-  min-height: 248px;
+  min-height: 200px;
   padding: 0;
   border: 1px solid #ececea;
   border-radius: 10px;
@@ -916,11 +989,11 @@ img {
 .strength-item__content {
   flex: 1 1 48%;
   min-width: 0;
-  padding: 32px 34px;
+  padding: 22px 26px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .strength-item__photo {
@@ -965,7 +1038,7 @@ img {
 
 .strength-item__num {
   font-family: 'Cormorant Garamond', 'Shippori Mincho', serif;
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.18em;
   color: #a9b6ac;
@@ -1006,8 +1079,8 @@ img {
 }
 
 .strength-item__icon-wrap {
-  width: 56px;
-  height: 56px;
+  width: 46px;
+  height: 46px;
   flex-shrink: 0;
   border-radius: 50%;
   display: flex;
@@ -1026,21 +1099,21 @@ img {
 }
 
 .strength-item__icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
 .strength-item__title {
-  font-size: 16px;
+  font-size: 14.5px;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .strength-item__desc {
-  font-size: 13.5px;
-  line-height: 1.8;
+  font-size: 12.5px;
+  line-height: 1.65;
   color: #767672;
 }
 
@@ -2793,7 +2866,8 @@ img {
   /* Nav → hamburger */
   .nav { padding-left: 20px !important; padding-right: 20px !important; height: 68px; }
   .page { padding-top: 68px; }
-  .stage-intro { height: calc(100vh - 68px); height: calc(100dvh - 68px); }
+  .stage-intro { height: calc((100vh - 68px) * 0.82); height: calc((100dvh - 68px) * 0.82); }
+  .hero__top-fade { height: 16vh; }
   .nav__brand-name { font-size: 15px; }
   .nav--minimal .nav__brand-name { font-size: 16px; }
   .nav--minimal .nav__lang { font-size: 12px; }
@@ -2867,8 +2941,8 @@ img {
   .hero__content,
   .subhero__content { padding-left: 20px !important; padding-right: 20px !important; }
 
-  .services { padding-top: 72px !important; padding-bottom: 56px !important; }
-  .strengths { padding-top: 72px !important; padding-bottom: 72px !important; gap: 28px !important; }
+  .services { padding-top: 52px !important; padding-bottom: 44px !important; }
+  .strengths { padding-top: 56px !important; padding-bottom: 56px !important; gap: 20px !important; }
   .works { padding-top: 72px !important; padding-bottom: 64px !important; }
   .flow { padding-top: 64px !important; padding-bottom: 72px !important; }
   .cta { padding-top: 72px !important; padding-bottom: 72px !important; }
@@ -2920,7 +2994,7 @@ img {
 
   /* Strengths: heading → detail list, stacked (matches the About page
      sections above for a consistent mobile feel). */
-  .strengths { row-gap: 24px; }
+  .strengths { row-gap: 18px; }
   .strengths__list { width: 100%; height: auto; gap: 16px; }
   .strengths__heading .section-heading__title { font-size: 22px; }
 
@@ -2929,7 +3003,7 @@ img {
      to a stacked layout and the seam gradient (built for a horizontal
      blend) is swapped for a vertical one to match. */
   .strength-item { flex-direction: column; min-height: 0; }
-  .strength-item__content { padding: 22px 20px; }
+  .strength-item__content { padding: 18px 18px; gap: 8px; }
   .strength-item__photo { flex: 0 0 200px; min-width: 0; }
   .strength-item__photo::before {
     background: linear-gradient(180deg, rgba(255,255,255,0) 78%, #ffffff 100%);
