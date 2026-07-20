@@ -168,6 +168,106 @@
 })();
 
 /**
+ * Works marquee (index.html / Works.html): auto-scroll + manual drag.
+ * The original pure-CSS keyframe marquee could not be moved by hand, so
+ * each `.works-track` is now driven by JS: the same continuous drift
+ * (one full loop ≈ 32s, row2 flowing the opposite way, matching the old
+ * CSS timing) plus pointer-based dragging on mouse and touch. The CSS
+ * `animation` rules are kept in the stylesheet as a no-JS fallback and
+ * are disabled here at runtime. The track's content is duplicated in the
+ * HTML, so wrapping the offset within one half keeps the loop seamless
+ * in both directions. Auto-drift pauses on hover / while dragging
+ * (preserving the old hover-pause behavior) and is skipped entirely
+ * under reduced-motion - manual dragging still works there.
+ */
+(function () {
+  var tracks = document.querySelectorAll('.works-track');
+  if (!tracks.length) return;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LOOP_SECONDS = 32; // matches the old CSS animation duration
+
+  Array.prototype.forEach.call(tracks, function (track) {
+    var reverse = track.classList.contains('works-track--row2');
+    var offset = 0;
+    var half = 0;
+    var speed = 0; // px per second
+    var hovered = false;
+    var dragging = false;
+    var lastX = 0;
+    var lastT = null;
+
+    // Take over from the CSS keyframe animation.
+    track.style.animation = 'none';
+    track.classList.add('works-track--js');
+
+    function measure() {
+      half = track.scrollWidth / 2;
+      speed = half > 0 ? half / LOOP_SECONDS : 0;
+    }
+    measure();
+    window.addEventListener('load', measure);
+    window.addEventListener('resize', measure);
+
+    function wrapOffset() {
+      if (!half) return;
+      offset = offset % half;
+      if (offset > 0) offset -= half;
+    }
+
+    function apply() {
+      track.style.transform = 'translateX(' + offset.toFixed(2) + 'px)';
+    }
+
+    function tick(t) {
+      if (lastT === null) lastT = t;
+      var dt = Math.min((t - lastT) / 1000, 0.1); // clamp after tab switches
+      lastT = t;
+      if (!dragging && !hovered && !reduceMotion && speed) {
+        offset += (reverse ? 1 : -1) * speed * dt;
+        wrapOffset();
+        apply();
+      }
+      window.requestAnimationFrame(tick);
+    }
+    window.requestAnimationFrame(tick);
+
+    // Preserve the old "pause while hovering" behavior (mouse only).
+    track.addEventListener('mouseenter', function () { hovered = true; });
+    track.addEventListener('mouseleave', function () { hovered = false; });
+
+    // Manual drag (mouse + touch, via pointer events).
+    track.addEventListener('pointerdown', function (e) {
+      dragging = true;
+      lastX = e.clientX;
+      track.classList.add('is-dragging');
+      if (track.setPointerCapture) {
+        try { track.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+      }
+    });
+
+    track.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      offset += e.clientX - lastX;
+      lastX = e.clientX;
+      wrapOffset();
+      apply();
+    });
+
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      track.classList.remove('is-dragging');
+    }
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+
+    // Images would otherwise start a native drag and swallow the gesture.
+    track.addEventListener('dragstart', function (e) { e.preventDefault(); });
+  });
+})();
+
+/**
  * TOP page only: falling plum-blossom petals, intro-only.
  * Each of the 10 source petals (numbered (1)-(10) in the reference sheet)
  * has been individually cut out - background removed, no number labels -
