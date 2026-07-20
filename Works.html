@@ -37,7 +37,9 @@
       </span>
     </a>
     <div class="nav__right">
-      <span class="nav__lang">JP<span class="nav__lang-sep">|</span>EN</span>
+      <span class="nav__lang">
+        <button type="button" class="nav__lang-btn is-active" data-lang="ja" aria-label="日本語">JP</button><span class="nav__lang-sep">|</span><button type="button" class="nav__lang-btn" data-lang="en" aria-label="English">EN</button>
+      </span>
       <button class="nav__toggle" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
     <div class="nav__links">
@@ -169,6 +171,25 @@
         </div>
       </div>
 
+      <!-- 06 実績: 居酒屋M様(守秘のため店名は伏せる) -->
+      <div class="works-grid-card hover-lift-work">
+        <div class="works-grid-card__image">
+          <img src="assets/images/works-izakaya-m.png" alt="居酒屋M様 公式Webサイト制作">
+        </div>
+        <div class="works-grid-card__body">
+          <span class="works-grid-card__category">CLIENT WORK 01</span>
+          <h3 class="works-grid-card__title">居酒屋M様 公式Webサイト</h3>
+          <p class="works-grid-card__desc">初めてでも入りやすい店の空気感を、和の温かみあるデザインで表現。公開後3ヶ月で新規予約数 約150%UP、サイトアクセス数 約200%UPを達成しました。</p>
+          <div class="works-grid-card__tags">
+            <span class="tag-pill tag-pill--sm">飲食店サイト</span>
+            <span class="tag-pill tag-pill--sm">予約導線</span>
+            <span class="tag-pill tag-pill--sm">スマホ最適化</span>
+          </div>
+          <p class="works-grid-card__note">※守秘のため店名は伏せています。</p>
+          <a href="Contact.html" class="works-grid-card__link">お問い合わせ →</a>
+        </div>
+      </div>
+
       <!-- 追加予定 -->
       <div class="works-grid-card--placeholder">
         <span>+</span>
@@ -242,6 +263,7 @@
 
 </div>
 
+<script src="assets/js/i18n.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
