@@ -147,6 +147,7 @@
     'ホームページ制作・Webデザイン・LINE構築・SNS運用・AI導入支援・外国人向け日本語勉強サイト運用・保守運用': 'Website creation, web design, LINE setup, SNS management, AI consulting, a Japanese-learning site for international users, and maintenance',
     '所在地': 'Location',
     '後日追加': 'Coming soon',
+    '準備中': 'Coming soon',
     'メール': 'Email',
     '電話番号': 'Phone',
     'ホームページ制作からWeb集客、AI活用までなんでも': 'From websites to web marketing and AI adoption —',
