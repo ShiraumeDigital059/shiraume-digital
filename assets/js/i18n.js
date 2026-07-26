@@ -82,11 +82,15 @@
     '公開後も、ずっと安心を。': 'Peace of mind, long after launch.',
     'Instagramで、認知と集客を広げる。': 'Grow reach and customers on Instagram.',
 
-    /* pricing brief (v19) */
+    /* pricing brief (v19 / v20) */
     '料金の目安': 'Pricing at a Glance',
+    'ホームページ制作の基本プランです。': 'These are our core website-build plans.',
+    'ご要望に合わせて、必要な機能だけを追加していただけます。': 'Add only the features you actually need.',
+    'ホームページ制作プラン': 'Website Build Plans',
     '人気': 'Popular',
-    'LINE構築・SNS運用・AI導入などのオプションは¥1,100〜。': 'Options such as LINE setup, SNS management and AI start from ¥1,100.',
-    '内容に応じて、お見積りを無料でご提案します。': "We'll prepare a free, tailored quote for you.",
+    'LINE公式アカウント構築・SNS運用・AI導入などは別途料金となります。': 'LINE official account setup, SNS management, AI adoption and similar services are priced separately.',
+    '詳しくは下のリンクからご覧いただけます。': 'See the link below for full details.',
+    '料金を詳しく見る': 'See Full Pricing',
 
     'サービス一覧を見る': 'View All Services',
     'Shiraume Digital、': 'Shiraume Digital —',
