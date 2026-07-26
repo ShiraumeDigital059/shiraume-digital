@@ -288,8 +288,10 @@
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
 
-  var MIN_PETALS = 10;
-  var MAX_PETALS = 16;
+  /* Density is deliberately CONSTANT rather than a random 10-16 range.
+     With a moving target the count kept swinging, which read as "a burst
+     of petals, a pause, then another burst" instead of a steady fall. */
+  var STEADY_PETALS = 11;
   var PETAL_COUNT = 10;
   var active = 0;
   var stopped = false;
@@ -302,8 +304,12 @@
     return 'url(assets/images/petals/petal-' + num + '.png)';
   }
 
-  function spawnPetal() {
-    if (stopped || active >= MAX_PETALS) return;
+  /* `progress` (0-1) starts the petal PART-WAY through its fall by way of
+     a negative animation-delay. Used only for the initial seeding: it
+     spreads the first petals evenly down the screen instead of releasing
+     them all from the top at once (which was the "dobatt" clump). */
+  function spawnPetal(progress) {
+    if (stopped || active >= STEADY_PETALS) return;
     active++;
 
     var petal = document.createElement('div');
@@ -329,6 +335,9 @@
     petal.style.setProperty('--petal-dx4', -rand(4, 14) + 'px');
     petal.style.setProperty('--petal-spin', spin + 'deg');
     petal.style.animationDuration = duration + 's';
+    if (progress) {
+      petal.style.animationDelay = '-' + (duration * progress).toFixed(2) + 's';
+    }
 
     petal.addEventListener('animationend', function () {
       petal.remove();
@@ -353,15 +362,21 @@
     });
   }
 
-  // Seed an initial batch so the effect is already present on load.
-  for (var i = 0; i < MIN_PETALS; i++) {
-    window.setTimeout(spawnPetal, i * 220);
+  // Seed the full complement at once, but each petal starts at a different
+  // point of its own fall - so from the very first frame the screen shows
+  // an evenly spread, already-falling drift rather than a batch of petals
+  // marching down from the top together.
+  for (var i = 0; i < STEADY_PETALS; i++) {
+    spawnPetal((i + rand(0.15, 0.85)) / STEADY_PETALS);
   }
 
+  // Steady top-up: at most one new petal per tick, and only ever back up
+  // to the same fixed density. Because each petal's fall lasts a random
+  // 16-26s they finish at staggered times, so replacements trickle in one
+  // by one instead of a whole group respawning together.
   spawnTimer = window.setInterval(function () {
-    var target = MIN_PETALS + Math.floor(Math.random() * (MAX_PETALS - MIN_PETALS + 1));
-    if (active < target) spawnPetal();
-  }, 900);
+    if (active < STEADY_PETALS) spawnPetal(0);
+  }, 1100);
 
   // Stop spawning once Stage 1 has fully scrolled out of view.
   var stageIntro = document.getElementById('stageIntro');

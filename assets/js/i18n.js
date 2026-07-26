@@ -74,6 +74,20 @@
     'SNS運用・宣伝': 'SNS Management & Promotion',
     'Instagramを中心に、': 'Centered on Instagram, we grow awareness',
     'お店やブランドの認知と集客を広げます。': 'and bring more customers to your shop or brand.',
+    /* short service card lines (v19) */
+    '目的から逆算した、伝わるサイトを。': 'Designed backward from your goal.',
+    '予約・問い合わせの窓口をつくる。': 'A single door for bookings and questions.',
+    '日々の業務を、AIで軽くする。': 'Let AI lighten the daily workload.',
+    'ブランドの世界観を、美しく。': "Your brand's world, beautifully told.",
+    '公開後も、ずっと安心を。': 'Peace of mind, long after launch.',
+    'Instagramで、認知と集客を広げる。': 'Grow reach and customers on Instagram.',
+
+    /* pricing brief (v19) */
+    '料金の目安': 'Pricing at a Glance',
+    '人気': 'Popular',
+    'LINE構築・SNS運用・AI導入などのオプションは¥1,100〜。': 'Options such as LINE setup, SNS management and AI start from ¥1,100.',
+    '内容に応じて、お見積りを無料でご提案します。': "We'll prepare a free, tailored quote for you.",
+
     'サービス一覧を見る': 'View All Services',
     'Shiraume Digital、': 'Shiraume Digital —',
     '他社にはない４つの強み': 'Four Strengths That Set Us Apart',
