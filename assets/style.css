@@ -3157,3 +3157,100 @@ img {
   -webkit-user-drag: none;
   pointer-events: none;     /* keeps pointer capture on the track itself */
 }
+
+/* ---------- v18: Stage 1 first-view refresh ---------- */
+/* The CTA button was removed from Stage 1 (the first view is now a pure
+   "read then scroll" screen), so the lead copy takes its place. A thin
+   rule separates the English wordmark-style headline from the Japanese
+   value proposition, keeping the composition balanced rather than a
+   stack of three same-weight paragraphs. */
+
+.stage-intro__rule {
+  width: 40px;
+  height: 1px;
+  background: #4D6652;
+  opacity: 0;
+  animation: introFadeLeft 1.1s cubic-bezier(0.16,1,0.3,1) 0.55s forwards;
+}
+
+.stage-intro__lead {
+  margin: 0;
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0.02em;
+  color: #1f1f1d;
+  opacity: 0;
+  animation: introFadeLeft 1.1s cubic-bezier(0.16,1,0.3,1) 0.7s forwards;
+}
+
+/* Service keywords are now supporting detail under the lead copy, so they
+   step back a little in size/colour instead of competing with it. */
+.stage-intro__services {
+  font-size: 12.5px;
+  color: #86867f;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-intro__rule,
+  .stage-intro__lead {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ---------- v18: SNS card + 2-up service grid on phones ---------- */
+
+/* Desktop/tablet: the grid is authored as 5 columns; with the 6th (SNS)
+   card added it now wraps to 5 + 1, which looks lopsided. Six columns
+   keeps every card on one row at desktop width. */
+@media (min-width: 1025px) {
+  .services__grid { grid-template-columns: repeat(6, 1fr); }
+}
+
+/* Cascade delay for the 6th card (the original list stopped at 5). */
+.service-card:nth-child(6) { transition-delay: 0.60s; }
+
+@media (max-width: 768px) {
+  /* Two cards per row instead of one full-width card per row: the whole
+     service line-up is visible in about a screen and a half rather than
+     six full screens of scrolling. Cards are deliberately smaller - the
+     photo is a mood cue here, the title carries the meaning. The
+     !important matches the single-column rule it overrides above. */
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .service-card--photo {
+    aspect-ratio: 3 / 3.7;
+    padding: 16px 12px;
+    gap: 9px;
+  }
+
+  .service-card--photo .service-card__icon { width: 25px; height: 25px; }
+  .service-card--photo .service-card__title { font-size: 12px; line-height: 1.45; }
+  .service-card--photo .service-card__desc { font-size: 10.5px; line-height: 1.6; }
+
+  /* The two-column card is far narrower than the old full-width one, so
+     the desktop line breaks inside the description would leave very short
+     orphan lines - let the text reflow to the card width instead. */
+  .service-card--photo .service-card__desc .br-desktop { display: none; }
+}
+
+/* ---------- v18: larger plum branch on phones ---------- */
+/* The branch is painted before .stage-intro__content in the markup and
+   sits at z-index 0 while the copy is at z-index 1, so growing it simply
+   lets it pass BEHIND the text (never over it). Opacity is eased down a
+   touch at the same time so the headline stays crisp where they overlap. */
+
+@media (max-width: 768px) {
+  .plum-branch {
+    height: 34vh;
+    top: 44px;
+    left: -54px;
+    max-width: 300px;
+    opacity: 0.5;
+  }
+}
