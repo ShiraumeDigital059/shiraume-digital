@@ -3321,30 +3321,40 @@ img {
 /* Sits between "View all services" and the Strengths section: answers the
    "roughly how much?" question in one glance, then hands off to Pricing. */
 
+/* Its own band, not a tail on the Services section. Services sits on white
+   and Strengths on the warm grey #f7f7f5, so Pricing takes a third, faintly
+   green-tinted surface plus hairline rules top and bottom: the change of
+   subject is unmistakable at a glance, and no two neighbouring sections
+   ever share a background. */
 .price-brief {
-  margin-top: 96px;
+  padding: 104px 56px 96px;
+  background: #EEF2EF;
+  border-top: 1px solid #E0E7E2;
+  border-bottom: 1px solid #E0E7E2;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
 }
 
-.price-brief__eyebrow {
+/* Makes explicit that these three figures are for the WEBSITE build -
+   LINE / SNS / AI are quoted separately (see the note below the cards). */
+.price-brief__scope {
+  margin-top: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 18px;
+  border: 1px solid #C6D3CA;
+  border-radius: 999px;
+  background: #ffffff;
   font-size: 12px;
-  letter-spacing: 0.28em;
   font-weight: 600;
+  letter-spacing: 0.06em;
   color: #1e3a2b;
 }
 
-.price-brief__title {
-  margin: 0;
-  font-size: 30px;
-  font-weight: 700;
-  font-family: 'Shippori Mincho', serif;
-}
-
 .price-brief__grid {
-  margin-top: 22px;
+  margin-top: 18px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 230px));
   gap: 18px;
@@ -3426,8 +3436,8 @@ img {
 }
 
 @media (max-width: 768px) {
-  .price-brief { margin-top: 64px; }
-  .price-brief__title { font-size: 24px; }
+  .price-brief { padding-top: 72px; padding-bottom: 68px; }
+  .price-brief__scope { margin-top: 24px; font-size: 11.5px; padding: 6px 15px; }
   /* Three narrow columns would squeeze the prices onto two lines; the
      plans read better stacked, with the featured one still standing out. */
   .price-brief__grid {
