@@ -4001,3 +4001,21 @@ body.plan-modal-open .plan-tile,
 body.plan-modal-open .plan-tile:hover {
   transform: none !important;
 }
+
+/* v21.2: the REAL cause of the trapped dialog. `.fade-section.is-visible`
+   settles on `transform: translateY(0)` - an identity transform, but still
+   a transform, which makes the section a containing block for its
+   position:fixed descendants and opens a stacking context. The dialog was
+   therefore positioned (and stacked) inside its section rather than the
+   viewport, landing under the backdrop. Resolving to `none` once the fade
+   has run keeps the animation identical and frees the dialog. */
+.price-cat.is-visible { transform: none; }
+
+/* Belt and braces: whatever else may animate, nothing between the dialog
+   and the viewport may hold a transform while a dialog is open. */
+body.plan-modal-open .price-cat,
+body.plan-modal-open .plan-tiles,
+body.plan-modal-open .plan-tile {
+  transform: none !important;
+  filter: none !important;
+}
