@@ -3990,3 +3990,14 @@ body.plan-modal-open { overflow: hidden; }
   border-color: #1E3A2B;
   color: #ffffff;
 }
+
+/* v21 fix: a transformed ancestor becomes the containing block for its
+   position:fixed descendants AND opens a new stacking context - so while
+   the pointer sat on a tile, its :hover transform trapped the open dialog
+   underneath the backdrop (dialog blurred + dimmed). Suppressing tile
+   transforms for as long as a dialog is open keeps the dialog in the root
+   stacking context, where its z-index actually outranks the backdrop. */
+body.plan-modal-open .plan-tile,
+body.plan-modal-open .plan-tile:hover {
+  transform: none !important;
+}
