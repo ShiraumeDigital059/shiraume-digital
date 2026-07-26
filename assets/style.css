@@ -3254,3 +3254,189 @@ img {
     opacity: 0.5;
   }
 }
+
+/* ---------- v19: high-contrast buttons that read as buttons on photos ---------- */
+/* The old --solid / --ghost pair were both translucent, so on a busy photo
+   they blended into whatever was behind them and stopped looking tappable.
+   These two are fully opaque with a real drop shadow, so they read as
+   raised, pressable objects against ANY background, light or dark. Hover
+   lifts, :active presses the button back down for tactile feedback. */
+
+.btn-pill--brand,
+.btn-pill--white {
+  border: 0;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.2s ease;
+}
+
+.btn-pill--brand {
+  background: #1E3A2B;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(10,26,18,0.34), 0 1px 0 rgba(255,255,255,0.14) inset;
+}
+
+.btn-pill--brand:hover {
+  background: #27503A;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(10,26,18,0.42), 0 1px 0 rgba(255,255,255,0.16) inset;
+}
+
+.btn-pill--white {
+  background: #ffffff;
+  color: #16261D;
+  box-shadow: 0 8px 20px rgba(10,20,14,0.26);
+}
+
+.btn-pill--white:hover {
+  background: #ffffff;
+  color: #16261D;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(10,20,14,0.34);
+}
+
+/* Pressed state: the button visibly sinks, which is the single clearest
+   signal on touch devices that the tap registered. */
+.btn-pill--brand:active,
+.btn-pill--white:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px rgba(10,20,14,0.28);
+}
+
+.btn-pill--brand:focus-visible,
+.btn-pill--white:focus-visible {
+  outline: 3px solid #9FD1B3;
+  outline-offset: 3px;
+}
+
+/* The arrow slides on hover on the brand button too (it inherits
+   .btn-pill__arrow, which only had a rule for the older variants). */
+.btn-pill--brand .btn-pill__arrow,
+.btn-pill--white .btn-pill__arrow { transition: transform 0.25s ease; }
+.btn-pill--brand:hover .btn-pill__arrow,
+.btn-pill--white:hover .btn-pill__arrow { transform: translateX(4px); }
+
+/* ---------- v19: pricing brief on the top page ---------- */
+/* Sits between "View all services" and the Strengths section: answers the
+   "roughly how much?" question in one glance, then hands off to Pricing. */
+
+.price-brief {
+  margin-top: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.price-brief__eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  font-weight: 600;
+  color: #1e3a2b;
+}
+
+.price-brief__title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  font-family: 'Shippori Mincho', serif;
+}
+
+.price-brief__grid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 230px));
+  gap: 18px;
+  width: 100%;
+  max-width: 760px;
+  justify-content: center;
+}
+
+.price-brief__card {
+  position: relative;
+  border: 1px solid #ececea;
+  border-radius: 6px;
+  padding: 26px 18px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.price-brief__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 36px rgba(20,20,18,0.09);
+  border-color: #d4ddd7;
+}
+
+.price-brief__card--featured {
+  border-color: #1e3a2b;
+  box-shadow: 0 12px 30px rgba(30,58,43,0.10);
+}
+
+.price-brief__badge {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e3a2b;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.price-brief__name {
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+  color: #8a8a86;
+}
+
+.price-brief__price {
+  font-size: 25px;
+  font-weight: 700;
+  color: #1e3a2b;
+  letter-spacing: 0.01em;
+}
+
+.price-brief__for {
+  font-size: 12px;
+  color: #767672;
+}
+
+.price-brief__note {
+  margin: 20px 0 0;
+  font-size: 12.5px;
+  line-height: 1.95;
+  color: #8a8a86;
+  text-align: center;
+}
+
+.price-brief .services__more { margin-top: 10px; }
+
+@media (max-width: 1024px) {
+  .price-brief__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 680px; }
+}
+
+@media (max-width: 768px) {
+  .price-brief { margin-top: 64px; }
+  .price-brief__title { font-size: 24px; }
+  /* Three narrow columns would squeeze the prices onto two lines; the
+     plans read better stacked, with the featured one still standing out. */
+  .price-brief__grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+    max-width: 420px;
+    margin-top: 26px;
+  }
+  .price-brief__card { padding: 20px 18px 18px; }
+  .price-brief__price { font-size: 23px; }
+  .price-brief__note { font-size: 12px; }
+}
