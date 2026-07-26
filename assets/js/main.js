@@ -392,3 +392,104 @@
     stageObserver.observe(stageIntro);
   }
 })();
+
+/**
+ * Pricing.html: plan detail dialogs.
+ *
+ * Each plan tile owns a `.plan-detail` element that lives in the normal
+ * DOM (display:none) rather than inside a <template>. That matters: the
+ * JP/EN translator in i18n.js walks document.body for text nodes, and a
+ * template's content sits in a separate DocumentFragment it would never
+ * reach - so a templated dialog would stay Japanese in English mode.
+ *
+ * Opening one just adds classes; nothing is cloned or moved, so the
+ * translator's cached text-node references stay valid for the life of the
+ * page and switching language with a dialog open works too.
+ */
+(function () {
+  var openers = document.querySelectorAll('.plan-tile__more');
+  if (!openers.length) return;
+
+  var backdrop = document.getElementById('planBackdrop');
+  var current = null;
+  var lastFocus = null;
+
+  function open(dialog, opener) {
+    if (current) close();
+    current = dialog;
+    lastFocus = opener;
+    dialog.classList.add('is-open');
+    dialog.setAttribute('aria-hidden', 'false');
+    if (backdrop) {
+      backdrop.hidden = false;
+      // next frame, so the opacity transition actually runs
+      window.requestAnimationFrame(function () { backdrop.classList.add('is-open'); });
+    }
+    document.body.classList.add('plan-modal-open');
+    var closeBtn = dialog.querySelector('.plan-detail__close');
+    if (closeBtn) closeBtn.focus();
+  }
+
+  function close() {
+    if (!current) return;
+    current.classList.remove('is-open');
+    current.setAttribute('aria-hidden', 'true');
+    current = null;
+    if (backdrop) {
+      backdrop.classList.remove('is-open');
+      backdrop.hidden = true;
+    }
+    document.body.classList.remove('plan-modal-open');
+    if (lastFocus) { lastFocus.focus(); lastFocus = null; }
+  }
+
+  openers.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var dialog = document.getElementById(btn.getAttribute('data-detail'));
+      if (dialog) open(dialog, btn);
+    });
+  });
+
+  // Both the × and the 戻る button carry data-close.
+  document.querySelectorAll('.plan-detail [data-close]').forEach(function (btn) {
+    btn.addEventListener('click', close);
+  });
+
+  if (backdrop) backdrop.addEventListener('click', close);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && current) close();
+  });
+
+  // Keep focus inside the dialog while it is open.
+  document.addEventListener('focusin', function (e) {
+    if (current && !current.contains(e.target)) {
+      var first = current.querySelector('.plan-detail__close');
+      if (first) first.focus();
+    }
+  });
+})();
+
+/**
+ * Pricing.html: highlight the jump-nav pill for the service currently on
+ * screen, so the visitor always knows which section they are reading.
+ */
+(function () {
+  var links = document.querySelectorAll('.price-jump__link');
+  if (!links.length || !window.IntersectionObserver) return;
+
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      var link = map[entry.target.id];
+      if (link) link.classList.toggle('is-current', entry.isIntersecting);
+    });
+  }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+
+  Object.keys(map).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+})();
