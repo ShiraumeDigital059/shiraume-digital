@@ -505,7 +505,9 @@
  * points should not have to keep reopening the first one.
  */
 (function () {
-  var heads = document.querySelectorAll('.acc__head');
+  // Two visual treatments, one behaviour: the About page's value/reason
+  // rows and the Works page's 実績 buttons both open a measured panel.
+  var heads = document.querySelectorAll('.acc__head, .works-case__toggle');
   if (!heads.length) return;
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
