@@ -4019,3 +4019,262 @@ body.plan-modal-open .plan-tile {
   transform: none !important;
   filter: none !important;
 }
+
+/* =====================================================================
+   v22: photos on the bands + per-service detail pages (no more dialogs)
+   ===================================================================== */
+
+/* Photo sits above the number, framed in the service's own accent so the
+   band still reads as one fenced unit rather than a loose image. */
+.price-cat__photo {
+  width: min(560px, 100%);
+  aspect-ratio: 16 / 7;
+  margin-bottom: 22px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 18px 44px rgba(20,20,18,0.14);
+  border-bottom: 3px solid var(--cat-accent);
+}
+
+.price-cat__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.price-cat__head--sub .price-cat__title { font-size: 26px; }
+
+/* ---------- detail page hero ---------- */
+.price-hero {
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.price-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.price-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15,18,15,0.62) 0%, rgba(15,18,15,0.74) 100%);
+}
+
+.price-hero__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  padding: 70px 56px;
+  max-width: 760px;
+}
+
+.price-hero__eyebrow {
+  font-size: 11.5px;
+  letter-spacing: 0.28em;
+  font-weight: 700;
+  color: #C9DBCF;
+}
+
+.price-hero__title {
+  margin: 0;
+  font-size: 38px;
+  font-weight: 700;
+  font-family: 'Shippori Mincho', serif;
+  color: #ffffff;
+  line-height: 1.4;
+}
+
+.price-hero__desc {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.95;
+  color: rgba(255,255,255,0.86);
+}
+
+/* breadcrumb back to the overview */
+.price-crumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 56px;
+  border-bottom: 1px solid #ECECEA;
+  font-size: 12.5px;
+  color: #8a8a86;
+}
+.price-crumb a { color: #1E3A2B; font-weight: 600; }
+.price-crumb a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- a plan, written out in full ---------- */
+.price-detail { padding: 78px 56px 72px; }
+
+.plan-fulls {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.plan-full {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 0;
+  border: 1px solid #E4E7E4;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.plan-full--featured {
+  border-color: var(--cat-accent);
+  box-shadow: 0 16px 40px rgba(20,20,18,0.10);
+}
+
+.plan-full__aside {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 30px 26px;
+  background: #F7F9F7;
+  border-right: 1px solid #E9EDEA;
+}
+
+.plan-full__badge {
+  align-self: flex-start;
+  margin-bottom: 4px;
+  background: var(--cat-accent);
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 5px 13px;
+  border-radius: 999px;
+}
+
+.plan-full__name {
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #8a8a86;
+}
+
+.plan-full__price {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--cat-accent);
+  line-height: 1.2;
+}
+
+.plan-full__for {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #DCE3DE;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #4a5a4e;
+}
+
+.plan-full__lead {
+  margin: 6px 0 0;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #5a5a56;
+}
+
+.plan-full__cta {
+  margin-top: auto;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  font-size: 13.5px;
+}
+
+.plan-full__body {
+  padding: 30px 30px 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 26px 32px;
+  align-content: start;
+}
+
+.plan-full__subtitle {
+  margin: 0 0 10px;
+  padding-left: 10px;
+  border-left: 3px solid var(--cat-accent);
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a18;
+}
+
+.plan-full__list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.95;
+  color: #5a5a56;
+}
+.plan-full__list li { margin-bottom: 3px; }
+
+.plan-full__single {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--cat-accent);
+}
+
+/* ---------- options section on a detail page ---------- */
+.opt-sec {
+  padding: 76px 56px 84px;
+  background: #F5F7F5;
+  border-top: 1px solid #E4E9E5;
+}
+.opt-wrap--flush { padding: 0 !important; max-width: 900px; }
+
+@media (max-width: 1024px) {
+  .plan-full { grid-template-columns: 250px 1fr; }
+  .plan-full__price { font-size: 26px; }
+}
+
+@media (max-width: 768px) {
+  .price-cat__photo { aspect-ratio: 16 / 9; margin-bottom: 18px; border-radius: 8px; }
+
+  .price-hero { min-height: 260px; }
+  .price-hero__content { padding: 54px 20px; gap: 10px; }
+  .price-hero__title { font-size: 26px; }
+  .price-hero__desc { font-size: 13.5px; }
+
+  .price-crumb { padding: 12px 20px !important; font-size: 12px; }
+
+  .price-detail { padding: 48px 20px 44px !important; }
+
+  /* Stack the price block above its contents: side-by-side at phone width
+     leaves both columns too narrow to read comfortably. */
+  .plan-full { grid-template-columns: 1fr; }
+  .plan-full__aside {
+    border-right: 0;
+    border-bottom: 1px solid #E9EDEA;
+    padding: 24px 20px;
+  }
+  .plan-full__cta { margin-top: 14px; align-self: stretch; justify-content: center; text-align: center; }
+  .plan-full__body { padding: 22px 20px 24px; grid-template-columns: 1fr; gap: 20px; }
+  .plan-full__price { font-size: 27px; }
+
+  .opt-sec { padding: 52px 20px 60px !important; }
+  .price-cat__head--sub .price-cat__title { font-size: 21px; }
+}
