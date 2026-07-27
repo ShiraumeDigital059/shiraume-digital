@@ -404,6 +404,15 @@
     '配信テンプレート作成': 'Broadcast templates',
     '集客導線をしっかり作りたい方向け': 'For building a real customer path',
 
+
+    /* ===== v25: Japanese nav labels + "more than websites" block ===== */
+    '白梅デジタルとは': 'About',
+    'サービス': 'Services',
+    '実績': 'Works',
+    '料金': 'Pricing',
+    '料金プランは、ホームページ制作だけではありません。': 'Website builds are only one of the plans we offer.',
+    'それぞれのプラン内容・オプションは、下のページでご覧いただけます。': 'Full plan contents and options for each are on the page below.',
+
     /* ================= About.html ================= */
     '想いをカタチに、': 'Shaping Your Vision,',
     'ビジネスを': 'Guiding Your Business',
