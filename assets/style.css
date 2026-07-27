@@ -4914,3 +4914,165 @@ body.plan-modal-open .plan-tile {
 
   .info-list__item { font-size: 11.5px; padding: 4px 10px; }
 }
+
+/* =====================================================================
+   v27: Works page - a "実績" accordion on the cards that have a real case
+   =====================================================================
+   The category cards describe what we can build; the accordion underneath
+   shows what we actually did. Keeping the case folded away means the grid
+   still scans quickly, while anyone interested can open the proof in
+   place rather than being sent to another page. */
+
+.works-grid-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.works-case__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid #1E3A2B;
+  border-radius: 999px;
+  background: #1E3A2B;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.works-case__toggle:hover { background: #27503A; border-color: #27503A; }
+
+/* plus that turns into a minus, drawn from two bars */
+.works-case__toggle-mark {
+  position: relative;
+  width: 11px;
+  height: 11px;
+}
+.works-case__toggle-mark::before,
+.works-case__toggle-mark::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 1.5px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+}
+.works-case__toggle-mark::after { transform: translate(-50%, -50%) rotate(90deg); }
+.works-case__toggle.is-open .works-case__toggle-mark::after { transform: translate(-50%,-50%) rotate(0deg); opacity: 0; }
+
+.works-case {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.32s cubic-bezier(0.16,1,0.3,1);
+}
+
+.works-case__photo {
+  margin: 18px 0 14px;
+  border-radius: 6px;
+  overflow: hidden;
+  border-bottom: 3px solid #1E3A2B;
+}
+
+.works-case__photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.works-case__client {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #F1F4F1;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #1E3A2B;
+}
+
+.works-case__text {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.95;
+  color: #5A605C;
+}
+
+.works-case__points {
+  margin: 12px 0 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #6A706C;
+}
+
+/* Only the Izakaya case carries measured numbers, so the strip appears
+   just where there is something real to report. */
+.works-case__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+  padding: 14px 10px;
+  border-radius: 6px;
+  background: #F5F7F5;
+  border: 1px solid #E4E9E5;
+}
+
+.works-case__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.works-case__stat-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1E3A2B;
+  letter-spacing: -0.01em;
+}
+
+.works-case__stat-label {
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: #7A807C;
+}
+
+.works-case__stats-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: #9AA09C;
+  text-align: center;
+}
+
+/* The confidentiality line closes the whole section. */
+.works-privacy-note {
+  margin: 44px auto 0;
+  max-width: 900px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #8a8a86;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .works-case { transition: none !important; }
+}
+
+@media (max-width: 768px) {
+  .works-grid-card__actions { gap: 10px; }
+  .works-case__toggle { padding: 8px 14px; font-size: 12px; }
+  .works-case__stats { padding: 12px 6px; gap: 5px; }
+  .works-case__stat-value { font-size: 13.5px; }
+  .works-case__stat-label { font-size: 9.5px; }
+  .works-privacy-note { margin-top: 34px; font-size: 11.5px; }
+}
