@@ -104,73 +104,161 @@
   </section>
 
   <!-- VALUE -->
-  <section class="fade-section" style="padding:140px 56px 120px;">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:72px;">
+  <section class="fade-section" style="padding:140px 56px 110px;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:52px;">
       <span style="font-size:12px;letter-spacing:0.2em;color:#1e3a2b;font-weight:600;">VALUE</span>
       <h2 class="block-title--45" style="margin:0;font-weight:700;font-family:'Shippori Mincho',serif;">大切にしている価値観</h2>
+      <p style="margin:0;max-width:560px;font-size:13.5px;line-height:1.95;color:#767672;text-align:center;">見出しをタップすると、それぞれの考え方を詳しくご覧いただけます。</p>
     </div>
-    <div class="grid-4" style="gap:24px;">
-      <div class="value-card hover-lift-sm">
-        <img class="value-card__icon" src="assets/images/leaf-outline.png" alt="">
-        <div class="value-card__title">Simple</div>
-        <div class="value-card__desc">必要なものだけを、<br class="br-desktop">美しく。</div>
+    <div class="acc">
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="value-0">
+          <img class="acc__icon" src="assets/images/leaf-outline.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">Simple</span>
+            <span class="acc__summary">必要なものだけを、美しく。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="value-0" hidden>
+          <p class="acc__body">情報を足すことよりも、削ることに時間をかけます。伝えたいことが多いほど、肝心の一言は埋もれていくものです。本当に必要な要素だけを残し、あとは余白に語らせる。日本の設えに通じるこの考え方が、結果として「見やすく、迷わない」サイトをつくります。</p>
+        </div>
       </div>
-      <div class="value-card hover-lift-sm">
-        <img class="value-card__icon" src="assets/images/shield-check.png" alt="">
-        <div class="value-card__title">Trust</div>
-        <div class="value-card__desc">誠実な対応と、<br class="br-desktop">丁寧なものづくり。</div>
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="value-1">
+          <img class="acc__icon" src="assets/images/shield-check.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">Trust</span>
+            <span class="acc__summary">誠実な対応と、丁寧なものづくり。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="value-1" hidden>
+          <p class="acc__body">できることは「できる」、難しいことは「難しい」と正直にお伝えします。専門用語をそのまま並べるのではなく、なぜその判断をしたのかまでご説明します。目に見えない部分の作り込みにも同じ姿勢で向き合い、公開後に困らない状態でお渡しします。</p>
+        </div>
       </div>
-      <div class="value-card hover-lift-sm">
-        <img class="value-card__icon" src="assets/images/growth-chart.png" alt="">
-        <div class="value-card__title">Growth</div>
-        <div class="value-card__desc">公開して終わりではなく、<br class="br-desktop">その先まで支える。</div>
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="value-2">
+          <img class="acc__icon" src="assets/images/growth-chart.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">Growth</span>
+            <span class="acc__summary">公開して終わりではなく、その先まで支える。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="value-2" hidden>
+          <p class="acc__body">サイトは公開した瞬間が完成ではなく、そこがスタートです。実際のお客様の反応を見ながら、言葉づかい・導線・写真を少しずつ調整していく。数字を一緒に確認し、次の一手を考える。長くご一緒することを前提に設計しています。</p>
+        </div>
       </div>
-      <div class="value-card hover-lift-sm">
-        <img class="value-card__icon" src="assets/images/ai-chip.png" alt="">
-        <div class="value-card__title">Challenge</div>
-        <div class="value-card__desc">常に新しい技術と<br class="br-desktop">アイデアを取り入れる。</div>
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="value-3">
+          <img class="acc__icon" src="assets/images/ai-chip.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">Challenge</span>
+            <span class="acc__summary">常に新しい技術とアイデアを取り入れる。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="value-3" hidden>
+          <p class="acc__body">AIやSNSの「効く使い方」は数か月単位で変わります。私たち自身がまず試し、実際に運用して確かめたうえで、お客様にとって本当に効果のあるものだけをご提案します。流行を追うためではなく、成果につなげるために。</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- WHY -->
-  <section class="fade-section" style="padding:120px 56px;background:#f7f7f5;">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:64px;">
+  <section class="fade-section" style="padding:110px 56px;background:#f7f7f5;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:48px;">
       <span style="font-size:12px;letter-spacing:0.2em;color:#1e3a2b;font-weight:600;">WHY SHIRAUME DIGITAL?</span>
       <h2 class="block-title--45" style="margin:0;font-weight:700;font-family:'Shippori Mincho',serif;">選ばれる理由</h2>
+      <p style="margin:0;max-width:560px;font-size:13.5px;line-height:1.95;color:#767672;text-align:center;">4つの理由を、それぞれ詳しくご説明します。</p>
     </div>
-    <div class="grid-4" style="gap:24px;">
-      <div class="why-item">
-        <img class="why-item__icon" src="assets/images/circle-outline.png" alt="">
-        <div class="why-item__title">デザイン性</div>
-        <div class="why-item__desc">シンプルで高級感のある、ブランド価値<br class="br-desktop">を高めるデザイン。</div>
+    <div class="acc">
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="why-0">
+          <img class="acc__icon" src="assets/images/circle-outline.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">デザイン性</span>
+            <span class="acc__summary">シンプルで高級感のある、ブランド価値を高めるデザイン。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="why-0" hidden>
+          <p class="acc__body">テンプレートに当てはめるのではなく、事業の雰囲気・お客様の層・強みからデザインを起こします。余白の取り方、書体、写真のトーンまで一つずつ選び、「なんとなく良さそう」ではなく「この会社らしい」と感じていただける佇まいに仕上げます。</p>
+        </div>
       </div>
-      <div class="why-item">
-        <img class="why-item__icon" src="assets/images/network-nodes.png" alt="">
-        <div class="why-item__title">提案力</div>
-        <div class="why-item__desc">目的や課題に合わせた最適なWeb戦略をご提案。</div>
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="why-1">
+          <img class="acc__icon" src="assets/images/network-nodes.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">提案力</span>
+            <span class="acc__summary">目的や課題に合わせた最適なWeb戦略をご提案。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="why-1" hidden>
+          <p class="acc__body">「ホームページが欲しい」の裏には、採用したい・予約を増やしたい・信頼されたい、といった本当の目的があります。まずそこを丁寧に伺い、必要であればサイト以外の手段（LINEやGoogleマップ対策）もご提案します。つくること自体が目的にならないようにしています。</p>
+        </div>
       </div>
-      <div class="why-item">
-        <img class="why-item__icon" src="assets/images/database.png" alt="">
-        <div class="why-item__title">ワンストップ対応</div>
-        <div class="why-item__desc">企画・デザイン・制作・運用まで一貫サポート。</div>
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="why-2">
+          <img class="acc__icon" src="assets/images/database.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">ワンストップ対応</span>
+            <span class="acc__summary">企画・デザイン・制作・運用まで一貫サポート。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="why-2" hidden>
+          <p class="acc__body">制作会社・SNS代行・広告代理店と窓口が分かれるほど、伝言と調整に時間を取られます。企画から公開後の運用まで同じ担当が受け持つため、話が早く、サイトとSNSとLINEのトーンも自然に揃います。</p>
+        </div>
       </div>
-      <div class="why-item">
-        <img class="why-item__icon" src="assets/images/chat-bubbles.png" alt="">
-        <div class="why-item__title">スピード対応</div>
-        <div class="why-item__desc">迅速かつ丁寧なコミュニケーションで安心して進められます。</div>
+      <div class="acc__item">
+        <button type="button" class="acc__head" aria-expanded="false" aria-controls="why-3">
+          <img class="acc__icon" src="assets/images/chat-bubbles.png" alt="">
+          <span class="acc__text">
+            <span class="acc__title">スピード対応</span>
+            <span class="acc__summary">迅速かつ丁寧なコミュニケーションで安心して進められます。</span>
+          </span>
+          <span class="acc__mark" aria-hidden="true"></span>
+        </button>
+        <div class="acc__panel" id="why-3" hidden>
+          <p class="acc__body">ご連絡には原則1営業日以内にお返事します。ちょっとした修正であれば当日中に反映することも少なくありません。進行中は「いまどこまで進んでいるか」を随時共有し、待たされている不安がない状態を保ちます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER -->
+  <section class="fade-section founder" id="founder">
+    <div class="founder__inner">
+      <div class="founder__photo">
+        <img src="assets/images/5DF73ADD-1FA8-47EF-85A3-EE910EEEAD3D-6422ab42.PNG" alt="大西 一輝" loading="lazy">
+      </div>
+      <div class="founder__body">
+        <span class="founder__eyebrow">REPRESENTATIVE</span>
+        <h2 class="founder__heading">代表紹介</h2>
+        <div class="founder__name-row">
+          <span class="founder__name">大西 一輝</span>
+          <span class="founder__reading">おおにし いつき</span>
+        </div>
+        <p class="founder__meta">2002年7月12日生まれ｜三重県松阪市出身</p>
+        <p class="founder__text">名古屋商科大学 経営学部 経営学科を卒業。在学中は国際ビジネスとマーケティングを中心に学び、アメリカ・シンガポール・タイ・中国をはじめとする計9か国を自ら訪れ、海外のビジネスとデジタルマーケティングを現地で学びました。</p>
+        <p class="founder__text">現在はオーストラリア・パースを拠点に、日本の魅力や技術を世界へ届けることをテーマに事業を展開。ベトナム人向けの日本語学習アプリ、英語話者向けの漢字学習アプリの企画・開発・運営を手がけています。</p>
+        <p class="founder__text">日本国内では、Webサイト制作・SNS運用サポート・Googleマップ（MEO）活用支援などを通じて、中小企業や個人事業主のデジタル活用をお手伝いしています。</p>
+        <blockquote class="founder__quote">デジタルの力で、挑戦をもっと身近に。</blockquote>
       </div>
     </div>
   </section>
 
   <!-- COMPANY -->
-  <section class="fade-section grid-company" style="padding:140px 56px;">
+  <section class="fade-section grid-company" style="padding:120px 56px;">
     <div class="about-block__heading">
       <span style="font-size:12px;letter-spacing:0.2em;color:#1e3a2b;font-weight:600;">COMPANY</span>
       <h2 class="block-title--30" style="margin:0;font-weight:700;font-family:'Shippori Mincho',serif;">会社概要</h2>
     </div>
     <div class="about-block__image" style="border-radius:6px;overflow:hidden;box-shadow:0 24px 60px rgba(20,20,18,0.14);width:100%;max-width:380px;margin:0 auto;">
-      <img class="feature-photo" src="assets/images/5DF73ADD-1FA8-47EF-85A3-EE910EEEAD3D-6422ab42.PNG" alt="Shiraume Digital メンバー" style="width:100%;height:460px;object-fit:cover;display:block;">
+      <img class="feature-photo" src="assets/images/web-design-photo.png" alt="Shiraume Digital の制作風景" style="width:100%;height:460px;object-fit:cover;display:block;">
     </div>
     <div class="about-block__body" style="border-top:1px solid #ececea;">
       <div class="info-row">
@@ -178,20 +266,32 @@
         <span class="info-row__value">Shiraume Digital</span>
       </div>
       <div class="info-row">
-        <span class="info-row__label">事業内容</span>
-        <span class="info-row__value" style="line-height:1.8;">ホームページ制作・Webデザイン・LINE構築・SNS運用・AI導入支援・外国人向け日本語勉強サイト運用・保守運用</span>
+        <span class="info-row__label">代表</span>
+        <span class="info-row__value">大西 一輝（おおにし いつき）</span>
       </div>
       <div class="info-row">
-        <span class="info-row__label">所在地</span>
-        <span class="info-row__value info-row__value--muted">後日追加</span>
+        <span class="info-row__label">主なサービス</span>
+        <span class="info-row__value"><span class="info-list"><span class="info-list__item">ホームページ制作・Webデザイン</span><span class="info-list__item">LINE公式アカウント構築</span><span class="info-list__item">SNS運用サポート</span><span class="info-list__item">Googleマップ（MEO）対策</span><span class="info-list__item">広告サポート</span><span class="info-list__item">AI導入・業務効率化</span><span class="info-list__item">保守・運用サポート</span><span class="info-list__item">外国人向け学習アプリの企画・開発・運営</span></span></span>
+      </div>
+      <div class="info-row">
+        <span class="info-row__label">主な対象顧客</span>
+        <span class="info-row__value"><span class="info-list"><span class="info-list__item">中小企業</span><span class="info-list__item">個人事業主</span><span class="info-list__item">飲食店・店舗</span><span class="info-list__item">これから開業される方</span><span class="info-list__item">海外展開を目指す事業者</span></span></span>
+      </div>
+      <div class="info-row">
+        <span class="info-row__label">特徴</span>
+        <span class="info-row__value"><span class="info-list"><span class="info-list__item">企画から公開後の運用まで一貫対応</span><span class="info-list__item">海外9か国で学んだ視点を日本の事業に還元</span><span class="info-list__item">日本とオーストラリアの二拠点でサポート</span><span class="info-list__item">一社一社に専任で伴走</span></span></span>
       </div>
       <div class="info-row">
         <span class="info-row__label">メール</span>
-        <span class="info-row__value" style="color:#101010;">contact.shiraumedigital@gmail.com</span>
+        <span class="info-row__value"><a href="mailto:contact.shiraumedigital@gmail.com" style="color:#101010;">contact.shiraumedigital@gmail.com</a></span>
       </div>
       <div class="info-row">
-        <span class="info-row__label">電話番号</span>
-        <span class="info-row__value info-row__value--muted">後日追加</span>
+        <span class="info-row__label">Instagram</span>
+        <span class="info-row__value"><a href="https://www.instagram.com/shiraume.digital_?igsh=eXQ5eXh2MjRrM2pj" target="_blank" rel="noopener" style="color:#1e3a2b;">@shiraume.digital_</a></span>
+      </div>
+      <div class="info-row">
+        <span class="info-row__label">LINE公式アカウント</span>
+        <span class="info-row__value"><a href="https://lin.ee/9umLhUi" target="_blank" rel="noopener" style="color:#1e3a2b;">友だち追加はこちら</a></span>
       </div>
     </div>
   </section>
