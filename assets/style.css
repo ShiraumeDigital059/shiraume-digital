@@ -4278,3 +4278,90 @@ body.plan-modal-open .plan-tile {
   .opt-sec { padding: 52px 20px 60px !important; }
   .price-cat__head--sub .price-cat__title { font-size: 21px; }
 }
+
+/* =====================================================================
+   v23: heading sits ON the photo, photo faded well back
+   =====================================================================
+   The words are what a visitor needs; the photo only sets the mood. So
+   the image is dropped to a low opacity over white and covered with a
+   soft white veil, letting the existing dark type stay dark - far more
+   legible than white type on a busy photo, and it keeps the light, airy
+   feel of the rest of the site. */
+
+.price-cat__head--photo {
+  position: relative;
+  isolation: isolate;          /* keeps the veil under the copy, above the img */
+  width: min(1000px, 100%);
+  margin: 0 auto 46px;
+  padding: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  border-bottom: 3px solid var(--cat-accent);
+  box-shadow: 0 14px 38px rgba(20,20,18,0.10);
+}
+
+.price-cat__photo-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.30;               /* the "薄く" - photo reads as a soft backdrop */
+  z-index: 0;
+}
+
+/* A second, softer white wash biased to the centre, so the middle of the
+   block - exactly where the title sits - is the calmest part of the image. */
+.price-cat__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.60) 55%, rgba(255,255,255,0.42) 100%),
+    linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.30) 45%, rgba(255,255,255,0.70) 100%);
+}
+
+.price-cat__head-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 54px 40px 46px;
+}
+
+/* Type sits on a (light) photo now, so give it a faint white halo - it
+   stays crisp even where the image happens to be busy underneath. */
+.price-cat__head--photo .price-cat__no {
+  opacity: 0.72;
+  text-shadow: 0 1px 8px rgba(255,255,255,0.9);
+}
+
+.price-cat__head--photo .price-cat__eyebrow {
+  text-shadow: 0 1px 6px rgba(255,255,255,0.95);
+}
+
+.price-cat__head--photo .price-cat__title {
+  color: #14201A;
+  text-shadow: 0 1px 10px rgba(255,255,255,0.95), 0 0 26px rgba(255,255,255,0.75);
+}
+
+.price-cat__head--photo .price-cat__desc {
+  color: #46504A;
+  font-weight: 500;
+  text-shadow: 0 1px 8px rgba(255,255,255,0.95);
+}
+
+@media (max-width: 768px) {
+  .price-cat__head--photo {
+    margin-bottom: 30px;
+    border-radius: 9px;
+  }
+  .price-cat__head-inner { padding: 36px 22px 32px; gap: 8px; }
+  /* Phone screens are often viewed in bright light - fade the photo a
+     little further so the heading never has to compete. */
+  .price-cat__photo-bg { opacity: 0.24; }
+}
