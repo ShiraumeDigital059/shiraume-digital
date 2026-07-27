@@ -4534,3 +4534,163 @@ body.plan-modal-open .plan-tile {
   /* Touch devices have no hover, so the arrow would never show. */
   .svc-card__arrow { display: none; }
 }
+
+/* =====================================================================
+   v25: category heading - photo VISIBLE, tinted in the service colour
+   =====================================================================
+   v23 faded the photo so far back it read as nothing at all. The photo
+   needs to be seen. So instead of washing it out with white, it is now
+   shown at full strength under a gradient in that service's own colour:
+   the picture stays clearly visible, white type on top is comfortably
+   legible, and the colour of the block itself tells you which service
+   you are looking at before you read a word. */
+
+.price-cat__head--photo {
+  border-bottom: 0;
+  box-shadow: 0 16px 40px rgba(20,20,18,0.16);
+}
+
+.price-cat__photo-bg {
+  opacity: 1;                 /* the photo is the point - show it */
+}
+
+/* Per-service veil. Dark enough for white text at every size, but the
+   subject of the photo still reads through it. */
+.price-cat--web  { --cat-veil-a: rgba(14,32,22,0.52); --cat-veil-b: rgba(14,32,22,0.80); }
+.price-cat--sns  { --cat-veil-a: rgba(74,34,12,0.52); --cat-veil-b: rgba(74,34,12,0.80); }
+.price-cat--line { --cat-veil-a: rgba(16,54,30,0.52); --cat-veil-b: rgba(16,54,30,0.80); }
+.price-cat--meo  { --cat-veil-a: rgba(14,38,68,0.52); --cat-veil-b: rgba(14,38,68,0.80); }
+.price-cat--ads  { --cat-veil-a: rgba(46,24,60,0.52); --cat-veil-b: rgba(46,24,60,0.80); }
+
+.price-cat__veil {
+  background: linear-gradient(180deg,
+              var(--cat-veil-a, rgba(14,32,22,0.52)) 0%,
+              var(--cat-veil-b, rgba(14,32,22,0.80)) 100%);
+}
+
+/* A solid colour bar across the top of the block: the fastest possible
+   "this is a different service" signal while scrolling. */
+.price-cat__head--photo::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  z-index: 3;
+  background: var(--cat-accent);
+}
+
+.price-cat__head-inner { padding: 62px 40px 54px; }
+
+/* Type flips to white now that it sits on a dark, tinted photo. */
+.price-cat__head--photo .price-cat__no {
+  color: #ffffff;
+  opacity: 0.85;
+  font-size: 44px;
+  text-shadow: 0 2px 14px rgba(0,0,0,0.45);
+}
+
+.price-cat__head--photo .price-cat__eyebrow {
+  color: #ffffff;
+  opacity: 0.92;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.5);
+}
+
+.price-cat__head--photo .price-cat__title {
+  color: #ffffff;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.5);
+}
+
+.price-cat__head--photo .price-cat__desc {
+  color: rgba(255,255,255,0.90);
+  font-weight: 400;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.5);
+}
+
+/* Carry the colour beyond the header: the jump pill, the section's own
+   left rule and the plan prices all already use --cat-accent, so the
+   whole band now reads as one colour-coded unit. */
+.price-cat::before { width: 6px; }
+
+@media (max-width: 768px) {
+  .price-cat__photo-bg { opacity: 1; }
+  .price-cat__head-inner { padding: 42px 22px 38px; }
+  .price-cat__head--photo .price-cat__no { font-size: 34px; }
+  .price-cat__head--photo::after { height: 4px; }
+}
+
+/* ---------- v25: "there is more than the website plan" on the top page ---------- */
+/* Each row carries the same accent colour that service uses on the Pricing
+   page, so the colour coding starts here and stays consistent all the way
+   through to the detail pages. */
+
+.price-more {
+  width: min(680px, 100%);
+  margin: 34px auto 0;
+  padding: 24px 26px 22px;
+  background: #ffffff;
+  border: 1px solid #DDE4DF;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.price-more__lead {
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1E3A2B;
+}
+
+.price-more__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 14px;
+}
+
+.price-more__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 12px 9px 14px;
+  border-left: 3px solid var(--row-accent, #1E3A2B);
+  background: #F7F9F7;
+  border-radius: 0 4px 4px 0;
+  text-align: left;
+}
+
+.price-more__item--sns  { --row-accent: #C2703F; }
+.price-more__item--line { --row-accent: #4A8C5C; }
+.price-more__item--meo  { --row-accent: #3F6EA8; }
+.price-more__item--ads  { --row-accent: #8A5FA8; }
+
+.price-more__name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #23302A;
+}
+
+.price-more__price {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--row-accent, #1E3A2B);
+  white-space: nowrap;
+}
+
+.price-more__note {
+  margin: 16px 0 0;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #8a8a86;
+}
+
+@media (max-width: 768px) {
+  .price-more { padding: 18px 16px 16px; margin-top: 26px; }
+  .price-more__lead { font-size: 12.5px; margin-bottom: 13px; }
+  .price-more__list { grid-template-columns: 1fr; gap: 7px; }
+  .price-more__item { padding: 8px 11px 8px 12px; }
+  .price-more__name, .price-more__price { font-size: 12px; }
+  .price-more__note { font-size: 11.5px; }
+}
