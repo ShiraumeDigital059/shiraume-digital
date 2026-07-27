@@ -4365,3 +4365,172 @@ body.plan-modal-open .plan-tile {
      little further so the heading never has to compete. */
   .price-cat__photo-bg { opacity: 0.24; }
 }
+
+/* =====================================================================
+   v24: Services grid rebuilt - editorial cards, not photo tiles
+   =====================================================================
+   The old cards put white text on top of six different photos under a
+   heavy dark gradient. Six unrelated images, each dimmed differently,
+   read as muddy and cluttered - and the copy had to fight the picture
+   behind it. Here the two jobs are separated: the photo is a clean,
+   undimmed band at the top, and the words sit below it on white, where
+   they are simply easy to read. A hairline frame, a serif numeral and
+   plenty of air do the styling instead of overlays. */
+
+.services__grid {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border: 1px solid #E9EAE7;
+  border-radius: 3px;             /* near-square corners read sharper */
+  overflow: hidden;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+              transform 0.7s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.35s ease,
+              box-shadow 0.35s ease;
+}
+
+/* Cascade in one by one once the section scrolls into view. */
+.services.is-visible .svc-card { opacity: 1; transform: translateY(0); }
+.svc-card:nth-child(1) { transition-delay: 0.04s; }
+.svc-card:nth-child(2) { transition-delay: 0.12s; }
+.svc-card:nth-child(3) { transition-delay: 0.20s; }
+.svc-card:nth-child(4) { transition-delay: 0.28s; }
+.svc-card:nth-child(5) { transition-delay: 0.36s; }
+.svc-card:nth-child(6) { transition-delay: 0.44s; }
+
+.svc-card:hover {
+  border-color: #1E3A2B;
+  box-shadow: 0 18px 40px rgba(20,20,18,0.10);
+}
+
+.svc-card__media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #F1F2F0;
+}
+
+.svc-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  /* The six source photos were shot in different light. Pulling the
+     saturation back and lifting them slightly makes them read as one
+     considered set rather than six stock images. */
+  filter: saturate(0.78) brightness(1.05) contrast(0.98);
+  transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.5s ease;
+}
+
+.svc-card:hover .svc-card__media img {
+  transform: scale(1.05);
+  filter: saturate(0.95) brightness(1.02) contrast(1);
+}
+
+.svc-card__body {
+  position: relative;
+  flex: 1 1 auto;
+  padding: 20px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.svc-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.svc-card__no {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1;
+  color: #1E3A2B;
+}
+
+.svc-card__rule {
+  width: 18px;
+  height: 1px;
+  background: #C9CFCB;
+}
+
+.svc-card__eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  font-weight: 700;
+  color: #96A099;
+}
+
+.svc-card__title {
+  margin: 0;
+  font-family: 'Shippori Mincho', serif;
+  font-size: 16.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #14201A;
+  letter-spacing: 0.01em;
+}
+
+.svc-card__desc {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: #7A807C;
+}
+
+/* Sits bottom-right, appears on hover - a quiet hint that the card is a
+   link, without adding a permanent button to every tile. */
+.svc-card__arrow {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  font-size: 15px;
+  color: #1E3A2B;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.svc-card:hover .svc-card__arrow { opacity: 1; transform: translateX(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-card { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .svc-card__media img, .svc-card__arrow { transition: none !important; }
+}
+
+@media (max-width: 1024px) {
+  .services__grid { grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .svc-card__title { font-size: 15px; }
+  .svc-card__body { padding: 17px 16px 19px; }
+}
+
+@media (max-width: 768px) {
+  /* Two per row: the whole line-up is visible in about a screen and a
+     half, and each card is still wide enough for a readable title. */
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+  .svc-card__media { aspect-ratio: 5 / 4; }
+  .svc-card__body { padding: 14px 13px 15px; gap: 7px; }
+  .svc-card__no { font-size: 16px; }
+  .svc-card__rule { width: 12px; }
+  .svc-card__eyebrow { font-size: 9px; letter-spacing: 0.18em; }
+  .svc-card__title { font-size: 13.5px; line-height: 1.45; }
+  .svc-card__desc { font-size: 11px; line-height: 1.7; }
+  /* Touch devices have no hover, so the arrow would never show. */
+  .svc-card__arrow { display: none; }
+}
