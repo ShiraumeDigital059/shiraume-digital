@@ -493,3 +493,70 @@
     if (el) observer.observe(el);
   });
 })();
+
+/**
+ * About.html: accordions for the Values and Reasons blocks.
+ *
+ * The panels are plain elements with the `hidden` attribute rather than
+ * <details>/<summary>: that keeps their copy inside the normal DOM where
+ * the JP/EN translator in i18n.js can reach it, and lets us animate the
+ * open/close with a measured height instead of the browser's instant
+ * toggle. Several panels may be open at once - visitors comparing two
+ * points should not have to keep reopening the first one.
+ */
+(function () {
+  var heads = document.querySelectorAll('.acc__head');
+  if (!heads.length) return;
+
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function open(panel, head) {
+    panel.hidden = false;
+    head.setAttribute('aria-expanded', 'true');
+    head.classList.add('is-open');
+    if (reduceMotion) { panel.style.height = 'auto'; return; }
+    var target = panel.scrollHeight;
+    panel.style.height = '0px';
+    // force a reflow so the browser registers the start height
+    void panel.offsetHeight;
+    panel.style.height = target + 'px';
+    window.setTimeout(function () {
+      if (head.classList.contains('is-open')) panel.style.height = 'auto';
+    }, 340);
+  }
+
+  function close(panel, head) {
+    head.setAttribute('aria-expanded', 'false');
+    head.classList.remove('is-open');
+    if (reduceMotion) { panel.hidden = true; panel.style.height = ''; return; }
+    panel.style.height = panel.scrollHeight + 'px';
+    void panel.offsetHeight;
+    panel.style.height = '0px';
+    window.setTimeout(function () {
+      if (!head.classList.contains('is-open')) { panel.hidden = true; panel.style.height = ''; }
+    }, 320);
+  }
+
+  Array.prototype.forEach.call(heads, function (head) {
+    var panel = document.getElementById(head.getAttribute('aria-controls'));
+    if (!panel) return;
+    head.addEventListener('click', function () {
+      if (head.classList.contains('is-open')) close(panel, head);
+      else open(panel, head);
+    });
+  });
+
+  // An open panel measured in one language can be the wrong height in the
+  // other, so re-measure whenever the language is switched.
+  document.querySelectorAll('.nav__lang-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      window.setTimeout(function () {
+        Array.prototype.forEach.call(heads, function (head) {
+          if (!head.classList.contains('is-open')) return;
+          var panel = document.getElementById(head.getAttribute('aria-controls'));
+          if (panel) panel.style.height = 'auto';
+        });
+      }, 30);
+    });
+  });
+})();
