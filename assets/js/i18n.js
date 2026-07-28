@@ -27,6 +27,21 @@
   'use strict';
 
   var TEXT = {
+    "ホームページ制作は3つの選び方があります。": "There are three ways to buy a website.",
+    "買い切り・月額制・保守運用から、ご都合に合うものをお選びいただけます。": "Choose one-time, monthly, or maintenance - whichever suits you.",
+    "※24ヶ月契約時の月額です。契約期間が短いほど月額は上がります。": "* Monthly price on a 24-month term; shorter terms cost more per month.",
+    "※ページ数や機能によってお見積りいたします。": "* Quoted according to page count and features.",
+    "※他社で制作されたサイトは、内容を拝見したうえでお引き受けの可否をご案内します。": "* For sites built elsewhere we review the site before confirming.",
+    "ホームページ制作は3つの選び方があります。<br class=\"br-desktop\">買い切り・月額制・保守運用から、ご都合に合うものをお選びいただけます。": "There are three ways to buy a website - one-time, monthly, or maintenance. Choose whichever suits you.",
+    "一度の制作費だけ。サイトはそのまま資産になります。": "Pay once. The site becomes yours.",
+    "公開後の更新・管理をお任せいただけます。他社制作のサイトにも対応します。": "We look after your site once it is live - including sites built elsewhere.",
+    "初期費用0円。月額だけで始められます。": "No setup fee. Start on a monthly plan.",
+    "更新もまとめてお任せしたい方": "For upkeep plus regular updates",
+    "最低限の管理をお任せしたい方": "For basic upkeep",
+    "月額制": "Monthly",
+    "買い切り": "One-time",
+    "買い切り・月額制・保守運用の3つからお選びいただけます。": "Choose from one-time, monthly, or maintenance.",
+    "運用を全面的にお任せしたい方": "For full hands-off operation",
     "/ 月": " / month",
     "12ヶ月": "12 months",
     "1〜3ページ": "1-3 pages",

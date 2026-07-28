@@ -562,3 +562,42 @@
     });
   });
 })();
+
+/* ---------- v31: plan tabs (one-time / monthly / maintenance) ----------
+   Small tab switch used on the home page and on Pricing.html so all three
+   ways of buying a website are visible without leaving the page. */
+(function () {
+  var wraps = document.querySelectorAll('[data-plan-tabs]');
+  if (!wraps.length) return;
+
+  Array.prototype.forEach.call(wraps, function (wrap) {
+    var btns = wrap.querySelectorAll('.plan-tabs__btn');
+
+    function show(target) {
+      Array.prototype.forEach.call(btns, function (b) {
+        var id = b.getAttribute('aria-controls');
+        var panel = document.getElementById(id);
+        var on = (b === target);
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-selected', on ? 'true' : 'false');
+        if (panel) {
+          panel.classList.toggle('is-active', on);
+          if (on) { panel.removeAttribute('hidden'); }
+          else { panel.setAttribute('hidden', ''); }
+        }
+      });
+    }
+
+    Array.prototype.forEach.call(btns, function (b) {
+      b.addEventListener('click', function () { show(b); });
+      b.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        var list = Array.prototype.slice.call(btns);
+        var i = list.indexOf(b) + (e.key === 'ArrowRight' ? 1 : -1);
+        var next = list[(i + list.length) % list.length];
+        next.focus(); show(next);
+      });
+    });
+  });
+})();
