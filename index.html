@@ -216,27 +216,82 @@
     <div class="section-heading">
       <span class="section-heading__eyebrow">PRICING</span>
       <h2 class="section-heading__title">料金の目安</h2>
-      <p class="section-heading__desc">ホームページ制作の基本プランです。<br class="br-desktop">ご要望に合わせて、必要な機能だけを追加していただけます。</p>
+      <p class="section-heading__desc">ホームページ制作は3つの選び方があります。<br class="br-desktop">買い切り・月額制・保守運用から、ご都合に合うものをお選びいただけます。</p>
     </div>
     <span class="price-brief__scope">ホームページ制作プラン</span>
-    <div class="price-brief__grid">
-        <div class="price-brief__card">
-          <span class="price-brief__name">STARTER</span>
-          <span class="price-brief__price">¥39,800〜</span>
-          <span class="price-brief__for">個人・小規模店舗向け</span>
-        </div>
-        <div class="price-brief__card price-brief__card--featured">
-          <span class="price-brief__badge">人気</span>
-          <span class="price-brief__name">STANDARD</span>
-          <span class="price-brief__price">¥89,800〜</span>
-          <span class="price-brief__for">企業・店舗向け</span>
-        </div>
-        <div class="price-brief__card">
-          <span class="price-brief__name">BUSINESS</span>
-          <span class="price-brief__price">¥139,800〜</span>
-          <span class="price-brief__for">集客を重視する方向け</span>
-        </div>
+    <div class="plan-tabs" data-plan-tabs>
+      <div class="plan-tabs__nav" role="tablist">
+        <button type="button" class="plan-tabs__btn is-active" role="tab" aria-selected="true" aria-controls="home-buy">買い切り</button>
+        <button type="button" class="plan-tabs__btn" role="tab" aria-selected="false" aria-controls="home-month">月額制</button>
+        <button type="button" class="plan-tabs__btn" role="tab" aria-selected="false" aria-controls="home-maint">保守・運用</button>
       </div>
+      <div class="plan-tabs__panel is-active" id="home-buy" role="tabpanel">
+        <p class="plan-tabs__desc">一度の制作費だけ。サイトはそのまま資産になります。</p>
+        <div class="price-brief__grid">
+          <div class="price-brief__card">
+            <span class="price-brief__name">STARTER</span>
+            <span class="price-brief__price">¥39,800〜</span>
+            <span class="price-brief__for">個人・小規模店舗向け</span>
+          </div>
+          <div class="price-brief__card price-brief__card--featured">
+            <span class="price-brief__badge">人気</span>
+            <span class="price-brief__name">STANDARD</span>
+            <span class="price-brief__price">¥89,800〜</span>
+            <span class="price-brief__for">企業・店舗向け</span>
+          </div>
+          <div class="price-brief__card">
+            <span class="price-brief__name">BUSINESS</span>
+            <span class="price-brief__price">¥139,800〜</span>
+            <span class="price-brief__for">集客を重視する方向け</span>
+          </div>
+        </div>
+        <p class="plan-tabs__note">※ページ数や機能によってお見積りいたします。</p>
+      </div>
+      <div class="plan-tabs__panel" id="home-month" role="tabpanel" hidden>
+        <p class="plan-tabs__desc">初期費用0円。月額だけで始められます。</p>
+        <div class="price-brief__grid">
+          <div class="price-brief__card">
+            <span class="price-brief__name">LIGHT</span>
+            <span class="price-brief__price">¥4,480〜 / 月</span>
+            <span class="price-brief__for">個人・小規模店舗向け</span>
+          </div>
+          <div class="price-brief__card price-brief__card--featured">
+            <span class="price-brief__badge">人気</span>
+            <span class="price-brief__name">STANDARD</span>
+            <span class="price-brief__price">¥7,480〜 / 月</span>
+            <span class="price-brief__for">企業・店舗向け</span>
+          </div>
+          <div class="price-brief__card">
+            <span class="price-brief__name">BUSINESS</span>
+            <span class="price-brief__price">¥11,480〜 / 月</span>
+            <span class="price-brief__for">集客を重視する方向け</span>
+          </div>
+        </div>
+        <p class="plan-tabs__note">※24ヶ月契約時の月額です。契約期間が短いほど月額は上がります。</p>
+      </div>
+      <div class="plan-tabs__panel" id="home-maint" role="tabpanel" hidden>
+        <p class="plan-tabs__desc">公開後の更新・管理をお任せいただけます。他社制作のサイトにも対応します。</p>
+        <div class="price-brief__grid">
+          <div class="price-brief__card">
+            <span class="price-brief__name">BASIC</span>
+            <span class="price-brief__price">¥2,980 / 月</span>
+            <span class="price-brief__for">最低限の管理をお任せしたい方</span>
+          </div>
+          <div class="price-brief__card price-brief__card--featured">
+            <span class="price-brief__badge">人気</span>
+            <span class="price-brief__name">STANDARD</span>
+            <span class="price-brief__price">¥5,980 / 月</span>
+            <span class="price-brief__for">更新もまとめてお任せしたい方</span>
+          </div>
+          <div class="price-brief__card">
+            <span class="price-brief__name">PREMIUM</span>
+            <span class="price-brief__price">¥9,980 / 月</span>
+            <span class="price-brief__for">運用を全面的にお任せしたい方</span>
+          </div>
+        </div>
+        <p class="plan-tabs__note">※他社で制作されたサイトは、内容を拝見したうえでお引き受けの可否をご案内します。</p>
+      </div>
+    </div>
     <!-- Website pricing is only one of five priced services; spell the
          others out here so nobody assumes this is the whole menu. -->
     <div class="price-more">

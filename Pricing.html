@@ -76,31 +76,82 @@
         <span class="price-cat__no">01</span>
         <span class="price-cat__eyebrow">WEBSITE</span>
         <h2 class="price-cat__title">ホームページ制作</h2>
-        <p class="price-cat__desc">目的に合わせて選べる3つの基本プラン。ページ数や機能で選んでいただけます。</p>
+        <p class="price-cat__desc">買い切り・月額制・保守運用の3つからお選びいただけます。</p>
       </div>
     </div>
-    <div class="plan-tiles plan-tiles--3">
-      <article class="plan-tile">
-        <span class="plan-tile__name">STARTER</span>
-        <span class="plan-tile__price">¥39,800〜</span>
-        <span class="plan-tile__for">個人・小規模店舗向け</span>
-        <p class="plan-tile__lead">初めてのホームページ制作におすすめのシンプルプラン。</p>
-      </article>
-      <article class="plan-tile plan-tile--featured">
-        <span class="plan-tile__badge">おすすめ</span>
-        <span class="plan-tile__name">STANDARD</span>
-        <span class="plan-tile__price">¥89,800〜</span>
-        <span class="plan-tile__for">企業・店舗向け</span>
-        <p class="plan-tile__lead">デザイン性と集客のバランスを重視した人気プラン。</p>
-      </article>
-      <article class="plan-tile">
-        <span class="plan-tile__name">BUSINESS</span>
-        <span class="plan-tile__price">¥139,800〜</span>
-        <span class="plan-tile__for">集客・売上を重視する方向け</span>
-        <p class="plan-tile__lead">戦略設計から運用までトータルサポートする本格プラン。</p>
-      </article>
+    <div class="plan-tabs" data-plan-tabs>
+      <div class="plan-tabs__nav" role="tablist">
+        <button type="button" class="plan-tabs__btn is-active" role="tab" aria-selected="true" aria-controls="pr-buy">買い切り</button>
+        <button type="button" class="plan-tabs__btn" role="tab" aria-selected="false" aria-controls="pr-month">月額制</button>
+        <button type="button" class="plan-tabs__btn" role="tab" aria-selected="false" aria-controls="pr-maint">保守・運用</button>
+      </div>
+      <div class="plan-tabs__panel is-active" id="pr-buy" role="tabpanel">
+        <p class="plan-tabs__desc">一度の制作費だけ。サイトはそのまま資産になります。</p>
+        <div class="plan-tiles plan-tiles--3">
+          <div class="plan-tile">
+            <span class="plan-tile__name">STARTER</span>
+            <span class="plan-tile__price">¥39,800〜</span>
+            <span class="plan-tile__for">個人・小規模店舗向け</span>
+          </div>
+          <div class="plan-tile plan-tile--featured">
+            <span class="plan-tile__badge">人気</span>
+            <span class="plan-tile__name">STANDARD</span>
+            <span class="plan-tile__price">¥89,800〜</span>
+            <span class="plan-tile__for">企業・店舗向け</span>
+          </div>
+          <div class="plan-tile">
+            <span class="plan-tile__name">BUSINESS</span>
+            <span class="plan-tile__price">¥139,800〜</span>
+            <span class="plan-tile__for">集客を重視する方向け</span>
+          </div>
+        </div>
+        <p class="plan-tabs__note">※ページ数や機能によってお見積りいたします。</p>
+      </div>
+      <div class="plan-tabs__panel" id="pr-month" role="tabpanel" hidden>
+        <p class="plan-tabs__desc">初期費用0円。月額だけで始められます。</p>
+        <div class="plan-tiles plan-tiles--3">
+          <div class="plan-tile">
+            <span class="plan-tile__name">LIGHT</span>
+            <span class="plan-tile__price">¥4,480〜 / 月</span>
+            <span class="plan-tile__for">個人・小規模店舗向け</span>
+          </div>
+          <div class="plan-tile plan-tile--featured">
+            <span class="plan-tile__badge">人気</span>
+            <span class="plan-tile__name">STANDARD</span>
+            <span class="plan-tile__price">¥7,480〜 / 月</span>
+            <span class="plan-tile__for">企業・店舗向け</span>
+          </div>
+          <div class="plan-tile">
+            <span class="plan-tile__name">BUSINESS</span>
+            <span class="plan-tile__price">¥11,480〜 / 月</span>
+            <span class="plan-tile__for">集客を重視する方向け</span>
+          </div>
+        </div>
+        <p class="plan-tabs__note">※24ヶ月契約時の月額です。契約期間が短いほど月額は上がります。</p>
+      </div>
+      <div class="plan-tabs__panel" id="pr-maint" role="tabpanel" hidden>
+        <p class="plan-tabs__desc">公開後の更新・管理をお任せいただけます。他社制作のサイトにも対応します。</p>
+        <div class="plan-tiles plan-tiles--3">
+          <div class="plan-tile">
+            <span class="plan-tile__name">BASIC</span>
+            <span class="plan-tile__price">¥2,980 / 月</span>
+            <span class="plan-tile__for">最低限の管理をお任せしたい方</span>
+          </div>
+          <div class="plan-tile plan-tile--featured">
+            <span class="plan-tile__badge">人気</span>
+            <span class="plan-tile__name">STANDARD</span>
+            <span class="plan-tile__price">¥5,980 / 月</span>
+            <span class="plan-tile__for">更新もまとめてお任せしたい方</span>
+          </div>
+          <div class="plan-tile">
+            <span class="plan-tile__name">PREMIUM</span>
+            <span class="plan-tile__price">¥9,980 / 月</span>
+            <span class="plan-tile__for">運用を全面的にお任せしたい方</span>
+          </div>
+        </div>
+        <p class="plan-tabs__note">※他社で制作されたサイトは、内容を拝見したうえでお引き受けの可否をご案内します。</p>
+      </div>
     </div>
-    <p class="price-cat__note">※ホームページ制作には、初期費用0円の月額プラン（¥4,480〜/月）と保守・運用プラン（¥2,980〜/月）もございます。</p>
     <div class="price-cat__more">
       <a href="Pricing-Web.html" class="btn-more"><span>ホームページ制作の料金を詳しく見る</span><span class="btn-more__arrow">&rarr;</span></a>
     </div>
