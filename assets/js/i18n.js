@@ -47,6 +47,8 @@
     'SNS運用　｜　SEO　｜　AI導入支援': 'SNS Management | SEO | AI Consulting',
     'ホームページ制作から、SNS運用・宣伝・開業サポートまで。': 'From website creation to SNS management, promotion and launch support.',
     'ビジネスの立ち上げと成長を、すべて一貫して支援します。': 'We support your business from launch to growth, all in one place.',
+    'ビジネスの立ち上げと成長を、': 'From launch to growth,',
+    'すべて一貫して支援します。': 'we support your business every step of the way.',
     'お問い合わせはこちら': 'Contact Us',
     'ともに、': 'Together,',
     '未来を、作ろう。': "Let's Create the Future.",
