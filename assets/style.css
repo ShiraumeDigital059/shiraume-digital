@@ -5076,3 +5076,64 @@ body.plan-modal-open .plan-tile {
   .works-case__stat-label { font-size: 9.5px; }
   .works-privacy-note { margin-top: 34px; font-size: 11.5px; }
 }
+
+/* ===== v28: Stage 1（1枚目）の整理 =====
+   1. 日本語コピーとサービス名の羅列で内容が重複していたため、リード文から
+      サービス名を外し、役割を分けた。
+        英語見出し ＝ 姿勢／リード文 ＝ 約束／サービス名 ＝ できること
+   2. 日本語を明朝体（Shippori Mincho）に統一。英字セリフと字面が揃う。
+   3. 見出しを 52px → 46px に落とし、リード文を 15.5px → 17px に上げて
+      サイズの落差をなだらかにした。
+   4. Scroll のキューを下げ、コピーの塊から離した。                      */
+
+.stage-intro__title {
+  font-size: 46px;
+  letter-spacing: 0.04em;
+}
+
+.stage-intro__lead {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 2.1;
+  letter-spacing: 0.06em;
+  color: #1f1f1d;
+}
+
+.stage-intro__services {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 13px;
+  line-height: 2.2;
+  letter-spacing: 0.08em;
+  color: #7d7d76;
+}
+
+.stage-intro__content { gap: 20px; }
+
+.stage-intro__scroll {
+  margin-top: 34px;
+  font-size: 11.5px;
+  letter-spacing: 0.26em;
+}
+.stage-intro__scroll > span:first-child {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 12.5px;
+  letter-spacing: 0.28em;
+}
+.stage-intro__scroll-line { height: 40px; }
+
+@media (max-width: 768px) {
+  .stage-intro__title { font-size: 30px; letter-spacing: 0.03em; }
+  .stage-intro__lead {
+    font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+    font-size: 15px; line-height: 2; letter-spacing: 0.04em; color: #1f1f1d;
+  }
+  .stage-intro__services {
+    font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+    font-size: 11.5px; line-height: 2.1; letter-spacing: 0.06em;
+    color: #6f6f68; font-weight: 400;
+  }
+  .stage-intro__content { gap: 16px; }
+  .stage-intro__scroll { margin-top: 24px; }
+  .stage-intro__scroll-line { height: 32px; }
+}
