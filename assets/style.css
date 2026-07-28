@@ -5479,3 +5479,67 @@ body.plan-modal-open .plan-tile {
   .mplan__term-price { font-size: 19px; }
   .mnt__price { font-size: 24px; }
 }
+
+/* ===== v31: 買い切り／月額制／保守・運用のタブ切り替え ===== */
+
+.plan-tabs { width: 100%; }
+
+.plan-tabs__nav {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  max-width: 480px;
+  margin: 0 auto 26px;
+  padding: 4px;
+  background: #EFF2EF;
+  border-radius: 999px;
+}
+
+.plan-tabs__btn {
+  flex: 1 1 0;
+  padding: 11px 8px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: 13.5px;
+  letter-spacing: 0.04em;
+  color: #6C726E;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.plan-tabs__btn:hover { color: #1E3A2B; }
+.plan-tabs__btn.is-active {
+  background: #FFFFFF;
+  color: #14201A;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(20,32,26,0.08);
+}
+
+.plan-tabs__desc {
+  margin: 0 auto 22px;
+  max-width: 640px;
+  font-size: 13px;
+  line-height: 1.95;
+  color: #6C726E;
+  text-align: center;
+}
+
+.plan-tabs__note {
+  margin: 20px auto 0;
+  max-width: 760px;
+  font-size: 11.5px;
+  line-height: 1.85;
+  color: #8A908C;
+  text-align: center;
+}
+
+.plan-tabs__panel[hidden] { display: none; }
+
+@media (max-width: 768px) {
+  .plan-tabs__nav { max-width: 100%; margin-bottom: 20px; }
+  .plan-tabs__btn { font-size: 12.5px; padding: 10px 4px; }
+  .plan-tabs__desc { font-size: 12.5px; margin-bottom: 18px; }
+  .plan-tabs__note { font-size: 11px; }
+}
