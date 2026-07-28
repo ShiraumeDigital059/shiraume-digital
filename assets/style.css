@@ -5137,3 +5137,345 @@ body.plan-modal-open .plan-tile {
   .stage-intro__scroll { margin-top: 24px; }
   .stage-intro__scroll-line { height: 32px; }
 }
+
+/* ===== v29: よくあるご質問ページ =====
+   About/Works と同じアコーディオン（.acc）を流用し、アイコンの位置に
+   「Q」を置いた FAQ 用の見た目だけを足す。開閉の挙動は main.js の
+   .acc__head ハンドラがそのまま担当する。                             */
+
+.faq-sec {
+  padding: 20px 56px 110px;
+  background: #FAFAFA;
+}
+
+.acc--faq .acc__q {
+  flex: 0 0 auto;
+  width: 30px;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  line-height: 1;
+  color: #4D6652;
+}
+
+.acc--faq .acc__title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.75;
+}
+
+.acc--faq .acc__head { padding: 24px 4px; align-items: flex-start; }
+.acc--faq .acc__q    { margin-top: 3px; }
+.acc--faq .acc__mark { margin-top: 3px; }
+
+.faq-sec__note {
+  max-width: 820px;
+  margin: 34px auto 0;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #86867f;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .faq-sec { padding: 12px 20px 80px; }
+  .acc--faq .acc__head { padding: 20px 2px; gap: 12px; }
+  .acc--faq .acc__q { width: 20px; font-size: 17px; }
+  .acc--faq .acc__title { font-size: 14.5px; line-height: 1.8; }
+  .acc--faq .acc__body { padding-left: 34px; padding-right: 2px; font-size: 13px; }
+  .faq-sec__note { font-size: 12px; }
+}
+
+/* ===== v30: ホームページ制作の3区分 =====
+   買い切り／月額／保守運用を、それぞれ独立したまとまりとして見せる。   */
+
+.plan-group {
+  padding: 96px 56px;
+  border-top: 1px solid #E4E9E5;
+}
+.plan-group--monthly { background: #F6F8F6; }
+.plan-group--maint   { background: #FFFFFF; }
+
+.plan-group__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  margin: 0 auto 46px;
+  max-width: 720px;
+}
+.plan-group__eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  color: #4D6652;
+  font-family: 'Cormorant Garamond', serif;
+}
+.plan-group__title {
+  margin: 0;
+  font-family: 'Shippori Mincho', serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #14201A;
+}
+.plan-group__desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 2;
+  color: #6C726E;
+}
+.plan-group__note {
+  max-width: 900px;
+  margin: 30px auto 0;
+  font-size: 12px;
+  line-height: 1.9;
+  color: #8A908C;
+  text-align: center;
+}
+
+/* the three "everything included" pills above the monthly plans */
+.plan-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.plan-badge {
+  padding: 7px 15px;
+  border: 1px solid #C9D6CC;
+  border-radius: 999px;
+  background: #FFFFFF;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: #1E3A2B;
+  white-space: nowrap;
+}
+
+/* ---------- monthly build plans ---------- */
+.mplan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1020px;
+  margin: 0 auto;
+  align-items: start;
+}
+.mplan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 34px 26px 30px;
+  background: #FFFFFF;
+  border: 1px solid #E4E9E5;
+  border-radius: 4px;
+}
+.mplan--featured {
+  border-color: #1E3A2B;
+  box-shadow: 0 10px 30px rgba(30,58,43,0.07);
+}
+.mplan__badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 16px;
+  border-radius: 999px;
+  background: #1E3A2B;
+  color: #FFFFFF;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.mplan__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 21px;
+  letter-spacing: 0.16em;
+  color: #14201A;
+  text-align: center;
+}
+.mplan__for {
+  font-size: 12.5px;
+  color: #7A807C;
+  text-align: center;
+  margin-top: -6px;
+}
+.mplan__terms {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #ECEFEC;
+  margin-top: 6px;
+}
+.mplan__term {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 13px 2px;
+  border-bottom: 1px solid #ECEFEC;
+}
+.mplan__term--best {
+  background: #F4F8F4;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.mplan__term-label {
+  font-size: 12.5px;
+  color: #6C726E;
+  white-space: nowrap;
+}
+.mplan__term-price {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #14201A;
+  white-space: nowrap;
+}
+.mplan__term-price small {
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: #7A807C;
+  margin-left: 2px;
+}
+.mplan__term-tag {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #C2703F;
+  color: #FFFFFF;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.mplan__list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.mplan__list li {
+  position: relative;
+  padding-left: 17px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: #4C524E;
+}
+.mplan__list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4D6652;
+}
+.mplan__cta {
+  margin-top: auto;
+  justify-content: center;
+  text-align: center;
+}
+
+/* ---------- maintenance ---------- */
+.mnt-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1020px;
+  margin: 0 auto;
+  align-items: start;
+}
+.mnt {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 34px 26px 30px;
+  background: #F8FAF8;
+  border: 1px solid #E4E9E5;
+  border-radius: 4px;
+}
+.mnt--rec { border-color: #1E3A2B; background: #FFFFFF; }
+.mnt__badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 5px 16px;
+  border-radius: 999px;
+  background: #1E3A2B;
+  color: #FFFFFF;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.mnt__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  letter-spacing: 0.16em;
+  color: #14201A;
+  text-align: center;
+}
+.mnt__price {
+  font-family: 'Shippori Mincho', serif;
+  font-size: 27px;
+  font-weight: 700;
+  color: #14201A;
+  text-align: center;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #E4E9E5;
+}
+.mnt__price small {
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  color: #7A807C;
+  margin-left: 3px;
+}
+.mnt__list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.mnt__list li {
+  position: relative;
+  padding-left: 17px;
+  font-size: 13px;
+  line-height: 1.75;
+  color: #4C524E;
+}
+.mnt__list li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4D6652;
+}
+
+@media (max-width: 1024px) {
+  .mplan-grid, .mnt-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .plan-group { padding: 66px 20px; }
+  .plan-group__title { font-size: 23px; }
+  .plan-group__desc { font-size: 13px; }
+  .plan-badge { font-size: 11px; padding: 6px 12px; }
+  .mplan-grid, .mnt-grid { grid-template-columns: 1fr; gap: 26px; }
+  .mplan, .mnt { padding: 30px 20px 26px; }
+  .mplan__term-price { font-size: 19px; }
+  .mnt__price { font-size: 24px; }
+}
