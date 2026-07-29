@@ -5569,6 +5569,15 @@ body.plan-modal-open .plan-tile {
   position: relative;
 }
 
+/* .strengths__heading is a flex column with no align-items, so its children
+   stretch the full width - and the accent bar stretched with them. Pin the
+   eyebrow to the start so the bar matches the label instead of the column.
+   Scoped deliberately: centred headings must keep their auto width. */
+.strengths__heading .section-heading__eyebrow,
+.founder__body .founder__eyebrow {
+  align-self: flex-start;
+}
+
 /* The bar itself. Sits just under the eyebrow text, centred on the same
    inline box so it matches the label width rather than the whole column. */
 .section-heading__eyebrow::after,
