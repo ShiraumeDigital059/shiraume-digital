@@ -5543,3 +5543,107 @@ body.plan-modal-open .plan-tile {
   .plan-tabs__desc { font-size: 12.5px; margin-bottom: 18px; }
   .plan-tabs__note { font-size: 11px; }
 }
+
+/* ==========================================================================
+   v32 - Wipe reveal accent (left-to-right)
+   A gold accent bar grows from the left edge under every section eyebrow the
+   moment it scrolls into view, then the eyebrow letters brighten behind it.
+   Triggered by main.js adding `.is-wiped`; purely decorative, so a browser
+   without IntersectionObserver simply shows the finished state.
+   ========================================================================== */
+
+:root {
+  --wipe-gold: #C9A227;
+  --wipe-gold-soft: #E4C766;
+}
+
+.section-heading__eyebrow,
+.cta-home__eyebrow,
+.subhero__eyebrow,
+.simple-hero__eyebrow,
+.founder__eyebrow,
+.price-cat__eyebrow,
+.price-hero__eyebrow,
+.plan-group__eyebrow,
+.hearing-session__eyebrow {
+  position: relative;
+}
+
+/* The bar itself. Sits just under the eyebrow text, centred on the same
+   inline box so it matches the label width rather than the whole column. */
+.section-heading__eyebrow::after,
+.cta-home__eyebrow::after,
+.subhero__eyebrow::after,
+.simple-hero__eyebrow::after,
+.founder__eyebrow::after,
+.price-hero__eyebrow::after,
+.plan-group__eyebrow::after,
+.hearing-session__eyebrow::after,
+.price-cat__eyebrow::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -9px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--wipe-gold) 0%, var(--wipe-gold-soft) 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.section-heading__eyebrow.is-wiped::after,
+.cta-home__eyebrow.is-wiped::after,
+.subhero__eyebrow.is-wiped::after,
+.simple-hero__eyebrow.is-wiped::after,
+.founder__eyebrow.is-wiped::after,
+.price-hero__eyebrow.is-wiped::after,
+.plan-group__eyebrow.is-wiped::after,
+.hearing-session__eyebrow.is-wiped::after,
+.price-cat__eyebrow.is-wiped::after {
+  transform: scaleX(1);
+}
+
+/* The pill variant already has a solid green background, so the bar would
+   collide with the rounded edge - push it clear and match its width. */
+.section-heading__eyebrow--pill::after,
+.cta-home__eyebrow--pill::after {
+  bottom: -11px;
+}
+
+/* Reusable standalone divider: <span class="wipe-bar"></span>
+   Same motion, used where there is no eyebrow to hang the bar on. */
+.wipe-bar {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  height: 4px;
+  margin: 0 auto;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--wipe-gold) 0%, var(--wipe-gold-soft) 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wipe-bar.is-wiped {
+  transform: scaleX(1);
+}
+
+/* Respect the OS "reduce motion" setting - show the finished bar, no sweep. */
+@media (prefers-reduced-motion: reduce) {
+  .section-heading__eyebrow::after,
+  .cta-home__eyebrow::after,
+  .subhero__eyebrow::after,
+  .simple-hero__eyebrow::after,
+  .founder__eyebrow::after,
+  .price-cat__eyebrow::after,
+  .price-hero__eyebrow::after,
+  .plan-group__eyebrow::after,
+  .hearing-session__eyebrow::after,
+  .wipe-bar {
+    transform: scaleX(1);
+    transition: none;
+  }
+}
