@@ -601,3 +601,47 @@
     });
   });
 })();
+
+/* --------------------------------------------------------------------------
+ * v32 - Wipe reveal accent
+ * Adds `.is-wiped` to every section eyebrow (and any .wipe-bar) once it
+ * scrolls into view, which starts the left-to-right gold sweep defined in
+ * style.css. Runs once per element - the bar never resets on scroll-up.
+ * ------------------------------------------------------------------------ */
+(function () {
+  var SEL = [
+    '.section-heading__eyebrow',
+    '.cta-home__eyebrow',
+    '.subhero__eyebrow',
+    '.simple-hero__eyebrow',
+    '.founder__eyebrow',
+    '.price-cat__eyebrow',
+    '.price-hero__eyebrow',
+    '.plan-group__eyebrow',
+    '.hearing-session__eyebrow',
+    '.wipe-bar'
+  ].join(',');
+
+  var targets = document.querySelectorAll(SEL);
+  if (!targets.length) return;
+
+  // No observer support: show the finished bars rather than nothing at all.
+  if (!window.IntersectionObserver) {
+    Array.prototype.forEach.call(targets, function (el) {
+      el.classList.add('is-wiped');
+    });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-wiped');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.4, rootMargin: '0px 0px -8% 0px' });
+
+  Array.prototype.forEach.call(targets, function (el) {
+    observer.observe(el);
+  });
+})();
