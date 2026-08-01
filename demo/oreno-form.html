@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>出店お申し込み｜俺の大作戦</title>
+<style>
+  :root{
+    --ink:#1f1c19; --sub:#6b645c; --line:#e3ddd3; --paper:#faf7f2;
+    --accent:#8c2b2b; --accent-soft:#f4ece9; --ok:#2f6b46;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;
+    font-size:16px; line-height:1.8;
+  }
+  .wrap{max-width:600px; margin:0 auto; background:#fff; min-height:100vh;
+        box-shadow:0 0 40px rgba(0,0,0,.05);}
+
+  /* ---- 見出し ---- */
+  .head{background:var(--accent); color:#fff; padding:26px 22px 22px; text-align:center;}
+  .head__mark{font-size:11px; letter-spacing:.28em; opacity:.8; margin:0 0 8px;}
+  .head__title{font-size:21px; font-weight:700; margin:0 0 6px; letter-spacing:.04em;}
+  .head__lead{font-size:12.5px; opacity:.9; margin:0; line-height:1.7;}
+
+  .note{background:var(--accent-soft); border-bottom:1px solid var(--line);
+        padding:14px 22px; font-size:12.5px; color:var(--sub); line-height:1.75;}
+  .note b{color:var(--accent);}
+
+  form{padding:8px 22px 40px;}
+
+  /* ---- 各項目 ---- */
+  .f{padding:20px 0 18px; border-bottom:1px solid var(--line);}
+  .f:last-of-type{border-bottom:none;}
+  .f__q{display:flex; align-items:flex-start; gap:8px; margin:0 0 4px;
+        font-size:14.5px; font-weight:700; line-height:1.6;}
+  .req{flex:none; margin-top:3px; font-size:10px; font-weight:700; color:#fff;
+       background:var(--accent); border-radius:3px; padding:1px 5px; letter-spacing:.06em;}
+  .opt{flex:none; margin-top:3px; font-size:10px; font-weight:700; color:var(--sub);
+       background:#efeae2; border-radius:3px; padding:1px 5px; letter-spacing:.06em;}
+  .f__help{margin:0 0 10px; font-size:12px; color:var(--sub); line-height:1.7;}
+
+  input[type=text], input[type=tel], input[type=email], input[type=number], select, textarea{
+    width:100%; padding:11px 12px; font-size:16px; font-family:inherit; color:var(--ink);
+    background:#fff; border:1px solid var(--line); border-radius:7px; line-height:1.6;
+  }
+  textarea{min-height:96px; resize:vertical;}
+  input:focus, select:focus, textarea:focus{
+    outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(140,43,43,.09);
+  }
+  select{appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--sub) 50%),linear-gradient(135deg,var(--sub) 50%,transparent 50%);
+         background-position:calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+         background-size:5px 5px,5px 5px; background-repeat:no-repeat; padding-right:36px;}
+
+  .choices{display:flex; flex-direction:column; gap:9px; margin-top:2px;}
+  .choice{display:flex; align-items:flex-start; gap:9px; padding:11px 13px;
+          border:1px solid var(--line); border-radius:7px; cursor:pointer; font-size:14px; line-height:1.6;}
+  .choice:has(input:checked){border-color:var(--accent); background:var(--accent-soft);}
+  .choice input{flex:none; margin:5px 0 0; accent-color:var(--accent); width:17px; height:17px;}
+  .choice span small{display:block; color:var(--sub); font-size:11.5px; margin-top:1px;}
+
+  .row{display:flex; gap:10px;}
+  .row > *{flex:1; min-width:0;}
+
+  .submit{width:100%; margin-top:26px; padding:16px; font-size:16px; font-weight:700;
+          font-family:inherit; color:#fff; background:var(--accent); border:none;
+          border-radius:8px; cursor:pointer; letter-spacing:.06em;}
+  .submit:active{transform:scale(.99);}
+  .after{margin:14px 0 0; font-size:11.5px; color:var(--sub); text-align:center; line-height:1.8;}
+
+  /* ---- 送信後 ---- */
+  .done{display:none; padding:64px 26px; text-align:center;}
+  .done.on{display:block;}
+  .done__ic{width:62px; height:62px; margin:0 auto 22px; border-radius:50%;
+            background:var(--ok); color:#fff; font-size:30px; line-height:62px;}
+  .done h2{font-size:19px; margin:0 0 14px;}
+  .done p{font-size:13.5px; color:var(--sub); margin:0 0 8px; line-height:1.9;}
+  .done .box{margin-top:24px; padding:16px; background:var(--paper);
+             border:1px solid var(--line); border-radius:8px; font-size:12.5px;
+             color:var(--sub); text-align:left; line-height:1.85;}
+  form.off{display:none;} .head.off, .note.off{display:none;}
+
+  .foot{padding:20px 22px 34px; text-align:center; font-size:11px; color:var(--sub);
+        border-top:1px solid var(--line);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head" id="head">
+    <p class="head__mark">DEMO</p>
+    <h1 class="head__title">出店お申し込み</h1>
+    <p class="head__lead">俺の大作戦｜神社マルシェ</p>
+  </div>
+
+  <div class="note" id="note">
+    ご記入は<b>2〜3分</b>で終わります。送信後、<b>控えが自動で届きます</b>。<br>
+    確定のご連絡は、こちらから改めてお送りします。
+  </div>
+
+  <form id="f">
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>ご希望の開催日</p>
+      <p class="f__help">複数ご希望の場合は、いちばん出たい日をお選びください。</p>
+      <select name="date" required>
+        <option value="">選択してください</option>
+        <option>10月4日（日）　○○神社</option>
+        <option>10月18日（日）　△△神社</option>
+        <option>11月1日（日）　○○神社</option>
+        <option>11月15日（日）　□□神社</option>
+        <option>まだ決めていない／相談したい</option>
+      </select>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>お店・団体のお名前</p>
+      <input type="text" name="shop" required placeholder="例）まる福珈琲">
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>ご担当者さまのお名前</p>
+      <input type="text" name="person" required placeholder="例）山田 太郎">
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>ご連絡先</p>
+      <p class="f__help">当日つながる番号をご記入ください。</p>
+      <div class="row">
+        <input type="tel" name="tel" required placeholder="電話番号">
+        <input type="email" name="mail" placeholder="メール（任意）">
+      </div>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="opt">任意</span>InstagramなどのSNS</p>
+      <p class="f__help">告知の際に、こちらからご紹介させていただきます。</p>
+      <input type="text" name="sns" placeholder="@から始まるIDでも、URLでも構いません">
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>出店の内容</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="genre" value="飲食（調理あり）" required><span>飲食（その場で調理する）<small>キッチンカー・鉄板・フライヤーなど</small></span></label>
+        <label class="choice"><input type="radio" name="genre" value="飲食（調理なし）"><span>飲食（包装済みの販売）<small>焼菓子・パン・コーヒー豆など</small></span></label>
+        <label class="choice"><input type="radio" name="genre" value="物販"><span>物販<small>雑貨・アクセサリー・古着など</small></span></label>
+        <label class="choice"><input type="radio" name="genre" value="ワークショップ"><span>ワークショップ・体験</span></label>
+        <label class="choice"><input type="radio" name="genre" value="その他"><span>その他</span></label>
+      </div>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>お取り扱いの品と、だいたいの価格帯</p>
+      <textarea name="items" required placeholder="例）自家焙煎のドリップコーヒー 500円／焼菓子 300〜450円"></textarea>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>ご希望の区画</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="space" value="1区画" required><span>1区画（およそ 2m × 2m）</span></label>
+        <label class="choice"><input type="radio" name="space" value="2区画"><span>2区画（およそ 4m × 2m）</span></label>
+        <label class="choice"><input type="radio" name="space" value="キッチンカー"><span>キッチンカー<small>車種と全長を、下の備考欄にご記入ください</small></span></label>
+      </div>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>電源のご使用</p>
+      <p class="f__help">境内は電源に限りがあります。先にお伺いできると助かります。</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="power" value="不要" required><span>使わない</span></label>
+        <label class="choice"><input type="radio" name="power" value="必要"><span>使いたい<small>W数が分かれば、備考欄にご記入ください</small></span></label>
+        <label class="choice"><input type="radio" name="power" value="発電機持込"><span>発電機を持ち込む</span></label>
+      </div>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="req">必須</span>お車でのご来場</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="car" value="搬入のみ" required><span>搬入だけ（そのあと移動できます）</span></label>
+        <label class="choice"><input type="radio" name="car" value="駐車必要"><span>そのまま停めておきたい</span></label>
+        <label class="choice"><input type="radio" name="car" value="車なし"><span>車は使いません</span></label>
+      </div>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="opt">任意</span>これまでの出店の経験</p>
+      <p class="f__help">初めての方も大歓迎です。</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="exp" value="初めて"><span>今回が初めて</span></label>
+        <label class="choice"><input type="radio" name="exp" value="他イベント経験あり"><span>他のイベントに出たことがある</span></label>
+        <label class="choice"><input type="radio" name="exp" value="俺の大作戦リピート"><span>俺の大作戦に出たことがある</span></label>
+      </div>
+    </div>
+
+    <div class="f">
+      <p class="f__q"><span class="opt">任意</span>ご質問・ご要望</p>
+      <textarea name="memo" placeholder="キッチンカーの全長、電源のW数、当日のご相談など"></textarea>
+    </div>
+
+    <button type="submit" class="submit">この内容で申し込む</button>
+    <p class="after">※ この画面はデモです。実際には送信すると<br>控えが自動で届き、主催者側の一覧に反映されます。</p>
+  </form>
+
+  <div class="done" id="done">
+    <div class="done__ic">✓</div>
+    <h2>お申し込みを受け付けました</h2>
+    <p>ありがとうございます。<br>ご記入の内容を控えとしてお送りしました。</p>
+    <div class="box">
+      <b>このあとの流れ</b><br>
+      1. 主催者が内容を確認します（3日以内）<br>
+      2. 出店確定のご連絡をお送りします<br>
+      3. 開催が近づきましたら、集合時間と区画をご案内します<br><br>
+      <b>雨天などで中止になった場合</b><br>
+      お申し込みいただいた皆さまへ、一斉にご連絡します。個別にお問い合わせいただく必要はありません。
+    </div>
+  </div>
+
+  <div class="foot">俺の大作戦｜神社マルシェ<br>デモ画面 — 白梅デジタル</div>
+</div>
+
+<script>
+  document.getElementById('f').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('head').classList.add('off');
+    document.getElementById('note').classList.add('off');
+    this.classList.add('off');
+    document.getElementById('done').classList.add('on');
+    window.scrollTo(0,0);
+  });
+</script>
+</body>
+</html>
