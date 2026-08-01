@@ -5656,3 +5656,217 @@ body.plan-modal-open .plan-tile {
     transition: none;
   }
 }
+
+/* ==========================================================================
+   v33 - Set plans
+   料金ページの最初に置く「まずはこの4つから」。単品合計とセット価格を並べて、
+   選ぶ判断を1画面で終わらせる。おすすめの1枚だけ枠と背景で持ち上げる。
+   ========================================================================== */
+
+.setplans {
+  padding: 88px 56px 96px;
+  background: #ffffff;
+}
+
+.setplans__heading {
+  margin-bottom: 44px;
+}
+
+.setplans__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1240px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+
+.setplan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 24px 26px;
+  background: #ffffff;
+  border: 1px solid #e3ddd3;
+  border-radius: 14px;
+}
+
+/* おすすめの1枚。色ではなく、枠の濃さと背景のわずかな差で持ち上げる */
+.setplan--pick {
+  border: 2px solid #1e3a2b;
+  background: #fbfaf8;
+}
+
+.setplan__badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: #1e3a2b;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.setplan__no {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: #C9A227;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.setplan__name {
+  margin: 0 0 8px;
+  font-family: 'Shippori Mincho', serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: #1a1a1a;
+}
+
+.setplan__lead {
+  margin: 0 0 20px;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: #6b645c;
+}
+
+.setplan__prices {
+  padding: 16px 0;
+  border-top: 1px solid #ececea;
+  border-bottom: 1px solid #ececea;
+  margin-bottom: 18px;
+}
+
+/* 単品合計。打ち消し線で、セットとの差を一目で見せる */
+.setplan__single {
+  margin: 0 0 10px;
+  font-size: 11.5px;
+  color: #8a8a86;
+  text-decoration: line-through;
+}
+
+.setplan__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.setplan__row + .setplan__row {
+  margin-top: 8px;
+}
+
+.setplan__label {
+  flex: none;
+  font-size: 11.5px;
+  color: #6b645c;
+}
+
+.setplan__price {
+  font-size: 19px;
+  font-weight: 600;
+  color: #1e3a2b;
+  letter-spacing: 0.01em;
+}
+
+.setplan__price--sub {
+  font-size: 16px;
+}
+
+.setplan__per {
+  font-size: 11px;
+  font-weight: 400;
+  color: #6b645c;
+  margin-left: 1px;
+}
+
+.setplan__items {
+  flex: 1 1 auto;
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.setplan__item {
+  position: relative;
+  padding-left: 16px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #4a4a48;
+}
+
+.setplan__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #C9A227;
+}
+
+.setplan__cta {
+  display: block;
+  padding: 12px;
+  border: 1px solid #1e3a2b;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e3a2b;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.setplan__cta:hover {
+  background: #1e3a2b;
+  color: #ffffff;
+}
+
+.setplan--pick .setplan__cta {
+  background: #1e3a2b;
+  color: #ffffff;
+}
+
+.setplan--pick .setplan__cta:hover {
+  background: #132a1f;
+}
+
+.setplans__note {
+  margin: 34px auto 0;
+  max-width: 760px;
+  font-size: 11.5px;
+  line-height: 1.9;
+  color: #8a908c;
+  text-align: center;
+}
+
+.setplans__link {
+  margin: 14px 0 0;
+  text-align: center;
+  font-size: 13px;
+}
+
+.setplans__link a {
+  color: #1e3a2b;
+  border-bottom: 1px solid #d8d8d4;
+  padding-bottom: 2px;
+}
+
+@media (max-width: 1080px) {
+  .setplans__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+}
+
+@media (max-width: 768px) {
+  .setplans { padding: 60px 20px 68px; }
+  .setplans__grid { grid-template-columns: 1fr; gap: 26px; }
+  .setplan { padding: 28px 20px 24px; }
+  .setplan__name { font-size: 16px; }
+  .setplans__note { font-size: 11px; }
+}
