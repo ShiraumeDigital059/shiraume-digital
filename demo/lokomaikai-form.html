@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お店・スペースのお問い合わせ｜LOKOMAIKAI（沖縄・読谷村）</title>
+<meta name="description" content="沖縄県読谷村のハワイアンショップ LOKOMAIKAI の店舗レンタル・ワークショップスペースのお問い合わせフォーム。月ぎめレンタル（月〜木）と単発のワークショップ利用（月・火）を承っています。">
+<style>
+:root{
+  --pink:#E5308A; --pink-p:#FFEAF3; --yellow:#FDC81E; --green:#3DAE5A; --green-p:#E6F6EA;
+  --blue:#3FBEE8; --blue-p:#E4F6FC;
+  --ink:#2E2A2C; --ink-m:#6B6467; --line:#E6DFE2; --bg:#FFFDF9; --card:#fff;
+  --err:#D6455E; --r:16px; --sh:0 4px 20px rgba(46,42,44,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.8;font-size:15.5px;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:660px;margin:0 auto;padding:0 18px}
+
+.head{
+  background:radial-gradient(800px 300px at 20% 0%,rgba(253,200,30,.4),transparent 60%),
+             linear-gradient(170deg,#FFF3F8,#FFFDF9);
+  padding:38px 0 30px;text-align:center;position:relative;
+}
+.head::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;
+  background:linear-gradient(90deg,var(--pink),var(--yellow),var(--green),var(--blue))}
+.logo{font-size:1.75rem;font-weight:900;color:var(--pink);letter-spacing:.04em;text-shadow:2px 2px 0 #fff}
+.head h1{font-size:1.14rem;margin-top:12px}
+.head p{font-size:.88rem;color:var(--ink-m);margin-top:6px}
+.back{display:inline-block;margin-top:14px;font-size:.82rem;color:var(--ink-m);text-decoration:none;border-bottom:1px solid var(--line)}
+
+main{padding:30px 0 60px}
+.note{
+  background:var(--blue-p);border-radius:var(--r);padding:16px 18px;font-size:.88rem;margin-bottom:26px;
+}
+.note b{color:var(--ink)}
+
+form{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:26px 20px}
+.f{margin-bottom:26px}
+.f:last-of-type{margin-bottom:16px}
+label.q{display:block;font-weight:800;font-size:.96rem;margin-bottom:4px}
+.hint{font-size:.8rem;color:var(--ink-m);margin-bottom:10px}
+.req,.opt{
+  display:inline-block;font-size:.66rem;font-weight:800;padding:2px 8px;border-radius:999px;
+  vertical-align:middle;margin-left:8px;letter-spacing:.06em;
+}
+.req{background:var(--pink);color:#fff}
+.opt{background:#F0ECEE;color:var(--ink-m)}
+
+input[type=text],input[type=email],input[type=tel],textarea,select{
+  width:100%;border:1.5px solid var(--line);border-radius:11px;padding:13px 14px;
+  font-size:16px;font-family:inherit;background:#fff;color:var(--ink);transition:.15s;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-p)}
+textarea{min-height:110px;resize:vertical;line-height:1.75}
+
+.opts{display:grid;gap:10px}
+.opt-item{
+  display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;
+  padding:14px;cursor:pointer;transition:.15s;background:#fff;
+}
+.opt-item:hover{border-color:var(--pink)}
+.opt-item input{margin-top:.35em;flex:0 0 auto;width:18px;height:18px;accent-color:var(--pink)}
+.opt-item.sel{border-color:var(--pink);background:var(--pink-p)}
+.opt-t{font-weight:700;font-size:.95rem;display:block}
+.opt-d{font-size:.8rem;color:var(--ink-m);display:block;margin-top:2px}
+
+.days{display:flex;gap:8px;flex-wrap:wrap}
+.day{
+  border:1.5px solid var(--line);border-radius:10px;padding:10px 0;cursor:pointer;
+  flex:1;min-width:62px;text-align:center;font-weight:700;font-size:.92rem;transition:.15s;background:#fff;
+}
+.day input{display:none}
+.day.sel{border-color:var(--pink);background:var(--pink-p);color:var(--pink)}
+
+.confirm{background:#FFF7F7;border-left:3px solid #F0A0A0;border-radius:0 10px 10px 0;padding:14px 16px;font-size:.85rem}
+.confirm ul{margin:8px 0 12px 18px}
+.confirm li{margin-bottom:4px}
+.chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:700;font-size:.9rem}
+.chk input{margin-top:.3em;width:18px;height:18px;accent-color:var(--pink);flex:0 0 auto}
+
+.err{color:var(--err);font-size:.82rem;margin-top:6px;display:none;font-weight:700}
+.f.bad input[type=text],.f.bad input[type=email],.f.bad textarea{border-color:var(--err)}
+.f.bad .err{display:block}
+
+.submit{
+  width:100%;background:var(--pink);color:#fff;border:none;border-radius:999px;
+  padding:18px;font-size:1.05rem;font-weight:800;font-family:inherit;cursor:pointer;transition:.2s;
+  box-shadow:0 6px 18px rgba(229,48,138,.28);
+}
+.submit:hover{transform:translateY(-2px)}
+.after{text-align:center;font-size:.8rem;color:var(--ink-m);margin-top:14px}
+
+/* done */
+.done{display:none;background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:44px 24px;text-align:center}
+.done.on{display:block}
+.done .mark{
+  width:76px;height:76px;border-radius:50%;background:var(--green-p);color:var(--green);
+  display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 18px;font-weight:900;
+}
+.done h2{font-size:1.3rem;margin-bottom:10px}
+.done p{color:var(--ink-m);font-size:.94rem}
+.done .mahalo{margin-top:22px;font-size:1.1rem;font-weight:900;color:var(--pink);letter-spacing:.08em}
+.done .recap{
+  text-align:left;background:var(--bg);border-radius:12px;padding:16px;margin-top:22px;font-size:.87rem;
+}
+.done .recap dt{color:var(--ink-m);font-size:.76rem;margin-top:8px}
+.done .recap dt:first-child{margin-top:0}
+.done .recap dd{font-weight:700}
+
+footer{text-align:center;padding:28px 0 40px;color:var(--ink-m);font-size:.78rem;border-top:1px solid var(--line)}
+.fnote{font-size:.72rem;color:#B9B2B5;margin-top:8px}
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="wrap">
+    <div class="logo">LOKOMAIKAI</div>
+    <h1>お店・スペースのお問い合わせ</h1>
+    <p>沖縄県読谷村のハワイアンショップ</p>
+    <a class="back" href="./lokomaikai.html">← お店のご案内にもどる</a>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <div class="note" id="note">
+    <b>料金や細かい条件は、やりたいことをうかがってからご案内しています。</b><br>
+    まだ迷っている段階でも大丈夫です。お気軽にお送りください。<br>
+    <span style="font-size:.82rem;color:var(--ink-m)">※ 内容を拝見して、3日以内にご連絡します。</span>
+  </div>
+
+  <form id="form" novalidate>
+
+    <div class="f" id="f-kind">
+      <label class="q">ご希望の内容<span class="req">必須</span></label>
+      <p class="hint">近いものをお選びください。決めかねている場合は3つ目で大丈夫です。</p>
+      <div class="opts">
+        <label class="opt-item"><input type="radio" name="kind" value="お店の月ぎめレンタル">
+          <span><span class="opt-t">お店をまるごと借りたい（月ぎめ）</span>
+          <span class="opt-d">月〜木のうち週2日または週4日／10:00〜17:00の間で1日6時間〜／1か月ごと</span></span></label>
+        <label class="opt-item"><input type="radio" name="kind" value="ワークショップでの利用（単発）">
+          <span><span class="opt-t">ワークショップで使いたい（1日・単発）</span>
+          <span class="opt-d">月曜11:00〜14:00／火曜10:00〜15:00／1時間〜最大3時間</span></span></label>
+        <label class="opt-item"><input type="radio" name="kind" value="まだ決めていない・相談したい">
+          <span><span class="opt-t">まだ決めていない・まず相談したい</span>
+          <span class="opt-d">どちらが合うか分からない、という方はこちらへ</span></span></label>
+      </div>
+      <p class="err">ご希望の内容をお選びください</p>
+    </div>
+
+    <div class="f" id="f-name">
+      <label class="q" for="name">お名前<span class="req">必須</span></label>
+      <input type="text" id="name" name="name" placeholder="例）読谷 花子" autocomplete="name">
+      <p class="err">お名前をご記入ください</p>
+    </div>
+
+    <div class="f">
+      <label class="q" for="kana">ふりがな<span class="opt">任意</span></label>
+      <input type="text" id="kana" name="kana" placeholder="例）よみたん はなこ">
+    </div>
+
+    <div class="f">
+      <label class="q" for="shop">活動名・お店の名前<span class="opt">任意</span></label>
+      <p class="hint">すでに屋号やブランド名をお持ちの方は、ご記入ください。</p>
+      <input type="text" id="shop" name="shop" placeholder="例）Aloha Resin Works">
+    </div>
+
+    <div class="f" id="f-mail">
+      <label class="q" for="mail">メールアドレス<span class="req">必須</span></label>
+      <input type="email" id="mail" name="mail" placeholder="例）aloha@example.com" autocomplete="email">
+      <p class="err">メールアドレスをご確認ください</p>
+    </div>
+
+    <div class="f">
+      <label class="q" for="tel">お電話番号<span class="opt">任意</span></label>
+      <p class="hint">お急ぎの場合はご記入ください。</p>
+      <input type="tel" id="tel" name="tel" placeholder="例）090-0000-0000" autocomplete="tel">
+    </div>
+
+    <div class="f" id="f-what">
+      <label class="q" for="what">どんなことをされたいですか<span class="req">必須</span></label>
+      <p class="hint">作られているもの、やってみたい教室の内容など。ひとことでも大丈夫です。</p>
+      <textarea id="what" name="what" placeholder="例）レジンでアクセサリーを作っています。月に2回ほど、少人数の体験会を開きたいと思っています。"></textarea>
+      <p class="err">やりたいことをご記入ください</p>
+    </div>
+
+    <div class="f">
+      <label class="q">ご希望の曜日<span class="opt">任意</span></label>
+      <p class="hint">お貸しできるのは月・火・水・木です。ワークショップでのご利用は月・火のみになります。</p>
+      <div class="days">
+        <label class="day"><input type="checkbox" name="day" value="月">月</label>
+        <label class="day"><input type="checkbox" name="day" value="火">火</label>
+        <label class="day"><input type="checkbox" name="day" value="水">水</label>
+        <label class="day"><input type="checkbox" name="day" value="木">木</label>
+      </div>
+    </div>
+
+    <div class="f">
+      <label class="q" for="time">ご希望の時間帯・回数<span class="opt">任意</span></label>
+      <input type="text" id="time" name="time" placeholder="例）10時から15時くらい／週2日を希望">
+    </div>
+
+    <div class="f">
+      <label class="q" for="sns">SNSのアカウント<span class="opt">任意</span></label>
+      <p class="hint">作品を拝見できると、ご案内がしやすくなります。</p>
+      <input type="text" id="sns" name="sns" placeholder="例）@your_account">
+    </div>
+
+    <div class="f">
+      <label class="q" for="q">ご質問・気になっていること<span class="opt">任意</span></label>
+      <textarea id="q" name="q" placeholder="例）料金を知りたいです／駐車場はありますか"></textarea>
+    </div>
+
+    <div class="f" id="f-agree">
+      <div class="confirm">
+        <b>お申し込みの前に、3つだけご確認ください。</b>
+        <ul>
+          <li><b>飲食をともなう事業はお受けできません</b></li>
+          <li><b>内装を変えることはできません</b>（すでに完成しています）</li>
+          <li>お店の雰囲気を気に入ってくださる方に限らせていただいています</li>
+        </ul>
+        <label class="chk"><input type="checkbox" id="agree" name="agree">
+          <span>上記を確認しました</span></label>
+      </div>
+      <p class="err">ご確認のうえ、チェックをお願いします</p>
+    </div>
+
+    <button type="submit" class="submit">この内容で送信する</button>
+    <p class="after">送信後、3日以内にご連絡します。しつこいご案内はいたしません。</p>
+  </form>
+
+  <div class="done" id="done">
+    <div class="mark">✓</div>
+    <h2>お問い合わせを承りました</h2>
+    <p>内容を拝見して、3日以内にご連絡いたします。<br>少しだけお待ちください。</p>
+    <dl class="recap" id="recap"></dl>
+    <p class="mahalo">MAHALO NUI LOA !</p>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div style="font-weight:900;color:var(--pink);letter-spacing:.04em">LOKOMAIKAI</div>
+    <p style="margin-top:6px">沖縄県中頭郡読谷村字ときわ30番地1 Gra-Jewe Owan D棟1階</p>
+    <p class="fnote">このページは白梅デジタルが試作したものです（2026年8月）</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var form=document.getElementById('form');
+
+  // 選択のハイライト
+  document.querySelectorAll('.opt-item input').forEach(function(r){
+    r.addEventListener('change',function(){
+      document.querySelectorAll('.opt-item').forEach(function(x){x.classList.remove('sel')});
+      r.closest('.opt-item').classList.add('sel');
+    });
+  });
+  document.querySelectorAll('.day input').forEach(function(c){
+    c.addEventListener('change',function(){ c.closest('.day').classList.toggle('sel',c.checked) });
+  });
+
+  function bad(id,on){ document.getElementById(id).classList.toggle('bad',on) }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=true;
+
+    var kind=form.querySelector('input[name=kind]:checked');
+    bad('f-kind',!kind); if(!kind) ok=false;
+
+    var name=document.getElementById('name').value.trim();
+    bad('f-name',!name); if(!name) ok=false;
+
+    var mail=document.getElementById('mail').value.trim();
+    var mailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail);
+    bad('f-mail',!mailOk); if(!mailOk) ok=false;
+
+    var what=document.getElementById('what').value.trim();
+    bad('f-what',!what); if(!what) ok=false;
+
+    var agree=document.getElementById('agree').checked;
+    bad('f-agree',!agree); if(!agree) ok=false;
+
+    if(!ok){
+      var first=document.querySelector('.f.bad');
+      if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+
+    var days=[].slice.call(form.querySelectorAll('input[name=day]:checked')).map(function(d){return d.value});
+    var rows=[
+      ['ご希望の内容',kind.value],
+      ['お名前',name],
+      ['メールアドレス',mail],
+      ['ご希望の曜日',days.length?days.join('・')+'曜日':'—'],
+      ['やりたいこと',what]
+    ];
+    document.getElementById('recap').innerHTML=rows.map(function(r){
+      return '<dt>'+r[0]+'</dt><dd>'+r[1].replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</dd>';
+    }).join('');
+
+    form.style.display='none';
+    document.getElementById('note').style.display='none';
+    document.getElementById('done').classList.add('on');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+</script>
+
+</body>
+</html>

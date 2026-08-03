@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOKOMAIKAI（ロコマイカイ）｜沖縄・読谷村のハワイアンショップ</title>
+<meta name="description" content="沖縄県読谷村のハワイアンショップ LOKOMAIKAI（ロコマイカイ）。土日13:00〜18:00の週末限定オープン。沖縄県内初上陸の Hilo Homemade Ice Cream、ハワイアンウェア、雑貨。店舗・ワークショップスペースの貸し出しもしています。">
+<style>
+:root{
+  --pink:#E5308A; --pink-l:#FF7FB8; --pink-p:#FFEAF3;
+  --yellow:#FDC81E; --yellow-p:#FFF6D9;
+  --green:#3DAE5A; --green-p:#E6F6EA;
+  --blue:#3FBEE8; --blue-p:#E4F6FC;
+  --ink:#2E2A2C; --ink-m:#6B6467; --line:#EDE6E9;
+  --bg:#FFFDF9; --card:#fff;
+  --r:18px; --sh:0 4px 20px rgba(46,42,44,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.85;
+  -webkit-font-smoothing:antialiased; font-size:15.5px;
+}
+img{max-width:100%;display:block}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+section{padding:46px 0}
+h2{font-size:1.28rem;letter-spacing:.02em;margin-bottom:6px;line-height:1.5}
+.h2sub{font-size:.78rem;color:var(--ink-m);letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.lead{color:var(--ink-m);font-size:.94rem;margin-bottom:22px}
+
+/* ---- hero ---- */
+.hero{
+  background:
+    radial-gradient(1000px 380px at 12% -8%, rgba(253,200,30,.42), transparent 62%),
+    radial-gradient(880px 420px at 92% 8%, rgba(63,190,232,.34), transparent 62%),
+    linear-gradient(170deg,#FFF3F8 0%, #FFFDF9 78%);
+  padding:52px 0 40px; text-align:center; position:relative; overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:5px;
+  background:linear-gradient(90deg,var(--pink),var(--yellow),var(--green),var(--blue),var(--pink));
+}
+.logo{
+  font-size:clamp(2.1rem,8.4vw,3.2rem);font-weight:900;letter-spacing:.03em;
+  color:var(--pink);text-shadow:2px 2px 0 #fff,4px 4px 0 rgba(253,200,30,.55);
+  line-height:1.1;
+}
+.logo-ja{font-size:.92rem;color:var(--ink-m);letter-spacing:.3em;margin-top:8px}
+.tagline{margin-top:16px;font-size:1.02rem;font-weight:700}
+.hero-meta{margin-top:6px;font-size:.9rem;color:var(--ink-m)}
+
+/* ---- today ---- */
+.today{
+  margin:26px auto 0;max-width:520px;background:var(--card);border-radius:var(--r);
+  box-shadow:var(--sh);padding:20px 18px;border:2px solid var(--line);
+}
+.today.open{border-color:var(--green);background:var(--green-p)}
+.today.closed{border-color:var(--line)}
+.today-badge{font-size:.74rem;font-weight:800;letter-spacing:.14em;color:var(--ink-m)}
+.today-main{font-size:1.34rem;font-weight:900;margin:6px 0 2px;line-height:1.4}
+.today.open .today-main{color:var(--green)}
+.today-sub{font-size:.9rem;color:var(--ink-m)}
+
+/* ---- calendar ---- */
+.cals{display:grid;gap:18px;grid-template-columns:1fr}
+@media(min-width:620px){.cals{grid-template-columns:1fr 1fr}}
+.cal{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px 14px 16px}
+.cal-h{text-align:center;font-weight:900;font-size:1.05rem;margin-bottom:12px;letter-spacing:.04em}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-g div{text-align:center;padding:7px 0;font-size:.82rem;border-radius:8px;position:relative}
+.cal-w{font-weight:800;font-size:.72rem;color:var(--ink-m)}
+.cal-w.sat{color:var(--blue)} .cal-w.sun{color:var(--pink)}
+.cal-d{color:#B9B2B5}
+.cal-d.open{background:var(--pink-p);color:var(--pink);font-weight:900}
+.cal-d.today{outline:2px solid var(--yellow);outline-offset:-2px}
+.cal-note{margin-top:12px;font-size:.78rem;color:var(--ink-m);text-align:center}
+.cal-note b{color:var(--pink)}
+
+/* ---- cards ---- */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:24px 20px}
+.badge{
+  display:inline-block;background:var(--pink);color:#fff;font-size:.72rem;font-weight:800;
+  letter-spacing:.1em;padding:5px 12px;border-radius:999px;margin-bottom:12px;
+}
+.badge.y{background:var(--yellow);color:#5A4700}
+.badge.g{background:var(--green)}
+.badge.b{background:var(--blue)}
+.item-list{list-style:none;display:grid;gap:10px;margin-top:14px}
+.item-list li{padding-left:24px;position:relative;font-size:.95rem}
+.item-list li::before{content:"";position:absolute;left:4px;top:.72em;width:8px;height:8px;border-radius:50%;background:var(--yellow)}
+
+/* ---- access ---- */
+.addr{font-size:1.04rem;font-weight:700;line-height:1.7}
+.addr small{display:block;font-size:.86rem;font-weight:400;color:var(--ink-m);margin-top:6px}
+.btn{
+  display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-weight:700;
+  padding:13px 26px;border-radius:999px;font-size:.94rem;margin-top:16px;transition:.2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn.pink{background:var(--pink)}
+.btn.big{display:block;text-align:center;padding:17px 20px;font-size:1.02rem}
+
+/* ---- rental ---- */
+.rental{background:linear-gradient(170deg,#FFF9E8,#FFF3F8);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.plans{display:grid;gap:16px;margin-top:20px}
+@media(min-width:640px){.plans{grid-template-columns:1fr 1fr}}
+.plan{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:22px 18px;display:flex;flex-direction:column}
+.plan h3{font-size:1.08rem;margin-bottom:4px}
+.plan .who{font-size:.82rem;color:var(--ink-m);margin-bottom:14px}
+.spec{list-style:none;display:grid;gap:8px;font-size:.9rem;margin-bottom:14px}
+.spec li{display:flex;gap:10px;align-items:flex-start}
+.spec .k{flex:0 0 4.6em;color:var(--ink-m);font-size:.82rem;padding-top:.15em}
+.spec .v{flex:1;font-weight:600}
+.merit{background:var(--green-p);border-radius:12px;padding:12px 14px;font-size:.86rem;margin-top:auto}
+.merit b{color:var(--green)}
+.caution{margin-top:14px;font-size:.8rem;color:var(--ink-m);background:#FFF7F7;border-left:3px solid #F0A0A0;padding:10px 12px;border-radius:0 8px 8px 0}
+.limit{
+  text-align:center;background:var(--pink);color:#fff;border-radius:12px;
+  padding:12px;font-weight:800;font-size:.96rem;margin-top:20px;
+}
+
+/* ---- contact ---- */
+.sns{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.sns a{
+  flex:1;min-width:150px;text-align:center;text-decoration:none;color:var(--ink);
+  background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;font-weight:700;font-size:.92rem;
+}
+footer{text-align:center;padding:34px 0 44px;color:var(--ink-m);font-size:.8rem;border-top:1px solid var(--line)}
+.fnote{font-size:.72rem;color:#B9B2B5;margin-top:10px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="logo">LOKOMAIKAI</div>
+    <div class="logo-ja">ロコマイカイ</div>
+    <p class="tagline">沖縄・読谷村のハワイアンショップ</p>
+    <p class="hero-meta">土曜・日曜 13:00〜18:00／週末限定オープン</p>
+
+    <div class="today" id="today">
+      <div class="today-badge" id="todayLabel">本日</div>
+      <div class="today-main" id="todayMain">確認中…</div>
+      <div class="today-sub" id="todaySub"></div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="h2sub">Calendar</p>
+    <h2>今月・来月の営業日</h2>
+    <p class="lead">土曜・日曜のみ、13:00〜18:00 で開けています。</p>
+    <div class="cals" id="cals"></div>
+    <p class="cal-note"><b>■</b> が営業日です。祝日はお休みをいただく場合があります。</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="card">
+      <span class="badge y">沖縄県内 初上陸</span>
+      <h2>Hilo Homemade Ice Cream</h2>
+      <p class="lead" style="margin-bottom:0">ハワイ島ヒロ生まれのアイスクリームです。沖縄県内でお召し上がりいただけるのは、当店が初めてになります。濃厚な味わいをぜひ店内で。</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <p class="h2sub">Shop</p>
+    <h2>お店にあるもの</h2>
+    <p class="lead">ハワイの空気をそのまま持ってきたようなお店です。</p>
+    <div class="card">
+      <ul class="item-list">
+        <li><b>Hilo Homemade Ice Cream</b>（沖縄県内初上陸）</li>
+        <li><b>ハワイアンウェア・アロハシャツ</b></li>
+        <li><b>ハワイアン雑貨・アクセサリー</b></li>
+        <li><b>レインボーハンドバッグ</b> ほか、季節ごとの入荷</li>
+        <li>季節の企画（夏の福袋、ワークショップなど）</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <p class="h2sub">Access</p>
+    <h2>場所</h2>
+    <p class="lead">大湾シティのすぐ近くです。</p>
+    <div class="card">
+      <p class="addr">
+        沖縄県中頭郡読谷村字ときわ30番地1<br>
+        Gra-Jewe Owan D棟 1階
+        <small>お車でお越しの方は「Gra-Jewe Owan」でお探しください。D棟の1階になります。</small>
+      </p>
+      <a class="btn" href="https://www.google.com/maps/search/?api=1&query=%E6%B2%96%E7%B8%84%E7%9C%8C%E8%AA%AD%E8%B0%B7%E6%9D%91%E5%AD%97%E3%81%A8%E3%81%8D%E3%82%8F30%E7%95%AA%E5%9C%B01" target="_blank" rel="noopener">Googleマップで開く</a>
+    </div>
+  </div>
+</section>
+
+<section class="rental" id="rental">
+  <div class="wrap">
+    <p class="h2sub">Rental</p>
+    <h2>お店・スペースをお貸ししています</h2>
+    <p class="lead">平日はお店が空いています。ご自身のお店を始めたい方、ワークショップを開きたい方に、そのままお使いいただけます。</p>
+
+    <div class="plans">
+
+      <div class="plan">
+        <span class="badge">月ぎめレンタル</span>
+        <h3>お店をまるごと借りる</h3>
+        <p class="who">自分のお店を始めてみたい方へ</p>
+        <ul class="spec">
+          <li><span class="k">曜日</span><span class="v">月・火・水・木</span></li>
+          <li><span class="k">時間</span><span class="v">10:00〜17:00 の間<br><small style="font-weight:400;color:var(--ink-m)">1日6時間〜（7時間も相談可）</small></span></li>
+          <li><span class="k">日数</span><span class="v">週2日 または 週4日<br><small style="font-weight:400;color:var(--ink-m)">1か月ごとのレンタルです</small></span></li>
+          <li><span class="k">募集</span><span class="v">最大2名さままで<br><small style="font-weight:400;color:var(--ink-m)">ご利用人数はご相談ください</small></span></li>
+        </ul>
+        <div class="merit">
+          <b>レンタル料金以外はかかりません。</b><br>
+          賃貸物件を借りるときの敷金・礼金・光熱費などが不要です。内装もすでに完成しているので、<b>初期投資を抑えてお店を始められます。</b>
+        </div>
+        <div class="caution">
+          ※ 内装を変えることはできません<br>
+          ※ 飲食をともなう事業はご遠慮いただいています<br>
+          ※ お店の雰囲気を気に入ってくださる方に限らせていただきます
+        </div>
+      </div>
+
+      <div class="plan">
+        <span class="badge b">1日・単発</span>
+        <h3>ワークショップで使う</h3>
+        <p class="who">教室・体験会を開きたい作家さんへ</p>
+        <ul class="spec">
+          <li><span class="k">月曜</span><span class="v">11:00〜14:00</span></li>
+          <li><span class="k">火曜</span><span class="v">10:00〜15:00</span></li>
+          <li><span class="k">時間</span><span class="v">1時間〜 最大3時間</span></li>
+          <li><span class="k">場所</span><span class="v">LOKOMAIKAI 1階 店舗内</span></li>
+        </ul>
+        <div class="merit">
+          レジンアート、絵付け、アクセサリーづくりなど、<b>これまでにも作家さんに使っていただいています。</b>お店のお客さまにも見ていただける場所です。
+        </div>
+        <div class="caution">
+          ※ 飲食をともなう内容はご遠慮いただいています
+        </div>
+      </div>
+
+    </div>
+
+    <p class="limit">月ぎめレンタルは、最大2名さままでの募集です</p>
+
+    <a class="btn pink big" href="./lokomaikai-form.html">お店・スペースのお問い合わせはこちら</a>
+    <p style="text-align:center;font-size:.8rem;color:var(--ink-m);margin-top:10px">料金や詳しい内容は、内容をうかがってからご案内しています。まずはお気軽にどうぞ。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="h2sub">Contact</p>
+    <h2>お問い合わせ</h2>
+    <p class="lead">お店のこと、商品のことは、InstagramのDMでも承っています。</p>
+    <div class="sns">
+      <a href="https://www.instagram.com/lokomaikai_yomitan_/" target="_blank" rel="noopener">Instagram<br><small style="font-weight:400;color:var(--ink-m)">@lokomaikai_yomitan_</small></a>
+      <a href="https://www.threads.net/@lokomaikai_yomitan_" target="_blank" rel="noopener">Threads<br><small style="font-weight:400;color:var(--ink-m)">@lokomaikai_yomitan_</small></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div style="font-weight:900;color:var(--pink);letter-spacing:.04em">LOKOMAIKAI</div>
+    <p style="margin-top:6px">沖縄県中頭郡読谷村字ときわ30番地1 Gra-Jewe Owan D棟1階</p>
+    <p>土・日 13:00〜18:00</p>
+    <p class="fnote">このページは白梅デジタルが試作したものです（2026年8月）</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var WD = ['日','月','火','水','木','金','土'];
+  var now = new Date();
+
+  // ---- 営業日の判定（土=6 / 日=0） ----
+  function isOpen(d){ var w=d.getDay(); return w===0||w===6; }
+
+  // ---- 本日の状態 ----
+  var box=document.getElementById('today'),
+      lab=document.getElementById('todayLabel'),
+      main=document.getElementById('todayMain'),
+      sub=document.getElementById('todaySub');
+
+  var m=now.getMonth()+1, d=now.getDate(), w=WD[now.getDay()];
+  lab.textContent = m+'月'+d+'日（'+w+'）';
+
+  if(isOpen(now)){
+    var h=now.getHours()+now.getMinutes()/60;
+    box.className='today open';
+    if(h<13){
+      main.textContent='本日は営業日です';
+      sub.textContent='13:00にオープンします（18:00まで）';
+    }else if(h<18){
+      main.textContent='ただいま営業中です';
+      sub.textContent='18:00まで開けています';
+    }else{
+      main.textContent='本日は終了しました';
+      sub.textContent='次は'+nextOpenText()+'です';
+    }
+  }else{
+    box.className='today closed';
+    main.textContent='本日はお休みです';
+    sub.textContent='次の営業日は'+nextOpenText()+'（13:00〜18:00）';
+  }
+
+  function nextOpenText(){
+    var t=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+    for(var i=0;i<10;i++){
+      if(isOpen(t)) return (t.getMonth()+1)+'月'+t.getDate()+'日（'+WD[t.getDay()]+'）';
+      t.setDate(t.getDate()+1);
+    }
+    return '';
+  }
+
+  // ---- カレンダー自動生成（今月・来月） ----
+  function buildCal(y,mo){
+    var first=new Date(y,mo,1), last=new Date(y,mo+1,0);
+    var head=(mo+1)+'月';
+    var h='<div class="cal"><div class="cal-h">'+y+'年 '+head+'</div><div class="cal-g">';
+    var wl=['月','火','水','木','金','土','日'];
+    wl.forEach(function(x,i){
+      h+='<div class="cal-w'+(i===5?' sat':i===6?' sun':'')+'">'+x+'</div>';
+    });
+    // 月曜始まりに補正
+    var lead=(first.getDay()+6)%7;
+    for(var i=0;i<lead;i++) h+='<div></div>';
+    for(var day=1;day<=last.getDate();day++){
+      var dt=new Date(y,mo,day);
+      var cls='cal-d';
+      if(isOpen(dt)) cls+=' open';
+      if(dt.toDateString()===now.toDateString()) cls+=' today';
+      h+='<div class="'+cls+'">'+day+'</div>';
+    }
+    h+='</div></div>';
+    return h;
+  }
+
+  var y=now.getFullYear(), mo=now.getMonth();
+  var nY=mo===11?y+1:y, nM=(mo+1)%12;
+  document.getElementById('cals').innerHTML = buildCal(y,mo)+buildCal(nY,nM);
+})();
+</script>
+
+</body>
+</html>
