@@ -186,6 +186,41 @@ header p{font-size:12.5px;color:var(--sub);margin-top:8px}
   .result .who .y{font-size:19px}
   .tabs{grid-template-columns:repeat(2,1fr)}
 }
+
+table.detail{width:100%;border-collapse:collapse;margin-top:6px}
+table.detail th,table.detail td{padding:8px 6px;border-bottom:1px solid #F2EDE2;
+  font-size:12.5px;text-align:left;line-height:1.6;vertical-align:top}
+table.detail th{background:var(--paper);color:var(--gold);font-size:11.5px;font-weight:700}
+table.detail td.p{text-align:right;white-space:nowrap;font-weight:700}
+table.detail td.w{white-space:nowrap;font-weight:700}
+table.detail td.w.k{color:var(--k)} table.detail td.w.o{color:var(--o)}
+table.detail td.w.h{color:var(--half)} table.detail td.w.n{color:var(--none)}
+table.detail tr.sum td{border-top:2px solid var(--gold);border-bottom:0;
+  padding-top:11px;font-weight:700;font-size:13px}
+table.detail tr.grp td{background:var(--paper);font-size:11.5px;color:var(--gold);font-weight:700}
+
+.calcbox{background:var(--paper);border:1px solid var(--line);padding:14px 15px;
+  margin-top:14px;font-size:12.5px;line-height:2}
+.calcbox .h{font-weight:700;margin-bottom:6px;font-size:13px}
+.calcbox code{font-family:ui-monospace,Menlo,monospace;font-size:12px;
+  background:var(--white);padding:1px 5px;border:1px solid var(--line);border-radius:2px}
+
+.plantbl{margin-bottom:18px}
+.plantbl h3{font-size:13px;font-weight:700;margin-bottom:2px}
+.plantbl .pn{font-size:11.5px;color:var(--sub);margin-bottom:6px}
+.plantbl table{width:100%;border-collapse:collapse}
+.plantbl td{padding:5px 6px;border-bottom:1px solid #F4F0E6;font-size:12px;line-height:1.5}
+.plantbl td.p{text-align:right;white-space:nowrap;color:var(--gold);font-weight:700;width:46px}
+.plantbl td.g{background:var(--paper);color:var(--gold);font-weight:700;font-size:11px}
+.plantbl tr.t td{border-top:1px solid var(--line);font-weight:700}
+
+@media print{
+  .result{position:static;background:#fff;color:#000;border-top:2px solid #000}
+  .result .who .n,.result .who .p,.result .who .ex{opacity:1}
+  .tabs,.bulk,.brand{display:none}
+  body{padding-bottom:0;background:#fff}
+  .card{break-inside:avoid;border-color:#999}
+}
 </style>
 </head>
 <body>
@@ -240,6 +275,28 @@ header p{font-size:12.5px;color:var(--sub);margin-top:8px}
     </div>
     <div id="items"></div>
     <div class="warn" id="warn" style="display:none"></div>
+  </div>
+
+  <div class="card" id="detailCard">
+    <h2>計算の内訳</h2>
+    <div class="note">この表を見れば、どうやって分かれたかが全部わかります。</div>
+    <table class="detail" id="detail"></table>
+
+    <div class="calcbox" id="calcbox"></div>
+
+    <div class="bulk" style="margin-top:16px">
+      <button id="copyBtn">記録用の文をコピー</button>
+      <button id="printBtn">印刷・PDFにする</button>
+    </div>
+    <div class="note" style="margin-top:8px">
+      コピーした文は、そのままLINEやメールでお互いに送れます。あとで見返せるように残しておいてください。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>割合の一覧（4つの案件すべて）</h2>
+    <div class="note">この割合は、二人で話して決めたものです。変えるときも二人で決めます。</div>
+    <div id="allPlans"></div>
   </div>
 
   <div class="memo">
@@ -348,6 +405,99 @@ function calc(){
       <div class="y">${yen(money[m] + (jihi && tate===m ? jihi : 0))}</div>
       ${jihi && tate===m ? `<div class="ex">うち実費 ${yen(jihi)}</div>` : ''}
     </div>`).join('');
+
+  renderDetail({items, den, raw, share, money, amount, jihi, tate, base});
+  window.__snap = {items, den, raw, share, money, amount, jihi, tate, base};
+}
+
+const CLS = {'角田':'k','大西':'o','半分':'h','なし':'n'};
+
+function renderDetail(d){
+  const p = PLANS[plan];
+  let n = 0, rows = '';
+  p.groups.forEach(g => {
+    rows += `<tr class="grp"><td colspan="4">${esc(g.title)}</td></tr>`;
+    g.items.forEach(it => {
+      const w = state[n++];
+      const my = MEMBERS.map(m => {
+        if (w === 'なし') return '—';
+        if (w === '半分') return (it.pct/2) + '%';
+        return w === m ? it.pct + '%' : '—';
+      });
+      rows += `<tr>
+        <td>${esc(it.name)}</td>
+        <td class="w ${CLS[w]}">${esc(w)}</td>
+        <td class="p">${my[0]}</td>
+        <td class="p">${my[1]}</td>
+      </tr>`;
+    });
+  });
+  rows += `<tr class="sum">
+    <td>合計（なしを除く）</td><td class="w">${d.den}%</td>
+    <td class="p">${d.raw[MEMBERS[0]]}%</td>
+    <td class="p">${d.raw[MEMBERS[1]]}%</td></tr>`;
+
+  document.getElementById('detail').innerHTML =
+    `<tr><th>作業</th><th>やった人</th><th style="text-align:right">${esc(MEMBERS[0])}</th>
+     <th style="text-align:right">${esc(MEMBERS[1])}</th></tr>` + rows;
+
+  const m0 = MEMBERS[0], m1 = MEMBERS[1];
+  document.getElementById('calcbox').innerHTML = `
+    <div class="h">どう計算したか</div>
+    1　「なし」を除いた割合の合計　<code>${d.den}%</code>　これが分母になります<br>
+    2　${esc(m0)}　<code>${d.raw[m0]} ÷ ${d.den} = ${(d.share[m0]*100).toFixed(1)}%</code><br>
+    　　${esc(m1)}　<code>${d.raw[m1]} ÷ ${d.den} = ${(d.share[m1]*100).toFixed(1)}%</code><br>
+    3　分ける元のお金　<code>${yen(d.amount)} − 実費${yen(d.jihi)} = ${yen(d.base)}</code><br>
+    4　${esc(m0)}　<code>${yen(d.base)} × ${(d.share[m0]*100).toFixed(1)}% = ${yen(d.money[m0])}</code><br>
+    　　${esc(m1)}　<code>${yen(d.base)} × ${(d.share[m1]*100).toFixed(1)}% = ${yen(d.money[m1])}</code><br>
+    ${d.jihi ? `5　立て替えた実費 <code>${yen(d.jihi)}</code> を ${esc(d.tate)} に戻します<br>` : ''}
+    <br>
+    <b>お渡しする金額　${esc(m0)} ${yen(d.money[m0] + (d.jihi && d.tate===m0 ? d.jihi : 0))}　／　${esc(m1)} ${yen(d.money[m1] + (d.jihi && d.tate===m1 ? d.jihi : 0))}</b><br>
+    <span style="color:var(--sub)">合計 ${yen(d.amount)}（入金額とぴったり合います）</span>
+  `;
+}
+
+function makeText(){
+  const d = window.__snap; if (!d) return '';
+  const p = PLANS[plan];
+  const m0 = MEMBERS[0], m1 = MEMBERS[1];
+  const dt = new Date();
+  const ymd = `${dt.getFullYear()}年${dt.getMonth()+1}月${dt.getDate()}日`;
+  let s = `【報酬の分け方】${ymd}\n`;
+  s += `案件の種類　${p.label}\n`;
+  s += `入金額　${yen(d.amount)}\n`;
+  if (d.jihi) s += `立て替えた実費　${yen(d.jihi)}（${d.tate}）\n`;
+  s += `\n■ やった人\n`;
+  let n = 0;
+  p.groups.forEach(g => {
+    s += `《${g.title}》\n`;
+    g.items.forEach(it => { s += `　${it.name}　${it.pct}%　… ${state[n++]}\n`; });
+  });
+  s += `\n■ 計算\n`;
+  s += `　分母（なしを除く）　${d.den}%\n`;
+  s += `　${m0}　${d.raw[m0]} ÷ ${d.den} ＝ ${(d.share[m0]*100).toFixed(1)}%\n`;
+  s += `　${m1}　${d.raw[m1]} ÷ ${d.den} ＝ ${(d.share[m1]*100).toFixed(1)}%\n`;
+  s += `　分ける元　${yen(d.base)}\n`;
+  s += `\n■ お渡しする金額\n`;
+  s += `　${m0}　${yen(d.money[m0] + (d.jihi && d.tate===m0 ? d.jihi : 0))}\n`;
+  s += `　${m1}　${yen(d.money[m1] + (d.jihi && d.tate===m1 ? d.jihi : 0))}\n`;
+  s += `　合計　${yen(d.amount)}\n`;
+  return s;
+}
+
+function renderAllPlans(){
+  document.getElementById('allPlans').innerHTML = Object.entries(PLANS).map(([k,v]) => `
+    <div class="plantbl">
+      <h3>${k}　${esc(v.label)}</h3>
+      <div class="pn">${esc(v.note)}</div>
+      <table>
+        ${v.groups.map(g => `
+          <tr><td class="g" colspan="2">${esc(g.title)}</td></tr>
+          ${g.items.map(it => `<tr><td>${esc(it.name)}</td><td class="p">${it.pct}%</td></tr>`).join('')}
+        `).join('')}
+        <tr class="t"><td>合計</td><td class="p">${v.groups.reduce((s,g)=>s+g.items.reduce((a,i)=>a+i.pct,0),0)}%</td></tr>
+      </table>
+    </div>`).join('');
 }
 
 document.querySelectorAll('#tabs button').forEach(b =>
@@ -363,6 +513,19 @@ document.querySelectorAll('.bulk button').forEach(b =>
     calc();
   }));
 
+document.getElementById('copyBtn').addEventListener('click', async e => {
+  const txt = makeText();
+  try {
+    await navigator.clipboard.writeText(txt);
+    e.target.textContent = 'コピーしました';
+    setTimeout(()=>e.target.textContent='記録用の文をコピー', 2200);
+  } catch(_) {
+    prompt('この文をコピーしてください', txt);
+  }
+});
+document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+
+renderAllPlans();
 build();
 </script>
 
