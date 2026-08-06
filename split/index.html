@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>報酬の分け方｜白梅デジタル</title>
+<meta name="robots" content="noindex,nofollow">
+
+<!-- ═══════════════════════════════════════════════
+     ★ 割合を変えるときは、ここだけ書き換えます
+     ═══════════════════════════════════════════════ -->
+<script>
+const MEMBERS = ["角田", "大西"];
+
+const PLANS = {
+  A: {
+    label: "新規のお客様（初回の入金）",
+    note: "大枠は 営業40% ／ 作業60%",
+    groups: [
+      { title: "営業　40%", items: [
+        { name: "探す・調べる",     desc: "誰に送るか決める／プロフィール／Googleマップ／穴を見つける", pct: 4,  who: "角田" },
+        { name: "切り口を決める",   desc: "何が穴か／何を言うか／言ってはいけないことの整理",           pct: 6,  who: "大西" },
+        { name: "DMの文面を作る",   desc: "その人向けの文／2通目以降も",                              pct: 8,  who: "大西" },
+        { name: "送る",             desc: "送信／送る時間を選ぶ",                                     pct: 2,  who: "角田" },
+        { name: "DM・LINEで商談",   desc: "返信に答える／質問／条件のやり取り",                        pct: 8,  who: "角田" },
+        { name: "電話で商談",       desc: "電話をかける／受ける／メモを残す",                          pct: 6,  who: "角田" },
+        { name: "見積り・受注",     desc: "金額を出す／条件を詰める／決めてもらう",                    pct: 6,  who: "角田" },
+      ]},
+      { title: "作業　60%", items: [
+        { name: "構成を決める",     desc: "何を作るか／ページの並び／どこに何を置くか",                pct: 6,  who: "大西" },
+        { name: "文章を書く",       desc: "載せる文章／言い回しを整える",                             pct: 7,  who: "大西" },
+        { name: "作る",             desc: "実際の制作",                                              pct: 25, who: "大西" },
+        { name: "資料を作る",       desc: "ご提案書／お見積書／ご説明の資料",                          pct: 5,  who: "大西" },
+        { name: "お見せする",       desc: "たたき台を送る／何をしたか説明する",                        pct: 3,  who: "大西" },
+        { name: "修正対応",         desc: "言われたところを直す／何度でも",                            pct: 9,  who: "大西" },
+        { name: "公開・お渡し",     desc: "ドメイン／公開／使い方のご説明",                            pct: 5,  who: "大西" },
+      ]},
+    ]
+  },
+
+  B: {
+    label: "月額の2ヶ月目以降（毎月の入金）",
+    note: "営業がないので、40:60の枠は使いません",
+    groups: [
+      { title: "毎月の作業", items: [
+        { name: "窓口・連絡",       desc: "連絡を受ける／要望を聞く／こちらから連絡",                  pct: 15, who: "角田" },
+        { name: "打ち合わせ",       desc: "電話やLINEでのやり取り",                                   pct: 10, who: "角田" },
+        { name: "更新・修正",       desc: "実際に直す／中身を入れ替える",                             pct: 50, who: "大西" },
+        { name: "管理",             desc: "サーバー／ドメイン／表示の確認／不具合対応",                pct: 15, who: "大西" },
+        { name: "こちらからの提案", desc: "こうしたらどうですか、という声かけ",                        pct: 10, who: "大西" },
+      ]},
+    ]
+  },
+
+  C: {
+    label: "既にいるお客様からの追加注文",
+    note: "信用があるので、営業の枠を 40% → 25% に下げています",
+    groups: [
+      { title: "営業　25%", items: [
+        { name: "提案",             desc: "こういうこともできます、と持ちかける",                      pct: 10, who: "角田" },
+        { name: "商談",             desc: "DM・LINE・電話でのやり取り",                               pct: 8,  who: "角田" },
+        { name: "見積り・受注",     desc: "金額を出す／決めてもらう",                                 pct: 7,  who: "角田" },
+      ]},
+      { title: "作業　75%", items: [
+        { name: "構成を決める",     desc: "何を作るか／どう並べるか",                                 pct: 8,  who: "大西" },
+        { name: "文章を書く",       desc: "載せる文章を書く",                                        pct: 7,  who: "大西" },
+        { name: "作る",             desc: "実際の制作",                                              pct: 35, who: "大西" },
+        { name: "修正対応",         desc: "言われたところを直す",                                     pct: 15, who: "大西" },
+        { name: "公開・お渡し",     desc: "公開／ご説明",                                            pct: 10, who: "大西" },
+      ]},
+    ]
+  },
+
+  D: {
+    label: "紹介で来たお客様",
+    note: "紹介の分を先に15%取り、残り85%をAと同じ比率で割ります",
+    groups: [
+      { title: "紹介", items: [
+        { name: "紹介",             desc: "つないでくれた／お礼をした",                               pct: 15, who: "角田" },
+      ]},
+      { title: "営業　34%", items: [
+        { name: "探す・調べる",     desc: "",                                                        pct: 3,  who: "角田" },
+        { name: "切り口を決める",   desc: "",                                                        pct: 5,  who: "大西" },
+        { name: "DMの文面を作る",   desc: "",                                                        pct: 7,  who: "大西" },
+        { name: "送る",             desc: "",                                                        pct: 2,  who: "角田" },
+        { name: "DM・LINEで商談",   desc: "",                                                        pct: 7,  who: "角田" },
+        { name: "電話で商談",       desc: "",                                                        pct: 5,  who: "角田" },
+        { name: "見積り・受注",     desc: "",                                                        pct: 5,  who: "角田" },
+      ]},
+      { title: "作業　51%", items: [
+        { name: "構成を決める",     desc: "",                                                        pct: 5,  who: "大西" },
+        { name: "文章を書く",       desc: "",                                                        pct: 6,  who: "大西" },
+        { name: "作る",             desc: "",                                                        pct: 21, who: "大西" },
+        { name: "資料を作る",       desc: "",                                                        pct: 4,  who: "大西" },
+        { name: "お見せする",       desc: "",                                                        pct: 3,  who: "大西" },
+        { name: "修正対応",         desc: "",                                                        pct: 8,  who: "大西" },
+        { name: "公開・お渡し",     desc: "",                                                        pct: 4,  who: "大西" },
+      ]},
+    ]
+  },
+};
+</script>
+<!-- ═══════════ ここまで ═══════════ -->
+
+<style>
+:root{--ink:#26241F;--sub:#6B655C;--line:#E6E0D4;--paper:#FBF9F4;--gold:#9C7C2E;
+      --white:#fff;--k:#2E6B8A;--o:#8A5A2E;--half:#6B655C;--none:#B9B2A6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+     color:var(--ink);background:var(--paper);line-height:1.8;font-size:15px;
+     -webkit-text-size-adjust:100%;padding-bottom:120px}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px}
+
+.brand{display:flex;align-items:center;gap:9px;text-decoration:none;padding:14px 18px}
+.brand img{width:26px;height:26px}
+.brand span{font-size:11px;letter-spacing:.14em;color:var(--sub)}
+
+header{background:var(--white);border-top:4px solid var(--gold);border-bottom:1px solid var(--line);
+       padding:0 0 22px;text-align:center}
+header h1{font-size:22px;font-weight:600;letter-spacing:.06em;margin-top:6px}
+header p{font-size:12.5px;color:var(--sub);margin-top:8px}
+
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:22px 0 18px}
+.tabs button{padding:12px 4px;border:1px solid var(--line);background:var(--white);
+             font-family:inherit;font-size:12.5px;cursor:pointer;border-radius:2px;
+             color:var(--sub);line-height:1.5}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabs button b{display:block;font-size:15px;margin-bottom:2px}
+
+.card{background:var(--white);border:1px solid var(--line);padding:20px 18px;margin-bottom:16px}
+.card h2{font-size:15px;font-weight:600;margin-bottom:4px}
+.card .note{font-size:12.5px;color:var(--sub);margin-bottom:14px}
+
+.f{margin-bottom:14px}
+.f label{display:block;font-size:12.5px;color:var(--sub);margin-bottom:6px}
+.f input,.f select{width:100%;padding:12px 13px;border:1px solid var(--line);
+     font-family:inherit;font-size:17px;border-radius:2px;background:var(--white);color:var(--ink)}
+.f input[type=number]{font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.gtitle{font-size:12.5px;font-weight:700;color:var(--gold);letter-spacing:.06em;
+        padding:14px 0 8px;border-bottom:1px solid var(--line);margin-bottom:4px}
+
+.row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #F2EDE2}
+.row:last-child{border-bottom:0}
+.row .info{flex:1;min-width:0}
+.row .nm{font-size:13.5px;font-weight:600;line-height:1.5}
+.row .ds{font-size:11.5px;color:var(--sub);line-height:1.6;margin-top:2px}
+.row .pc{font-size:12px;color:var(--gold);font-weight:700;white-space:nowrap;min-width:34px;text-align:right}
+.pick{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;width:196px;flex-shrink:0}
+.pick label{margin:0;cursor:pointer}
+.pick input{display:none}
+.pick span{display:block;text-align:center;padding:8px 2px;border:1px solid var(--line);
+           font-size:11px;background:var(--white);border-radius:2px;transition:.1s;line-height:1.3}
+.pick input:checked + span{color:#fff;font-weight:700}
+.pick input[value="角田"]:checked + span{background:var(--k);border-color:var(--k)}
+.pick input[value="大西"]:checked + span{background:var(--o);border-color:var(--o)}
+.pick input[value="半分"]:checked + span{background:var(--half);border-color:var(--half)}
+.pick input[value="なし"]:checked + span{background:var(--none);border-color:var(--none)}
+
+.bulk{display:flex;gap:7px;margin:10px 0 0;flex-wrap:wrap}
+.bulk button{padding:7px 12px;border:1px solid var(--line);background:var(--white);
+             font-family:inherit;font-size:11.5px;cursor:pointer;border-radius:2px;color:var(--sub)}
+.bulk button:hover{background:var(--paper)}
+
+.result{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;
+        padding:14px 0;box-shadow:0 -3px 14px rgba(0,0,0,.16);z-index:9}
+.result .wrap{display:flex;align-items:center;gap:14px}
+.result .who{flex:1;text-align:center}
+.result .who .n{font-size:11.5px;opacity:.66;letter-spacing:.08em}
+.result .who .p{font-size:13px;opacity:.8;margin-top:1px}
+.result .who .y{font-size:22px;font-weight:700;letter-spacing:.01em;line-height:1.25}
+.result .who .ex{font-size:10.5px;opacity:.6;margin-top:1px}
+.result .bar{width:1px;height:42px;background:rgba(255,255,255,.2)}
+
+.warn{background:#FDF4EC;border:1px solid #E8D2BC;color:#8A5A2E;
+      padding:11px 13px;font-size:12.5px;margin-top:12px;line-height:1.75}
+.memo{font-size:12px;color:var(--sub);line-height:1.9;margin-top:14px}
+.memo b{color:var(--ink)}
+
+@media(max-width:640px){
+  .row{flex-wrap:wrap}
+  .pick{width:100%;order:3}
+  .row .info{flex:1 1 auto}
+  .two{grid-template-columns:1fr}
+  .result .who .y{font-size:19px}
+  .tabs{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<a class="brand" href="https://shiraumedigital.com/">
+  <img src="../assets/images/shiraume-symbol-mark.png" alt="" onerror="this.style.display='none'">
+  <span>白梅デジタル</span>
+</a>
+
+<header>
+  <div class="wrap">
+    <h1>報酬の分け方</h1>
+    <p>金額を入れて、やった人を選ぶだけです</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="card">
+    <h2 id="planLabel"></h2>
+    <div class="note" id="planNote"></div>
+
+    <div class="f">
+      <label>入金額（税込）</label>
+      <input type="number" id="amount" value="39840" min="0" step="1">
+    </div>
+
+    <div class="two">
+      <div class="f">
+        <label>立て替えた実費（ドメイン代など）</label>
+        <input type="number" id="jihi" value="0" min="0" step="1">
+      </div>
+      <div class="f">
+        <label>立て替えた人</label>
+        <select id="tate"></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>やった人を選んでください</h2>
+    <div class="note">
+      発生しなかった作業は「なし」にします。その分は、やった人で按分されます。
+    </div>
+    <div class="bulk">
+      <button data-all="角田">全部 角田</button>
+      <button data-all="大西">全部 大西</button>
+      <button data-all="半分">全部 半分</button>
+      <button data-reset="1">最初の想定に戻す</button>
+    </div>
+    <div id="items"></div>
+    <div class="warn" id="warn" style="display:none"></div>
+  </div>
+
+  <div class="memo">
+    <b>決まりごと</b><br>
+    ・分ける元は「入金額そのまま」。実費だけ、立て替えた人に先に返します<br>
+    ・「なし」にした作業の割合は、分母から外れます。合計は必ず100%になります<br>
+    ・振込手数料は、今は引かずに考えます<br>
+    ・海外送金の手数料は、送る側（大西）が持ちます<br>
+    ・割合を変えるときは、二人で話して決めます
+  </div>
+
+</div>
+
+<div class="result">
+  <div class="wrap" id="result"></div>
+</div>
+
+<script>
+const yen = n => '¥' + Math.round(n).toLocaleString('ja-JP');
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CH = ["角田","大西","半分","なし"];
+let plan = 'A', state = [];
+
+// タブ
+document.getElementById('tabs').innerHTML = Object.entries(PLANS).map(([k,v]) =>
+  `<button data-p="${k}"><b>${k}</b>${esc(v.label.replace(/（.*/,''))}</button>`).join('');
+document.getElementById('tate').innerHTML =
+  MEMBERS.map(m=>`<option>${esc(m)}</option>`).join('');
+
+function flat(){ return PLANS[plan].groups.flatMap(g=>g.items); }
+
+function build(){
+  const p = PLANS[plan];
+  document.getElementById('planLabel').textContent = p.label;
+  document.getElementById('planNote').textContent = p.note;
+  document.querySelectorAll('#tabs button').forEach(b =>
+    b.classList.toggle('on', b.dataset.p === plan));
+
+  state = flat().map(i => i.who);
+  let n = 0;
+  document.getElementById('items').innerHTML = p.groups.map(g => `
+    <div class="gtitle">${esc(g.title)}</div>
+    ${g.items.map(it => {
+      const i = n++;
+      return `<div class="row">
+        <div class="info">
+          <div class="nm">${esc(it.name)}</div>
+          ${it.desc ? `<div class="ds">${esc(it.desc)}</div>` : ''}
+        </div>
+        <div class="pc">${it.pct}%</div>
+        <div class="pick">
+          ${CH.map(c => `<label><input type="radio" name="w${i}" value="${c}" data-i="${i}"
+            ${c===it.who?'checked':''}><span>${c}</span></label>`).join('')}
+        </div>
+      </div>`;
+    }).join('')}
+  `).join('');
+
+  document.querySelectorAll('.pick input').forEach(r =>
+    r.addEventListener('change', () => { state[+r.dataset.i] = r.value; calc(); }));
+  calc();
+}
+
+function calc(){
+  const items = flat();
+  const amount = Math.max(0, +document.getElementById('amount').value || 0);
+  const jihi   = Math.max(0, +document.getElementById('jihi').value || 0);
+  const tate   = document.getElementById('tate').value;
+  const base   = Math.max(0, amount - jihi);
+
+  let den = 0;
+  const raw = {}; MEMBERS.forEach(m => raw[m] = 0);
+  items.forEach((it, i) => {
+    const w = state[i];
+    if (w === 'なし') return;
+    den += it.pct;
+    if (w === '半分') MEMBERS.forEach(m => raw[m] += it.pct / 2);
+    else if (raw[w] !== undefined) raw[w] += it.pct;
+  });
+
+  const warn = document.getElementById('warn');
+  if (den === 0) {
+    warn.style.display = 'block';
+    warn.textContent = '全部「なし」になっています。やった作業を選んでください。';
+  } else {
+    warn.style.display = 'none';
+  }
+
+  const share = {}, money = {};
+  MEMBERS.forEach(m => {
+    share[m] = den ? raw[m] / den : 0;
+    money[m] = Math.round(share[m] * base);
+  });
+  // 端数は、割合の大きいほうに寄せる
+  const diff = base - MEMBERS.reduce((s,m)=>s+money[m],0);
+  if (diff !== 0 && den) {
+    const top = MEMBERS.slice().sort((a,b)=>share[b]-share[a])[0];
+    money[top] += diff;
+  }
+
+  document.getElementById('result').innerHTML = MEMBERS.map((m,i) => `
+    ${i ? '<div class="bar"></div>' : ''}
+    <div class="who">
+      <div class="n">${esc(m)}</div>
+      <div class="p">${(share[m]*100).toFixed(1)}%</div>
+      <div class="y">${yen(money[m] + (jihi && tate===m ? jihi : 0))}</div>
+      ${jihi && tate===m ? `<div class="ex">うち実費 ${yen(jihi)}</div>` : ''}
+    </div>`).join('');
+}
+
+document.querySelectorAll('#tabs button').forEach(b =>
+  b.addEventListener('click', () => { plan = b.dataset.p; build(); }));
+['amount','jihi','tate'].forEach(id =>
+  document.getElementById(id).addEventListener('input', calc));
+document.querySelectorAll('.bulk button').forEach(b =>
+  b.addEventListener('click', () => {
+    if (b.dataset.reset) { build(); return; }
+    state = state.map(() => b.dataset.all);
+    document.querySelectorAll('.pick input').forEach(r =>
+      r.checked = (r.value === b.dataset.all));
+    calc();
+  }));
+
+build();
+</script>
+
+</body>
+</html>
