@@ -43,109 +43,111 @@ const ITEMS = [
 
 ];
 
-// ご注文の受け先
+// 数量の選択肢（増やしたいときはここに足す）
+const QTY = [50, 100, 500, 1000];
+
+// ご注文フォームの送信先
+const FORM_TO   = "contact.shiraumedigital@gmail.com";
+// ご注文の受け先（フォーム以外）
 const LINE_URL  = "https://lin.ee/zZOLYKc";
 const INSTA_URL = "https://www.instagram.com/shiraume.digital_";
-const MAIL_ADDR = "contact.shiraumedigital@gmail.com";
 
-// 特定商取引法の表記（ここも必要なら書き換え）
 const LAW = {
-  seller:   "白梅デジタル　大西 一輝",
-  address:  "ご請求いただき次第、遅滞なく開示いたします",
-  tel:      "ご請求いただき次第、遅滞なく開示いたします",
-  mail:     "contact.shiraumedigital@gmail.com",
-  extra:    "送料（ご注文時にお伝えします）／お振込手数料",
-  pay:      "銀行振込",
-  payTime:  "ご注文の確認後、7日以内にお願いしております",
-  ship:     "ご入金の確認後、7日以内に発送いたします。お取り寄せの商品は、その都度お伝えします",
-  returns:  "商品に不良があった場合は、お届けから7日以内にご連絡ください。送料は当方で負担いたします。お客様のご都合による返品は、未開封のものに限り、お届けから7日以内・送料お客様負担で承ります"
+  seller:  "白梅デジタル　大西 一輝",
+  address: "ご請求いただき次第、遅滞なく開示いたします",
+  tel:     "ご請求いただき次第、遅滞なく開示いたします",
+  mail:    "contact.shiraumedigital@gmail.com",
+  extra:   "送料（ご注文時にお伝えします）／お振込手数料",
+  pay:     "銀行振込",
+  payTime: "ご注文の確認後、7日以内にお願いしております",
+  ship:    "ご入金の確認後、7日以内に発送いたします。お取り寄せの商品は、その都度お伝えします",
+  returns: "商品に不良があった場合は、お届けから7日以内にご連絡ください。送料は当方で負担いたします。お客様のご都合による返品は、未開封のものに限り、お届けから7日以内・送料お客様負担で承ります"
 };
 </script>
 <!-- ═══════════ ここまで ═══════════ -->
 
 <style>
-:root{
-  --ink:#26241F; --sub:#6B655C; --line:#E6E0D4; --paper:#FBF9F4;
-  --gold:#9C7C2E; --white:#fff; --ok:#3B6B47; --ng:#B4472F;
-}
+:root{--ink:#26241F;--sub:#6B655C;--line:#E6E0D4;--paper:#FBF9F4;--gold:#9C7C2E;--white:#fff;--ok:#3B6B47;--ng:#B4472F}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
-     color:var(--ink);background:var(--white);line-height:1.85;
-     font-size:15px;-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;color:var(--ink);background:var(--white);line-height:1.85;font-size:15px;-webkit-text-size-adjust:100%}
 img{max-width:100%;display:block}
 a{color:inherit}
 .wrap{max-width:920px;margin:0 auto;padding:0 20px}
 
-header{border-top:4px solid var(--gold);background:var(--paper);
-       padding:38px 0 32px;text-align:center}
+.brand{position:absolute;top:16px;left:20px;display:flex;align-items:center;gap:9px;text-decoration:none;z-index:5}
+.brand img{width:30px;height:30px}
+.brand span{font-size:12px;letter-spacing:.14em;color:var(--ink)}
+
+header{border-top:4px solid var(--gold);background:var(--paper);padding:64px 0 34px;text-align:center;position:relative}
 header .en{font-size:10px;letter-spacing:.34em;color:var(--gold);margin-bottom:12px}
 header h1{font-size:27px;font-weight:600;letter-spacing:.14em}
 header .sub{font-size:13px;letter-spacing:.2em;color:var(--gold);margin-top:9px}
-header p{font-size:14px;color:var(--sub);margin-top:12px;line-height:1.9}
+header p{font-size:14px;color:var(--sub);margin-top:14px;line-height:1.9}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-      gap:22px;padding:40px 0 10px}
-.card{border:1px solid var(--line);background:var(--white);
-      display:flex;flex-direction:column;overflow:hidden}
-.card .ph{aspect-ratio:1/1;background:linear-gradient(135deg,#F4F0E7,#E9E2D3);
-          display:flex;align-items:center;justify-content:center;
-          font-size:12px;color:#B2A78F;letter-spacing:.08em;position:relative}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;padding:40px 0 10px}
+.card{border:1px solid var(--line);background:var(--white);display:flex;flex-direction:column;overflow:hidden}
+.card .ph{aspect-ratio:1/1;background:linear-gradient(135deg,#F4F0E7,#E9E2D3);display:flex;align-items:center;justify-content:center;font-size:12px;color:#B2A78F;position:relative}
 .card .ph img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .card .subs{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:2px;background:var(--line)}
 .card .sub-ph{aspect-ratio:1/1;overflow:hidden;background:#F4F0E7}
 .card .sub-ph img{width:100%;height:100%;object-fit:cover}
 .card .body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1}
-.card .tag{display:inline-block;align-self:flex-start;font-size:10px;
-           letter-spacing:.1em;color:var(--gold);border:1px solid #D9C79A;
-           padding:3px 9px;border-radius:2px;margin-bottom:10px}
-.card h3{font-size:16px;font-weight:600;letter-spacing:.03em;margin-bottom:8px;line-height:1.6}
+.card .tag{display:inline-block;align-self:flex-start;font-size:10px;letter-spacing:.1em;color:var(--gold);border:1px solid #D9C79A;padding:3px 9px;border-radius:2px;margin-bottom:10px}
+.card h3{font-size:16px;font-weight:600;margin-bottom:8px;line-height:1.6}
 .card .desc{font-size:13px;color:var(--sub);line-height:1.95;margin-bottom:10px}
 .card .note{font-size:12px;color:#8C857A;margin-bottom:12px;margin-top:auto}
-.card .price{font-size:21px;font-weight:700;letter-spacing:.02em;
-             border-top:1px solid var(--line);padding-top:13px}
+.card .price{font-size:20px;font-weight:700;border-top:1px solid var(--line);padding-top:13px}
 .card .price small{font-size:11px;font-weight:400;color:var(--sub);margin-left:4px}
 .card .stock{font-size:11px;color:var(--ok);margin-top:5px}
 .card .stock.out{color:var(--ng)}
-.card .buy{margin-top:14px;display:block;width:100%;border:1px solid var(--ink);
-           background:var(--white);color:var(--ink);padding:11px;font-size:13px;
-           letter-spacing:.06em;cursor:pointer;font-family:inherit;border-radius:2px;
-           transition:background .15s,color .15s}
+.card .buy{margin-top:14px;display:block;width:100%;border:1px solid var(--ink);background:var(--white);color:var(--ink);padding:11px;font-size:13px;cursor:pointer;font-family:inherit;border-radius:2px}
 .card .buy:hover{background:var(--ink);color:#fff}
-.card .buy.done{background:var(--ok);border-color:var(--ok);color:#fff}
 
-.order{background:var(--paper);padding:44px 0;margin-top:30px;text-align:center}
-.order h2{font-size:19px;font-weight:600;margin-bottom:14px;letter-spacing:.05em}
-.order p{font-size:14px;color:var(--sub);line-height:2;margin-bottom:22px}
-.btn{display:inline-block;text-decoration:none;padding:15px 34px;margin:6px;
-     font-size:14px;letter-spacing:.08em;border-radius:2px}
-.btn.dark{background:var(--ink);color:#fff}
-.btn.line{background:#06C755;color:#fff}
-.btn.mail{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.order{background:var(--paper);padding:48px 0;margin-top:34px}
+.order h2{font-size:20px;font-weight:600;margin-bottom:8px;text-align:center}
+.order .lead{font-size:13.5px;color:var(--sub);line-height:2;margin-bottom:26px;text-align:center}
+.form{max-width:560px;margin:0 auto;background:var(--white);border:1px solid var(--line);padding:28px 26px}
+.f{margin-bottom:19px}
+.f label{display:block;font-size:13px;color:var(--sub);margin-bottom:7px;letter-spacing:.04em}
+.f label .req{color:var(--ng);font-size:10px;margin-left:6px}
+.f label .opt{color:#A39B8E;font-size:10px;margin-left:6px}
+.f input,.f select,.f textarea{width:100%;padding:12px 13px;border:1px solid var(--line);background:var(--white);font-family:inherit;font-size:16px;color:var(--ink);border-radius:2px}
+.f textarea{resize:vertical;min-height:82px}
+.qty{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px}
+.qty label{display:block;margin:0;cursor:pointer}
+.qty input{display:none}
+.qty span{display:block;text-align:center;padding:12px 4px;border:1px solid var(--line);border-radius:2px;font-size:14px;background:var(--white);transition:.12s}
+.qty input:checked + span{background:var(--ink);color:#fff;border-color:var(--ink)}
+#qtyOther{display:none;margin-top:9px}
+#qtyOther.on{display:block}
+.submit{width:100%;background:var(--ink);color:#fff;border:0;padding:16px;font-size:15px;letter-spacing:.1em;cursor:pointer;font-family:inherit;border-radius:2px;margin-top:6px}
+.submit:hover{opacity:.88}
+.alt{text-align:center;margin-top:22px;font-size:13px;color:var(--sub);line-height:2}
+.alt a{color:var(--gold)}
 
 .info{padding:44px 0}
-.info h2{font-size:17px;font-weight:600;margin-bottom:16px;letter-spacing:.05em}
+.info h2{font-size:17px;font-weight:600;margin-bottom:16px}
 .info dl{border-top:1px solid var(--line)}
 .info dt{font-size:13px;color:var(--sub);padding:14px 0 0}
 .info dd{font-size:14px;padding:2px 0 14px;border-bottom:1px solid var(--line);line-height:1.9}
 
-footer{background:var(--ink);color:#C7C0B4;text-align:center;
-       padding:30px 0;font-size:12px;line-height:2}
+footer{background:var(--ink);color:#C7C0B4;text-align:center;padding:30px 0;font-size:12px;line-height:2}
 footer a{color:#C7C0B4}
-
-.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
-       background:var(--ink);color:#fff;padding:13px 26px;font-size:13px;
-       border-radius:3px;opacity:0;pointer-events:none;transition:.25s;z-index:99;
-       max-width:90%;text-align:center;line-height:1.7}
-.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:640px){
   .grid{grid-template-columns:1fr;gap:16px;padding-top:28px}
-  header h1{font-size:21px}
-  .btn{display:block;margin:8px 0}
+  header h1{font-size:22px}
+  header{padding-top:60px}
+  .form{padding:22px 18px}
 }
 </style>
 </head>
 <body>
+
+<a class="brand" href="https://shiraumedigital.com/">
+  <img src="../assets/images/shiraume-symbol-mark.png" alt="白梅デジタル" onerror="this.style.display='none'">
+  <span>白梅デジタル</span>
+</a>
 
 <header>
   <div class="en">SHIRAUME DIGITAL</div>
@@ -158,16 +160,70 @@ footer a{color:#C7C0B4}
   <div class="grid" id="grid"></div>
 </div>
 
-<div class="order">
+<div class="order" id="order">
   <div class="wrap">
-    <h2>ご注文について</h2>
-    <p>
-      商品名と個数を、下のいずれかからお送りください。<br>
+    <h2>ご注文・お問い合わせ</h2>
+    <div class="lead">
+      下記をご記入のうえ、お進みください。<br>
       在庫と送料をお伝えしたうえで、お支払い方法をご案内いたします。
-    </p>
-    <a href="#" class="btn line" id="lineBtn">LINEでご注文</a>
-    <a href="#" class="btn dark" id="instaBtn">InstagramのDMでご注文</a>
-    <a href="#" class="btn mail" id="mailBtn">メールでご注文</a>
+    </div>
+
+    <form class="form" id="orderForm" method="POST">
+      <input type="hidden" name="_subject" value="【shiraume supply】ご注文がありました">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_next" value="https://shiraumedigital.com/items/thanks.html">
+
+      <div class="f">
+        <label>商品<span class="req">必須</span></label>
+        <select name="商品" id="selItem" required></select>
+      </div>
+
+      <div class="f">
+        <label>数量<span class="req">必須</span></label>
+        <div class="qty" id="qtyBox"></div>
+        <input type="number" id="qtyOther" name="数量（その他）" placeholder="個数を入力してください" min="1" step="1">
+      </div>
+
+      <div class="f">
+        <label>お名前<span class="req">必須</span></label>
+        <input type="text" name="お名前" required placeholder="例）大西 一輝">
+      </div>
+
+      <div class="f">
+        <label>会社名・屋号<span class="opt">任意</span></label>
+        <input type="text" name="会社名・屋号" placeholder="個人の方は空欄で結構です">
+      </div>
+
+      <div class="f">
+        <label>お届け先のご住所<span class="req">必須</span></label>
+        <input type="text" name="お届け先のご住所" required placeholder="郵便番号からご記入ください">
+      </div>
+
+      <div class="f">
+        <label>お電話番号<span class="req">必須</span></label>
+        <input type="tel" name="お電話番号" required placeholder="090-0000-0000">
+      </div>
+
+      <div class="f">
+        <label>メールアドレス<span class="req">必須</span></label>
+        <input type="email" name="メールアドレス" required placeholder="example@example.com">
+      </div>
+
+      <div class="f">
+        <label>メモ<span class="opt">任意</span></label>
+        <textarea name="メモ" placeholder="ご希望の納期、色やサイズのご指定など、ございましたらご記入ください"></textarea>
+      </div>
+
+      <button type="submit" class="submit">購入に進む</button>
+    </form>
+
+    <div class="alt">
+      フォームが使いにくい場合は、こちらからでも承ります。<br>
+      <a href="#" id="lineBtn" target="_blank" rel="noopener">LINE</a>　／　
+      <a href="#" id="instaBtn" target="_blank" rel="noopener">InstagramのDM</a>　／　
+      <a href="#" id="mailBtn">メール</a>
+    </div>
   </div>
 </div>
 
@@ -183,20 +239,19 @@ footer a{color:#C7C0B4}
   <a href="https://shiraumedigital.com/">shiraumedigital.com</a>
 </footer>
 
-<div class="toast" id="toast"></div>
-
 <script>
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const yen = n => Number(n).toLocaleString('ja-JP');
+
 document.getElementById('shopName').textContent = SHOP_NAME;
 document.getElementById('shopSub').textContent = SHOP_SUB;
 document.getElementById('shopLead').innerHTML = SHOP_LEAD;
+document.getElementById('orderForm').action = 'https://formsubmit.co/' + FORM_TO;
 document.getElementById('lineBtn').href  = LINE_URL;
 document.getElementById('instaBtn').href = INSTA_URL;
-document.getElementById('mailBtn').href  =
-  'mailto:' + MAIL_ADDR + '?subject=' + encodeURIComponent('商品のご注文');
+document.getElementById('mailBtn').href  = 'mailto:' + FORM_TO + '?subject=' + encodeURIComponent('商品のご注文');
 
-const yen = n => Number(n).toLocaleString('ja-JP');
-const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
+// 商品カード
 document.getElementById('grid').innerHTML = ITEMS.map((it, i) => {
   const out = String(it.stock||'').includes('切');
   return `
@@ -215,28 +270,32 @@ document.getElementById('grid').innerHTML = ITEMS.map((it, i) => {
   </div>`;
 }).join('');
 
-const toast = document.getElementById('toast');
-let toastTimer;
-function showToast(msg){
-  toast.textContent = msg;
-  toast.classList.add('on');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('on'), 3200);
-}
+// 商品の選択肢（ITEMS から自動で作られます）
+document.getElementById('selItem').innerHTML =
+  '<option value="">お選びください</option>' +
+  ITEMS.map(it => `<option value="${esc(it.name)}">${esc(it.name)}</option>`).join('') +
+  '<option value="その他・ご相談">その他・ご相談</option>';
 
+// 数量（QTY から自動で作られます）
+document.getElementById('qtyBox').innerHTML =
+  QTY.map((q,i) => `<label><input type="radio" name="数量" value="${q}個" required><span>${yen(q)}個</span></label>`).join('') +
+  `<label><input type="radio" name="数量" value="その他"><span>その他</span></label>`;
+
+const other = document.getElementById('qtyOther');
+document.querySelectorAll('input[name="数量"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const on = r.value === 'その他' && r.checked;
+    other.classList.toggle('on', on);
+    other.required = on;
+    if (on) other.focus(); else other.value = '';
+  });
+});
+
+// カードの「この商品を注文する」→ フォームに商品を入れて移動
 document.querySelectorAll('.buy').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    const it = ITEMS[btn.dataset.i];
-    const text = `${it.name}を1個お願いします。`;
-    try {
-      await navigator.clipboard.writeText(text);
-      btn.textContent = 'コピーしました';
-      btn.classList.add('done');
-      showToast('「' + text + '」をコピーしました。LINEかDMに貼り付けてお送りください。');
-      setTimeout(() => { btn.textContent = 'この商品を注文する'; btn.classList.remove('done'); }, 3000);
-    } catch(e) {
-      showToast('「' + text + '」とお送りください。');
-    }
+  btn.addEventListener('click', () => {
+    document.getElementById('selItem').value = ITEMS[btn.dataset.i].name;
+    document.getElementById('order').scrollIntoView({behavior:'smooth'});
   });
 });
 
