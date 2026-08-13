@@ -9,37 +9,44 @@
 <meta property="og:description" content="海外で流行っている道具を、そのまま仕入れています。">
 
 <!-- ═══════════════════════════════════════════════════════
-     ★★ ここだけ書き換えれば商品が増減します ★★
-     書き方は README.txt を見てください
-     ═══════════════════════════════════════════════════════ -->
+★★ ここだけ書き換えれば商品が増減します ★★
+
+・商品を増やすときは、下の ITEMS の配列に { ... } を追記するだけ。
+・配列の「下に足すほど新しい商品」として扱われます
+　（並べ替えの「新しい順」で上に来ます）。
+・price を 0 にすると「価格はお問い合わせください」表示になります。
+・stock に「切」を含む文字（例：完売・品切れ）を入れると、
+　注文ボタンが自動で消えます。
+・書き方の詳しい説明は、引き継ぎメモ（00_引き継く_最新.md）にあります。
+═══════════════════════════════════════════════════════ -->
 <script>
 const SHOP_NAME = "shiraume supply";
-const SHOP_SUB  = "海外バズグッズ";
+const SHOP_SUB = "海外バズグッズ";
 const SHOP_LEAD = "海外のお店で実際に使われている道具を、そのまま仕入れています。<br>動画でご紹介したもののうち、お問い合わせの多かったものを置いています。";
 
 const ITEMS = [
 
-  {
-    name:  "スナックカップ",
-    price: 0,
-    stock: "お取り寄せ",
-    desc:  "上にスナックやトッピングを載せられる、二段のカップです。下がドリンク、上が食べもの。片手で両方持てるので、食べ歩きのお店で使われています。",
-    note:  "台湾・韓国のドリンク店で定番の形です",
-    img:   "images/item01.jpg",
-    sub:   ["images/item01c.jpg", "images/item01b.jpg"],
-    tag:   "動画で紹介"
-  },
+{
+name: "スナックカップ",
+price: 0,
+stock: "お取り寄せ",
+desc: "上にスナックやトッピングを載せられる、二段のカップです。下がドリンク、上が食べもの。片手で両方持てるので、食べ歩きのお店で使われています。",
+note: "台湾・韓国のドリンク店で定番の形です",
+img: "images/item01.jpg",
+sub: ["images/item01c.jpg", "images/item01b.jpg"],
+tag: "動画で紹介"
+},
 
-  {
-    name:  "ツインカップ",
-    price: 0,
-    stock: "お取り寄せ",
-    desc:  "ひとつのカップで、2種類の飲みものを同時に出せます。中が縦に仕切られているので混ざりません。ふたも左右に分かれています。",
-    note:  "2つの味を選べる、色の対比を見せる、といった使い方に",
-    img:   "images/item02.jpg",
-    sub:   ["images/item02b.jpg"],
-    tag:   "動画で紹介"
-  },
+{
+name: "ツインカップ",
+price: 0,
+stock: "お取り寄せ",
+desc: "ひとつのカップで、2種類の飲みものを同時に出せます。中が縦に仕切られているので混ざりません。ふたも左右に分かれています。",
+note: "2つの味を選べる、色の対比を見せる、といった使い方に",
+img: "images/item02.jpg",
+sub: ["images/item02b.jpg"],
+tag: "動画で紹介"
+},
 
 ];
 
@@ -47,21 +54,21 @@ const ITEMS = [
 const QTY = [50, 100, 500, 1000];
 
 // ご注文フォームの送信先
-const FORM_TO   = "contact.shiraumedigital@gmail.com";
+const FORM_TO = "contact.shiraumedigital@gmail.com";
 // ご注文の受け先（フォーム以外）
-const LINE_URL  = "https://lin.ee/zZOLYKc";
+const LINE_URL = "https://lin.ee/zZOLYKc";
 const INSTA_URL = "https://www.instagram.com/shiraume.digital_";
 
 const LAW = {
-  seller:  "白梅デジタル　大西 一輝",
-  address: "ご請求いただき次第、遅滞なく開示いたします",
-  tel:     "ご請求いただき次第、遅滞なく開示いたします",
-  mail:    "contact.shiraumedigital@gmail.com",
-  extra:   "送料（ご注文時にお伝えします）／お振込手数料",
-  pay:     "銀行振込",
-  payTime: "ご注文の確認後、7日以内にお願いしております",
-  ship:    "ご入金の確認後、7日以内に発送いたします。お取り寄せの商品は、その都度お伝えします",
-  returns: "商品に不良があった場合は、お届けから7日以内にご連絡ください。送料は当方で負担いたします。お客様のご都合による返品は、未開封のものに限り、お届けから7日以内・送料お客様負担で承ります"
+seller: "白梅デジタル 大西 一輝",
+address: "ご請求いただき次第、遅滞なく開示いたします",
+tel: "ご請求いただき次第、遅滞なく開示いたします",
+mail: "contact.shiraumedigital@gmail.com",
+extra: "送料（ご注文時にお伝えします）／お振込手数料",
+pay: "銀行振込",
+payTime: "ご注文の確認後、7日以内にお願いしております",
+ship: "ご入金の確認後、7日以内に発送いたします。お取り寄せの商品は、その都度お伝えします",
+returns: "商品に不良があった場合は、お届けから7日以内にご連絡ください。送料は当方で負担いたします。お客様のご都合による返品は、未開封のものに限り、お届けから7日以内・送料お客様負担で承ります"
 };
 </script>
 <!-- ═══════════ ここまで ═══════════ -->
@@ -84,7 +91,17 @@ header h1{font-size:27px;font-weight:600;letter-spacing:.14em}
 header .sub{font-size:13px;letter-spacing:.2em;color:var(--gold);margin-top:9px}
 header p{font-size:14px;color:var(--sub);margin-top:14px;line-height:1.9}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;padding:40px 0 10px}
+/* 検索・並べ替えバー */
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:30px 0 4px}
+.controls .search{flex:1 1 240px;position:relative;min-width:0}
+.controls .search input{width:100%;padding:11px 13px 11px 40px;border:1px solid var(--line);border-radius:2px;font-family:inherit;font-size:15px;color:var(--ink);background-color:var(--white);background-repeat:no-repeat;background-position:13px center;background-size:16px 16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B655C' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E")}
+.controls .search input:focus{outline:none;border-color:var(--gold)}
+.controls .sortwrap{position:relative;flex:0 0 auto}
+.controls select{appearance:none;-webkit-appearance:none;padding:11px 34px 11px 14px;border:1px solid var(--line);border-radius:2px;font-family:inherit;font-size:14px;color:var(--ink);background-color:var(--white);background-repeat:no-repeat;background-position:right 12px center;background-size:11px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%236B655C' stroke-width='1.6'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");cursor:pointer}
+.controls select:focus{outline:none;border-color:var(--gold)}
+.count{font-size:12px;color:var(--sub);padding:6px 0 0;letter-spacing:.04em}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;padding:14px 0 10px}
 .card{border:1px solid var(--line);background:var(--white);display:flex;flex-direction:column;overflow:hidden}
 .card .ph{aspect-ratio:1/1;background:linear-gradient(135deg,#F4F0E7,#E9E2D3);display:flex;align-items:center;justify-content:center;font-size:12px;color:#B2A78F;position:relative}
 .card .ph img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
@@ -102,6 +119,7 @@ header p{font-size:14px;color:var(--sub);margin-top:14px;line-height:1.9}
 .card .stock.out{color:var(--ng)}
 .card .buy{margin-top:14px;display:block;width:100%;border:1px solid var(--ink);background:var(--white);color:var(--ink);padding:11px;font-size:13px;cursor:pointer;font-family:inherit;border-radius:2px}
 .card .buy:hover{background:var(--ink);color:#fff}
+.empty{grid-column:1/-1;text-align:center;color:var(--sub);padding:56px 20px;font-size:14px;line-height:2}
 
 .order{background:var(--paper);padding:48px 0;margin-top:34px}
 .order h2{font-size:20px;font-weight:600;margin-bottom:8px;text-align:center}
@@ -113,6 +131,19 @@ header p{font-size:14px;color:var(--sub);margin-top:14px;line-height:1.9}
 .f label .opt{color:#A39B8E;font-size:10px;margin-left:6px}
 .f input,.f select,.f textarea{width:100%;padding:12px 13px;border:1px solid var(--line);background:var(--white);font-family:inherit;font-size:16px;color:var(--ink);border-radius:2px}
 .f textarea{resize:vertical;min-height:82px}
+.f .hint{font-size:11px;color:#A39B8E;margin-top:6px;line-height:1.7}
+/* 住所ブロック */
+.addr{border:1px solid var(--line);border-radius:2px;padding:18px 16px 4px;background:#FCFBF7}
+.addr .lbl{display:block;font-size:13px;color:var(--sub);margin-bottom:12px;letter-spacing:.04em}
+.addr .lbl .req{color:var(--ng);font-size:10px;margin-left:6px}
+.zip{display:flex;gap:8px;align-items:center}
+.zip .yubin{font-size:15px;color:var(--sub)}
+.zip input{max-width:170px}
+.zipmsg{font-size:11px;margin-top:6px;min-height:15px;line-height:1.6}
+.zipmsg.ok{color:var(--ok)}
+.zipmsg.err{color:var(--ng)}
+.sub-f{margin-top:13px}
+.sub-f span{display:block;font-size:12px;color:var(--sub);margin-bottom:6px}
 .qty{display:grid;grid-template-columns:repeat(auto-fit,minmax(78px,1fr));gap:8px}
 .qty label{display:block;margin:0;cursor:pointer}
 .qty input{display:none}
@@ -135,108 +166,155 @@ footer{background:var(--ink);color:#C7C0B4;text-align:center;padding:30px 0;font
 footer a{color:#C7C0B4}
 
 @media(max-width:640px){
-  .grid{grid-template-columns:1fr;gap:16px;padding-top:28px}
-  header h1{font-size:22px}
-  header{padding-top:60px}
-  .form{padding:22px 18px}
+.grid{grid-template-columns:1fr;gap:16px}
+header h1{font-size:22px}
+header{padding-top:60px}
+.form{padding:22px 18px}
+.controls{gap:9px}
+.controls .sortwrap{flex:1 1 100%}
+.controls select{width:100%}
 }
 </style>
 </head>
 <body>
 
 <a class="brand" href="https://shiraumedigital.com/">
-  <img src="../assets/images/shiraume-symbol-mark.png" alt="白梅デジタル" onerror="this.style.display='none'">
-  <span>白梅デジタル</span>
+<img src="../assets/images/shiraume-symbol-mark.png" alt="白梅デジタル" onerror="this.style.display='none'">
+<span>白梅デジタル</span>
 </a>
 
 <header>
-  <div class="en">SHIRAUME DIGITAL</div>
-  <h1 id="shopName"></h1>
-  <div class="sub" id="shopSub"></div>
-  <p id="shopLead"></p>
+<div class="en">SHIRAUME DIGITAL</div>
+<h1 id="shopName"></h1>
+<div class="sub" id="shopSub"></div>
+<p id="shopLead"></p>
 </header>
 
 <div class="wrap">
-  <div class="grid" id="grid"></div>
+<div class="controls">
+<div class="search">
+<input type="search" id="searchBox" placeholder="商品を検索（名前・説明・タグ）" autocomplete="off">
+</div>
+<div class="sortwrap">
+<select id="sortSel" aria-label="並べ替え">
+<option value="new">新しい順</option>
+<option value="old">古い順</option>
+<option value="priceAsc">価格が安い順</option>
+<option value="priceDesc">価格が高い順</option>
+</select>
+</div>
+</div>
+<div class="count" id="count"></div>
+<div class="grid" id="grid"></div>
 </div>
 
 <div class="order" id="order">
-  <div class="wrap">
-    <h2>ご注文・お問い合わせ</h2>
-    <div class="lead">
-      下記をご記入のうえ、お進みください。<br>
-      在庫と送料をお伝えしたうえで、お支払い方法をご案内いたします。
-    </div>
+<div class="wrap">
+<h2>ご注文・お問い合わせ</h2>
+<div class="lead">
+下記をご記入のうえ、お進みください。<br>
+在庫と送料をお伝えしたうえで、お支払い方法をご案内いたします。
+</div>
 
-    <form class="form" id="orderForm" method="POST">
-      <input type="hidden" name="_subject" value="【shiraume supply】ご注文がありました">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_next" value="https://shiraumedigital.com/items/thanks.html">
+<form class="form" id="orderForm" method="POST">
+<input type="hidden" name="_subject" value="【shiraume supply】ご注文がありました">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_next" value="https://shiraumedigital.com/items/thanks.html">
 
-      <div class="f">
-        <label>商品<span class="req">必須</span></label>
-        <select name="商品" id="selItem" required></select>
-      </div>
+<div class="f">
+<label>商品<span class="req">必須</span></label>
+<select name="商品" id="selItem" required></select>
+</div>
 
-      <div class="f">
-        <label>数量<span class="req">必須</span></label>
-        <div class="qty" id="qtyBox"></div>
-        <input type="number" id="qtyOther" name="数量（その他）" placeholder="個数を入力してください" min="1" step="1">
-      </div>
+<div class="f">
+<label>数量<span class="req">必須</span></label>
+<div class="qty" id="qtyBox"></div>
+<input type="number" id="qtyOther" name="数量（その他）" placeholder="個数を入力してください" min="1" step="1">
+</div>
 
-      <div class="f">
-        <label>お名前<span class="req">必須</span></label>
-        <input type="text" name="お名前" required placeholder="例）白梅 太郎">
-      </div>
+<div class="f">
+<label>お名前<span class="req">必須</span></label>
+<input type="text" name="お名前" required placeholder="例）白梅 太郎">
+</div>
 
-      <div class="f">
-        <label>会社名・屋号<span class="opt">任意</span></label>
-        <input type="text" name="会社名・屋号" placeholder="個人の方は空欄で結構です">
-      </div>
+<div class="f">
+<label>会社名・屋号<span class="opt">任意</span></label>
+<input type="text" name="会社名・屋号" placeholder="個人の方は空欄で結構です">
+</div>
 
-      <div class="f">
-        <label>お届け先のご住所<span class="req">必須</span></label>
-        <input type="text" name="お届け先のご住所" required placeholder="郵便番号からご記入ください">
-      </div>
+<div class="f">
+<div class="addr">
+<span class="lbl">お届け先のご住所<span class="req">必須</span></span>
 
-      <div class="f">
-        <label>お電話番号<span class="req">必須</span></label>
-        <input type="tel" name="お電話番号" required placeholder="090-0000-0000">
-      </div>
+<div class="sub-f">
+<span>郵便番号</span>
+<div class="zip">
+<span class="yubin">〒</span>
+<input type="text" name="郵便番号" id="zip" inputmode="numeric" autocomplete="postal-code" placeholder="1234567" maxlength="8" required>
+</div>
+<div class="zipmsg" id="zipMsg">番号を入力すると、都道府県と市区町村が自動で入ります。</div>
+</div>
 
-      <div class="f">
-        <label>メールアドレス<span class="req">必須</span></label>
-        <input type="email" name="メールアドレス" required placeholder="example@example.com">
-      </div>
+<div class="sub-f">
+<span>都道府県</span>
+<select name="都道府県" id="pref" required></select>
+</div>
 
-      <div class="f">
-        <label>メモ<span class="opt">任意</span></label>
-        <textarea name="メモ" placeholder="ご希望の納期、色やサイズのご指定など、ございましたらご記入ください"></textarea>
-      </div>
+<div class="sub-f">
+<span>市区町村・町名</span>
+<input type="text" name="市区町村" id="city" required placeholder="例）大阪市北区梅田">
+</div>
 
-      <button type="submit" class="submit">購入に進む</button>
-    </form>
+<div class="sub-f">
+<span>番地・丁目</span>
+<input type="text" name="番地" id="banchi" required placeholder="例）1丁目2-3">
+</div>
 
-    <div class="alt">
-      フォームが使いにくい場合は、こちらからでも承ります。<br>
-      <a href="#" id="lineBtn" target="_blank" rel="noopener">LINE</a>　／　
-      <a href="#" id="instaBtn" target="_blank" rel="noopener">InstagramのDM</a>　／　
-      <a href="#" id="mailBtn">メール</a>
-    </div>
-  </div>
+<div class="sub-f">
+<span>建物名・部屋番号<span class="opt" style="color:#A39B8E;font-size:10px;margin-left:6px">任意</span></span>
+<input type="text" name="建物名・部屋番号" id="bldg" placeholder="例）白梅ビル 4F">
+</div>
+</div>
+</div>
+
+<div class="f">
+<label>お電話番号<span class="req">必須</span></label>
+<input type="tel" name="お電話番号" required placeholder="090-0000-0000">
+</div>
+
+<div class="f">
+<label>メールアドレス<span class="req">必須</span></label>
+<input type="email" name="メールアドレス" required placeholder="example@example.com">
+</div>
+
+<div class="f">
+<label>メモ<span class="opt">任意</span></label>
+<textarea name="メモ" placeholder="ご希望の納期、色やサイズのご指定など、ございましたらご記入ください"></textarea>
+</div>
+
+<button type="submit" class="submit">購入に進む</button>
+</form>
+
+<div class="alt">
+フォームが使いにくい場合は、こちらからでも承ります。<br>
+<a href="#" id="lineBtn" target="_blank" rel="noopener">LINE</a> ／
+<a href="#" id="instaBtn" target="_blank" rel="noopener">InstagramのDM</a> ／
+<a href="#" id="mailBtn">メール</a>
+</div>
+</div>
 </div>
 
 <div class="wrap">
-  <div class="info">
-    <h2>特定商取引法に基づく表記</h2>
-    <dl id="law"></dl>
-  </div>
+<div class="info">
+<h2>特定商取引法に基づく表記</h2>
+<dl id="law"></dl>
+</div>
 </div>
 
 <footer>
-  白梅デジタル　Shiraume Digital<br>
-  <a href="https://shiraumedigital.com/">shiraumedigital.com</a>
+白梅デジタル Shiraume Digital<br>
+<a href="https://shiraumedigital.com/">shiraumedigital.com</a>
 </footer>
 
 <script>
@@ -247,63 +325,159 @@ document.getElementById('shopName').textContent = SHOP_NAME;
 document.getElementById('shopSub').textContent = SHOP_SUB;
 document.getElementById('shopLead').innerHTML = SHOP_LEAD;
 document.getElementById('orderForm').action = 'https://formsubmit.co/' + FORM_TO;
-document.getElementById('lineBtn').href  = LINE_URL;
+document.getElementById('lineBtn').href = LINE_URL;
 document.getElementById('instaBtn').href = INSTA_URL;
-document.getElementById('mailBtn').href  = 'mailto:' + FORM_TO + '?subject=' + encodeURIComponent('商品のご注文');
+document.getElementById('mailBtn').href = 'mailto:' + FORM_TO + '?subject=' + encodeURIComponent('商品のご注文');
 
-// 商品カード
-document.getElementById('grid').innerHTML = ITEMS.map((it, i) => {
-  const out = String(it.stock||'').includes('切');
-  return `
-  <div class="card">
-    <div class="ph">${it.img ? `<img src="${esc(it.img)}" alt="${esc(it.name)}" onerror="this.remove()">` : ''}写真をここに</div>
-    ${(it.sub && it.sub.length) ? `<div class="subs">${it.sub.map(s => `<div class="sub-ph"><img src="${esc(s)}" alt="" onerror="this.parentNode.remove()"></div>`).join('')}</div>` : ''}
-    <div class="body">
-      ${it.tag ? `<span class="tag">${esc(it.tag)}</span>` : ''}
-      <h3>${esc(it.name)}</h3>
-      <div class="desc">${esc(it.desc)}</div>
-      ${it.note ? `<div class="note">${esc(it.note)}</div>` : '<div class="note"></div>'}
-      <div class="price">${it.price ? '¥' + yen(it.price) : '価格はお問い合わせください'}${it.price ? '<small>税込</small>' : ''}</div>
-      <div class="stock${out ? ' out' : ''}">${esc(it.stock||'')}</div>
-      ${out ? '' : `<button class="buy" data-i="${i}">この商品を注文する</button>`}
-    </div>
-  </div>`;
-}).join('');
+/* ───────── 商品カード：検索・並べ替え ───────── */
+const grid = document.getElementById('grid');
+const searchBox = document.getElementById('searchBox');
+const sortSel = document.getElementById('sortSel');
+const countEl = document.getElementById('count');
 
-// 商品の選択肢（ITEMS から自動で作られます）
+function cardHTML(it, origIdx){
+const out = String(it.stock||'').includes('切');
+return `
+<div class="card">
+<div class="ph">${it.img ? `<img src="${esc(it.img)}" alt="${esc(it.name)}" onerror="this.remove()">` : ''}写真をここに</div>
+${(it.sub && it.sub.length) ? `<div class="subs">${it.sub.map(s => `<div class="sub-ph"><img src="${esc(s)}" alt="" onerror="this.parentNode.remove()"></div>`).join('')}</div>` : ''}
+<div class="body">
+${it.tag ? `<span class="tag">${esc(it.tag)}</span>` : ''}
+<h3>${esc(it.name)}</h3>
+<div class="desc">${esc(it.desc)}</div>
+${it.note ? `<div class="note">${esc(it.note)}</div>` : '<div class="note"></div>'}
+<div class="price">${it.price ? '¥' + yen(it.price) : '価格はお問い合わせください'}${it.price ? '<small>税込</small>' : ''}</div>
+<div class="stock${out ? ' out' : ''}">${esc(it.stock||'')}</div>
+${out ? '' : `<button class="buy" data-i="${origIdx}">この商品を注文する</button>`}
+</div>
+</div>`;
+}
+
+// 価格の並べ替え用キー（お問い合わせ=0 の商品は、安い順でも高い順でも末尾に回す）
+const priceAscKey  = it => (Number(it.price) > 0 ? Number(it.price) :  Infinity);
+const priceDescKey = it => (Number(it.price) > 0 ? Number(it.price) : -Infinity);
+
+function currentList(){
+let list = ITEMS.map((it, idx) => ({it, idx}));
+
+const q = searchBox.value.trim().toLowerCase();
+if(q){
+list = list.filter(({it}) => {
+const hay = [it.name, it.desc, it.note, it.tag].filter(Boolean).join(' ').toLowerCase();
+return hay.includes(q);
+});
+}
+
+const s = sortSel.value;
+if(s === 'new')            list.sort((a,b) => b.idx - a.idx);
+else if(s === 'old')       list.sort((a,b) => a.idx - b.idx);
+else if(s === 'priceAsc')  list.sort((a,b) => priceAscKey(a.it)  - priceAscKey(b.it)  || a.idx - b.idx);
+else if(s === 'priceDesc') list.sort((a,b) => priceDescKey(b.it) - priceDescKey(a.it) || a.idx - b.idx);
+
+return list;
+}
+
+function render(){
+const list = currentList();
+if(list.length){
+grid.innerHTML = list.map(({it, idx}) => cardHTML(it, idx)).join('');
+} else {
+grid.innerHTML = '<div class="empty">「' + esc(searchBox.value.trim()) + '」に一致する商品が見つかりませんでした。<br>別のことばでお試しください。</div>';
+}
+countEl.textContent = searchBox.value.trim() ? `${list.length}件が見つかりました` : `全${list.length}件`;
+
+// 「この商品を注文する」→ フォームに商品を入れて移動
+grid.querySelectorAll('.buy').forEach(btn => {
+btn.addEventListener('click', () => {
+document.getElementById('selItem').value = ITEMS[btn.dataset.i].name;
+document.getElementById('order').scrollIntoView({behavior:'smooth'});
+});
+});
+}
+
+searchBox.addEventListener('input', render);
+sortSel.addEventListener('change', render);
+render();
+
+/* ───────── 注文フォーム：商品・数量の選択肢 ───────── */
 document.getElementById('selItem').innerHTML =
-  '<option value="">お選びください</option>' +
-  ITEMS.map(it => `<option value="${esc(it.name)}">${esc(it.name)}</option>`).join('') +
-  '<option value="その他・ご相談">その他・ご相談</option>';
+'<option value="">お選びください</option>' +
+ITEMS.map(it => `<option value="${esc(it.name)}">${esc(it.name)}</option>`).join('') +
+'<option value="その他・ご相談">その他・ご相談</option>';
 
-// 数量（QTY から自動で作られます）
 document.getElementById('qtyBox').innerHTML =
-  QTY.map((q,i) => `<label><input type="radio" name="数量" value="${q}個" required><span>${yen(q)}個</span></label>`).join('') +
-  `<label><input type="radio" name="数量" value="その他"><span>その他</span></label>`;
+QTY.map((q,i) => `<label><input type="radio" name="数量" value="${q}個" required><span>${yen(q)}個</span></label>`).join('') +
+`<label><input type="radio" name="数量" value="その他"><span>その他</span></label>`;
 
 const other = document.getElementById('qtyOther');
 document.querySelectorAll('input[name="数量"]').forEach(r => {
-  r.addEventListener('change', () => {
-    const on = r.value === 'その他' && r.checked;
-    other.classList.toggle('on', on);
-    other.required = on;
-    if (on) other.focus(); else other.value = '';
-  });
+r.addEventListener('change', () => {
+const on = r.value === 'その他' && r.checked;
+other.classList.toggle('on', on);
+other.required = on;
+if (on) other.focus(); else other.value = '';
+});
 });
 
-// カードの「この商品を注文する」→ フォームに商品を入れて移動
-document.querySelectorAll('.buy').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.getElementById('selItem').value = ITEMS[btn.dataset.i].name;
-    document.getElementById('order').scrollIntoView({behavior:'smooth'});
-  });
-});
+/* ───────── 住所：都道府県プルダウン＋郵便番号で自動入力 ───────── */
+const PREFS = ["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県","静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県","鳥取県","島根県","岡山県","広島県","山口県","徳島県","香川県","愛媛県","高知県","福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"];
+const prefSel = document.getElementById('pref');
+prefSel.innerHTML = '<option value="">お選びください</option>' + PREFS.map(p => `<option value="${p}">${p}</option>`).join('');
 
+const zip = document.getElementById('zip');
+const city = document.getElementById('city');
+const banchi = document.getElementById('banchi');
+const zipMsg = document.getElementById('zipMsg');
+
+function setZipMsg(text, cls){
+zipMsg.textContent = text;
+zipMsg.className = 'zipmsg' + (cls ? ' ' + cls : '');
+}
+
+// 郵便番号 → 住所（zipcloud を JSONP で呼び出し。失敗しても手入力できます）
+function lookupZip(){
+const z = zip.value.replace(/[^0-9]/g, '');
+if(z.length !== 7){
+if(z.length === 0) setZipMsg('番号を入力すると、都道府県と市区町村が自動で入ります。', '');
+return;
+}
+setZipMsg('住所を調べています…', '');
+const cb = '__zipcb' + Date.now();
+const s = document.createElement('script');
+let done = false;
+const cleanup = () => { delete window[cb]; if(s.parentNode) s.parentNode.removeChild(s); };
+const timer = setTimeout(() => {
+if(done) return; done = true; cleanup();
+setZipMsg('自動入力できませんでした。お手数ですが住所をご記入ください。', 'err');
+}, 6000);
+window[cb] = (res) => {
+if(done) return; done = true; clearTimeout(timer); cleanup();
+if(res && res.status === 200 && res.results && res.results[0]){
+const r = res.results[0];
+prefSel.value = r.address1;
+city.value = (r.address2 || '') + (r.address3 || '');
+setZipMsg('住所を入力しました。続けて番地・建物名をご記入ください。', 'ok');
+if(!banchi.value) banchi.focus();
+} else {
+setZipMsg('この郵便番号の住所が見つかりませんでした。ご確認のうえ、手入力もできます。', 'err');
+}
+};
+s.onerror = () => {
+if(done) return; done = true; clearTimeout(timer); cleanup();
+setZipMsg('自動入力できませんでした。お手数ですが住所をご記入ください。', 'err');
+};
+s.src = 'https://zipcloud.ibsnet.co.jp/api/search?zipcode=' + z + '&callback=' + cb;
+document.body.appendChild(s);
+}
+zip.addEventListener('input', lookupZip);
+zip.addEventListener('blur', lookupZip);
+
+/* ───────── 特定商取引法に基づく表記 ───────── */
 document.getElementById('law').innerHTML = [
-  ['販売事業者', LAW.seller], ['所在地', LAW.address], ['電話番号', LAW.tel],
-  ['連絡先', LAW.mail], ['販売価格', '各商品に表示された金額（消費税込）'],
-  ['商品代金以外の費用', LAW.extra], ['お支払い方法', LAW.pay],
-  ['お支払い時期', LAW.payTime], ['お届け時期', LAW.ship], ['返品・交換', LAW.returns]
+['販売事業者', LAW.seller], ['所在地', LAW.address], ['電話番号', LAW.tel],
+['連絡先', LAW.mail], ['販売価格', '各商品に表示された金額（消費税込）'],
+['商品代金以外の費用', LAW.extra], ['お支払い方法', LAW.pay],
+['お支払い時期', LAW.payTime], ['お届け時期', LAW.ship], ['返品・交換', LAW.returns]
 ].map(([k,v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
 </script>
 
