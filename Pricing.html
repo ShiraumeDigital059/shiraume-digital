@@ -83,6 +83,37 @@
   .camp__btn{width:100%;justify-content:center;}
 }
 
+
+/* --- 最上部のジャンプナビ（v39） --- */
+.price-jump--top{
+  max-width:1080px;margin:0 auto 26px;padding:0 24px;
+  display:block;
+}
+.price-jump--top .price-jump__lead{
+  display:block;text-align:center;
+  font-size:12px;letter-spacing:.14em;color:#A79C88;margin-bottom:13px;
+}
+.price-jump--top .price-jump__row{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:9px;
+}
+.price-jump--top .price-jump__link{
+  display:inline-block;
+  padding:11px 20px;border-radius:999px;
+  border:1px solid #E5DCC8;background:#fff;
+  color:#4A4548;font-size:13.5px;font-weight:600;text-decoration:none;
+  white-space:nowrap;
+  transition:all .25s cubic-bezier(.22,1,.36,1);
+}
+.price-jump--top .price-jump__link:hover{
+  background:#2B2A2E;border-color:#2B2A2E;color:#fff;
+  transform:translateY(-2px);box-shadow:0 8px 20px rgba(43,42,46,.18);
+}
+@media(max-width:720px){
+  .price-jump--top{padding:0 16px;}
+  .price-jump--top .price-jump__row{gap:7px;}
+  .price-jump--top .price-jump__link{padding:10px 15px;font-size:12.5px;}
+}
+
 /* --- 買い切りタイル：キャンペーン表示（v38 派手版） --- */
 .plan-tiles--camp{
   display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;
@@ -327,6 +358,20 @@
 
 
 
+
+  <!-- ============ JUMP NAV (v39 : 最上部) ============ -->
+  <nav class="price-jump price-jump--top" aria-label="サービス別料金">
+    <span class="price-jump__lead">見たいものを選べます</span>
+    <div class="price-jump__row">
+      <a href="#sets" class="price-jump__link">セットプラン</a>
+      <a href="#web" class="price-jump__link">ホームページ制作</a>
+      <a href="#sns" class="price-jump__link">SNS運用サポート</a>
+      <a href="#line" class="price-jump__link">LINE公式アカウント</a>
+      <a href="#meo" class="price-jump__link">Googleマップ対策</a>
+      <a href="#ads" class="price-jump__link">広告サポート</a>
+    </div>
+  </nav>
+
   <!-- ============ CAMPAIGN (v37) ============ -->
   <section class="camp reveal">
     <div class="camp__inner">
@@ -451,14 +496,7 @@
     <p class="setplans__link"><a href="#web">サービスごとの詳しい料金を見る →</a></p>
   </section>
 
-  <nav class="price-jump" aria-label="サービス別料金">
-    <a href="#sets" class="price-jump__link">セットプラン</a>
-    <a href="#web" class="price-jump__link">ホームページ制作</a>
-    <a href="#sns" class="price-jump__link">SNS運用サポート</a>
-    <a href="#line" class="price-jump__link">LINE公式アカウント</a>
-    <a href="#meo" class="price-jump__link">Googleマップ対策</a>
-    <a href="#ads" class="price-jump__link">広告サポート</a>
-  </nav>
+
 
   <!-- ============ 01 : Website Creation ============ -->
   <section class="price-cat price-cat--web fade-section" id="web">
@@ -479,8 +517,30 @@
         <button type="button" class="plan-tabs__btn" role="tab" aria-selected="false" aria-controls="pr-maint">保守・運用</button>
       </div>
       <div class="plan-tabs__panel is-active" id="pr-buy" role="tabpanel">
-        <p class="plan-tabs__desc">一度の制作費だけ。サイトはそのまま資産になります。<br>
-        <b style="color:#8A6E1E;">いまなら期間限定で、初期費用0円でも始められます。</b></p>
+        <p class="plan-tabs__desc">一度の制作費だけ。サイトはそのまま資産になります。</p>
+        <div class="plan-tiles plan-tiles--3">
+          <div class="plan-tile">
+            <span class="plan-tile__name">STARTER</span>
+            <span class="plan-tile__price">¥39,800〜</span>
+            <span class="plan-tile__for">個人・小規模店舗向け</span>
+          </div>
+          <div class="plan-tile plan-tile--featured">
+            <span class="plan-tile__badge">人気</span>
+            <span class="plan-tile__name">STANDARD</span>
+            <span class="plan-tile__price">¥89,800〜</span>
+            <span class="plan-tile__for">企業・店舗向け</span>
+          </div>
+          <div class="plan-tile">
+            <span class="plan-tile__name">BUSINESS</span>
+            <span class="plan-tile__price">¥139,800〜</span>
+            <span class="plan-tile__for">集客を重視する方向け</span>
+          </div>
+        </div>
+        <p class="plan-tabs__note">※ページ数や機能によってお見積りいたします。</p>
+      </div>
+      <div class="plan-tabs__panel" id="pr-month" role="tabpanel" hidden>
+        <p class="plan-tabs__desc">通常は買い切りでの制作費をいただいていますが、月額なら分けてお支払いいただけます。<br>
+        <b style="color:#8A6E1E;">いまなら期間限定で、初期費用0円で始められます。</b></p>
 
         <div class="plan-tiles--camp">
 
@@ -529,34 +589,11 @@
         <div class="camp-note">
           <span class="camp-note__icon">!</span>
           <p class="camp-note__text">
-            打ち消し線は、通常の買い切り価格です。もちろん買い切りでのご依頼も承っています。<br>
+            打ち消し線は、通常の買い切り価格です。買い切りをご希望の場合は、左の「買い切り」タブをご覧ください。<br>
             <b>初期費用0円のお取り扱いは期間限定です。</b>予告なく終了・変更する場合があります。<br>
-            月額は24ヶ月契約時の金額です。ページ数や機能によってお見積りいたします。
+            月額は24ヶ月契約時の金額です。6ヶ月・12ヶ月もお選びいただけます（期間が短いほど月額は上がります）。
           </p>
         </div>
-      </div>
-      <div class="plan-tabs__panel" id="pr-month" role="tabpanel" hidden>
-        <p class="plan-tabs__desc">初期費用0円。月額だけで始められます。<br>
-        <b style="color:#8A6E1E;">こちらは期間限定のお取り扱いです。</b></p>
-        <div class="plan-tiles plan-tiles--3">
-          <div class="plan-tile">
-            <span class="plan-tile__name">LIGHT</span>
-            <span class="plan-tile__price">¥4,480〜 / 月</span>
-            <span class="plan-tile__for">個人・小規模店舗向け</span>
-          </div>
-          <div class="plan-tile plan-tile--featured">
-            <span class="plan-tile__badge">人気</span>
-            <span class="plan-tile__name">STANDARD</span>
-            <span class="plan-tile__price">¥7,480〜 / 月</span>
-            <span class="plan-tile__for">企業・店舗向け</span>
-          </div>
-          <div class="plan-tile">
-            <span class="plan-tile__name">BUSINESS</span>
-            <span class="plan-tile__price">¥11,480〜 / 月</span>
-            <span class="plan-tile__for">集客を重視する方向け</span>
-          </div>
-        </div>
-        <p class="plan-tabs__note">※24ヶ月契約時の月額です。6ヶ月・12ヶ月もお選びいただけます（期間が短いほど月額は上がります）。</p>
       </div>
       <div class="plan-tabs__panel" id="pr-maint" role="tabpanel" hidden>
         <p class="plan-tabs__desc">公開後の更新・管理をお任せいただけます。他社制作のサイトにも対応します。</p>
