@@ -21,6 +21,272 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon-180.png">
 <link rel="stylesheet" href="assets/style.css">
+
+<style>
+/* ================= v37 : 期間限定キャンペーン / 視認性強化 ================= */
+
+/* --- キャンペーン帯 --- */
+.camp{
+  max-width:1080px;margin:0 auto 8px;padding:0 24px;
+}
+.camp__inner{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#2B2A2E 0%,#3A3833 55%,#4A4130 100%);
+  border-radius:6px;padding:30px 34px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:26px;flex-wrap:wrap;
+  box-shadow:0 14px 40px rgba(43,42,46,.16);
+}
+.camp__inner::after{
+  content:"";position:absolute;top:-60%;left:-30%;
+  width:60%;height:220%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.10),transparent);
+  transform:rotate(14deg);
+  animation:campShine 5.5s ease-in-out infinite;
+}
+@keyframes campShine{
+  0%,68%{left:-40%;} 100%{left:130%;}
+}
+.camp__left{position:relative;z-index:2;}
+.camp__tag{
+  display:inline-block;background:#B8912F;color:#fff;
+  font-size:10.5px;letter-spacing:.18em;font-weight:700;
+  padding:5px 12px;border-radius:2px;margin-bottom:12px;
+}
+.camp__title{
+  color:#fff;font-size:24px;font-weight:700;line-height:1.55;margin:0 0 8px;
+  letter-spacing:.01em;
+}
+.camp__title em{
+  font-style:normal;color:#F0CE72;
+  font-size:31px;font-weight:800;letter-spacing:.02em;
+}
+.camp__note{
+  color:rgba(255,255,255,.68);font-size:12.5px;line-height:1.9;margin:0;
+}
+.camp__right{position:relative;z-index:2;}
+.camp__btn{
+  display:inline-flex;align-items:center;gap:9px;
+  background:#fff;color:#2B2A2E;text-decoration:none;
+  font-size:14.5px;font-weight:700;
+  padding:15px 27px;border-radius:999px;white-space:nowrap;
+  transition:transform .25s ease, box-shadow .25s ease;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+}
+.camp__btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.26);}
+.camp__btn span{transition:transform .25s ease;}
+.camp__btn:hover span{transform:translateX(4px);}
+@media(max-width:720px){
+  .camp__inner{padding:26px 22px;flex-direction:column;align-items:flex-start;gap:18px;}
+  .camp__title{font-size:19.5px;}
+  .camp__title em{font-size:25px;}
+  .camp__btn{width:100%;justify-content:center;}
+}
+
+/* --- 買い切りタイル：キャンペーン表示（v38 派手版） --- */
+.plan-tiles--camp{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch;
+}
+@media(max-width:860px){.plan-tiles--camp{grid-template-columns:1fr;}}
+
+.ctile{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  border-radius:10px;padding:30px 24px 24px;
+  background:linear-gradient(180deg,#FFFDF8 0%,#FBF4E4 100%);
+  border:1.5px solid #E8D5A8;
+  transition:transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s ease;
+}
+.ctile:hover{transform:translateY(-7px);box-shadow:0 20px 44px rgba(138,110,30,.20);}
+
+/* 斜めリボン */
+.ctile__ribbon{
+  position:absolute;top:15px;right:-40px;width:158px;
+  transform:rotate(45deg);
+  background:linear-gradient(90deg,#C9A02F,#8A6E1E);
+  color:#fff;text-align:center;
+  font-size:10.5px;font-weight:700;letter-spacing:.13em;
+  padding:6px 0;box-shadow:0 3px 10px rgba(0,0,0,.20);z-index:3;
+}
+
+/* 主役カード（黒地×金） */
+.ctile--hero{
+  background:linear-gradient(155deg,#26252A 0%,#33312F 48%,#463C29 100%);
+  border-color:#8A6E1E;
+  box-shadow:0 16px 42px rgba(38,37,42,.30);
+}
+.ctile--hero:hover{box-shadow:0 26px 58px rgba(38,37,42,.40);}
+.ctile--hero::before{
+  content:"";position:absolute;top:-60%;left:-35%;width:55%;height:230%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.11),transparent);
+  transform:rotate(15deg);animation:tileShine 6s ease-in-out infinite;z-index:1;
+}
+@keyframes tileShine{0%,72%{left:-45%;}100%{left:135%;}}
+.ctile--hero > *{position:relative;z-index:2;}
+
+.ctile__pop{
+  display:inline-block;align-self:flex-start;
+  background:#B8912F;color:#fff;
+  font-size:10px;letter-spacing:.16em;font-weight:700;
+  padding:5px 11px;border-radius:3px;margin-bottom:14px;
+}
+.ctile__name{
+  display:block;font-size:12.5px;letter-spacing:.22em;font-weight:700;
+  color:#8A7A55;margin-bottom:14px;
+}
+.ctile--hero .ctile__name{color:#D9C48A;}
+
+.ctile__was{
+  display:block;font-size:13.5px;color:#A79C88;margin-bottom:12px;
+}
+.ctile__was s{text-decoration:line-through;text-decoration-thickness:1.5px;}
+.ctile--hero .ctile__was{color:rgba(255,255,255,.5);}
+
+/* 0円の主張 */
+.ctile__zero{
+  display:flex;align-items:baseline;gap:9px;
+  padding:14px 0 12px;margin-bottom:12px;
+  border-top:1px dashed #E0CD9E;border-bottom:1px dashed #E0CD9E;
+}
+.ctile--hero .ctile__zero{border-color:rgba(217,196,138,.32);}
+.ctile__zero-label{font-size:13px;color:#6B6467;font-weight:600;white-space:nowrap;}
+.ctile--hero .ctile__zero-label{color:rgba(255,255,255,.72);}
+.ctile__zero-num{
+  font-size:42px;font-weight:800;line-height:1;letter-spacing:-.01em;
+  color:#8A6E1E;
+}
+.ctile--hero .ctile__zero-num{
+  color:#F5D57E;text-shadow:0 0 22px rgba(245,213,126,.30);
+}
+.ctile__zero-yen{font-size:19px;font-weight:800;color:#8A6E1E;}
+.ctile--hero .ctile__zero-yen{color:#F5D57E;}
+
+.ctile__monthly{
+  display:block;font-size:22px;font-weight:700;color:#2B2A2E;
+  line-height:1.4;margin-bottom:4px;
+}
+.ctile--hero .ctile__monthly{color:#fff;}
+.ctile__monthly small{font-size:13px;font-weight:600;color:#6B6467;}
+.ctile--hero .ctile__monthly small{color:rgba(255,255,255,.62);}
+
+.ctile__for{
+  display:block;font-size:12.5px;color:#6B6467;line-height:1.8;
+  margin-bottom:20px;
+}
+.ctile--hero .ctile__for{color:rgba(255,255,255,.62);}
+
+.ctile__cta{
+  margin-top:auto;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 18px;border-radius:999px;text-decoration:none;
+  font-size:14px;font-weight:700;letter-spacing:.02em;
+  background:#2B2A2E;color:#fff;
+  transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
+  box-shadow:0 5px 16px rgba(43,42,46,.20);
+}
+.ctile__cta::after{content:"→";transition:transform .22s ease;}
+.ctile__cta:hover{transform:translateY(-2px);box-shadow:0 11px 26px rgba(43,42,46,.30);}
+.ctile__cta:hover::after{transform:translateX(4px);}
+.ctile--hero .ctile__cta{
+  background:linear-gradient(90deg,#E8C765,#C9A02F);color:#26252A;
+  box-shadow:0 6px 20px rgba(201,160,47,.42);
+}
+.ctile--hero .ctile__cta:hover{box-shadow:0 13px 32px rgba(201,160,47,.55);}
+
+/* --- 期間限定の注記 --- */
+.camp-note{
+  display:flex;gap:9px;align-items:flex-start;
+  background:#FBF8F1;border:1px solid #EDE4D2;border-radius:4px;
+  padding:14px 17px;margin:16px 0 0;
+}
+.camp-note__icon{
+  flex:none;width:17px;height:17px;border-radius:50%;
+  background:#B8912F;color:#fff;font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;margin-top:2px;
+}
+.camp-note__text{font-size:12.5px;color:#6B6467;line-height:1.95;margin:0;}
+
+/* --- 追従お問い合わせボタン --- */
+.fab{
+  position:fixed;right:22px;bottom:22px;z-index:120;
+  display:flex;flex-direction:column;gap:10px;
+  opacity:0;transform:translateY(14px);pointer-events:none;
+  transition:opacity .4s ease, transform .4s ease;
+}
+.fab.is-on{opacity:1;transform:translateY(0);pointer-events:auto;}
+.fab__btn{
+  display:flex;align-items:center;gap:9px;
+  padding:14px 22px;border-radius:999px;text-decoration:none;
+  font-size:14px;font-weight:700;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(43,42,46,.24);
+  transition:transform .22s ease, box-shadow .22s ease;
+}
+.fab__btn:hover{transform:translateY(-3px);box-shadow:0 13px 30px rgba(43,42,46,.3);}
+.fab__btn--main{background:#2B2A2E;color:#fff;}
+.fab__btn--line{background:#06C755;color:#fff;}
+.fab__btn::after{content:"→";transition:transform .22s ease;}
+.fab__btn:hover::after{transform:translateX(4px);}
+@media(max-width:720px){
+  .fab{right:14px;bottom:14px;left:14px;flex-direction:row;}
+  .fab__btn{flex:1;justify-content:center;padding:15px 14px;font-size:13.5px;}
+}
+
+/* --- お問い合わせ導線の強化 --- */
+.contact-strip{
+  max-width:1080px;margin:0 auto;padding:0 24px 64px;
+}
+.contact-strip__inner{
+  border:1px solid #EDE7DA;border-radius:6px;background:#fff;
+  padding:38px 40px;text-align:center;
+  box-shadow:0 4px 20px rgba(43,42,46,.05);
+}
+.contact-strip__eyebrow{
+  display:block;font-size:11px;letter-spacing:.2em;color:#B8912F;margin-bottom:11px;
+}
+.contact-strip__title{
+  font-size:23px;color:#2B2A2E;margin:0 0 10px;line-height:1.6;font-weight:700;
+}
+.contact-strip__desc{
+  font-size:14px;color:#6B6467;line-height:2.0;margin:0 0 26px;
+}
+.contact-strip__actions{
+  display:flex;gap:13px;justify-content:center;flex-wrap:wrap;
+}
+.contact-strip__btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:16px 32px;border-radius:999px;text-decoration:none;
+  font-size:14.5px;font-weight:700;
+  transition:transform .22s ease, box-shadow .22s ease;
+}
+.contact-strip__btn--main{
+  background:#2B2A2E;color:#fff;box-shadow:0 6px 18px rgba(43,42,46,.18);
+}
+.contact-strip__btn--line{
+  background:#06C755;color:#fff;box-shadow:0 6px 18px rgba(6,199,85,.24);
+}
+.contact-strip__btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(43,42,46,.24);}
+.contact-strip__btn::after{content:"→";transition:transform .22s ease;}
+.contact-strip__btn:hover::after{transform:translateX(4px);}
+@media(max-width:720px){
+  .contact-strip__inner{padding:30px 22px;}
+  .contact-strip__title{font-size:19px;}
+  .contact-strip__btn{width:100%;justify-content:center;}
+}
+
+/* --- スクロール表示アニメーション --- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .75s cubic-bezier(.22,1,.36,1), transform .75s cubic-bezier(.22,1,.36,1);}
+.reveal.is-in{opacity:1;transform:none;}
+.reveal-d1{transition-delay:.08s;}
+.reveal-d2{transition-delay:.16s;}
+.reveal-d3{transition-delay:.24s;}
+
+/* --- タブの視認性を上げる --- */
+.plan-tabs__btn{transition:background .25s ease, color .25s ease, box-shadow .25s ease;}
+.plan-tabs__panel{animation:panelIn .45s cubic-bezier(.22,1,.36,1);}
+@keyframes panelIn{from{opacity:0;transform:translateY(9px);}to{opacity:1;transform:none;}}
+.plan-tile{transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;}
+.plan-tile:hover{transform:translateY(-5px);box-shadow:0 14px 32px rgba(43,42,46,.11);}
+</style>
 </head>
 <body>
 
@@ -59,6 +325,24 @@
     <p class="simple-hero__desc" style="max-width:600px;">サービスごとに料金を分けて掲載しています。掲載の料金は目安で、最終的なお見積りはヒアリング内容に基づいてご案内します。</p>
   </header>
 
+
+
+  <!-- ============ CAMPAIGN (v37) ============ -->
+  <section class="camp reveal">
+    <div class="camp__inner">
+      <div class="camp__left">
+        <span class="camp__tag">期間限定</span>
+        <h2 class="camp__title">いま始める方は、<em>初期費用 0円</em></h2>
+        <p class="camp__note">
+          買い切りでのご依頼も、もちろん承っています。<br>
+          「まず持ってみたい」という方は、初期費用なしでも始められます。
+        </p>
+      </div>
+      <div class="camp__right">
+        <a href="Contact.html" class="camp__btn">無料で相談してみる<span>→</span></a>
+      </div>
+    </div>
+  </section>
 
   <!-- ============ SET PLANS ============ -->
   <section class="setplans fade-section" id="sets">
@@ -195,29 +479,65 @@
         <button type="button" class="plan-tabs__btn" role="tab" aria-selected="false" aria-controls="pr-maint">保守・運用</button>
       </div>
       <div class="plan-tabs__panel is-active" id="pr-buy" role="tabpanel">
-        <p class="plan-tabs__desc">一度の制作費だけ。サイトはそのまま資産になります。</p>
-        <div class="plan-tiles plan-tiles--3">
-          <div class="plan-tile">
-            <span class="plan-tile__name">STARTER</span>
-            <span class="plan-tile__price">¥39,800〜</span>
-            <span class="plan-tile__for">個人・小規模店舗向け</span>
-          </div>
-          <div class="plan-tile plan-tile--featured">
-            <span class="plan-tile__badge">人気</span>
-            <span class="plan-tile__name">STANDARD</span>
-            <span class="plan-tile__price">¥89,800〜</span>
-            <span class="plan-tile__for">企業・店舗向け</span>
-          </div>
-          <div class="plan-tile">
-            <span class="plan-tile__name">BUSINESS</span>
-            <span class="plan-tile__price">¥139,800〜</span>
-            <span class="plan-tile__for">集客を重視する方向け</span>
-          </div>
+        <p class="plan-tabs__desc">一度の制作費だけ。サイトはそのまま資産になります。<br>
+        <b style="color:#8A6E1E;">いまなら期間限定で、初期費用0円でも始められます。</b></p>
+
+        <div class="plan-tiles--camp">
+
+          <article class="ctile">
+            <span class="ctile__ribbon">期間限定</span>
+            <span class="ctile__name">STARTER</span>
+            <span class="ctile__was">通常 買い切り <s>¥39,800〜</s></span>
+            <div class="ctile__zero">
+              <span class="ctile__zero-label">初期費用</span>
+              <span class="ctile__zero-num">0</span><span class="ctile__zero-yen">円</span>
+            </div>
+            <span class="ctile__monthly">¥4,480〜 <small>/ 月</small></span>
+            <span class="ctile__for">個人・小規模店舗向け<br>まずは1枚、持っておきたい方に。</span>
+            <a href="Contact.html" class="ctile__cta">このプランで相談する</a>
+          </article>
+
+          <article class="ctile ctile--hero">
+            <span class="ctile__ribbon">期間限定</span>
+            <span class="ctile__pop">いちばん人気</span>
+            <span class="ctile__name">STANDARD</span>
+            <span class="ctile__was">通常 買い切り <s>¥89,800〜</s></span>
+            <div class="ctile__zero">
+              <span class="ctile__zero-label">初期費用</span>
+              <span class="ctile__zero-num">0</span><span class="ctile__zero-yen">円</span>
+            </div>
+            <span class="ctile__monthly">¥7,480〜 <small>/ 月</small></span>
+            <span class="ctile__for">企業・店舗向け<br>集客まで考えるなら、このあたりから。</span>
+            <a href="Contact.html" class="ctile__cta">このプランで相談する</a>
+          </article>
+
+          <article class="ctile">
+            <span class="ctile__ribbon">期間限定</span>
+            <span class="ctile__name">BUSINESS</span>
+            <span class="ctile__was">通常 買い切り <s>¥139,800〜</s></span>
+            <div class="ctile__zero">
+              <span class="ctile__zero-label">初期費用</span>
+              <span class="ctile__zero-num">0</span><span class="ctile__zero-yen">円</span>
+            </div>
+            <span class="ctile__monthly">¥11,480〜 <small>/ 月</small></span>
+            <span class="ctile__for">集客を重視する方向け<br>本格的にWebから集めたい方に。</span>
+            <a href="Contact.html" class="ctile__cta">このプランで相談する</a>
+          </article>
+
         </div>
-        <p class="plan-tabs__note">※ページ数や機能によってお見積りいたします。</p>
+
+        <div class="camp-note">
+          <span class="camp-note__icon">!</span>
+          <p class="camp-note__text">
+            打ち消し線は、通常の買い切り価格です。もちろん買い切りでのご依頼も承っています。<br>
+            <b>初期費用0円のお取り扱いは期間限定です。</b>予告なく終了・変更する場合があります。<br>
+            月額は24ヶ月契約時の金額です。ページ数や機能によってお見積りいたします。
+          </p>
+        </div>
       </div>
       <div class="plan-tabs__panel" id="pr-month" role="tabpanel" hidden>
-        <p class="plan-tabs__desc">初期費用0円。月額だけで始められます。</p>
+        <p class="plan-tabs__desc">初期費用0円。月額だけで始められます。<br>
+        <b style="color:#8A6E1E;">こちらは期間限定のお取り扱いです。</b></p>
         <div class="plan-tiles plan-tiles--3">
           <div class="plan-tile">
             <span class="plan-tile__name">LIGHT</span>
@@ -461,6 +781,23 @@
     </div>
   </section>
 
+
+  <!-- ============ CONTACT STRIP (v37) ============ -->
+  <section class="contact-strip reveal">
+    <div class="contact-strip__inner">
+      <span class="contact-strip__eyebrow">CONTACT</span>
+      <h2 class="contact-strip__title">どのプランが合うか、一緒に決めましょう。</h2>
+      <p class="contact-strip__desc">
+        「これで合っているのか分からない」という段階でも大丈夫です。<br class="br-desktop">
+        ご相談だけでも費用はいただきません。無理におすすめすることもありません。
+      </p>
+      <div class="contact-strip__actions">
+        <a href="Contact.html" class="contact-strip__btn contact-strip__btn--main">無料で相談する</a>
+        <a href="https://lin.ee/rSesA3G" target="_blank" rel="noopener" class="contact-strip__btn contact-strip__btn--line">LINEで相談する</a>
+      </div>
+    </div>
+  </section>
+
     <!-- CTA -->
   <section class="cta-home fade-section" id="contact-cta">
     <img class="cta-home__bg" src="assets/images/contact-cta-family.jpg" alt="">
@@ -524,6 +861,56 @@
   </footer>
 
 </div>
+
+
+<!-- ============ FLOATING CTA (v37) ============ -->
+<div class="fab" id="fab">
+  <a href="Contact.html" class="fab__btn fab__btn--main">無料相談</a>
+  <a href="https://lin.ee/rSesA3G" target="_blank" rel="noopener" class="fab__btn fab__btn--line">LINE</a>
+</div>
+
+<script>
+(function(){
+  /* --- スクロールで表示 --- */
+  var targets = document.querySelectorAll('.reveal, .price-cat, .setplan, .plan-tabs');
+  if('IntersectionObserver' in window){
+    targets.forEach(function(el){ el.classList.add('reveal'); });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, {threshold:0.08, rootMargin:'0px 0px -40px 0px'});
+    targets.forEach(function(el){ io.observe(el); });
+  }else{
+    targets.forEach(function(el){ el.classList.add('is-in'); });
+  }
+
+  /* --- セットプランのカードを順番に --- */
+  document.querySelectorAll('.setplans__grid .setplan').forEach(function(el,i){
+    el.classList.add('reveal-d'+Math.min(i,3));
+  });
+  document.querySelectorAll('.plan-tiles .plan-tile').forEach(function(el,i){
+    el.style.transitionDelay = (i%3)*0.07 + 's';
+  });
+
+  /* --- 追従ボタン：少しスクロールしたら出す / フッター手前で引っ込める --- */
+  var fab = document.getElementById('fab');
+  var foot = document.querySelector('.footer');
+  function onScroll(){
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    var nearFooter = false;
+    if(foot){
+      var r = foot.getBoundingClientRect();
+      nearFooter = r.top < window.innerHeight - 40;
+    }
+    if(y > 420 && !nearFooter){ fab.classList.add('is-on'); }
+    else{ fab.classList.remove('is-on'); }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+})();
+</script>
 
 <script src="assets/js/i18n.js"></script>
 <script src="assets/js/main.js"></script>
