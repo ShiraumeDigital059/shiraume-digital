@@ -21,6 +21,154 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon-180.png">
 <link rel="stylesheet" href="assets/style.css">
+
+<style>
+/* ===== v40 : 月額プラン単一化 / 工程 / 保守半額 / 制作について ===== */
+
+/* 工程 */
+.mflow{max-width:900px;margin:0 auto 34px;padding:0 24px;display:flex;gap:14px;}
+.mflow__row{
+  flex:1;display:flex;flex-direction:column;gap:7px;
+  background:#FBF8F1;border:1px solid #EDE4D2;border-radius:6px;padding:18px 20px;
+}
+.mflow__term{
+  font-size:11.5px;letter-spacing:.14em;color:#8A6E1E;font-weight:700;
+}
+.mflow__do{font-size:14px;color:#2B2A2E;line-height:1.75;font-weight:600;}
+@media(max-width:720px){
+  .mflow{flex-direction:column;gap:10px;padding:0 16px;}
+  .mflow__row{padding:15px 17px;}
+}
+
+/* 月額：単一価格 */
+.mplan__single{
+  padding:20px 0 18px;margin:4px 0 16px;
+  border-top:1px solid #EDE7DA;border-bottom:1px solid #EDE7DA;text-align:center;
+}
+.mplan__single-price{
+  font-size:33px;font-weight:800;color:#2B2A2E;letter-spacing:-.01em;line-height:1.2;
+}
+.mplan__single-price small{
+  font-size:13.5px;font-weight:600;color:#6B6467;margin-left:4px;letter-spacing:0;
+}
+.mplan--featured .mplan__single-price{color:#8A6E1E;}
+
+/* 注記ブロック */
+.mnote{
+  max-width:900px;margin:26px auto 0;padding:18px 22px;
+  background:#FBF8F1;border:1px solid #EDE4D2;border-radius:5px;
+}
+.mnote__t{font-size:12.8px;color:#6B6467;line-height:1.95;margin:0 0 7px;}
+.mnote__t:last-child{margin-bottom:0;}
+.mnote__t b{color:#2B2A2E;}
+@media(max-width:720px){.mnote{margin-left:16px;margin-right:16px;padding:15px 17px;}}
+
+/* 保守：買い切りは半額 */
+.mnt-half{
+  display:inline-flex;flex-direction:column;gap:6px;align-items:center;
+  margin-top:16px;padding:14px 22px;
+  background:linear-gradient(135deg,#FFFDF8,#FBF4E4);
+  border:1.5px solid #E8D5A8;border-radius:6px;
+}
+.mnt-half__tag{
+  display:inline-block;background:#8A6E1E;color:#fff;
+  font-size:10px;letter-spacing:.14em;font-weight:700;padding:4px 11px;border-radius:3px;
+}
+.mnt-half__t{font-size:13.5px;color:#4A4548;line-height:1.85;margin:0;}
+.mnt-half__t b{color:#8A6E1E;font-weight:700;}
+.mnt__half{
+  display:block;font-size:12.5px;color:#8A6E1E;margin-top:5px;line-height:1.6;
+}
+.mnt__half b{font-size:16px;font-weight:800;}
+.mnt__half small{font-size:11px;font-weight:600;}
+
+/* 制作について（定義） */
+.about-work{max-width:900px;margin:0 auto;padding:0 24px 64px;}
+.about-work__head{border-top:1px solid #EDE7DA;padding-top:38px;margin-bottom:24px;}
+.about-work__eyebrow{display:block;font-size:11px;letter-spacing:.2em;color:#B8912F;margin-bottom:10px;}
+.about-work__title{font-size:21px;color:#2B2A2E;margin:0 0 8px;line-height:1.5;font-weight:700;}
+.about-work__lead{font-size:14px;color:#6B6467;line-height:2.0;margin:0;}
+.aw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:24px;}
+.aw-card{background:#fff;border:1px solid #EDE7DA;border-radius:6px;padding:20px 22px;}
+.aw-card__t{font-size:14.5px;font-weight:700;color:#2B2A2E;margin:0 0 9px;line-height:1.6;}
+.aw-card__d{font-size:13px;color:#6B6467;line-height:1.95;margin:0;}
+.aw-card__d b{color:#2B2A2E;}
+.aw-table{width:100%;border-collapse:collapse;margin:0 0 24px;}
+.aw-table th,.aw-table td{
+  padding:12px 14px;border-bottom:1px solid #EDE7DA;font-size:13px;
+  line-height:1.85;vertical-align:top;text-align:left;
+}
+.aw-table th{background:#FBF8F1;color:#8A6E1E;font-weight:700;width:30%;white-space:nowrap;}
+.aw-table td{color:#4A4548;}
+@media(max-width:720px){
+  .about-work{padding:0 16px 48px;}
+  .aw-table th,.aw-table td{display:block;width:auto;}
+  .aw-table th{border-bottom:0;padding-bottom:4px;}
+}
+
+/* 写真撮影 */
+.photo-sec{max-width:1080px;margin:0 auto;padding:0 24px 68px;}
+.photo-inner{
+  position:relative;overflow:hidden;border-radius:10px;
+  background:linear-gradient(155deg,#26252A 0%,#33312F 52%,#463C29 100%);
+  padding:44px 46px;border:1.5px solid #8A6E1E;
+}
+.photo-inner::before{
+  content:"";position:absolute;top:-60%;left:-35%;width:50%;height:230%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);
+  transform:rotate(15deg);animation:photoShine 7s ease-in-out infinite;
+}
+@keyframes photoShine{0%,74%{left:-45%;}100%{left:135%;}}
+.photo-inner > *{position:relative;z-index:2;}
+.photo__eyebrow{display:block;font-size:10.5px;letter-spacing:.24em;color:#D9C48A;margin-bottom:13px;}
+.photo__title{font-size:25px;color:#fff;font-weight:700;line-height:1.55;margin:0 0 14px;}
+.photo__lead{font-size:14px;color:rgba(255,255,255,.74);line-height:2.0;margin:0 0 26px;}
+.photo__cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:26px;margin-bottom:28px;}
+.photo__col-t{
+  font-size:11px;letter-spacing:.16em;color:#D9C48A;font-weight:700;
+  margin:0 0 11px;padding-bottom:8px;border-bottom:1px solid rgba(217,196,138,.3);
+}
+.photo__ul{list-style:none;margin:0;padding:0;}
+.photo__ul li{
+  font-size:13.2px;color:rgba(255,255,255,.8);line-height:1.85;
+  padding-left:15px;position:relative;margin-bottom:6px;
+}
+.photo__ul li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:1px;background:#D9C48A;}
+.photo__ol{list-style:none;margin:0;padding:0;counter-reset:pf;}
+.photo__ol li{
+  font-size:13.2px;color:rgba(255,255,255,.8);line-height:1.85;
+  padding-left:26px;position:relative;margin-bottom:8px;counter-increment:pf;
+}
+.photo__ol li::before{
+  content:counter(pf);position:absolute;left:0;top:1px;
+  width:17px;height:17px;border-radius:50%;background:rgba(217,196,138,.18);
+  color:#F5D57E;font-size:10.5px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.photo__foot{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  padding-top:24px;border-top:1px solid rgba(217,196,138,.28);
+}
+.photo__price{font-size:13.2px;color:rgba(255,255,255,.7);line-height:1.85;margin:0;}
+.photo__price b{color:#F5D57E;font-weight:700;}
+.photo__cta{
+  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  background:linear-gradient(90deg,#E8C765,#C9A02F);color:#26252A;
+  font-size:14px;font-weight:700;padding:14px 28px;border-radius:999px;text-decoration:none;
+  transition:transform .22s ease,box-shadow .22s ease;
+  box-shadow:0 6px 20px rgba(201,160,47,.4);
+}
+.photo__cta::after{content:"→";transition:transform .22s ease;}
+.photo__cta:hover{transform:translateY(-2px);box-shadow:0 13px 32px rgba(201,160,47,.55);}
+.photo__cta:hover::after{transform:translateX(4px);}
+@media(max-width:720px){
+  .photo-sec{padding:0 16px 48px;}
+  .photo-inner{padding:32px 24px;}
+  .photo__title{font-size:20px;}
+  .photo__cols{gap:20px;}
+  .photo__cta{width:100%;justify-content:center;}
+}
+</style>
 </head>
 <body>
 
@@ -76,7 +224,7 @@
       <article class="plan-full">
         <div class="plan-full__aside">
           <span class="plan-full__name">STARTER</span>
-          <span class="plan-full__price">¥39,800〜</span>
+          <span class="plan-full__price">¥49,800〜</span>
           <span class="plan-full__for">個人・小規模店舗向け</span>
           <p class="plan-full__lead">初めてのホームページ制作におすすめのシンプルプラン。</p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
@@ -111,7 +259,7 @@
         <div class="plan-full__aside">
           <span class="plan-full__badge">おすすめ</span>
           <span class="plan-full__name">STANDARD</span>
-          <span class="plan-full__price">¥89,800〜</span>
+          <span class="plan-full__price">¥109,800〜</span>
           <span class="plan-full__for">企業・店舗向け</span>
           <p class="plan-full__lead">デザイン性と集客のバランスを重視した人気プラン。</p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
@@ -120,7 +268,7 @@
           <div class="plan-full__block">
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
-              <li>5〜8ページ構成</li>
+              <li>4〜7ページ構成</li>
               <li>オリジナルデザイン</li>
               <li>スマホ最適化</li>
               <li>SEO内部対策</li>
@@ -147,7 +295,7 @@
       <article class="plan-full">
         <div class="plan-full__aside">
           <span class="plan-full__name">BUSINESS</span>
-          <span class="plan-full__price">¥139,800〜</span>
+          <span class="plan-full__price">¥169,800〜</span>
           <span class="plan-full__for">集客・売上を重視する方向け</span>
           <p class="plan-full__lead">戦略設計から運用までトータルサポートする本格プラン。</p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
@@ -156,7 +304,7 @@
           <div class="plan-full__block">
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
-              <li>ページ数自由設計</li>
+              <li>8〜10ページ構成</li>
               <li>完全オリジナルデザイン</li>
               <li>UI/UX設計（導線設計）</li>
               <li>本格SEO対策</li>
@@ -187,36 +335,40 @@
   <section class="plan-group plan-group--monthly fade-section" id="monthly">
     <div class="plan-group__head">
       <span class="plan-group__eyebrow">MONTHLY</span>
-      <h2 class="plan-group__title">月額ホームページ制作</h2>
-      <p class="plan-group__desc">初期費用0円。月額だけで始められるホームページ制作プランです。契約期間が長いほど、月額はお得になります。</p>
+      <h2 class="plan-group__title">6ヶ月で、あなただけのホームページを育てます。</h2>
+      <p class="plan-group__desc">テンプレートを当てはめて終わり、ではありません。<br class="br-desktop">最初の2ヶ月で形にして、残りの4ヶ月で、実際に使いながら整えていきます。<br class="br-desktop">初期費用は0円。月額だけで始められます。</p>
       <div class="plan-badges">
+        <span class="plan-badge">初期費用0円</span>
         <span class="plan-badge">ドメイン・サーバー費込み</span>
         <span class="plan-badge">スマホ対応込み</span>
         <span class="plan-badge">公開後サポート込み</span>
       </div>
     </div>
+
+    <div class="mflow">
+      <div class="mflow__row">
+        <span class="mflow__term">1〜2ヶ月目</span>
+        <span class="mflow__do">ヒアリング・構成・デザイン・公開</span>
+      </div>
+      <div class="mflow__row">
+        <span class="mflow__term">3〜6ヶ月目</span>
+        <span class="mflow__do">公開後の調整・更新・改善</span>
+      </div>
+    </div>
+
     <div class="mplan-grid">
       <article class="mplan">
         <span class="mplan__name">LIGHT</span>
         <span class="mplan__for">個人・小規模店舗向け</span>
-        <div class="mplan__terms">
-          <div class="mplan__term">
-            <span class="mplan__term-label">6ヶ月</span>
-            <span class="mplan__term-price">¥6,480<small>/ 月</small></span>
-          </div>
-          <div class="mplan__term mplan__term--best">
-            <span class="mplan__term-label">12ヶ月</span>
-            <span class="mplan__term-price">¥5,480<small>/ 月</small></span>
-            <span class="mplan__term-tag">人気No.1</span>
-          </div>
-          <div class="mplan__term">
-            <span class="mplan__term-label">24ヶ月</span>
-            <span class="mplan__term-price">¥4,480<small>/ 月</small></span>
-          </div>
+        <div class="mplan__single">
+          <span class="mplan__single-price">¥6,980<small>/ 月</small></span>
         </div>
         <ul class="mplan__list">
           <li>1〜3ページ</li>
-          <li>スマホ対応</li>
+          <li>オリジナルデザイン</li>
+          <li>スマホ・タブレット対応</li>
+          <li>お問い合わせフォーム</li>
+          <li>Googleマップ埋め込み</li>
           <li>ドメイン・サーバー管理</li>
           <li>軽微な更新（月1回）</li>
           <li>メールサポート</li>
@@ -227,64 +379,47 @@
         <span class="mplan__badge">おすすめ</span>
         <span class="mplan__name">STANDARD</span>
         <span class="mplan__for">企業・店舗向け</span>
-        <div class="mplan__terms">
-          <div class="mplan__term">
-            <span class="mplan__term-label">6ヶ月</span>
-            <span class="mplan__term-price">¥10,480<small>/ 月</small></span>
-          </div>
-          <div class="mplan__term mplan__term--best">
-            <span class="mplan__term-label">12ヶ月</span>
-            <span class="mplan__term-price">¥8,480<small>/ 月</small></span>
-            <span class="mplan__term-tag">人気No.1</span>
-          </div>
-          <div class="mplan__term">
-            <span class="mplan__term-label">24ヶ月</span>
-            <span class="mplan__term-price">¥7,480<small>/ 月</small></span>
-          </div>
+        <div class="mplan__single">
+          <span class="mplan__single-price">¥11,980<small>/ 月</small></span>
         </div>
         <ul class="mplan__list">
-          <li>最大7ページ</li>
+          <li>4〜7ページ</li>
           <li>オリジナルデザイン</li>
+          <li>スマホ最適化</li>
           <li>ブログ機能</li>
-          <li>SEO対策</li>
-          <li>月2回更新</li>
-          <li>Googleマップ</li>
+          <li>SEO内部対策</li>
+          <li>Googleマップ埋め込み</li>
           <li>SNS連携</li>
+          <li>軽微な更新（月2回）</li>
         </ul>
         <a href="Contact.html" class="btn-pill btn-pill--brand mplan__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
       </article>
       <article class="mplan">
         <span class="mplan__name">BUSINESS</span>
         <span class="mplan__for">集客・売上重視の方向け</span>
-        <div class="mplan__terms">
-          <div class="mplan__term">
-            <span class="mplan__term-label">6ヶ月</span>
-            <span class="mplan__term-price">¥15,480<small>/ 月</small></span>
-          </div>
-          <div class="mplan__term mplan__term--best">
-            <span class="mplan__term-label">12ヶ月</span>
-            <span class="mplan__term-price">¥13,480<small>/ 月</small></span>
-            <span class="mplan__term-tag">人気No.1</span>
-          </div>
-          <div class="mplan__term">
-            <span class="mplan__term-label">24ヶ月</span>
-            <span class="mplan__term-price">¥11,480<small>/ 月</small></span>
-          </div>
+        <div class="mplan__single">
+          <span class="mplan__single-price">¥17,980<small>/ 月</small></span>
         </div>
         <ul class="mplan__list">
-          <li>ページ数自由</li>
-          <li>オリジナルデザイン</li>
+          <li>8〜10ページ</li>
+          <li>完全オリジナルデザイン</li>
+          <li>スマホ最適化</li>
           <li>ブログ機能</li>
-          <li>SEO対策</li>
-          <li>LINE連携</li>
-          <li>月4回更新</li>
+          <li>本格SEO対策</li>
+          <li>LINE構築・自動化設定</li>
           <li>アクセス解析</li>
+          <li>軽微な更新（月4回）</li>
           <li>優先サポート</li>
         </ul>
         <a href="Contact.html" class="btn-pill btn-pill--brand mplan__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
       </article>
     </div>
-    <p class="plan-group__note">※契約期間が長いほど月額料金がお得になります。表示は税込価格です。</p>
+
+    <div class="mnote">
+      <p class="mnote__t"><b>最低利用期間は6ヶ月です。</b>ご解約は3ヶ月前までにお知らせください。</p>
+      <p class="mnote__t"><b>軽微な更新とは</b>、文章の書き換え・写真の差し替えを指します。ページの追加、レイアウトの変更、新しい機能の追加は別途お見積りとなります。</p>
+      <p class="mnote__t">表示は税込価格です。ページ数や機能によってお見積りいたします。</p>
+    </div>
   </section>
 
   <section class="plan-group plan-group--maint fade-section" id="maintenance">
@@ -292,11 +427,16 @@
       <span class="plan-group__eyebrow">MAINTENANCE</span>
       <h2 class="plan-group__title">保守・運用プラン</h2>
       <p class="plan-group__desc">ホームページ公開後の更新・管理もお任せください。他社で制作されたサイトにも対応可能です。</p>
+      <div class="mnt-half">
+        <span class="mnt-half__tag">買い切りプランをご利用の方</span>
+        <p class="mnt-half__t">買い切りでホームページを制作されたお客様は、<b>保守・運用プランの月額が半額</b>になります。</p>
+      </div>
     </div>
     <div class="mnt-grid">
       <article class="mnt">
         <span class="mnt__name">BASIC</span>
         <span class="mnt__price">¥2,980<small>/ 月</small></span>
+        <span class="mnt__half">買い切りの方 <b>¥1,490</b><small>/ 月</small></span>
         <ul class="mnt__list">
           <li>サーバー管理</li>
           <li>ドメイン管理</li>
@@ -308,6 +448,7 @@
         <span class="mnt__badge">おすすめ</span>
         <span class="mnt__name">STANDARD</span>
         <span class="mnt__price">¥5,980<small>/ 月</small></span>
+        <span class="mnt__half">買い切りの方 <b>¥2,990</b><small>/ 月</small></span>
         <ul class="mnt__list">
           <li>BASICの内容</li>
           <li>月2回更新</li>
@@ -319,6 +460,7 @@
       <article class="mnt">
         <span class="mnt__name">PREMIUM</span>
         <span class="mnt__price">¥9,980<small>/ 月</small></span>
+        <span class="mnt__half">買い切りの方 <b>¥4,990</b><small>/ 月</small></span>
         <ul class="mnt__list">
           <li>STANDARDの内容</li>
           <li>更新回数無制限（常識的な範囲）</li>
@@ -328,7 +470,130 @@
         </ul>
       </article>
     </div>
-    <p class="plan-group__note">※他社制作サイトの場合、内容を拝見したうえでお引き受けの可否をご案内します。</p>
+    <div class="mnote">
+      <p class="mnote__t"><b>軽微な修正とは</b>、文章の書き換え・写真の差し替えを指します。ページの追加、レイアウトの変更、新しい機能の追加は別途お見積りとなります。</p>
+      <p class="mnote__t">他社制作サイトの場合、内容を拝見したうえでお引き受けの可否をご案内します。表示は税込価格です。</p>
+    </div>
+  </section>
+
+
+  <!-- ============ 制作について（v40） ============ -->
+  <section class="about-work fade-section" id="about-work">
+    <div class="about-work__head">
+      <span class="about-work__eyebrow">ABOUT OUR WORK</span>
+      <h2 class="about-work__title">制作の進め方について</h2>
+      <p class="about-work__lead">あとで「聞いていない」が起きないように、先に書いておきます。</p>
+    </div>
+
+    <table class="aw-table">
+      <tr>
+        <th>修正の回数</th>
+        <td>デザインや文章の修正は、公開までに<b>3回</b>まで承ります。4回目以降は、内容に応じて別途お見積りいたします。</td>
+      </tr>
+      <tr>
+        <th>写真・文章</th>
+        <td>お客様からご提供いただく形になります。「良い写真がない」「文章が書けない」という場合も、<b>撮影の手配</b>や書き方のご相談を承っていますので、お気軽にお声がけください。</td>
+      </tr>
+      <tr>
+        <th>ページの追加</th>
+        <td>プランのページ数を超える場合、<b>1ページ ¥6,500</b>で追加できます。</td>
+      </tr>
+      <tr>
+        <th>公開後のサポート</th>
+        <td>BUSINESSプランは公開後1ヶ月、更新や修正を無料でサポートします。2ヶ月目以降も継続をご希望の場合は、保守・運用プラン（月額 ¥2,980〜）をご案内します。</td>
+      </tr>
+    </table>
+
+    <div class="about-work__head" style="border-top:1px solid #EDE7DA;padding-top:34px;">
+      <h2 class="about-work__title">プラン表の言葉について</h2>
+      <p class="about-work__lead">似た言葉が並んでいるので、それぞれの中身を書いておきます。</p>
+    </div>
+
+    <div class="aw-grid">
+      <div class="aw-card">
+        <p class="aw-card__t">オリジナルデザイン</p>
+        <p class="aw-card__d">テンプレートを使わず、一から作ります。既存のロゴや色に合わせて構成します。</p>
+      </div>
+      <div class="aw-card">
+        <p class="aw-card__t">完全オリジナルデザイン</p>
+        <p class="aw-card__d">上記に加えて、<b>ページごとに異なる構成</b>を設計します。写真の見せ方やアニメーションも個別に組みます。</p>
+      </div>
+      <div class="aw-card">
+        <p class="aw-card__t">スマホ・タブレット対応</p>
+        <p class="aw-card__d">スマホ・タブレットで崩れずに表示されます。</p>
+      </div>
+      <div class="aw-card">
+        <p class="aw-card__t">スマホ最適化</p>
+        <p class="aw-card__d">上記に加えて、<b>スマホで見たときの文字量・ボタン位置・読み込み速度</b>まで調整します。</p>
+      </div>
+      <div class="aw-card">
+        <p class="aw-card__t">基本SEO設定</p>
+        <p class="aw-card__d">ページのタイトルと説明文（検索結果に出る文章）を設定します。</p>
+      </div>
+      <div class="aw-card">
+        <p class="aw-card__t">SEO内部対策</p>
+        <p class="aw-card__d">上記に加えて、<b>見出しの構造・画像の説明文・表示速度</b>を整えます。</p>
+      </div>
+      <div class="aw-card">
+        <p class="aw-card__t">本格SEO対策</p>
+        <p class="aw-card__d">上記に加えて、<b>検索されている言葉を調べたうえで</b>、ページ構成から設計します。</p>
+      </div>
+      <div class="aw-card">
+        <p class="aw-card__t">LINE構築・自動化設定</p>
+        <p class="aw-card__d">ボタンの設置だけでなく、<b>リッチメニューの作成、あいさつ・自動応答の設定</b>まで行います。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 写真撮影サービス（v40） ============ -->
+  <section class="photo-sec fade-section" id="photo">
+    <div class="photo-inner">
+      <span class="photo__eyebrow">PHOTO SHOOTING</span>
+      <h2 class="photo__title">写真撮影も、白梅デジタルにお任せください。</h2>
+      <p class="photo__lead">
+        ホームページの印象を大きく左右するのが「写真」です。<br class="br-desktop">
+        店舗の雰囲気や商品の魅力が伝わる写真を用意したい場合も、白梅デジタルが撮影の手配からサポートします。
+      </p>
+
+      <div class="photo__cols">
+        <div>
+          <p class="photo__col-t">撮影できるもの</p>
+          <ul class="photo__ul">
+            <li>店舗の外観・内観</li>
+            <li>料理・商品</li>
+            <li>スタッフ</li>
+            <li>サービス風景</li>
+            <li>ホームページ・SNS掲載用の写真</li>
+          </ul>
+        </div>
+        <div>
+          <p class="photo__col-t">こんな方に</p>
+          <ul class="photo__ul">
+            <li>写真を撮れる人がいない</li>
+            <li>プロに撮影してほしい</li>
+            <li>ホームページ用の写真をまとめて用意したい</li>
+          </ul>
+        </div>
+        <div>
+          <p class="photo__col-t">ご依頼の流れ</p>
+          <ol class="photo__ol">
+            <li>ご希望・撮影内容をヒアリング</li>
+            <li>提携する撮影事業者・フォトグラファーを手配</li>
+            <li>撮影</li>
+            <li>写真データを納品</li>
+            <li>ホームページやSNSへ活用</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="photo__foot">
+        <p class="photo__price">
+          撮影内容・時間・場所などによって変動するため、<b>撮影内容に応じてお見積り</b>いたします。<br>
+          ※白梅デジタルが提携する撮影事業者・フォトグラファーを手配する形になります。
+        </p>
+        <a href="Contact.html" class="photo__cta">撮影について相談する</a>
+      </div>
+    </div>
   </section>
 
   <section class="opt-sec fade-section" id="options">
