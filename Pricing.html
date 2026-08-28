@@ -317,6 +317,51 @@
 @keyframes panelIn{from{opacity:0;transform:translateY(9px);}to{opacity:1;transform:none;}}
 .plan-tile{transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;}
 .plan-tile:hover{transform:translateY(-5px);box-shadow:0 14px 32px rgba(43,42,46,.11);}
+
+/* ===== v40 : 2026-09-01 料金改定 ===== */
+.mflow2{display:flex;gap:14px;max-width:760px;margin:0 auto 26px;flex-wrap:wrap;}
+.mflow2__row{flex:1 1 220px;background:#FBF8F1;border:1px solid #EDE4D2;border-radius:8px;padding:16px 18px;}
+.mflow2__term{display:block;font-size:11.5px;letter-spacing:.14em;color:#8A6E1E;font-weight:600;margin-bottom:6px;}
+.mflow2__do{display:block;font-size:14px;color:#2B2A2E;font-weight:500;line-height:1.7;}
+.mnt-half2{max-width:620px;margin:0 auto 26px;text-align:center;padding:16px 22px;
+  background:linear-gradient(135deg,#FFFDF8,#FBF4E4);border:1.5px solid #E8D5A8;border-radius:8px;}
+.mnt-half2__tag{display:inline-block;background:#8A6E1E;color:#FFFDF7;font-size:10.5px;letter-spacing:.14em;
+  padding:4px 12px;border-radius:4px;margin-bottom:9px;}
+.mnt-half2__t{font-size:13.5px;color:#4A4548;line-height:1.85;margin:0;}
+.mnt-half2__t b{color:#8A6E1E;}
+.plan-tile__half{display:block;font-size:12.5px;color:#8A6E1E;margin-top:-2px;margin-bottom:6px;}
+.plan-tile__half b{font-size:16px;font-weight:600;}
+.photo-cat{padding:0 24px 64px;}
+.photo-cat__inner{max-width:980px;margin:0 auto;position:relative;overflow:hidden;border-radius:10px;
+  background:linear-gradient(155deg,#26252A,#33312F 52%,#463C29);border:1.5px solid #8A6E1E;padding:52px 44px;}
+.photo-cat__inner::after{content:"";position:absolute;top:-60%;left:-30%;width:60%;height:220%;
+  background:linear-gradient(100deg,transparent,rgba(255,240,200,.13),transparent);
+  transform:rotate(14deg);animation:photoCatShine 6.5s ease-in-out infinite;pointer-events:none;}
+@keyframes photoCatShine{0%,70%{left:-40%;}100%{left:130%;}}
+.photo-cat__no{display:block;font-size:12px;letter-spacing:.2em;color:#8A6E1E;margin-bottom:6px;}
+.photo-cat__eyebrow{display:block;font-size:10.5px;letter-spacing:.24em;color:#D9C48A;margin-bottom:14px;}
+.photo-cat__title{font-size:25px;color:#FFFDF7;font-weight:500;line-height:1.55;margin:0 0 16px;}
+.photo-cat__desc{font-size:14px;color:rgba(255,253,247,.74);line-height:2.0;margin:0 0 34px;}
+.photo-cat__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;margin-bottom:32px;}
+.photo-cat__ct{display:block;font-size:11.5px;letter-spacing:.16em;color:#D9C48A;font-weight:600;
+  margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid rgba(217,196,138,.3);}
+.photo-cat__list{list-style:none;margin:0;padding:0;}
+.photo-cat__list li{font-size:13.5px;color:rgba(255,253,247,.8);line-height:2.0;}
+.photo-cat__foot{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding-top:26px;border-top:1px solid rgba(217,196,138,.28);}
+.photo-cat__note{font-size:13px;color:rgba(255,253,247,.7);line-height:1.9;margin:0;flex:1 1 320px;}
+.photo-cat__note b{color:#F5D57E;font-weight:600;}
+.photo-cat__cta{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(90deg,#E8C765,#C9A02F);
+  color:#26252A;font-size:14.5px;font-weight:600;padding:15px 30px;border-radius:999px;text-decoration:none;
+  white-space:nowrap;transition:transform .25s ease,box-shadow .25s ease;}
+.photo-cat__cta:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(184,145,47,.35);}
+@media (max-width:768px){
+  .photo-cat{padding:0 16px 48px;}
+  .photo-cat__inner{padding:36px 22px;}
+  .photo-cat__title{font-size:20px;}
+  .photo-cat__foot{flex-direction:column;align-items:stretch;}
+  .photo-cat__cta{justify-content:center;}
+}
 </style>
 </head>
 <body>
@@ -369,6 +414,7 @@
       <a href="#line" class="price-jump__link">LINE公式アカウント</a>
       <a href="#meo" class="price-jump__link">Googleマップ対策</a>
       <a href="#ads" class="price-jump__link">広告サポート</a>
+      <a href="#photo" class="price-jump__link">写真撮影</a>
     </div>
   </nav>
 
@@ -376,11 +422,11 @@
   <section class="camp reveal">
     <div class="camp__inner">
       <div class="camp__left">
-        <span class="camp__tag">期間限定</span>
-        <h2 class="camp__title">いま始める方は、<em>初期費用 0円</em></h2>
+        <span class="camp__tag">月額プラン</span>
+        <h2 class="camp__title">月額なら、<em>初期費用 0円</em></h2>
         <p class="camp__note">
-          買い切りでのご依頼も、もちろん承っています。<br>
-          「まず持ってみたい」という方は、初期費用なしでも始められます。
+          6ヶ月かけて、あなただけのホームページを育てていきます。<br>
+          買い切りでのご依頼も、もちろん承っています。
         </p>
       </div>
       <div class="camp__right">
@@ -405,11 +451,11 @@
         <div class="setplan__prices">
           <div class="setplan__row">
             <span class="setplan__label">買い切り</span>
-            <span class="setplan__price">¥39,800〜</span>
+            <span class="setplan__price">¥49,800〜</span>
           </div>
           <div class="setplan__row">
             <span class="setplan__label">月額（初期0円）</span>
-            <span class="setplan__price setplan__price--sub">¥6,480〜<span class="setplan__per">／月</span></span>
+            <span class="setplan__price setplan__price--sub">¥6,980〜<span class="setplan__per">／月</span></span>
           </div>
         </div>
         <ul class="setplan__items">
@@ -425,14 +471,14 @@
         <h3 class="setplan__name">ホームページ ＋ Googleマップ</h3>
         <p class="setplan__lead">「◯◯市 △△」で探している人に、見つけてもらう。</p>
         <div class="setplan__prices">
-          <p class="setplan__single">単品で頼むと ¥59,600</p>
+          <p class="setplan__single">単品で頼むと ¥69,600</p>
           <div class="setplan__row">
             <span class="setplan__label">買い切り</span>
-            <span class="setplan__price">¥49,800〜</span>
+            <span class="setplan__price">¥59,800〜</span>
           </div>
           <div class="setplan__row">
             <span class="setplan__label">月額（初期0円）</span>
-            <span class="setplan__price setplan__price--sub">¥8,480〜<span class="setplan__per">／月</span></span>
+            <span class="setplan__price setplan__price--sub">¥8,180〜<span class="setplan__per">／月</span></span>
           </div>
         </div>
         <ul class="setplan__items">
@@ -449,14 +495,14 @@
         <h3 class="setplan__name">ホームページ ＋ 公式LINE</h3>
         <p class="setplan__lead">予約とご連絡を、ひとつにまとめたい方へ。</p>
         <div class="setplan__prices">
-          <p class="setplan__single">単品で頼むと ¥79,600</p>
+          <p class="setplan__single">単品で頼むと ¥89,600</p>
           <div class="setplan__row">
             <span class="setplan__label">買い切り</span>
-            <span class="setplan__price">¥64,800〜</span>
+            <span class="setplan__price">¥74,800〜</span>
           </div>
           <div class="setplan__row">
             <span class="setplan__label">月額（初期0円）</span>
-            <span class="setplan__price setplan__price--sub">¥9,800〜<span class="setplan__per">／月</span></span>
+            <span class="setplan__price setplan__price--sub">¥9,980〜<span class="setplan__per">／月</span></span>
           </div>
         </div>
         <ul class="setplan__items">
@@ -472,14 +518,14 @@
         <h3 class="setplan__name">まるごとおまかせ</h3>
         <p class="setplan__lead">見つけてもらう・予約が入る、両方を一度に。</p>
         <div class="setplan__prices">
-          <p class="setplan__single">単品で頼むと ¥99,400</p>
+          <p class="setplan__single">単品で頼むと ¥109,400</p>
           <div class="setplan__row">
             <span class="setplan__label">買い切り</span>
-            <span class="setplan__price">¥79,800〜</span>
+            <span class="setplan__price">¥89,800〜</span>
           </div>
           <div class="setplan__row">
             <span class="setplan__label">月額（初期0円）</span>
-            <span class="setplan__price setplan__price--sub">¥12,800〜<span class="setplan__per">／月</span></span>
+            <span class="setplan__price setplan__price--sub">¥11,780〜<span class="setplan__per">／月</span></span>
           </div>
         </div>
         <ul class="setplan__items">
@@ -492,7 +538,7 @@
       </article>
     </div>
 
-    <p class="setplans__note">※上記は目安です。ページ数やご要望によってお見積りいたします。<br class="br-desktop">セットに含まれないものだけを単品で足すこともできます。</p>
+    <p class="setplans__note">※上記は目安です。ページ数やご要望によってお見積りいたします。<br class="br-desktop">セットに含まれないものだけを単品で足すこともできます。<br class="br-desktop">月額でお選びの場合、最低利用期間は6ヶ月です。</p>
     <p class="setplans__link"><a href="#web">サービスごとの詳しい料金を見る →</a></p>
   </section>
 
@@ -521,66 +567,69 @@
         <div class="plan-tiles plan-tiles--3">
           <div class="plan-tile">
             <span class="plan-tile__name">STARTER</span>
-            <span class="plan-tile__price">¥39,800〜</span>
-            <span class="plan-tile__for">個人・小規模店舗向け</span>
+            <span class="plan-tile__price">¥49,800〜</span>
+            <span class="plan-tile__for">個人・小規模店舗向け<br>1〜3ページ</span>
           </div>
           <div class="plan-tile plan-tile--featured">
             <span class="plan-tile__badge">人気</span>
             <span class="plan-tile__name">STANDARD</span>
-            <span class="plan-tile__price">¥89,800〜</span>
-            <span class="plan-tile__for">企業・店舗向け</span>
+            <span class="plan-tile__price">¥109,800〜</span>
+            <span class="plan-tile__for">企業・店舗向け<br>4〜7ページ</span>
           </div>
           <div class="plan-tile">
             <span class="plan-tile__name">BUSINESS</span>
-            <span class="plan-tile__price">¥139,800〜</span>
-            <span class="plan-tile__for">集客を重視する方向け</span>
+            <span class="plan-tile__price">¥169,800〜</span>
+            <span class="plan-tile__for">集客を重視する方向け<br>8〜10ページ</span>
           </div>
         </div>
-        <p class="plan-tabs__note">※ページ数や機能によってお見積りいたします。</p>
+        <p class="plan-tabs__note">※ページ数や機能によってお見積りいたします。<br>※買い切りで制作された方は、保守・運用プランの月額が半額になります。</p>
       </div>
       <div class="plan-tabs__panel" id="pr-month" role="tabpanel" hidden>
-        <p class="plan-tabs__desc">通常は買い切りでの制作費をいただいていますが、月額なら分けてお支払いいただけます。<br>
-        <b style="color:#8A6E1E;">いまなら期間限定で、初期費用0円で始められます。</b></p>
+        <p class="plan-tabs__desc">6ヶ月で、あなただけのホームページを育てます。<br>
+        最初の2ヶ月で形にして、残りの4ヶ月で、実際に使いながら整えていきます。<br>
+        <b style="color:#8A6E1E;">初期費用は0円。月額だけで始められます。</b></p>
+
+        <div class="mflow2">
+          <div class="mflow2__row"><span class="mflow2__term">1〜2ヶ月目</span><span class="mflow2__do">ヒアリング・構成・デザイン・公開</span></div>
+          <div class="mflow2__row"><span class="mflow2__term">3〜6ヶ月目</span><span class="mflow2__do">公開後の調整・更新・改善</span></div>
+        </div>
 
         <div class="plan-tiles--camp">
 
           <article class="ctile">
-            <span class="ctile__ribbon">期間限定</span>
             <span class="ctile__name">STARTER</span>
-            <span class="ctile__was">通常 買い切り <s>¥39,800〜</s></span>
+            <span class="ctile__was">通常 買い切り <s>¥49,800〜</s></span>
             <div class="ctile__zero">
               <span class="ctile__zero-label">初期費用</span>
               <span class="ctile__zero-num">0</span><span class="ctile__zero-yen">円</span>
             </div>
-            <span class="ctile__monthly">¥4,480〜 <small>/ 月</small></span>
-            <span class="ctile__for">個人・小規模店舗向け<br>まずは1枚、持っておきたい方に。</span>
+            <span class="ctile__monthly">¥6,980〜 <small>/ 月</small></span>
+            <span class="ctile__for">1〜3ページ<br>まずは1枚、持っておきたい方に。</span>
             <a href="Contact.html" class="ctile__cta">このプランで相談する</a>
           </article>
 
           <article class="ctile ctile--hero">
-            <span class="ctile__ribbon">期間限定</span>
             <span class="ctile__pop">いちばん人気</span>
             <span class="ctile__name">STANDARD</span>
-            <span class="ctile__was">通常 買い切り <s>¥89,800〜</s></span>
+            <span class="ctile__was">通常 買い切り <s>¥109,800〜</s></span>
             <div class="ctile__zero">
               <span class="ctile__zero-label">初期費用</span>
               <span class="ctile__zero-num">0</span><span class="ctile__zero-yen">円</span>
             </div>
-            <span class="ctile__monthly">¥7,480〜 <small>/ 月</small></span>
-            <span class="ctile__for">企業・店舗向け<br>集客まで考えるなら、このあたりから。</span>
+            <span class="ctile__monthly">¥11,980〜 <small>/ 月</small></span>
+            <span class="ctile__for">4〜7ページ<br>集客まで考えるなら、このあたりから。</span>
             <a href="Contact.html" class="ctile__cta">このプランで相談する</a>
           </article>
 
           <article class="ctile">
-            <span class="ctile__ribbon">期間限定</span>
             <span class="ctile__name">BUSINESS</span>
-            <span class="ctile__was">通常 買い切り <s>¥139,800〜</s></span>
+            <span class="ctile__was">通常 買い切り <s>¥169,800〜</s></span>
             <div class="ctile__zero">
               <span class="ctile__zero-label">初期費用</span>
               <span class="ctile__zero-num">0</span><span class="ctile__zero-yen">円</span>
             </div>
-            <span class="ctile__monthly">¥11,480〜 <small>/ 月</small></span>
-            <span class="ctile__for">集客を重視する方向け<br>本格的にWebから集めたい方に。</span>
+            <span class="ctile__monthly">¥17,980〜 <small>/ 月</small></span>
+            <span class="ctile__for">8〜10ページ<br>本格的にWebから集めたい方に。</span>
             <a href="Contact.html" class="ctile__cta">このプランで相談する</a>
           </article>
 
@@ -590,28 +639,37 @@
           <span class="camp-note__icon">!</span>
           <p class="camp-note__text">
             打ち消し線は、通常の買い切り価格です。買い切りをご希望の場合は、左の「買い切り」タブをご覧ください。<br>
-            <b>初期費用0円のお取り扱いは期間限定です。</b>予告なく終了・変更する場合があります。<br>
-            月額は24ヶ月契約時の金額です。6ヶ月・12ヶ月もお選びいただけます（期間が短いほど月額は上がります）。
+            <b>最低利用期間は6ヶ月です。</b>ご解約は3ヶ月前までにお知らせください。<br>
+            軽微な更新とは、文章の書き換え・写真の差し替えを指します。ページの追加、レイアウトの変更、新しい機能の追加は別途お見積りとなります。
           </p>
         </div>
       </div>
       <div class="plan-tabs__panel" id="pr-maint" role="tabpanel" hidden>
         <p class="plan-tabs__desc">公開後の更新・管理をお任せいただけます。他社制作のサイトにも対応します。</p>
+
+        <div class="mnt-half2">
+          <span class="mnt-half2__tag">買い切りプランをご利用の方</span>
+          <p class="mnt-half2__t">買い切りでホームページを制作されたお客様は、<b>保守・運用プランの月額が半額</b>になります。</p>
+        </div>
+
         <div class="plan-tiles plan-tiles--3">
           <div class="plan-tile">
             <span class="plan-tile__name">BASIC</span>
             <span class="plan-tile__price">¥2,980 / 月</span>
+            <span class="plan-tile__half">買い切りの方 <b>¥1,490</b> / 月</span>
             <span class="plan-tile__for">最低限の管理をお任せしたい方</span>
           </div>
           <div class="plan-tile plan-tile--featured">
             <span class="plan-tile__badge">人気</span>
             <span class="plan-tile__name">STANDARD</span>
             <span class="plan-tile__price">¥5,980 / 月</span>
+            <span class="plan-tile__half">買い切りの方 <b>¥2,990</b> / 月</span>
             <span class="plan-tile__for">更新もまとめてお任せしたい方</span>
           </div>
           <div class="plan-tile">
             <span class="plan-tile__name">PREMIUM</span>
             <span class="plan-tile__price">¥9,980 / 月</span>
+            <span class="plan-tile__half">買い切りの方 <b>¥4,990</b> / 月</span>
             <span class="plan-tile__for">運用を全面的にお任せしたい方</span>
           </div>
         </div>
@@ -766,6 +824,59 @@
     </div>
   </section>
 
+
+  <!-- ============ 06 : Photo Shooting ============ -->
+  <section class="photo-cat fade-section" id="photo">
+    <div class="photo-cat__inner">
+      <span class="photo-cat__no">06</span>
+      <span class="photo-cat__eyebrow">PHOTO SHOOTING</span>
+      <h2 class="photo-cat__title">写真撮影も、白梅デジタルにお任せください。</h2>
+      <p class="photo-cat__desc">
+        ホームページの印象を大きく左右するのが「写真」です。<br class="br-desktop">
+        店舗の雰囲気や商品の魅力が伝わる写真を用意したい場合も、白梅デジタルが撮影の手配からサポートします。
+      </p>
+
+      <div class="photo-cat__grid">
+        <div class="photo-cat__col">
+          <span class="photo-cat__ct">撮影できるもの</span>
+          <ul class="photo-cat__list">
+            <li>店舗の外観・内観</li>
+            <li>料理・商品</li>
+            <li>スタッフ</li>
+            <li>サービス風景</li>
+            <li>ホームページ・SNS掲載用の写真</li>
+          </ul>
+        </div>
+        <div class="photo-cat__col">
+          <span class="photo-cat__ct">こんな方に</span>
+          <ul class="photo-cat__list">
+            <li>写真を撮れる人がいない</li>
+            <li>プロに撮影してほしい</li>
+            <li>ホームページ用にまとめて用意したい</li>
+          </ul>
+        </div>
+        <div class="photo-cat__col">
+          <span class="photo-cat__ct">ご依頼の流れ</span>
+          <ul class="photo-cat__list">
+            <li>1. ヒアリング</li>
+            <li>2. 撮影事業者の手配</li>
+            <li>3. 撮影</li>
+            <li>4. データ納品</li>
+            <li>5. ホームページ・SNSへ活用</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="photo-cat__foot">
+        <p class="photo-cat__note">
+          撮影内容・時間・場所などによって変動するため、<b>撮影内容に応じてお見積り</b>いたします。<br>
+          ※白梅デジタルが提携する撮影事業者・フォトグラファーを手配する形になります。
+        </p>
+        <a href="Contact.html" class="photo-cat__cta">撮影について相談する<span>→</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- CONTRACT TERMS (v34) -->
   <section class="fade-section" style="max-width:900px;margin:0 auto;padding:8px 24px 60px;">
     <div style="border-top:1px solid #EDE7DA;padding-top:38px;">
@@ -783,14 +894,14 @@
         <tr>
           <th style="background:#FBF8F1;color:#2B2A2E;font-weight:600;font-size:14px;text-align:left;padding:13px 14px;border-bottom:1px solid #EDE7DA;white-space:nowrap;">月額・保守運用プラン</th>
           <td style="font-size:14px;color:#4A4548;line-height:1.95;padding:13px 14px;border-bottom:1px solid #EDE7DA;">
-            最低利用期間を <b>6ヶ月・12ヶ月・24ヶ月</b> からお選びいただけます。<br>
-            期間が長いほど月額はお安くなります。</td>
+            最低利用期間は <b>6ヶ月</b> です。<br>
+            最初の2ヶ月で形にして、残りの4ヶ月で、使いながら整えていきます。</td>
         </tr>
         <tr>
           <th style="background:#FBF8F1;color:#2B2A2E;font-weight:600;font-size:14px;text-align:left;padding:13px 14px;border-bottom:1px solid #EDE7DA;white-space:nowrap;">期間の満了後</th>
           <td style="font-size:14px;color:#4A4548;line-height:1.95;padding:13px 14px;border-bottom:1px solid #EDE7DA;">
             1ヶ月ごとの自動更新です。<b>金額は上げません。</b><br>
-            1ヶ月前までにお申し出いただければ、いつでも終了できます。</td>
+            ご解約は<b>3ヶ月前まで</b>にお知らせください。</td>
         </tr>
         <tr>
           <th style="background:#FBF8F1;color:#2B2A2E;font-weight:600;font-size:14px;text-align:left;padding:13px 14px;border-bottom:1px solid #EDE7DA;white-space:nowrap;">ご解約の方法</th>
