@@ -366,6 +366,48 @@
 .setplan__off{display:inline-block;margin-left:6px;background:linear-gradient(90deg,#E8C765,#C9A02F);
   color:#2B2A2E;font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:3px;
   vertical-align:middle;}
+
+/* ===== 06 ONLINE SHOP ===== */
+.shop-cat{padding:0 24px 64px;}
+.shop-cat__inner{max-width:980px;margin:0 auto;background:#FFFDF7;border:1px solid #EDE7DA;border-radius:10px;padding:52px 44px;}
+.shop-cat__no{display:block;font-size:12px;letter-spacing:.2em;color:#B8912F;margin-bottom:6px;}
+.shop-cat__eyebrow{display:block;font-size:10.5px;letter-spacing:.24em;color:#8A7A55;margin-bottom:14px;}
+.shop-cat__title{font-size:25px;color:#2B2A2E;font-weight:500;line-height:1.55;margin:0 0 16px;}
+.shop-cat__desc{font-size:14px;color:#6B6467;line-height:2.0;margin:0 0 30px;}
+.shop-cat__price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:22px 26px;margin:0 0 32px;
+  background:linear-gradient(135deg,#FFFDF8,#FBF4E4);border:1.5px solid #E8D5A8;border-radius:8px;}
+.shop-cat__price-label{font-size:12.5px;letter-spacing:.1em;color:#8A6E1E;font-weight:600;}
+.shop-cat__price-num{font-size:34px;font-weight:600;color:#2B2A2E;line-height:1;}
+.shop-cat__price-note{font-size:13px;color:#6B6467;}
+.shop-cat__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:28px;margin-bottom:28px;}
+.shop-cat__ct{display:block;font-size:11.5px;letter-spacing:.14em;color:#8A6E1E;font-weight:600;
+  margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid #EDE4D2;}
+.shop-cat__list{list-style:none;margin:0;padding:0;}
+.shop-cat__list li{font-size:13.5px;color:#4A4548;line-height:1.95;padding-left:14px;position:relative;}
+.shop-cat__list li::before{content:"";position:absolute;left:0;top:.85em;width:5px;height:5px;border-radius:50%;background:#D9C48A;}
+.shop-cat__sub{font-size:12px;color:#8A8079;line-height:1.85;margin:12px 0 0;}
+.shop-cat__sub a{color:#8A6E1E;}
+.shop-cat__add{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:16px 22px;margin-bottom:24px;
+  background:#FBF8F1;border-left:3px solid #B8912F;border-radius:3px;}
+.shop-cat__add-t{font-size:13.5px;color:#2B2A2E;font-weight:600;}
+.shop-cat__add-p{font-size:18px;color:#8A6E1E;font-weight:600;}
+.shop-cat__add-n{font-size:12.5px;color:#6B6467;}
+.shop-cat__note{border-top:1px solid #EDE7DA;padding-top:22px;margin-bottom:28px;}
+.shop-cat__note-t{font-size:13px;color:#6B6467;line-height:1.95;margin:0 0 10px;}
+.shop-cat__note-t:last-child{margin-bottom:0;}
+.shop-cat__note-t b{color:#2B2A2E;}
+.shop-cat__note-t a{color:#8A6E1E;}
+.shop-cat__cta-wrap{text-align:center;}
+.shop-cat__cta{display:inline-flex;align-items:center;gap:10px;background:#2B2A2E;color:#FFFDF7;
+  font-size:14.5px;font-weight:500;padding:15px 32px;border-radius:999px;text-decoration:none;
+  transition:transform .25s ease,box-shadow .25s ease;}
+.shop-cat__cta:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(43,42,46,.22);}
+@media (max-width:768px){
+  .shop-cat{padding:0 16px 48px;}
+  .shop-cat__inner{padding:36px 22px;}
+  .shop-cat__title{font-size:20px;}
+  .shop-cat__price-num{font-size:28px;}
+}
 </style>
 </head>
 <body>
@@ -418,6 +460,7 @@
       <a href="#line" class="price-jump__link">LINE公式アカウント</a>
       <a href="#meo" class="price-jump__link">Googleマップ対策</a>
       <a href="#ads" class="price-jump__link">広告サポート</a>
+      <a href="#shop" class="price-jump__link">ネットショップ</a>
       <a href="#photo" class="price-jump__link">写真撮影</a>
     </div>
   </nav>
@@ -829,10 +872,78 @@
   </section>
 
 
-  <!-- ============ 06 : Photo Shooting ============ -->
+
+  <!-- ============ 06 : Online Shop ============ -->
+  <section class="shop-cat fade-section" id="shop">
+    <div class="shop-cat__inner">
+      <span class="shop-cat__no">06</span>
+      <span class="shop-cat__eyebrow">ONLINE SHOP</span>
+      <h2 class="shop-cat__title">ネットショップ開設サポート</h2>
+      <p class="shop-cat__desc">
+        BASEでのショップ開設から、Instagram・公式LINEとのつなぎ込みまで。<br class="br-desktop">
+        「作ったけれど、そこから先で止まってしまった」という方に一番多くご依頼いただく内容です。
+      </p>
+
+      <div class="shop-cat__price">
+        <span class="shop-cat__price-label">開設サポート一式</span>
+        <span class="shop-cat__price-num">¥19,800</span>
+        <span class="shop-cat__price-note">商品登録 5点まで込み</span>
+      </div>
+
+      <div class="shop-cat__grid">
+        <div class="shop-cat__col">
+          <span class="shop-cat__ct">ショップの開設</span>
+          <ul class="shop-cat__list">
+            <li>BASEでのショップ開設</li>
+            <li>ショップ名・説明文の設定</li>
+            <li>特定商取引法の表記の設定</li>
+            <li>配送方法・送料の設定</li>
+            <li>お支払い方法の設定</li>
+          </ul>
+        </div>
+        <div class="shop-cat__col">
+          <span class="shop-cat__ct">Instagramとの連携</span>
+          <ul class="shop-cat__list">
+            <li>プロアカウントへの切り替え</li>
+            <li>Facebookページのご用意</li>
+            <li>商品カタログの取り込み</li>
+            <li>ショッピング審査の申請</li>
+            <li>投稿への商品タグ付けのご案内</li>
+          </ul>
+        </div>
+        <div class="shop-cat__col">
+          <span class="shop-cat__ct">公式LINEとの連携</span>
+          <ul class="shop-cat__list">
+            <li>リッチメニューからショップへの導線</li>
+            <li>あいさつメッセージへのリンク設置</li>
+            <li>お客様への案内文のご用意</li>
+          </ul>
+          <p class="shop-cat__sub">※すでにお持ちのLINE公式アカウントが対象です。開設からご希望の場合は<a href="#line">LINE公式アカウント</a>のプランをご覧ください。</p>
+        </div>
+      </div>
+
+      <div class="shop-cat__add">
+        <span class="shop-cat__add-t">商品登録の追加</span>
+        <span class="shop-cat__add-p">1点につき ¥1,500</span>
+        <span class="shop-cat__add-n">6点目以降。写真・説明文はお客様にご用意いただきます。</span>
+      </div>
+
+      <div class="shop-cat__note">
+        <p class="shop-cat__note-t"><b>Instagramショッピングの審査について。</b>審査を行うのはInstagram側であり、こちらで結果を左右することはできません。<b>通らなかった場合の再申請は、追加費用なしで何度でも承ります。</b>ただし、必ず通ることをお約束するものではありません。</p>
+        <p class="shop-cat__note-t">商品の写真・説明文は、お客様にご用意いただきます。写真がない場合は<a href="#photo">撮影の手配</a>も承っています。</p>
+        <p class="shop-cat__note-t">BASEの利用料・決済手数料は、BASEへ直接お支払いいただきます。こちらでお預かりするものではありません。</p>
+      </div>
+
+      <div class="shop-cat__cta-wrap">
+        <a href="Contact.html" class="shop-cat__cta">ネットショップについて相談する<span>&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 07 : Photo Shooting ============ -->
   <section class="photo-cat fade-section" id="photo">
     <div class="photo-cat__inner">
-      <span class="photo-cat__no">06</span>
+      <span class="photo-cat__no">07</span>
       <span class="photo-cat__eyebrow">PHOTO SHOOTING</span>
       <h2 class="photo-cat__title">写真撮影も、白梅デジタルにお任せください。</h2>
       <p class="photo-cat__desc">
