@@ -21,6 +21,38 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon-180.png">
 <link rel="stylesheet" href="assets/style.css">
+<style>
+/* ===== v42 : お約束できること・できないこと ===== */
+.pledge{max-width:900px;margin:0 auto;padding:0 24px 70px;}
+.pledge__head{border-top:1px solid #EDE7DA;padding-top:38px;margin-bottom:22px;}
+.pledge__eyebrow{display:block;font-size:11px;letter-spacing:.2em;color:#B8912F;margin-bottom:10px;}
+.pledge__title{font-size:21px;color:#2B2A2E;margin:0 0 8px;line-height:1.5;font-weight:700;}
+.pledge__lead{font-size:14px;color:#6B6467;line-height:2.0;margin:0;}
+.pledge__cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;}
+.pledge__box{border-radius:7px;padding:22px 24px;border:1.5px solid;}
+.pledge__box--can{background:#F4FAF6;border-color:#BEDFC9;}
+.pledge__box--cant{background:#FDF7F6;border-color:#EFCFC9;}
+.pledge__box-t{font-size:14.5px;font-weight:700;margin:0 0 12px;line-height:1.6;}
+.pledge__box--can .pledge__box-t{color:#16653D;}
+.pledge__box--cant .pledge__box-t{color:#B03A2E;}
+.pledge__list{list-style:none;margin:0;padding:0;}
+.pledge__list li{font-size:13.2px;line-height:1.9;color:#4A4548;padding-left:18px;position:relative;margin-bottom:9px;}
+.pledge__list li:last-child{margin-bottom:0;}
+.pledge__box--can .pledge__list li::before{content:"○";position:absolute;left:0;top:0;color:#1E7A4A;font-size:11px;font-weight:700;}
+.pledge__box--cant .pledge__list li::before{content:"×";position:absolute;left:0;top:0;color:#C0392B;font-size:12px;font-weight:700;}
+.pledge__list li b{color:#2B2A2E;}
+.pl-table{width:100%;border-collapse:collapse;margin:0;}
+.pl-table th,.pl-table td{padding:12px 14px;border-bottom:1px solid #EDE7DA;font-size:13px;line-height:1.85;vertical-align:top;text-align:left;}
+.pl-table th{background:#FBF8F1;color:#8A6E1E;font-weight:700;width:30%;white-space:nowrap;}
+.pl-table td{color:#4A4548;}
+.pl-table td b{color:#2B2A2E;}
+@media(max-width:720px){
+  .pledge{padding:0 16px 52px;}
+  .pledge__cols{grid-template-columns:1fr;}
+  .pl-table th,.pl-table td{display:block;width:auto;}
+  .pl-table th{border-bottom:0;padding-bottom:4px;}
+}
+</style>
 </head>
 <body>
 
@@ -371,6 +403,64 @@
         </div>
       </div>
     </div>
+  </section>
+
+<section class="pledge fade-section">
+    <div class="pledge__head">
+      <span class="pledge__eyebrow">SCOPE</span>
+      <h2 class="pledge__title">お約束できること、できないこと</h2>
+      <p class="pledge__lead">SNSは、やってすぐ結果が出るものではありません。<br>
+      だからこそ「何をどこまでやるか」を先に書いておきます。あとで「そういう話だと思っていなかった」が起きないように。</p>
+    </div>
+
+    <div class="pledge__cols">
+      <div class="pledge__box pledge__box--can">
+        <p class="pledge__box-t">お約束できること</p>
+        <ul class="pledge__list">
+          <li><b>決めた本数を、毎月きちんと出します。</b>企画・本文・ハッシュタグまで用意します</li>
+          <li><b>毎月、数字を見て次の手を決めます。</b>見た数・保存された数・プロフィールが見られた数</li>
+          <li><b>3ヶ月かけて「このお店にとっての成果は何か」を一緒に決めます。</b>フォロワーなのか、問い合わせなのか、来店なのか</li>
+          <li><b>うまくいかなかったときは、正直にそう言います。</b>やり方を変える提案をします</li>
+        </ul>
+      </div>
+      <div class="pledge__box pledge__box--cant">
+        <p class="pledge__box-t">お約束できないこと</p>
+        <ul class="pledge__list">
+          <li><b>フォロワー数、売上、来店数の保証はできません。</b>できると言う会社があれば、根拠を確かめてください</li>
+          <li><b>「バズらせる」ことはお約束できません</b></li>
+          <li><b>フォロワーやいいねを買うことはしません</b></li>
+          <li><b>撮影・編集は含まれません。</b>写真や動画はお客様にご用意いただきます（手配はオプションで承ります）</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="pl-table">
+      <tr>
+        <th>最低契約期間</th>
+        <td><b>3ヶ月です。</b>1ヶ月では、良かったのか悪かったのかの判断がつきません。<br>
+        <b>1ヶ月目は形を作る、2ヶ月目で数字を見る、3ヶ月目で変える。</b>ここまでやって、ようやく「続けるかどうか」を決められます。<br>
+        4ヶ月目以降は1ヶ月ごとの更新です。ご解約は1ヶ月前までにお申し出ください。</td>
+      </tr>
+      <tr>
+        <th>毎月の進め方</th>
+        <td><b>月のはじめ</b>に、その月に出す内容をお送りします。<br>
+        <b>月の終わり</b>に、数字と「次はこうします」をお送りします。<br>
+        BUSINESSプランは、これに<b>月1回のオンライン打ち合わせ（30分）</b>が付きます。</td>
+      </tr>
+      <tr>
+        <th>アカウントの扱い</th>
+        <td><b>ログイン情報をお預かりすることはいたしません。</b><br>
+        投稿代行が含まれるプランでは、Instagramの「共同管理者」としてご招待いただく形になります。<b>いつでもお客様の側で外せますし、お付き合いが終わってもアカウントはそのまま残ります。</b></td>
+      </tr>
+      <tr>
+        <th>素材のご用意</th>
+        <td>写真・動画は<b>お客様にご用意いただきます。</b>「良い写真がない」という場合は、<b>何をどう撮ればいいかの指示書</b>をお渡しします。撮影そのものが必要な場合は、提携している撮影者を手配します（実費＋¥10,000〜）。</td>
+      </tr>
+      <tr>
+        <th>ご連絡の時間</th>
+        <td><b>平日 10:00〜19:00</b>に対応しています。ご連絡には<b>翌営業日まで</b>にお返事します。</td>
+      </tr>
+    </table>
   </section>
 
   <div class="price-cat__more" style="padding:0 56px 90px;">
