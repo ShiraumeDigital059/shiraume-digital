@@ -21,6 +21,38 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon-180.png">
 <link rel="stylesheet" href="assets/style.css">
+<style>
+/* ===== v42 : お約束できること・できないこと ===== */
+.pledge{max-width:900px;margin:0 auto;padding:0 24px 70px;}
+.pledge__head{border-top:1px solid #EDE7DA;padding-top:38px;margin-bottom:22px;}
+.pledge__eyebrow{display:block;font-size:11px;letter-spacing:.2em;color:#B8912F;margin-bottom:10px;}
+.pledge__title{font-size:21px;color:#2B2A2E;margin:0 0 8px;line-height:1.5;font-weight:700;}
+.pledge__lead{font-size:14px;color:#6B6467;line-height:2.0;margin:0;}
+.pledge__cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px;}
+.pledge__box{border-radius:7px;padding:22px 24px;border:1.5px solid;}
+.pledge__box--can{background:#F4FAF6;border-color:#BEDFC9;}
+.pledge__box--cant{background:#FDF7F6;border-color:#EFCFC9;}
+.pledge__box-t{font-size:14.5px;font-weight:700;margin:0 0 12px;line-height:1.6;}
+.pledge__box--can .pledge__box-t{color:#16653D;}
+.pledge__box--cant .pledge__box-t{color:#B03A2E;}
+.pledge__list{list-style:none;margin:0;padding:0;}
+.pledge__list li{font-size:13.2px;line-height:1.9;color:#4A4548;padding-left:18px;position:relative;margin-bottom:9px;}
+.pledge__list li:last-child{margin-bottom:0;}
+.pledge__box--can .pledge__list li::before{content:"○";position:absolute;left:0;top:0;color:#1E7A4A;font-size:11px;font-weight:700;}
+.pledge__box--cant .pledge__list li::before{content:"×";position:absolute;left:0;top:0;color:#C0392B;font-size:12px;font-weight:700;}
+.pledge__list li b{color:#2B2A2E;}
+.pl-table{width:100%;border-collapse:collapse;margin:0;}
+.pl-table th,.pl-table td{padding:12px 14px;border-bottom:1px solid #EDE7DA;font-size:13px;line-height:1.85;vertical-align:top;text-align:left;}
+.pl-table th{background:#FBF8F1;color:#8A6E1E;font-weight:700;width:30%;white-space:nowrap;}
+.pl-table td{color:#4A4548;}
+.pl-table td b{color:#2B2A2E;}
+@media(max-width:720px){
+  .pledge{padding:0 16px 52px;}
+  .pledge__cols{grid-template-columns:1fr;}
+  .pl-table th,.pl-table td{display:block;width:auto;}
+  .pl-table th{border-bottom:0;padding-bottom:4px;}
+}
+</style>
 </head>
 <body>
 
@@ -70,7 +102,7 @@
       <article class="plan-full">
         <div class="plan-full__aside">
           <span class="plan-full__name">初期設定・最適化</span>
-          <span class="plan-full__price">¥19,800</span>
+          <span class="plan-full__price">¥39,000</span>
           <span class="plan-full__for">まず土台を整えたい方（初回のみ）</span>
           <p class="plan-full__lead">検索で見つけてもらうための情報を、一度きちんと整えます。</p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
@@ -104,14 +136,14 @@
           <span class="plan-full__name">LIGHT</span>
           <span class="plan-full__price">¥9,800 / 月</span>
           <span class="plan-full__for">見てもらう</span>
-          <p class="plan-full__lead">情報が古くならないように、最低限を続けます。</p>
+          <p class="plan-full__lead">情報が古くならないように、最低限を続けます。<strong>投稿の中身はこちらで作り、投稿はお客様の操作で行っていただきます。</strong></p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
         </div>
         <div class="plan-full__body">
           <div class="plan-full__block">
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
-              <li>投稿代行 月2回</li>
+              <li>投稿の作成 月2回（文章＋写真をご用意します）</li>
               <li>営業時間・臨時休業などの情報更新</li>
               <li>口コミへの返信文案（月5件まで）</li>
               <li>チャットでのご相談</li>
@@ -142,7 +174,7 @@
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
               <li>LIGHTの内容すべて</li>
-              <li>投稿代行 月4回</li>
+              <li>投稿の作成 月4回</li>
               <li>口コミへの返信文案 <strong>無制限</strong></li>
               <li>写真の追加・入れ替え（月5枚）</li>
               <li>月次レポート（表示回数・検索経路・電話やルート検索の数）</li>
@@ -173,7 +205,7 @@
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
               <li>STANDARDの内容すべて</li>
-              <li>投稿代行 月8回</li>
+              <li>投稿の作成 月8回</li>
               <li>競合3社の順位追跡（月次）</li>
               <li>口コミを増やす仕組みづくり（声かけの型・卓上カード・QRの用意）</li>
               <li>写真の追加・入れ替え 無制限</li>
@@ -198,7 +230,7 @@
           <h3 class="plan-full__subtitle">ご契約について</h3>
           <ul class="plan-full__list">
             <li><strong>月額プランの最低契約期間は3ヶ月です。</strong>Googleマップは、変化が出るまでに時間がかかるためです。</li>
-            <li>初期設定・最適化は初回のみの費用です。<strong>月額プランと同時にお申し込みの場合は ¥9,800</strong> になります。</li>
+            <li>初期設定・最適化は初回のみの費用です。<strong>月額プランと同時にお申し込みの場合は ¥19,800</strong> になります。</li>
             <li><strong>2店舗目以降は、各月額プランが半額</strong>になります。</li>
             <li>順位や来店数をお約束するものではありません。できること・できないことは、事前に正直にお伝えします。</li>
           </ul>
@@ -226,7 +258,7 @@
             <ul class="opt-card__list">
               <li>写真の選定</li>
               <li>本文の作成</li>
-              <li>投稿の実施</li>
+              <li>投稿手順のご案内</li>
             </ul>
             <p class="opt-card__tip">セール・新メニュー・臨時休業のお知らせに</p>
           </article>
@@ -300,6 +332,71 @@
         </div>
       </div>
     </div>
+  </section>
+
+<section class="pledge fade-section">
+    <div class="pledge__head">
+      <span class="pledge__eyebrow">SCOPE</span>
+      <h2 class="pledge__title">お約束できること、できないこと</h2>
+      <p class="pledge__lead">Googleマップは、やってすぐ順位が上がるものではありません。<br>
+      だからこそ「何をどこまでやるか」を先に書いておきます。あとで「そういう話だと思っていなかった」が起きないように。</p>
+    </div>
+
+    <div class="pledge__cols">
+      <div class="pledge__box pledge__box--can">
+        <p class="pledge__box-t">お約束できること</p>
+        <ul class="pledge__list">
+          <li><b>情報を正しく、新しい状態に保ちます。</b>店名・住所・営業時間・カテゴリ・写真</li>
+          <li><b>決めた回数、毎月きちんと投稿の中身をご用意します。</b>写真の選定から本文まで</li>
+          <li><b>毎月、数字を見て次の手を決めます。</b>見られた回数、検索された言葉、電話やルート検索の数</li>
+          <li><b>口コミが自然に増える仕組みを作ります。</b>声のかけ方、卓上カード、返信の型</li>
+          <li><b>うまくいかなかったときは、正直にそう言います</b></li>
+        </ul>
+      </div>
+      <div class="pledge__box pledge__box--cant">
+        <p class="pledge__box-t">お約束できないこと</p>
+        <ul class="pledge__list">
+          <li><b>「◯位以内」という順位の保証はできません。</b>できると言う会社があれば、根拠を確かめてください</li>
+          <li><b>来店数・売上の保証はできません</b></li>
+          <li><b>口コミの自作自演や、購入はしません。</b>Googleの規約違反ですし、いずれ消されます</li>
+          <li><b>悪い口コミを消すことはできません。</b>できるのは、きちんと返信することだけです</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="pl-table">
+      <tr>
+        <th>最低契約期間</th>
+        <td><b>3ヶ月です。</b>Googleマップは、情報を直してから反映されるまでに時間がかかります。<br>
+        <b>1ヶ月目で土台を整える、2ヶ月目で数字を見る、3ヶ月目で変える。</b>ここまでやって、ようやく「続けるかどうか」を決められます。<br>
+        4ヶ月目以降は1ヶ月ごとの更新です。ご解約は1ヶ月前までにお申し出ください。</td>
+      </tr>
+      <tr>
+        <th>毎月の進め方</th>
+        <td><b>月のはじめ</b>に、その月に出す投稿の内容をお送りします。<br>
+        <b>月の終わり</b>に、数字と「次はこうします」をお送りします（STANDARD以上）。<br>
+        PREMIUMは、これに<b>競合3社との比較</b>と<b>月1回のオンライン打ち合わせ（30分）</b>が付きます。</td>
+      </tr>
+      <tr>
+        <th>アカウントの扱い</th>
+        <td><b>お客様のGoogleアカウントは、お預かりしません。管理者としてお借りすることもいたしません。</b><br>
+        <b>操作の権限は、最初から最後までお客様のものです。</b>白梅デジタルがやるのは、投稿の文章や写真をご用意して、<b>「どこを押せばいいか」までお伝えするところ</b>までです。<br>
+        操作にご不安がある場合は、<b>画面を一緒に見ながら、その場で進めます。</b>お手元で操作していただく形なので、<b>お付き合いが終わっても、すべてお客様の手元に残ります。</b><br>
+        オーナー権限がご自身にない場合は、その確認手続きからお手伝いします（オプション ¥9,800）。</td>
+      </tr>
+      <tr>
+        <th>写真のご用意</th>
+        <td>お客様にご用意いただきます。「良い写真がない」という場合は、<b>何をどう撮ればいいかをお伝えします。</b>撮影そのものが必要な場合は、提携している撮影者を手配します（実費＋¥10,000〜）。</td>
+      </tr>
+      <tr>
+        <th>2店舗以上ある場合</th>
+        <td><b>2店舗目以降は、各月額プランが半額</b>になります。初期設定・最適化は店舗ごとに必要です（2店舗目以降 ¥19,800）。</td>
+      </tr>
+      <tr>
+        <th>ご連絡の時間</th>
+        <td><b>平日 10:00〜19:00</b>に対応しています。ご連絡には<b>翌営業日まで</b>にお返事します。</td>
+      </tr>
+    </table>
   </section>
 
   <div class="price-cat__more" style="padding:0 56px 90px;">
