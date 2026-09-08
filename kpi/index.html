@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>売上管理・目標設定｜白梅デジタル</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="format-detection" content="telephone=no">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     ★★ 書き換えるのは、この SETTINGS の中だけです ★★
+
+     ■ ログインについて、正直なところ
+
+     メールアドレスとパスワードは、このファイルには「書いていません」。
+     混ぜて計算した結果（ハッシュ）だけを置いてあります。
+     元に戻すことはできないので、このページを見ても
+     パスワードそのものは読み取れません。
+
+     ただし、確認はブラウザの中でやっています。
+     詳しい人が開発者ツールを使えば、この入り口は迂回できます。
+
+     ★ それでも大きな問題にならないのは、
+     　 入力した数字がこのページ（サーバー）に一切残らないからです。
+     　 数字は入力した本人のブラウザの中にだけ保存されます。
+     　 知らない人がURLを開いて迂回しても、中身は空っぽです。
+
+     ★★ 一つだけ、必ず守ってください。
+     　　ここのパスワードは、このページ専用にしてください。
+     　　Gmail や GitHub など、他で使っているものと同じにしないこと。
+
+     ■ メールアドレスやパスワードを変えるとき
+     　 ページを開いて、ブラウザの開発者ツールのコンソールで
+     　 　newHash("新しいメール", "新しいパスワード")
+     　 と打つと、下の HASH に入れる文字列が出ます。
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+const SETTINGS = {
+
+  /* ── ログイン ───────────────────────────────
+     入り口は1つ。二人とも同じメールとパスワードで入ります。
+     誰がやったかは、入力するときに名前を選んで記録します。 */
+  AUTH: {
+    SALT: "shiraume-kpi-2026",
+    HASH: "2e7871edf323ca8e522ab299daf5408b902b66594230115c13207956167b8f2d",
+    SESSION_MINUTES: 60,   // これだけ経つと、もう一度ログインが要ります
+    LOCK_ON_LEAVE: true,   // 別のアプリ・別のタブに移ったら、すぐ閉じる
+  },
+
+  /* ── 目標 ──────────────────────────────── */
+  YEAR_TARGET_DEFAULT: 6000000,   // 年間売上目標（画面から変えられます）
+  FY_START_MONTH: 1,              // 今期の開始月（1＝1月はじまり／4＝4月はじまり）
+
+  /* ── 逆算に使う割合（最初は仮の値）──────────
+     実績が 3ヶ月ぶんたまると、自動で実測値に置き換わります */
+  RATES_ASSUMED: {
+    dmReply:      0.10,   // DM送信 → 返信
+    replyDoc:     0.40,   // 返信 → 資料送付
+    docMeeting:   0.30,   // 資料送付 → 商談
+    callConnect:  0.40,   // 架電 → つながる
+    connectAppt:  0.20,   // つながる → アポ
+    apptMeeting:  0.70,   // アポ → 商談
+    meetingClose: 0.30,   // 商談 → 成約
+  },
+  RATE_MIN_DAYS: 90,      // 実測に切り替える日数（3ヶ月）
+  RATE_MIN_COUNT: 20,     // 実測に切り替える最低母数
+
+  /* ── その他 ──────────────────────────────── */
+  WEEKS_PER_MONTH: 4.3,       // 52週 ÷ 12ヶ月
+  DM_SHARE_OF_MEETINGS: 0.5,  // 商談のうちDM経由で取る割合（残りは電話経由）
+  AVG_DEAL_FALLBACK: 100000,  // 成約実績が0件のときに使う平均成約単価
+  OVERDUE_DAYS: 30,           // 未回収を赤で別枠に出す日数
+  STORAGE_KEY: "shiraume_kpi_v1",
+};
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     報酬の分け方（/split/ と同じ割合）
+     ★ 変えるときは /split/ と両方を直してください
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+const MEMBERS = ["角田", "大西"];
+const PLANS = {
+  A: { label:"新規のお客様（初回の入金）", note:"営業40% ／ 作業60%", groups:[
+    { title:"営業　40%", items:[
+      {name:"探す・調べる",   desc:"誰に送るか決める／プロフィール／穴を見つける", pct:4,  who:"角田", eg:"例：30件調べた"},
+      {name:"切り口を決める", desc:"何が穴か／何を言うか",                       pct:6,  who:"大西", eg:"例：40分"},
+      {name:"DMの文面を作る", desc:"その人向けの文／2通目以降も",                pct:8,  who:"大西", eg:"例：8本"},
+      {name:"送る",           desc:"送信／送る時間を選ぶ",                       pct:2,  who:"角田", eg:"例：25件"},
+      {name:"DM・LINEで商談", desc:"返信に答える／質問／条件のやり取り",         pct:8,  who:"角田", eg:"例：12往復"},
+      {name:"電話で商談",     desc:"電話をかける／受ける／メモを残す",           pct:6,  who:"角田", eg:"例：20分"},
+      {name:"見積り・受注",   desc:"金額を出す／条件を詰める",                   pct:6,  who:"角田", eg:"例：30分"},
+    ]},
+    { title:"作業　60%", items:[
+      {name:"構成を決める",   desc:"何を作るか／ページの並び",                   pct:6,  who:"大西", eg:"例：1時間"},
+      {name:"文章を書く",     desc:"載せる文章／言い回しを整える",               pct:7,  who:"大西", eg:"例：2時間"},
+      {name:"作る",           desc:"実際の制作",                                 pct:25, who:"大西", eg:"例：6時間"},
+      {name:"資料を作る",     desc:"ご提案書／お見積書",                         pct:5,  who:"大西", eg:"例：1時間"},
+      {name:"お見せする",     desc:"たたき台を送る／説明する",                   pct:3,  who:"大西", eg:"例：20分"},
+      {name:"修正対応",       desc:"言われたところを直す",                       pct:9,  who:"大西", eg:"例：3回・2時間"},
+      {name:"公開・お渡し",   desc:"ドメイン／公開／使い方のご説明",             pct:5,  who:"大西", eg:"例：1時間"},
+    ]},
+  ]},
+  B: { label:"月額の2ヶ月目以降（毎月の入金）", note:"営業がないので40:60の枠は使いません", groups:[
+    { title:"毎月の作業", items:[
+      {name:"窓口・連絡",       desc:"連絡を受ける／要望を聞く",       pct:15, who:"角田", eg:"例：LINE 8往復"},
+      {name:"打ち合わせ",       desc:"電話やLINEでのやり取り",         pct:10, who:"角田", eg:"例：30分"},
+      {name:"更新・修正",       desc:"実際に直す／中身を入れ替える",   pct:50, who:"大西", eg:"例：3時間"},
+      {name:"管理",             desc:"サーバー／ドメイン／表示の確認", pct:15, who:"大西", eg:"例：30分"},
+      {name:"こちらからの提案", desc:"こうしたらどうですか、の声かけ", pct:10, who:"大西", eg:"例：1件"},
+    ]},
+  ]},
+  C: { label:"既にいるお客様からの追加注文", note:"営業の枠を 40% → 25% に下げています", groups:[
+    { title:"営業　25%", items:[
+      {name:"提案",         desc:"こういうこともできます、と持ちかける", pct:10, who:"角田", eg:"例：1件"},
+      {name:"商談",         desc:"DM・LINE・電話でのやり取り",           pct:8,  who:"角田", eg:"例：20分"},
+      {name:"見積り・受注", desc:"金額を出す／決めてもらう",             pct:7,  who:"角田", eg:"例：30分"},
+    ]},
+    { title:"作業　75%", items:[
+      {name:"構成を決める", desc:"何を作るか／どう並べるか", pct:8,  who:"大西", eg:"例：40分"},
+      {name:"文章を書く",   desc:"載せる文章を書く",         pct:7,  who:"大西", eg:"例：1時間"},
+      {name:"作る",         desc:"実際の制作",               pct:35, who:"大西", eg:"例：5時間"},
+      {name:"修正対応",     desc:"言われたところを直す",     pct:15, who:"大西", eg:"例：2回"},
+      {name:"公開・お渡し", desc:"公開／ご説明",             pct:10, who:"大西", eg:"例：40分"},
+    ]},
+  ]},
+  D: { label:"紹介で来たお客様", note:"紹介の分を先に15%取り、残り85%をAと同じ比率で割ります", groups:[
+    { title:"紹介", items:[
+      {name:"紹介", desc:"つないでくれた／お礼をした", pct:15, who:"角田", eg:"例：○○様から"},
+    ]},
+    { title:"営業　34%", items:[
+      {name:"探す・調べる",   desc:"", pct:3, who:"角田", eg:"例：10件"},
+      {name:"切り口を決める", desc:"", pct:5, who:"大西", eg:"例：30分"},
+      {name:"DMの文面を作る", desc:"", pct:7, who:"大西", eg:"例：3本"},
+      {name:"送る",           desc:"", pct:2, who:"角田", eg:"例：5件"},
+      {name:"DM・LINEで商談", desc:"", pct:7, who:"角田", eg:"例：8往復"},
+      {name:"電話で商談",     desc:"", pct:5, who:"角田", eg:"例：20分"},
+      {name:"見積り・受注",   desc:"", pct:5, who:"角田", eg:"例：30分"},
+    ]},
+    { title:"作業　51%", items:[
+      {name:"構成を決める", desc:"", pct:5,  who:"大西", eg:"例：40分"},
+      {name:"文章を書く",   desc:"", pct:6,  who:"大西", eg:"例：1時間"},
+      {name:"作る",         desc:"", pct:21, who:"大西", eg:"例：5時間"},
+      {name:"資料を作る",   desc:"", pct:4,  who:"大西", eg:"例：1時間"},
+      {name:"お見せする",   desc:"", pct:3,  who:"大西", eg:"例：20分"},
+      {name:"修正対応",     desc:"", pct:8,  who:"大西", eg:"例：2回"},
+      {name:"公開・お渡し", desc:"", pct:4,  who:"大西", eg:"例：40分"},
+    ]},
+  ]},
+};
+
+/* サービスと料金（すべて税込）★サイトの料金を変えたら、ここも直す */
+const SERVICES = [
+  {n:"ホームページ STARTER",             k:"one", a:49800,  m:0},
+  {n:"ホームページ STANDARD",            k:"one", a:109800, m:0},
+  {n:"ホームページ BUSINESS",            k:"one", a:169800, m:0},
+  {n:"Googleマップ 初期設定・最適化",    k:"one", a:39000,  m:0},
+  {n:"Googleマップ 初期設定（月額同時）", k:"one", a:19800,  m:0},
+  {n:"ページ追加（1ページ）",            k:"one", a:6500,   m:0},
+  {n:"ホームページ月額 LIGHT",           k:"mon", a:6980,   m:6},
+  {n:"ホームページ月額 STANDARD",        k:"mon", a:11980,  m:6},
+  {n:"ホームページ月額 BUSINESS",        k:"mon", a:17980,  m:6},
+  {n:"保守・運用 BASIC",                 k:"mon", a:2980,   m:0},
+  {n:"保守・運用 STANDARD",              k:"mon", a:5980,   m:0},
+  {n:"保守・運用 PREMIUM",               k:"mon", a:9980,   m:0},
+  {n:"SNS運用 LIGHT",                    k:"mon", a:19800,  m:3},
+  {n:"SNS運用 STANDARD",                 k:"mon", a:39800,  m:3},
+  {n:"SNS運用 BUSINESS",                 k:"mon", a:69800,  m:3},
+  {n:"Googleマップ LIGHT",               k:"mon", a:9800,   m:3},
+  {n:"Googleマップ STANDARD",            k:"mon", a:19800,  m:3},
+  {n:"Googleマップ PREMIUM",             k:"mon", a:29800,  m:3},
+  {n:"その他（自分で入力）",              k:"one", a:0,      m:0},
+];
+</script>
+
+<style>
+:root{
+  --gold:#B8912F; --gold-d:#8A6E1E; --gold-l:#C9A02F;
+  --ink:#2B2A2E; --ink2:#4A4548; --sub:#6B6467;
+  --paper:#FFFDF7; --paper2:#FBF8F1; --white:#fff;
+  --line:#EDE4D2; --line2:#EDE7DA;
+  --red:#C0392B; --green:#1e3a2b;
+  --k:#2E6B8A; --o:#8A5A2E; --half:#6B655C; --none:#B9B2A6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  color:var(--ink);background:var(--paper);line-height:1.8;font-size:15px;
+  padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+.wrap{max-width:900px;margin:0 auto;padding:0 18px}
+h1,h2,h3{font-weight:600}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;color:var(--ink)}
+/* iOS で勝手に拡大しないよう、入力欄は必ず16px以上 */
+input,select,textarea{font-size:16px}
+
+/* ── ログイン ── */
+#gate{position:fixed;inset:0;background:var(--paper);z-index:100;
+  display:flex;align-items:center;justify-content:center;padding:20px}
+#gate .box{background:var(--white);border:1px solid var(--line);
+  border-top:4px solid var(--gold);padding:30px 24px;max-width:340px;width:100%}
+#gate h1{font-size:18px;text-align:center;letter-spacing:.06em}
+#gate .s{font-size:12px;color:var(--sub);text-align:center;margin:6px 0 22px}
+#gate .gf{margin-bottom:12px}
+#gate .gf label{display:block;font-size:12px;color:var(--sub);margin-bottom:5px}
+#gate input{width:100%;padding:14px 13px;border:1px solid var(--line);
+  border-radius:2px;background:var(--white)}
+#gate .go{width:100%;margin-top:14px;padding:16px;border:0;background:var(--gold);
+  color:#fff;font-size:16px;font-weight:700;border-radius:2px;letter-spacing:.08em}
+#gate .go:disabled{background:var(--none)}
+header .clock{font-size:11px;color:var(--sub);white-space:nowrap;font-variant-numeric:tabular-nums}
+#gate .err{color:var(--red);font-size:12.5px;text-align:center;margin-top:12px;min-height:20px}
+#gate .memo{font-size:11px;color:var(--sub);line-height:1.75;margin-top:18px;
+  padding-top:14px;border-top:1px solid var(--line)}
+
+/* ── ヘッダー・タブ ── */
+header{background:var(--white);border-top:4px solid var(--gold);
+  border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;gap:12px;padding-top:13px;padding-bottom:13px}
+header .logo{flex:1;font-size:13px;letter-spacing:.14em;color:var(--sub);
+  text-decoration:none;display:flex;align-items:center;gap:8px}
+header .logo img{width:22px;height:22px}
+header .out{padding:8px 13px;border:1px solid var(--line);background:var(--white);
+  font-size:12px;color:var(--sub);border-radius:2px}
+nav{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:8}
+nav .wrap{display:flex;overflow-x:auto;padding:0 18px;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+nav button{flex:1 0 auto;min-width:88px;padding:14px 10px 12px;border:0;
+  border-bottom:3px solid transparent;background:none;font-size:13.5px;color:var(--sub);
+  white-space:nowrap}
+nav button.on{color:var(--gold-d);border-bottom-color:var(--gold);font-weight:700}
+
+/* ── カード ── */
+.card{background:var(--white);border:1px solid var(--line);padding:20px 18px;margin:16px 0}
+.card > h2{font-size:15px;margin-bottom:3px}
+.card > .note{font-size:12.5px;color:var(--sub);margin-bottom:15px;line-height:1.7}
+.sec{font-size:11.5px;font-weight:700;color:var(--gold-d);letter-spacing:.08em;
+  padding:18px 0 8px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.sec:first-child{padding-top:0}
+
+/* ── 今週の行 ── */
+.wk{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line2)}
+.wk:last-child{border-bottom:0}
+.wk .nm{width:104px;font-size:13.5px;flex-shrink:0;line-height:1.45}
+.wk .nm small{display:block;font-size:10.5px;color:var(--sub);font-weight:400}
+.wk .num{width:74px;text-align:right;font-size:13px;font-variant-numeric:tabular-nums;flex-shrink:0}
+.wk .num b{font-size:15px}
+.wk .bar{flex:1;height:9px;background:var(--paper2);border-radius:5px;overflow:hidden;min-width:40px}
+.wk .bar i{display:block;height:100%;background:var(--gold-l);border-radius:5px}
+.wk .rest{width:66px;text-align:right;font-size:12px;color:var(--sub);flex-shrink:0}
+.wk.done .bar i{background:var(--green)}
+.wk.done .rest{color:var(--green)}
+.wk.bad .nm{color:var(--red);font-weight:700}
+.wk.bad .bar i{background:var(--red)}
+.wk.bad .rest{color:var(--red);font-weight:700}
+
+/* ── 数字の表示 ── */
+.big{font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.big.red{color:var(--red)} .big.green{color:var(--green)}
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:9px 0;border-bottom:1px solid var(--line2);font-size:13.5px}
+.kv:last-child{border-bottom:0}
+.kv .k{color:var(--ink2);line-height:1.5}
+.kv .k small{display:block;font-size:11px;color:var(--sub)}
+.kv .v{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.kv .v.red{color:var(--red)} .kv .v.green{color:var(--green)}
+.kv.ind .k{padding-left:14px;color:var(--sub);font-size:12.5px}
+.kv.ind .v{font-weight:400;font-size:12.5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{background:var(--paper2);border:1px solid var(--line2);padding:13px 14px}
+.stat .l{font-size:11.5px;color:var(--sub);letter-spacing:.04em}
+.stat .n{font-size:20px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums;line-height:1.35}
+.stat .n.red{color:var(--red)} .stat .n.green{color:var(--green)}
+.stat .d{font-size:11px;color:var(--sub);margin-top:2px;line-height:1.6}
+
+/* ── 次の一手 ── */
+.move{border-left:3px solid var(--gold);background:var(--paper2);padding:12px 14px;
+  font-size:13px;line-height:1.8;margin-top:12px}
+.move.red{border-left-color:var(--red);background:#FCF2F0;color:var(--red);font-weight:700}
+.move .t{font-size:11px;letter-spacing:.08em;opacity:.75;font-weight:700;display:block;margin-bottom:2px}
+.move.sub{border-left-color:var(--line);color:var(--sub);font-weight:400}
+.empty{font-size:12.5px;color:var(--sub);text-align:center;padding:22px 10px;line-height:1.8}
+
+/* ── フォーム ── */
+.f{margin-bottom:14px}
+.f label{display:block;font-size:12.5px;color:var(--sub);margin-bottom:6px}
+.f input,.f select,.f textarea{width:100%;padding:13px 12px;border:1px solid var(--line);
+  border-radius:2px;background:var(--white)}
+.f textarea{line-height:1.8;resize:vertical;min-height:76px}
+.f input[type=number]{font-weight:700;font-variant-numeric:tabular-nums}
+.fg{display:grid;gap:12px}
+.fg.c2{grid-template-columns:1fr 1fr}
+.fg.c3{grid-template-columns:1fr 1fr 1fr}
+.fg.c4{grid-template-columns:repeat(4,1fr)}
+
+/* 数を数える欄（スマホで押しやすい ＋ −） */
+.stp{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:2px;
+  overflow:hidden;background:var(--white)}
+.stp button{width:46px;flex-shrink:0;border:0;background:var(--paper2);color:var(--gold-d);
+  font-size:21px;line-height:1;font-weight:700;-webkit-user-select:none;user-select:none;
+  touch-action:manipulation}
+.stp button:active{background:var(--line)}
+.stp input{flex:1;min-width:0;border:0;border-left:1px solid var(--line);
+  border-right:1px solid var(--line);text-align:center;padding:13px 2px;
+  font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;background:var(--white)}
+.stp input::-webkit-outer-spin-button,.stp input::-webkit-inner-spin-button{
+  -webkit-appearance:none;margin:0}
+.stp input[type=number]{-moz-appearance:textfield}
+
+.btn{padding:14px 20px;border:0;background:var(--gold);color:#fff;font-size:15px;
+  font-weight:700;border-radius:2px;letter-spacing:.06em;touch-action:manipulation}
+.btn.g{background:var(--white);color:var(--sub);border:1px solid var(--line);font-weight:400;
+  font-size:13px;padding:11px 15px}
+.btn.r{background:var(--white);color:var(--red);border:1px solid var(--line);font-weight:400;
+  font-size:12px;padding:8px 12px}
+.btn.w{width:100%}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.ok{color:var(--green);font-size:13px}
+a.btn{text-decoration:none;display:inline-block;text-align:center}
+
+/* ── 表 ── */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:4px}
+table.t{width:100%;border-collapse:collapse;min-width:520px}
+table.t th,table.t td{padding:9px 8px;border-bottom:1px solid var(--line2);
+  font-size:12.5px;text-align:left;line-height:1.6;vertical-align:middle;white-space:nowrap}
+table.t th{background:var(--paper2);color:var(--gold-d);font-size:11px;font-weight:700}
+table.t td.n{text-align:right;font-variant-numeric:tabular-nums}
+table.t td.red{color:var(--red);font-weight:700}
+table.t input{padding:8px 7px;border:1px solid var(--line);font-size:14px;border-radius:2px;
+  background:var(--white);width:130px}
+table.t input[type=number]{text-align:right;width:104px}
+.tag{display:inline-block;padding:2px 7px;font-size:10.5px;border-radius:2px;
+  background:var(--paper2);border:1px solid var(--line2);color:var(--sub)}
+.tag.k{color:var(--gold-d);border-color:var(--gold)}
+
+/* ── 配分計算 ── */
+.ptabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:16px}
+.ptabs button{padding:11px 4px;border:1px solid var(--line);background:var(--white);
+  font-size:11.5px;color:var(--sub);border-radius:2px;line-height:1.45}
+.ptabs button b{display:block;font-size:15px;margin-bottom:1px}
+.ptabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.spl{padding:14px 0;border-bottom:1px solid var(--line2)}
+.spl:last-child{border-bottom:0}
+.spl .top{display:flex;align-items:flex-start;gap:10px}
+.spl .info{flex:1;min-width:0}
+.spl .nm{font-size:14px;font-weight:600;line-height:1.5}
+.spl .ds{font-size:11.5px;color:var(--sub);line-height:1.6;margin-top:1px}
+.spl .pc{font-size:12px;color:var(--gold-d);font-weight:700;white-space:nowrap}
+.pick{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:9px}
+.pick label{cursor:pointer}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+.pick span{display:block;text-align:center;padding:11px 2px;border:1px solid var(--line);
+  font-size:12.5px;background:var(--white);border-radius:2px;line-height:1.3}
+.pick input:checked + span{color:#fff;font-weight:700}
+.pick input[value="角田"]:checked + span{background:var(--k);border-color:var(--k)}
+.pick input[value="大西"]:checked + span{background:var(--o);border-color:var(--o)}
+.pick input[value="半分"]:checked + span{background:var(--half);border-color:var(--half)}
+.pick input[value="なし"]:checked + span{background:var(--none);border-color:var(--none)}
+.work{width:100%;margin-top:7px;padding:10px 12px;border:1px dashed var(--line);
+  border-radius:2px;background:var(--paper2)}
+.work::placeholder{color:#B3ABA0}
+.res{background:var(--ink);color:#fff;padding:16px 14px;margin-top:16px;
+  display:flex;align-items:center;gap:12px}
+.res .who{flex:1;text-align:center}
+.res .who .n{font-size:11.5px;opacity:.66;letter-spacing:.08em}
+.res .who .p{font-size:13px;opacity:.8}
+.res .who .y{font-size:23px;font-weight:700;line-height:1.3;font-variant-numeric:tabular-nums}
+.res .who .ex{font-size:10.5px;opacity:.6}
+.res .bar{width:1px;align-self:stretch;background:rgba(255,255,255,.2)}
+.calcbox{background:var(--paper2);border:1px solid var(--line);padding:14px 15px;
+  margin-top:14px;font-size:12.5px;line-height:2}
+.calcbox .h{font-weight:700;margin-bottom:6px;font-size:13px}
+.calcbox code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--white);
+  padding:1px 5px;border:1px solid var(--line);border-radius:2px}
+
+/* ── その他 ── */
+.warn{background:#FCF2F0;border:1px solid #E8C4BE;color:var(--red);padding:11px 13px;
+  font-size:12.5px;line-height:1.75;margin-top:12px}
+.info{background:var(--paper2);border:1px solid var(--line2);color:var(--sub);padding:11px 13px;
+  font-size:12px;line-height:1.8;margin-top:12px}
+details{border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+details summary{font-size:13px;color:var(--gold-d);cursor:pointer;font-weight:700;padding:4px 0}
+details .in{padding-top:14px}
+.chartbox{position:relative;height:230px;margin-top:8px}
+.hide{display:none!important}
+.rev{border:1px solid var(--line);padding:14px;margin-bottom:12px;background:var(--paper2)}
+.rev .h{font-size:12px;color:var(--gold-d);font-weight:700;margin-bottom:7px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px}
+.rev .q{font-size:11px;color:var(--sub);margin-top:8px}
+.rev .a{font-size:13.5px;line-height:1.8;white-space:pre-wrap;word-break:break-word}
+.foot{font-size:11.5px;color:var(--sub);line-height:1.9;text-align:center;padding:26px 0 10px}
+
+@media(max-width:640px){
+  body{font-size:14px}
+  .wrap{padding:0 12px}
+  nav .wrap{padding:0 12px}
+  nav button{min-width:0;flex:1 1 auto;padding:14px 6px 12px;font-size:12.5px}
+  .card{padding:17px 14px;margin:13px 0}
+  .grid2{grid-template-columns:1fr 1fr}
+  .fg.c2,.fg.c3,.fg.c4{grid-template-columns:1fr 1fr}
+  .wk{flex-wrap:wrap;gap:8px}
+  .wk .nm{width:auto;flex:1 1 120px}
+  .wk .bar{order:5;flex:1 1 100%}
+  .big{font-size:23px}
+  .stat{padding:11px 11px}
+  .stat .n{font-size:17px}
+  .btn.w-sp{width:100%}
+  .ptabs{grid-template-columns:repeat(2,1fr)}
+  .res{flex-direction:row;padding:14px 8px}
+  .res .who .y{font-size:19px}
+  .stp button{width:52px;font-size:23px}
+}
+@media print{ nav,header .out,.btns{display:none} body{background:#fff;padding:0} }
+</style>
+</head>
+<body>
+
+<!-- ══════════ ログイン ══════════ -->
+<div id="gate">
+  <div class="box">
+    <h1>白梅デジタル</h1>
+    <div class="s">売上管理・目標設定</div>
+    <div class="gf"><label for="gMail">メールアドレス</label>
+      <input type="email" id="gMail" autocomplete="username" autocapitalize="off"
+             autocorrect="off" spellcheck="false" placeholder="＠を含めて入力"></div>
+    <div class="gf"><label for="gPass">パスワード</label>
+      <input type="password" id="gPass" autocomplete="current-password"></div>
+    <button class="go" id="gGo">入る</button>
+    <div class="err" id="gErr"></div>
+    <div class="memo" id="gMemo">
+      二人とも同じメールとパスワードで入ります。<br>
+      誰がやったかは、数字を入れるときに名前を選んで記録します。<br>
+      1時間たつか、別のアプリに移ると、もう一度ここに戻ります。
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 本体 ══════════ -->
+<div id="app" class="hide">
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="https://shiraumedigital.com/">
+      <img src="../assets/images/shiraume-symbol-mark.png" alt="" onerror="this.style.display='none'">
+      <span>白梅デジタル</span>
+    </a>
+    <span class="clock" id="hClock"></span>
+    <button class="out" id="hOut">出る</button>
+  </div>
+</header>
+
+<nav><div class="wrap" id="tabs"></div></nav>
+
+<div class="wrap">
+
+<!-- ───────── ① 結果 ───────── -->
+<section id="p-result" class="pane">
+  <div class="card">
+    <h2 id="moTitle">今月</h2>
+    <div class="note" id="moNote"></div>
+    <div class="big" id="moBig">¥0</div>
+    <div class="note" style="margin:4px 0 12px" id="moRate"></div>
+    <div class="kv ind"><span class="k">買い切り</span><span class="v" id="moOne">¥0</span></div>
+    <div class="kv ind"><span class="k">月額（今月分）</span><span class="v" id="moMon">¥0</span></div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="stat"><div class="l">MRR（毎月入る額）</div><div class="n green" id="moMrr">¥0</div>
+        <div class="d" id="moMrrCnt">契約 0件</div></div>
+      <div class="stat"><div class="l">確定売上</div><div class="n green" id="moFix">¥0</div>
+        <div class="d">最低契約期間の残りぶん。<br>これから確実に入る額です</div></div>
+    </div>
+    <div id="moMrrWarn"></div>
+  </div>
+
+  <div class="card">
+    <div class="sec">入金</div>
+    <div class="kv"><span class="k">請求済</span><span class="v" id="moBilled">¥0</span></div>
+    <div class="kv"><span class="k">入金済</span><span class="v" id="moPaid">¥0</span></div>
+    <div class="kv"><span class="k">未回収</span><span class="v" id="moUnpaid">¥0</span></div>
+    <div id="moOverdue"></div>
+  </div>
+
+  <div class="card">
+    <h2 id="yrTitle">今年</h2>
+    <div class="note" id="yrRange"></div>
+    <div class="big" id="yrBig">¥0</div>
+    <div class="note" style="margin:4px 0 14px" id="yrSub"></div>
+    <div class="grid2">
+      <div class="stat"><div class="l">残り</div><div class="n" id="yrRest">¥0</div>
+        <div class="d" id="yrRestM">残り0ヶ月</div></div>
+      <div class="stat"><div class="l">このペースだと着地</div><div class="n" id="yrLand">¥0</div>
+        <div class="d" id="yrLandR">目標比 0%</div></div>
+    </div>
+    <div class="chartbox" style="margin-top:18px"><canvas id="yrChart"></canvas></div>
+    <div class="note" id="yrChartNote" style="margin-top:10px"></div>
+    <div id="yrMove"></div>
+  </div>
+
+  <div class="card">
+    <h2>角田さんの数字（今月）</h2>
+    <div class="note">角田さんの名前で入れたぶんだけを見ています。</div>
+    <div class="grid2">
+      <div class="stat"><div class="l">架電 → つながった</div><div class="n" id="kCall">0 → 0</div>
+        <div class="d" id="kCallR"></div></div>
+      <div class="stat"><div class="l">アポ → 商談</div><div class="n" id="kAppt">0 → 0</div>
+        <div class="d" id="kApptR"></div></div>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="stat"><div class="l">角田さん経由の成約</div><div class="n" id="kClose">0件</div>
+        <div class="d" id="kCloseYen">¥0</div></div>
+      <div class="stat"><div class="l">報酬分配（目安）</div><div class="n" id="kShare">¥0</div>
+        <div class="d">正式には「④ 配分計算」で</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>今週やること</h2>
+    <div class="note" id="wkRange"></div>
+    <div id="wkRows"></div>
+    <div id="wkMove"></div>
+    <details><summary>今月あと必要な数（成約からDM・架電まで）</summary>
+      <div class="in">
+        <div id="moBack"></div>
+        <div class="info" id="moRateSrc"></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ───────── ② 目標設定 ───────── -->
+<section id="p-goal" class="pane hide">
+  <div class="card">
+    <h2>年間の目標</h2>
+    <div class="note">勘で決めず、下から積むと現実的な数字になります。決め方は下の折りたたみに。</div>
+    <div class="fg c2">
+      <div class="f"><label>年間売上の目標（税込）</label>
+        <input type="number" id="s_year" min="0" step="100000" inputmode="numeric"></div>
+      <div class="f"><label>今期の開始月</label><select id="s_fy"></select></div>
+    </div>
+    <div class="grid2">
+      <div class="stat"><div class="l">月あたり（12等分）</div><div class="n" id="g_permonth">¥0</div></div>
+      <div class="stat"><div class="l">今のMRRで埋まる分</div><div class="n green" id="g_mrr">¥0</div>
+        <div class="d" id="g_mrrPct">月の目標の 0%</div></div>
+    </div>
+    <div class="move" id="g_need"></div>
+    <details><summary>目標額の決め方（守り・本命・伸び）</summary>
+      <div class="in info" style="margin-top:0">
+        <b>手順1</b>　今のMRRを出す。何もしなくても入る額です。<br>
+        <b>手順2</b>　月に必要な額 ＝ 生活費 ＋ 経費 ＋ 角田さんへの分配 ＋ 税金の積立。これが下限です。<br>
+        <b>手順3</b>　守り＝手順2×12／本命＝守り×1.5〜2.0／伸び＝本命×1.5。<br>
+        　　画面に出すのは<b>本命だけ</b>。3つ出すと、人は一番低いのを見ます。<br>
+        <b>手順4</b>　月に割る。12等分にしないで、下の表で月ごとに変えます。<br>
+        <b>手順5</b>　週に割る。週の目標は金額ではなく<b>行動の件数</b>で置きます。
+      </div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2>月ごとの目標</h2>
+    <div class="note">
+      制作業は月に波があります。12で割ると、どこかで無理が出ます。<br>
+      年度初め・年末前・年度末は多め、夏と年末年始は少なめ。
+    </div>
+    <div class="tw"><table class="t" id="mtTbl"></table></div>
+    <div class="btns">
+      <button class="btn" id="mtSave">月別の目標を保存</button>
+      <button class="btn g" id="mtEven">12等分に戻す</button>
+      <span class="ok hide" id="mtOk">保存しました</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>逆算に使う割合</h2>
+    <div class="note" id="rateNote"></div>
+    <div class="tw"><table class="t" id="rateTbl"></table></div>
+    <div class="info">
+      仮の値のままでも動きます。実績が3ヶ月ぶんたまり、母数が20件を超えた段階から、
+      自動で実測値に入れ替わります。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>バックアップ</h2>
+    <div class="note">
+      数字はこのパソコン（スマホ）のこのブラウザにだけ保存されます。<br>
+      ブラウザのデータを消すと消えます。月末のふりかえりのときに、必ず書き出してください。
+    </div>
+    <div class="btns">
+      <button class="btn" id="bOut">書き出す（JSON）</button>
+      <button class="btn g" id="bIn">読み込む</button>
+      <input type="file" id="bFile" accept=".json,application/json" class="hide">
+    </div>
+    <div class="note" id="bStat" style="margin-top:12px"></div>
+    <details><summary>全部消す</summary>
+      <div class="in">
+        <div class="warn">元に戻せません。先に「書き出す」をしておいてください。</div>
+        <div class="btns"><button class="btn r" id="bClear">保存されている数字を全部消す</button></div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ───────── ③ ふりかえり ───────── -->
+<section id="p-review" class="pane hide">
+  <div class="card">
+    <h2>今週のふりかえり</h2>
+    <div class="note" id="rvWeekRange">金曜の夜、5分。3行だけ書きます。</div>
+    <div class="f" style="max-width:230px"><label>書く人</label><select id="rWho"></select></div>
+    <div class="f"><label>1　今週、一番うまくいったこと（1つだけ）</label>
+      <textarea id="r_good"></textarea></div>
+    <div class="f"><label>2　一番詰まったところ（数字で書く）</label>
+      <textarea id="r_stuck" placeholder="例：DMは25本送ったが、返信が1件だった"></textarea></div>
+    <div class="f"><label>3　来週、1つだけ変えること</label>
+      <textarea id="r_change" placeholder="何を、どう変えるか。「もっと頑張る」は書かない"></textarea></div>
+    <div class="btns"><button class="btn w-sp" id="rSaveW">今週のぶんを保存</button>
+      <span class="ok hide" id="rOkW">保存しました</span></div>
+    <div class="info">変えることは1つだけにします。2つ以上変えると、どちらが効いたか分からなくなります。</div>
+  </div>
+
+  <div class="card">
+    <h2>今月のふりかえり</h2>
+    <div class="note" id="rvMonthRange">月末、30分。</div>
+    <div class="f" style="max-width:230px"><label>書く人</label><select id="mWho"></select></div>
+    <div class="f"><label>1　目標に対していくらだったか。差はいくらか</label>
+      <textarea id="m_gap"></textarea></div>
+    <div class="f"><label>2　詰まったのは、どの段階か</label>
+      <select id="m_stage" style="margin-bottom:8px;width:100%;padding:13px 12px;
+        border:1px solid var(--line);border-radius:2px;background:var(--white)">
+        <option value="">選んでください</option>
+        <option>DMの数が少なかった</option>
+        <option>DMは送ったが返信が来なかった</option>
+        <option>返信は来たが資料送付が止まっていた</option>
+        <option>架電の数が少なかった</option>
+        <option>架電はしたがアポにならなかった</option>
+        <option>アポは取れたが商談まで行かなかった</option>
+        <option>商談まで行ったが断られた</option>
+        <option>詰まりはなかった</option>
+      </select>
+      <textarea id="m_stageMemo" placeholder="補足があれば"></textarea></div>
+    <div class="f"><label>3　断られた理由（お客様の言葉のまま。要約しない）</label>
+      <textarea id="m_reason"></textarea></div>
+    <div class="f"><label>4　来月、1つだけ変えること</label>
+      <textarea id="m_change"></textarea></div>
+    <div class="btns"><button class="btn w-sp" id="rSaveM">今月のぶんを保存</button>
+      <span class="ok hide" id="rOkM">保存しました</span></div>
+  </div>
+
+  <div class="card">
+    <h2>これまでのふりかえり</h2>
+    <div id="rvList"></div>
+  </div>
+</section>
+
+<!-- ───────── ④ 配分計算 ───────── -->
+<section id="p-split" class="pane hide">
+  <div class="card">
+    <h2>報酬の分け方</h2>
+    <div class="note">金額を入れて、やった人を選ぶだけです。割合は二人で決めたものと同じです。</div>
+    <div class="ptabs" id="pTabs"></div>
+    <div style="font-size:14px;font-weight:600" id="planLabel"></div>
+    <div class="note" id="planNote" style="margin-bottom:14px"></div>
+    <div class="f"><label>入金額（税込）</label>
+      <input type="number" id="c_amount" min="0" step="100" inputmode="numeric" value="39800"></div>
+    <div class="fg c2">
+      <div class="f"><label>立て替えた実費（ドメイン代など）</label>
+        <input type="number" id="c_jihi" min="0" step="100" inputmode="numeric" value="0"></div>
+      <div class="f"><label>立て替えた人</label><select id="c_tate"></select></div>
+    </div>
+    <div class="res" id="cRes"></div>
+  </div>
+
+  <div class="card">
+    <h2>やった人と、やったこと</h2>
+    <div class="note">
+      発生しなかった作業は「なし」にします。その分は、やった人で按分されます。<br>
+      「やったこと」は記録用です。書いても割合は変わりません。あとで見返すためのものです。
+    </div>
+    <div class="btns" style="margin-bottom:6px">
+      <button class="btn g" data-all="角田">全部 角田</button>
+      <button class="btn g" data-all="大西">全部 大西</button>
+      <button class="btn g" data-all="半分">全部 半分</button>
+      <button class="btn g" data-reset="1">最初の想定に戻す</button>
+    </div>
+    <div id="cItems"></div>
+    <div class="warn hide" id="cWarn"></div>
+  </div>
+
+  <div class="card">
+    <h2>計算の内訳</h2>
+    <div class="tw"><table class="t" id="cDetail"></table></div>
+    <div class="calcbox" id="cCalc"></div>
+    <div class="fg c2" style="margin-top:16px">
+      <div class="f"><label>日付</label><input type="date" id="c_date"></div>
+      <div class="f"><label>お客様名（記録用）</label>
+        <input type="text" id="c_cust" placeholder="○○様"></div>
+    </div>
+    <div class="btns">
+      <button class="btn w-sp" id="cSave">この計算を記録に残す</button>
+      <button class="btn g" id="cCopy">記録用の文をコピー</button>
+      <span class="ok hide" id="cOk">記録しました</span>
+    </div>
+    <div class="note" style="margin-top:8px">
+      コピーした文は、そのままLINEやメールでお互いに送れます。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>これまでの配分</h2>
+    <div id="cList"></div>
+  </div>
+</section>
+
+<!-- ───────── ⑤ 結果入力 ───────── -->
+<section id="p-enter" class="pane hide">
+  <div class="card">
+    <h2>今日の数字</h2>
+    <div class="note">＋ と − で数えられます。0のところは触らなくて大丈夫です。</div>
+    <div class="fg c2" style="max-width:440px">
+      <div class="f"><label>やった人</label><select id="dWho"></select></div>
+      <div class="f"><label>日付</label><input type="date" id="dDate"></div>
+    </div>
+    <div class="sec">DM営業</div>
+    <div class="fg c3">
+      <div class="f"><label>DM送信（1通目）</label>
+        <div class="stp"><button type="button" data-step="-1" data-for="d_dm">−</button>
+          <input type="number" id="d_dm" min="0" value="0" inputmode="numeric">
+          <button type="button" data-step="1" data-for="d_dm">＋</button></div></div>
+      <div class="f"><label>返信が来た</label>
+        <div class="stp"><button type="button" data-step="-1" data-for="d_reply">−</button>
+          <input type="number" id="d_reply" min="0" value="0" inputmode="numeric">
+          <button type="button" data-step="1" data-for="d_reply">＋</button></div></div>
+      <div class="f"><label>資料を送った</label>
+        <div class="stp"><button type="button" data-step="-1" data-for="d_doc">−</button>
+          <input type="number" id="d_doc" min="0" value="0" inputmode="numeric">
+          <button type="button" data-step="1" data-for="d_doc">＋</button></div></div>
+    </div>
+    <div class="sec">電話・商談</div>
+    <div class="fg c4">
+      <div class="f"><label>架電</label>
+        <div class="stp"><button type="button" data-step="-1" data-for="d_call">−</button>
+          <input type="number" id="d_call" min="0" value="0" inputmode="numeric">
+          <button type="button" data-step="1" data-for="d_call">＋</button></div></div>
+      <div class="f"><label>つながった</label>
+        <div class="stp"><button type="button" data-step="-1" data-for="d_connect">−</button>
+          <input type="number" id="d_connect" min="0" value="0" inputmode="numeric">
+          <button type="button" data-step="1" data-for="d_connect">＋</button></div></div>
+      <div class="f"><label>アポ</label>
+        <div class="stp"><button type="button" data-step="-1" data-for="d_appt">−</button>
+          <input type="number" id="d_appt" min="0" value="0" inputmode="numeric">
+          <button type="button" data-step="1" data-for="d_appt">＋</button></div></div>
+      <div class="f"><label>商談</label>
+        <div class="stp"><button type="button" data-step="-1" data-for="d_meeting">−</button>
+          <input type="number" id="d_meeting" min="0" value="0" inputmode="numeric">
+          <button type="button" data-step="1" data-for="d_meeting">＋</button></div></div>
+    </div>
+    <div class="f"><label>電話にかけた時間（分）※ 任意</label>
+      <div class="stp"><button type="button" data-step="-5" data-for="d_callmin">−5</button>
+        <input type="number" id="d_callmin" min="0" value="0" inputmode="numeric">
+        <button type="button" data-step="5" data-for="d_callmin">＋5</button></div></div>
+    <div class="btns"><button class="btn w-sp" id="dSave">この日の数字を保存</button>
+      <span class="ok hide" id="dOk">保存しました</span></div>
+    <div class="info">
+      名前ごとに別々に保存されます。二人が同じ日を入れても、上書きになりません。<br>
+      アポ＝次の日時が決まったもの。「また連絡します」はアポに入れません。<br>
+      商談＝金額の話をしたもの。ヒアリングだけは商談に入れません。<br>
+      成約は、下の「案件の登録」で登録すると自動で数えられます。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>案件の登録（成約したとき）</h2>
+    <div class="note">お客様が「お願いします」と言った時点で登録します。入金ではありません。</div>
+    <div class="fg c2">
+      <div class="f"><label>成約日</label><input type="date" id="n_date"></div>
+      <div class="f"><label>お客様名</label><input type="text" id="n_cust" placeholder="○○様"></div>
+    </div>
+    <div class="f"><label>サービス</label><select id="n_svc"></select></div>
+    <div class="fg c3">
+      <div class="f"><label>種別</label><select id="n_kind">
+        <option value="one">買い切り</option><option value="mon">月額</option></select></div>
+      <div class="f"><label>金額（税込）</label>
+        <input type="number" id="n_amt" min="0" step="100" value="0" inputmode="numeric"></div>
+      <div class="f" id="n_mBox"><label>最低契約期間（月）</label>
+        <input type="number" id="n_months" min="0" value="0" inputmode="numeric"></div>
+    </div>
+    <div class="fg c2">
+      <div class="f"><label>案件の区分（報酬の分け方）</label><select id="n_plan"></select></div>
+      <div class="f"><label>主に動いた人</label><select id="n_via"></select></div>
+    </div>
+    <div class="btns"><button class="btn w-sp" id="nSave">この案件を登録</button>
+      <span class="ok hide" id="nOk">登録しました</span></div>
+    <div class="info" id="n_hint"></div>
+  </div>
+
+  <div class="card">
+    <h2>案件の一覧</h2>
+    <div class="note">着手日・公開日を入れると、その月の売上として計上されます。解約は「解約月」に。</div>
+    <div class="tw"><table class="t" id="dealTbl"></table></div>
+    <div class="empty hide" id="dealEmpty">まだ案件がありません。</div>
+  </div>
+
+  <div class="card">
+    <h2>入金の記録</h2>
+    <div class="note">
+      買い切りは「着手50% ＋ 公開前50%」なので、1件が2行になります。<br>
+      月額は、月がくるたびに1行ずつ増えます。
+    </div>
+    <div class="tw"><table class="t" id="payTbl"></table></div>
+    <div class="empty hide" id="payEmpty">まだ請求の行がありません。案件を登録すると出てきます。</div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<div class="foot">
+  白梅デジタル　売上管理・目標設定<br>
+  数字はこのブラウザにだけ保存されています
+</div>
+
+</div><!-- /app -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+/* ═══════════════════════════════════════════════
+   道具
+   ═══════════════════════════════════════════════ */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const yen = n => '¥' + Math.round(Number(n)||0).toLocaleString('ja-JP');
+const num = v => { const n = Number(v); return isFinite(n) ? n : 0; };
+const clamp0 = n => Math.max(0, num(n));
+const div = (a,b) => (num(b) > 0 ? num(a)/num(b) : 0);          // 0除算をしない
+const pct = (a,b) => (num(b) > 0 ? Math.round(num(a)/num(b)*100) : 0);
+
+function iso(d){ const x=new Date(d); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0'); }
+function parseISO(s){ const p=String(s||'').split('-'); return new Date(num(p[0]),num(p[1])-1,num(p[2])); }
+function ym(d){ const x=new Date(d); return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0'); }
+function ymAdd(k,n){ const p=k.split('-'); const d=new Date(num(p[0]),num(p[1])-1+n,1); return ym(d); }
+function ymDiff(a,b){ const pa=a.split('-'),pb=b.split('-');
+  return (num(pb[0])-num(pa[0]))*12 + (num(pb[1])-num(pa[1])); }
+/* 週は月曜はじまり */
+function mondayOf(d){ const x=new Date(d); const w=(x.getDay()+6)%7;
+  x.setDate(x.getDate()-w); x.setHours(0,0,0,0); return x; }
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function jpDate(d){ const x=new Date(d);
+  return (x.getMonth()+1)+'月'+x.getDate()+'日（'+'日月火水木金土'[x.getDay()]+'）'; }
+function daysBetween(a,b){ return Math.floor((parseISO(b)-parseISO(a))/86400000); }
+const TODAY = iso(new Date());
+
+/* ═══════════════════════════════════════════════
+   保存
+   ═══════════════════════════════════════════════ */
+const DKEYS = ['dm','reply','doc','call','connect','appt','meeting','callmin'];
+
+function blank(){
+  return {
+    v: 3,
+    settings: {
+      yearTarget: SETTINGS.YEAR_TARGET_DEFAULT,
+      fyStart: SETTINGS.FY_START_MONTH,
+      monthTargets: {},          // "2026-04": 500000
+    },
+    // 日付 → 名前 → 数字。名前ごとに分けて持つので、二人が同じ日を入れても消し合わない
+    daily: {},                   // "2026-09-07": { "大西": {dm,...}, "角田": {dm,...} }
+    deals: [],                   // 案件
+    invoices: {},                // "dealId::key": {billed:"",amount:0,paidDate:"",paid:0}
+    reviews: [],                 // ふりかえり（by＝書いた人）
+    splits: [],                  // 配分計算の記録
+  };
+}
+let DB = blank();
+
+/* 古い形（日付 → 数字）を、新しい形（日付 → 名前 → 数字）に直す */
+function migrate(o){
+  const dl = o.daily || {};
+  Object.keys(dl).forEach(k => {
+    const v = dl[k];
+    if (!v || typeof v !== 'object') { delete dl[k]; return; }
+    const isOld = DKEYS.some(x => typeof v[x] === 'number' || typeof v[x] === 'string');
+    if (isOld) dl[k] = { '大西': v };
+  });
+  (o.reviews||[]).forEach(r => { if (!r.by) r.by = '大西'; });
+  return o;
+}
+/* 読み込んだ中身を、欠けや型のおかしいところを直しながら受け入れる */
+function adopt(o){
+  const db = Object.assign(blank(), o);
+  db.settings = Object.assign(blank().settings, o.settings||{});
+  db.daily    = (o.daily && typeof o.daily === 'object') ? o.daily : {};
+  db.deals    = Array.isArray(o.deals) ? o.deals : [];
+  db.invoices = (o.invoices && typeof o.invoices === 'object') ? o.invoices : {};
+  db.reviews  = Array.isArray(o.reviews) ? o.reviews : [];
+  db.splits   = Array.isArray(o.splits)  ? o.splits  : [];
+  return migrate(db);
+}
+function load(){
+  try{
+    const raw = localStorage.getItem(SETTINGS.STORAGE_KEY);
+    if(!raw) return;
+    const o = JSON.parse(raw);
+    if(o && typeof o === 'object') DB = adopt(o);
+  }catch(e){ console.warn('保存データを読めませんでした', e); }
+}
+function save(){
+  try{ localStorage.setItem(SETTINGS.STORAGE_KEY, JSON.stringify(DB)); }
+  catch(e){ alert('保存できませんでした。ブラウザの設定を確認してください。'); }
+}
+
+/* ═══════════════════════════════════════════════
+   期間
+   ═══════════════════════════════════════════════ */
+function fyMonths(){
+  const start = Math.min(12, Math.max(1, num(DB.settings.fyStart) || 1));
+  const now = new Date();
+  let y = now.getFullYear();
+  if (now.getMonth()+1 < start) y -= 1;      // まだ期が始まっていない
+  const list = [];
+  for(let i=0;i<12;i++) list.push(ymAdd(y+'-'+String(start).padStart(2,'0'), i));
+  return list;
+}
+function monthTarget(k){
+  const t = DB.settings.monthTargets || {};
+  if (t[k] != null && t[k] !== '') return num(t[k]);
+  return Math.round(num(DB.settings.yearTarget)/12);
+}
+
+/* ═══════════════════════════════════════════════
+   日々の数字
+   ═══════════════════════════════════════════════ */
+const zero = () => { const o={}; DKEYS.forEach(x=>o[x]=0); return o; };
+function dayOfWho(k, who){
+  const d = (DB.daily[k] || {})[who] || {};
+  const o = {}; DKEYS.forEach(x => o[x] = clamp0(d[x]));
+  return o;
+}
+function dayOf(k){
+  const day = DB.daily[k] || {};
+  const o = zero();
+  Object.keys(day).forEach(who => {
+    const d = day[who] || {}; DKEYS.forEach(x => o[x] += clamp0(d[x]));
+  });
+  return o;
+}
+function sumDays(fromISO, toISO, who){
+  const o = zero();
+  Object.keys(DB.daily).forEach(k => {
+    if (k < fromISO || k > toISO) return;
+    const d = who ? dayOfWho(k, who) : dayOf(k);
+    DKEYS.forEach(x => o[x] += d[x]);
+  });
+  return o;
+}
+
+/* ═══════════════════════════════════════════════
+   案件・売上・MRR・確定売上
+   ═══════════════════════════════════════════════ */
+function dealValue(d){
+  if (d.kind === 'mon') return num(d.amount) * Math.max(1, num(d.months) || 3);
+  return num(d.amount);
+}
+function dealsIn(fromISO, toISO, filterVia){
+  return DB.deals.filter(d => d.date >= fromISO && d.date <= toISO
+    && (!filterVia || d.via === filterVia));
+}
+function revenueRows(){
+  const rows = [];
+  const nowYm = ym(new Date());
+  DB.deals.forEach(d => {
+    if (d.kind === 'one'){
+      const a = Math.round(num(d.amount)/2);
+      const b = num(d.amount) - a;
+      rows.push({dealId:d.id, key:'着手50%', ym: ym(parseISO(d.startDate || d.date)), amount:a, deal:d});
+      rows.push({dealId:d.id, key:'公開前50%', ym: d.pubDate ? ym(parseISO(d.pubDate)) : null, amount:b, deal:d});
+    } else {
+      const from = ym(parseISO(d.date));
+      const end  = d.cancelYm || nowYm;
+      const n = ymDiff(from, end);
+      for(let i=0;i<=n;i++){
+        const k = ymAdd(from, i);
+        if (k > nowYm) break;
+        rows.push({dealId:d.id, key:k+' 月額', ym:k, amount:num(d.amount), deal:d});
+      }
+    }
+  });
+  return rows;
+}
+function monthRevenue(k){
+  let one=0, mon=0;
+  revenueRows().forEach(r => {
+    if (r.ym !== k) return;
+    if (r.deal.kind === 'one') one += r.amount; else mon += r.amount;
+  });
+  return {one, mon, total: one+mon};
+}
+function calcMRR(){
+  const nowYm = ym(new Date());
+  let mrr=0, cnt=0, fixed=0;
+  DB.deals.forEach(d => {
+    if (d.kind !== 'mon') return;
+    if (d.cancelYm && d.cancelYm < nowYm) return;
+    mrr += num(d.amount); cnt++;
+    const passed = Math.max(0, ymDiff(ym(parseISO(d.date)), nowYm));
+    const rest = Math.max(0, (num(d.months)||0) - passed);
+    fixed += num(d.amount) * rest;
+  });
+  return {mrr, cnt, fixed};
+}
+function avgDeal(){
+  const vals = DB.deals.map(dealValue).filter(v => v > 0);
+  if (!vals.length) return {v: SETTINGS.AVG_DEAL_FALLBACK, actual:false, n:0};
+  return {v: Math.round(vals.reduce((a,b)=>a+b,0)/vals.length), actual:true, n:vals.length};
+}
+
+/* ═══════════════════════════════════════════════
+   入金
+   ═══════════════════════════════════════════════ */
+function invoiceRows(){
+  return revenueRows().filter(r => r.ym !== null).map(r => {
+    const id = r.dealId + '::' + r.key;
+    const rec = DB.invoices[id] || {};
+    return {
+      id, deal: r.deal, label: r.key, ym: r.ym, plan: num(r.amount),
+      billed: rec.billed || '',
+      billedAmt: rec.billed ? (rec.amount != null ? num(rec.amount) : num(r.amount)) : 0,
+      paidDate: rec.paidDate || '',
+      paid: rec.paidDate ? (rec.paid != null ? num(rec.paid) : num(r.amount)) : 0,
+    };
+  });
+}
+function paymentStats(){
+  const rows = invoiceRows();
+  let billed=0, paid=0, overdue=0;
+  const late = [];
+  rows.forEach(r => {
+    billed += r.billedAmt; paid += r.paid;
+    const rest = r.billedAmt - r.paid;
+    if (r.billed && rest > 0 && daysBetween(r.billed, TODAY) > SETTINGS.OVERDUE_DAYS){
+      overdue += rest; late.push({r, rest, days: daysBetween(r.billed, TODAY)});
+    }
+  });
+  return {billed, paid, unpaid: billed - paid, overdue, late, rows};
+}
+
+/* ═══════════════════════════════════════════════
+   割合（仮 → 実測に自動で置き換え）
+   ═══════════════════════════════════════════════ */
+const RATE_DEFS = [
+  {k:'dmReply',      n:'DM送信 → 返信',   a:'reply',   b:'dm'},
+  {k:'replyDoc',     n:'返信 → 資料送付', a:'doc',     b:'reply'},
+  {k:'docMeeting',   n:'資料送付 → 商談', a:null,      b:'doc'},
+  {k:'callConnect',  n:'架電 → つながる', a:'connect', b:'call'},
+  {k:'connectAppt',  n:'つながる → アポ', a:'appt',    b:'connect'},
+  {k:'apptMeeting',  n:'アポ → 商談',     a:null,      b:'appt'},
+  {k:'meetingClose', n:'商談 → 成約',     a:null,      b:'meeting'},
+];
+function rates(){
+  const from = iso(addDays(new Date(), -SETTINGS.RATE_MIN_DAYS));
+  const s = sumDays(from, TODAY);
+  const closes = dealsIn(from, TODAY).length;
+  const firstDay = Object.keys(DB.daily).sort()[0] || TODAY;
+  const spanOk = daysBetween(firstDay, TODAY) >= SETTINGS.RATE_MIN_DAYS;
+
+  const out = {};
+  RATE_DEFS.forEach(d => {
+    const assumed = SETTINGS.RATES_ASSUMED[d.k];
+    let a, b;
+    if (d.k === 'docMeeting')        { a = s.meeting * SETTINGS.DM_SHARE_OF_MEETINGS; b = s.doc; }
+    else if (d.k === 'apptMeeting')  { a = s.meeting * (1 - SETTINGS.DM_SHARE_OF_MEETINGS); b = s.appt; }
+    else if (d.k === 'meetingClose') { a = closes; b = s.meeting; }
+    else                             { a = s[d.a]; b = s[d.b]; }
+
+    const enough = spanOk && b >= SETTINGS.RATE_MIN_COUNT;
+    const real = enough ? div(a, b) : 0;
+    out[d.k] = {
+      v: (enough && real > 0) ? real : assumed,
+      actual: enough && real > 0,
+      assumed, a: Math.round(a*10)/10, b: Math.round(b*10)/10, name: d.n,
+    };
+  });
+  out.__spanOk = spanOk;
+  out.__firstDay = firstDay;
+  return out;
+}
+
+/* ═══════════════════════════════════════════════
+   逆算（年 → 月 → 週）
+   ═══════════════════════════════════════════════ */
+function backcast(){
+  const k = ym(new Date());
+  const R = rates();
+  const target = monthTarget(k);
+  const got = monthRevenue(k).total;
+  const {mrr} = calcMRR();
+  const av = avgDeal();
+
+  const needYen = Math.max(0, target - Math.max(got, mrr));
+  const needClose  = needYen / Math.max(1, av.v);
+  const needMeeting = div(needClose, R.meetingClose.v);
+
+  const mShare = Math.min(1, Math.max(0, SETTINGS.DM_SHARE_OF_MEETINGS));
+  const mDm   = needMeeting * mShare;
+  const mCall = needMeeting * (1 - mShare);
+
+  const needDoc     = div(mDm,   R.docMeeting.v);
+  const needReply   = div(needDoc, R.replyDoc.v);
+  const needDmSend  = div(needReply, R.dmReply.v);
+  const needAppt    = div(mCall, R.apptMeeting.v);
+  const needConnect = div(needAppt, R.connectAppt.v);
+  const needCall    = div(needConnect, R.callConnect.v);
+
+  const w = SETTINGS.WEEKS_PER_MONTH;
+  const up = n => Math.ceil(Math.max(0, n) - 1e-9);
+  return {
+    ym:k, target, got, mrr, avg:av, needYen, R,
+    month: { close:up(needClose), meeting:up(needMeeting), doc:up(needDoc),
+             reply:up(needReply), dm:up(needDmSend), appt:up(needAppt),
+             connect:up(needConnect), call:up(needCall) },
+    week:  { meeting:up(needMeeting/w), doc:up(needDoc/w), reply:up(needReply/w),
+             dm:up(needDmSend/w), appt:up(needAppt/w), connect:up(needConnect/w),
+             call:up(needCall/w) },
+  };
+}
+
+/* ═══════════════════════════════════════════════
+   詰まっている段階を1つだけ選ぶ
+   「頑張りましょう」は絶対に出さない
+   ═══════════════════════════════════════════════ */
+function bottleneck(){
+  const B = backcast();
+  const mon = mondayOf(new Date());
+  const s = sumDays(iso(mon), iso(addDays(mon,6)));
+  // まだ一度も入力していないうちは、何も詰まっていない。最初から赤を出さない
+  if (Object.keys(DB.daily).length === 0 && DB.deals.length === 0)
+    return {text: null, B, s, need: () => 0};
+
+  const done = pct(daysBetween(iso(mon), TODAY)+1, 7);   // 週の何%が過ぎたか
+  const scale = Math.max(0.15, done/100);                 // 週の途中なので按分する
+  const need = k => Math.max(0, Math.round(B.week[k] * scale));
+
+  const hits = [];
+  // 手前の段階から順に見る。最初に見つかったものだけを赤にする
+  if (B.week.dm > 0 && s.dm < need('dm') * 0.7)
+    hits.push('DMを送る数が足りていません。ここが一番手前です（今週 '+s.dm+' 本／この時点で '+need('dm')+' 本）');
+  else if (B.week.call > 0 && s.call < need('call') * 0.7)
+    hits.push('架電の数が足りていません（今週 '+s.call+' 件／この時点で '+need('call')+' 件）');
+  else if (s.dm >= 20 && div(s.reply, s.dm) < 0.05)
+    hits.push('送る数ではなく、1通目の中身の問題です（'+s.dm+' 本で返信 '+s.reply+' 件）');
+  else if (s.reply > 0 && s.doc < s.reply * 0.5)
+    hits.push('資料の送付が '+(s.reply - s.doc)+' 件たまっています。ここが一番の詰まりです');
+  else if (s.connect >= 10 && div(s.appt, s.connect) < 0.1)
+    hits.push('つながってはいますが、アポになっていません（'+s.connect+' 件で アポ '+s.appt+' 件）');
+  else if (s.meeting >= 5 && div(dealsIn(iso(mon), iso(addDays(mon,6))).length, s.meeting) < 0.2)
+    hits.push('見せ方より、価格か範囲の伝え方の問題かもしれません（商談 '+s.meeting+' 件で成約 '+dealsIn(iso(mon),iso(addDays(mon,6))).length+' 件）');
+
+  return {text: hits[0] || null, B, s, need};
+}
+function moneyAlert(){
+  const P = paymentStats();
+  if (P.overdue > 0){
+    const d = P.late.slice().sort((a,b)=>b.days-a.days)[0];
+    return {text: '請求から '+d.days+' 日たっても入っていない額が '+yen(P.overdue)+' あります。入金の確認が必要です。'};
+  }
+  const nowK = ym(new Date());
+  const prev = ymAdd(nowK, -1);
+  const now = calcMRR().mrr;
+  let before = 0;
+  DB.deals.forEach(d => {
+    if (d.kind !== 'mon') return;
+    if (ym(parseISO(d.date)) > prev) return;
+    if (d.cancelYm && d.cancelYm < prev) return;
+    before += num(d.amount);
+  });
+  if (before > 0 && now < before)
+    return {text: '月額が先月より '+yen(before-now)+' 減っています。解約が出ています。理由の記録を。'};
+  return null;
+}
+
+/* ═══════════════════════════════════════════════
+   報酬分配（/split/ と同じ割合。初期の担当のまま計算）
+   ═══════════════════════════════════════════════ */
+function planShare(planKey){
+  const p = PLANS[planKey] || PLANS.A;
+  let den = 0; const raw = {}; MEMBERS.forEach(m => raw[m]=0);
+  p.groups.forEach(g => g.items.forEach(it => {
+    den += it.pct;
+    if (raw[it.who] !== undefined) raw[it.who] += it.pct;
+  }));
+  const o = {}; MEMBERS.forEach(m => o[m] = div(raw[m], den));
+  return o;
+}
+
+/* ═══════════════════════════════════════════════
+   画面：① 結果
+   ═══════════════════════════════════════════════ */
+let chart = null;
+function renderResult(){
+  /* ── 今月 ── */
+  const k = ym(new Date());
+  const p = k.split('-');
+  $('#moTitle').textContent = num(p[0]) + '年' + num(p[1]) + '月';
+
+  const rev = monthRevenue(k), tgt = monthTarget(k);
+  $('#moNote').textContent = '目標 ' + yen(tgt);
+  $('#moBig').textContent = yen(rev.total);
+  $('#moBig').className = 'big' + (tgt>0 && rev.total>=tgt ? ' green' : '');
+  $('#moRate').textContent = tgt>0 ? '達成率 ' + pct(rev.total, tgt) + '%' : '目標が未設定です';
+  $('#moOne').textContent = yen(rev.one);
+  $('#moMon').textContent = yen(rev.mon);
+
+  const M = calcMRR();
+  $('#moMrr').textContent = yen(M.mrr);
+  $('#moMrrCnt').textContent = '契約 ' + M.cnt + '件';
+  $('#moFix').textContent = yen(M.fixed);
+  const ma = moneyAlert();
+  $('#moMrrWarn').innerHTML = (ma && ma.text.indexOf('月額') === 0)
+    ? `<div class="warn">${esc(ma.text)}</div>` : '';
+
+  /* ── 入金 ── */
+  const P = paymentStats();
+  $('#moBilled').textContent = yen(P.billed);
+  $('#moPaid').textContent = yen(P.paid);
+  $('#moUnpaid').textContent = yen(P.unpaid);
+  $('#moUnpaid').className = 'v' + (P.unpaid > 0 ? ' red' : '');
+  $('#moOverdue').innerHTML = P.overdue > 0
+    ? `<div class="warn"><b>${SETTINGS.OVERDUE_DAYS}日を過ぎた未回収　${yen(P.overdue)}</b><br>`
+      + P.late.sort((a,b)=>b.days-a.days).map(x =>
+          `${esc(x.r.deal.customer||'（名前なし）')}　${esc(x.r.label)}　${yen(x.rest)}　${x.days}日経過`
+        ).join('<br>') + `</div>`
+    : '';
+
+  renderYear();
+  renderKakuda(k, p);
+  renderWeek();
+  renderBackcast();
+}
+
+function renderYear(){
+  const months = fyMonths();
+  const nowK = ym(new Date());
+  const target = num(DB.settings.yearTarget);
+  const got = months.reduce((a,k) => a + (k <= nowK ? monthRevenue(k).total : 0), 0);
+  const passed = months.filter(k => k < nowK).length;
+  const elapsed = passed + Math.min(1, new Date().getDate()/30);
+  const restM = Math.max(0, 12 - passed - 1);
+
+  const s = months[0].split('-'), e = months[11].split('-');
+  $('#yrRange').textContent = num(s[0])+'年'+num(s[1])+'月 〜 '+num(e[0])+'年'+num(e[1])+'月'
+    + '　目標 ' + yen(target);
+  $('#yrBig').textContent = yen(got);
+  $('#yrBig').className = 'big' + (target>0 && got>=target ? ' green' : '');
+  $('#yrSub').textContent = target>0 ? '達成率 ' + pct(got, target) + '%' : '目標が未設定です';
+  $('#yrRest').textContent = yen(Math.max(0, target - got));
+  $('#yrRestM').textContent = '残り ' + restM + 'ヶ月';
+
+  const land = elapsed > 0 ? Math.round(got/elapsed*12) : 0;   // 今のペースをそのまま伸ばす
+  $('#yrLand').textContent = yen(land);
+  const lr = pct(land, target);
+  $('#yrLand').className = 'n' + (target>0 ? (lr>=100 ? ' green' : (lr<80 ? ' red' : '')) : '');
+  $('#yrLandR').textContent = target>0 ? '目標比 ' + lr + '%' : '';
+
+  const box = $('#yrMove');
+  if (got === 0 && DB.deals.length === 0){
+    box.innerHTML = `<div class="move sub"><span class="t">まだ売上がありません</span>`
+      + `「⑤ 結果入力」で案件を登録すると、ここに着地の予想が出ます。</div>`;
+  } else if (target > 0 && lr < 100){
+    const B = backcast();
+    box.innerHTML = `<div class="move"><span class="t">目標に届かせるには</span>`
+      + `毎月あと ${yen(Math.ceil(Math.max(0,target-got)/Math.max(1,restM+1)))} 必要です。`
+      + `成約に直すと 月 ${Math.ceil(Math.max(0,target-got)/Math.max(1,restM+1)/Math.max(1,B.avg.v))} 件、`
+      + `DMに直すと 週 ${B.week.dm} 本です。</div>`;
+  } else {
+    box.innerHTML = `<div class="move"><span class="t">今のペース</span>このまま行けば目標に届きます。</div>`;
+  }
+
+  const data = months.map(k => (k <= nowK ? monthRevenue(k).total : 0));
+  const tgts = months.map(k => monthTarget(k));
+  $('#yrChartNote').textContent = '金色の棒が実績、線が月ごとの目標です。'
+    + (typeof Chart === 'undefined' ? '（グラフの読み込みに失敗しました。ネットにつないで開き直してください）' : '');
+  if (typeof Chart === 'undefined') return;
+
+  if (chart) chart.destroy();
+  chart = new Chart($('#yrChart'), {
+    data: {
+      labels: months.map(k => num(k.split('-')[1]) + '月'),
+      datasets: [
+        {type:'bar', label:'実績', data, backgroundColor:'#C9A02F', borderRadius:2, order:2},
+        {type:'line', label:'目標', data:tgts, borderColor:'#8A6E1E', borderWidth:1.5,
+         pointRadius:0, borderDash:[4,3], tension:0, order:1},
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:true, labels:{boxWidth:12, font:{size:11}}},
+        tooltip:{callbacks:{label:c => c.dataset.label+' '+yen(c.parsed.y)}}},
+      scales:{ y:{beginAtZero:true, ticks:{font:{size:10},
+          callback:v => v >= 10000 ? (v/10000)+'万' : v}, grid:{color:'#EDE4D2'}},
+        x:{ticks:{font:{size:10}}, grid:{display:false}} }
+    }
+  });
+}
+
+function renderKakuda(k, p){
+  const from = k + '-01';
+  const to = iso(new Date(num(p[0]), num(p[1]), 0));
+  const s = sumDays(from, to, '角田');
+  $('#kCall').textContent = s.call + ' → ' + s.connect;
+  $('#kCallR').textContent = (s.call > 0 ? Math.round(div(s.connect, s.call)*100)+'%' : '—')
+    + (s.callmin > 0 ? '　電話 '+s.callmin+'分' : '');
+  $('#kAppt').textContent = s.appt + ' → ' + s.meeting;
+  $('#kApptR').textContent = s.appt > 0 ? Math.round(div(s.meeting, s.appt)*100)+'%' : '—';
+
+  const kd = dealsIn(from, to, '角田');
+  $('#kClose').textContent = kd.length + '件';
+  $('#kCloseYen').textContent = yen(kd.reduce((a,d)=>a+num(d.amount),0)) + '（入金1回ぶん）';
+  $('#kShare').textContent = yen(kd.reduce((a,d)=>
+    a + num(d.amount) * planShare(d.plan||'A')['角田'], 0));
+}
+
+function renderWeek(){
+  const mon = mondayOf(new Date()), sun = addDays(mon, 6);
+  $('#wkRange').textContent = jpDate(mon) + ' 〜 ' + jpDate(sun)
+    + '　（今日は ' + jpDate(new Date()) + '）';
+
+  const bn = bottleneck();
+  const B = bn.B, s = bn.s;
+  const fresh = Object.keys(DB.daily).length === 0 && DB.deals.length === 0;
+
+  const defs = [
+    {k:'dm',      n:'DM送信',     sub:'1通目'},
+    {k:'reply',   n:'返信対応',   sub:'返ってきた数'},
+    {k:'doc',     n:'資料送付',   sub:'実際に送った'},
+    {k:'call',    n:'架電',       sub:''},
+    {k:'connect', n:'つながった', sub:''},
+    {k:'appt',    n:'アポ',       sub:'日時が決まった'},
+    {k:'meeting', n:'商談',       sub:'金額の話をした'},
+  ];
+
+  // 赤にする行を1つだけ決める（手前の段階を優先）
+  let redKey = null;
+  if (!fresh) for (const d of defs){
+    const t = B.week[d.k] || 0;
+    if (t > 0 && s[d.k] < t * 0.7){ redKey = d.k; break; }
+  }
+
+  $('#wkRows').innerHTML = defs.map(d => {
+    const t = B.week[d.k] || 0;
+    const v = s[d.k] || 0;
+    const pp = t > 0 ? Math.min(100, Math.round(v/t*100)) : (v > 0 ? 100 : 0);
+    const rest = Math.max(0, t - v);
+    const cls = (d.k === redKey) ? 'bad' : (t > 0 && v >= t ? 'done' : '');
+    return `<div class="wk ${cls}">
+      <div class="nm">${esc(d.n)}${d.sub?`<small>${esc(d.sub)}</small>`:''}</div>
+      <div class="num"><b>${v}</b>${t>0?' / '+t:''}</div>
+      <div class="bar"><i style="width:${pp}%"></i></div>
+      <div class="rest">${t>0 ? (rest>0 ? 'あと'+rest+'件' : '達成') : '—'}</div>
+    </div>`;
+  }).join('');
+
+  const box = $('#wkMove');
+  if (fresh){
+    box.innerHTML = `<div class="move sub"><span class="t">まだ数字がありません</span>`
+      + `「⑤ 結果入力」から今日の数字を入れてください。数字が入ると、ここに今週の本数と、`
+      + `どの段階で止まっているかが出ます。</div>`;
+  } else if (bn.text){
+    box.innerHTML = `<div class="move red"><span class="t">ここが詰まっています</span>${esc(bn.text)}</div>`;
+  } else if (B.needYen <= 0 && B.target > 0){
+    box.innerHTML = `<div class="move"><span class="t">今月の状況</span>今月の目標額には届いています。</div>`;
+  } else {
+    box.innerHTML = `<div class="move sub"><span class="t">今のところ</span>手前の段階で止まっているところはありません。</div>`;
+  }
+}
+
+function renderBackcast(){
+  const B = backcast();
+  const rows = [
+    ['今月あと必要な新規', yen(B.needYen), ''],
+    ['成約', B.month.close + '件', '平均成約単価 ' + yen(B.avg.v) + (B.avg.actual ? '（実績 '+B.avg.n+'件）' : '（仮）')],
+    ['商談', B.month.meeting + '件', ''],
+    ['── DM経由', '', ''],
+    ['資料送付', B.month.doc + '件', '今週 ' + B.week.doc + '件'],
+    ['返信', B.month.reply + '件', ''],
+    ['DM送信', B.month.dm + '件', '今週 ' + B.week.dm + '件'],
+    ['── 電話経由', '', ''],
+    ['アポ', B.month.appt + '件', '今週 ' + B.week.appt + '件'],
+    ['つながる', B.month.connect + '件', ''],
+    ['架電', B.month.call + '件', '今週 ' + B.week.call + '件'],
+  ];
+  if (B.needYen <= 0){
+    $('#moBack').innerHTML = `<div class="move"><span class="t">今月の状況</span>`
+      + `今月分の目標 ${yen(B.target)} には、すでに届いています（${yen(Math.max(B.got,B.mrr))}）。</div>`;
+  } else {
+    $('#moBack').innerHTML = rows.map(r => {
+      if (r[0].indexOf('──') === 0)
+        return `<div class="sec" style="padding-top:12px">${esc(r[0].replace('── ',''))}</div>`;
+      return `<div class="kv"><span class="k">${esc(r[0])}${r[2]?`<small>${esc(r[2])}</small>`:''}</span>`
+           + `<span class="v">${esc(r[1])}</span></div>`;
+    }).join('');
+  }
+  const R = B.R;
+  const act = RATE_DEFS.filter(d => R[d.k].actual).length;
+  $('#moRateSrc').innerHTML = act === 0
+    ? '割合はまだ全部が仮の値です。実績が3ヶ月ぶんたまると、自動で実測に置き換わります。<br>'
+      + '週の本数は 月の必要数 ÷ ' + SETTINGS.WEEKS_PER_MONTH + '（52週÷12ヶ月）で出しています。'
+    : RATE_DEFS.length + '個のうち ' + act + '個が実測値に置き換わっています。「② 目標設定」で中身を見られます。';
+}
+
+/* ═══════════════════════════════════════════════
+   画面：② 目標設定
+   ═══════════════════════════════════════════════ */
+function renderGoal(){
+  $('#s_year').value = num(DB.settings.yearTarget);
+  if (!$('#s_fy').options.length){
+    $('#s_fy').innerHTML = Array.from({length:12},(_,i)=>
+      `<option value="${i+1}">${i+1}月はじまり</option>`).join('');
+  }
+  $('#s_fy').value = num(DB.settings.fyStart) || 1;
+
+  const per = Math.round(num(DB.settings.yearTarget)/12);
+  const M = calcMRR();
+  $('#g_permonth').textContent = yen(per);
+  $('#g_mrr').textContent = yen(M.mrr);
+  $('#g_mrrPct').textContent = '月の目標の ' + pct(M.mrr, per) + '%';
+
+  const B = backcast();
+  $('#g_need').innerHTML = per <= 0
+    ? '<span class="t">目標が未設定です</span>年間の目標額を入れてください。'
+    : `<span class="t">この目標だと</span>`
+      + `月あと ${yen(B.needYen)}（成約 ${B.month.close}件）。`
+      + `週に直すと DM ${B.week.dm}本、架電 ${B.week.call}件です。`;
+
+  const months = fyMonths();
+  const sum = months.reduce((a,k)=>a+monthTarget(k),0);
+  const diff = sum - num(DB.settings.yearTarget);
+  $('#mtTbl').innerHTML = '<tr><th>月</th><th>目標額</th><th>実績</th></tr>'
+    + months.map(k => `<tr><td>${esc(k)}</td>
+        <td><input type="number" data-mt="${esc(k)}" value="${monthTarget(k)}" step="10000"
+             inputmode="numeric"></td>
+        <td class="n">${yen(monthRevenue(k).total)}</td></tr>`).join('')
+    + `<tr><th>合計</th><th style="text-align:right">${yen(sum)}</th>
+        <th style="text-align:right">${diff===0 ? '年間目標と一致' : '差 '+yen(diff)}</th></tr>`;
+
+  const R = rates();
+  $('#rateNote').innerHTML = R.__spanOk
+    ? '実績が3ヶ月ぶんたまりました。母数が' + SETTINGS.RATE_MIN_COUNT + '件以上あるものは、実測値を使っています。'
+    : '実績がまだ3ヶ月ぶんありません（最初の記録 ' + esc(R.__firstDay) + '）。今は全部が仮の値です。';
+  $('#rateTbl').innerHTML = '<tr><th>段階</th><th>今つかっている値</th><th>仮の値</th><th>実績</th></tr>'
+    + RATE_DEFS.map(d => {
+      const r = R[d.k];
+      return `<tr><td>${esc(r.name)}</td>
+        <td class="n"><b>${Math.round(r.v*1000)/10}%</b>　<span class="tag${r.actual?' k':''}">${r.actual?'実測':'仮'}</span></td>
+        <td class="n">${Math.round(r.assumed*1000)/10}%</td>
+        <td class="n">${r.b>0 ? r.a+' / '+r.b : '—'}</td></tr>`;
+    }).join('');
+
+  $('#bStat').textContent = '記録した日数 ' + Object.keys(DB.daily).length
+    + '日／案件 ' + DB.deals.length + '件／ふりかえり ' + DB.reviews.length
+    + '件／配分の記録 ' + DB.splits.length + '件';
+}
+
+/* ═══════════════════════════════════════════════
+   画面：③ ふりかえり
+   ═══════════════════════════════════════════════ */
+function weekKey(){ return iso(mondayOf(new Date())); }
+function renderReview(){
+  const wk = weekKey(), mk = ym(new Date());
+  const mon = mondayOf(new Date());
+  $('#rvWeekRange').textContent = jpDate(mon)+' 〜 '+jpDate(addDays(mon,6))+'　金曜の夜、5分。3行だけ書きます。';
+  const p = mk.split('-');
+  $('#rvMonthRange').textContent = num(p[0])+'年'+num(p[1])+'月　月末、30分。';
+
+  const w = DB.reviews.find(r => r.type==='week' && r.period===wk && r.by===$('#rWho').value);
+  $('#r_good').value = w ? w.good : '';
+  $('#r_stuck').value = w ? w.stuck : '';
+  $('#r_change').value = w ? w.change : '';
+
+  const m = DB.reviews.find(r => r.type==='month' && r.period===mk && r.by===$('#mWho').value);
+  $('#m_gap').value = m ? m.gap : '';
+  $('#m_stage').value = m ? (m.stage||'') : '';
+  $('#m_stageMemo').value = m ? (m.stageMemo||'') : '';
+  $('#m_reason').value = m ? m.reason : '';
+  $('#m_change').value = m ? m.change : '';
+
+  const list = DB.reviews.slice().sort((a,b) => b.period.localeCompare(a.period));
+  $('#rvList').innerHTML = list.length ? list.map(r => {
+    const t = (r.type === 'week' ? '週' : '月') + '　' + (r.by || '');
+    const qs = r.type === 'week'
+      ? [['うまくいったこと', r.good], ['詰まったところ', r.stuck], ['変えること', r.change]]
+      : [['目標との差', r.gap], ['詰まった段階', [r.stage, r.stageMemo].filter(Boolean).join('　')],
+         ['断られた理由', r.reason], ['変えること', r.change]];
+    return `<div class="rev">
+      <div class="h"><span>${esc(t)}　${esc(r.period)}</span>
+        <button class="btn r" data-rv="${esc(r.type+'|'+r.period+'|'+(r.by||''))}">消す</button></div>
+      ${qs.filter(q=>q[1]).map(q=>`<div class="q">${esc(q[0])}</div><div class="a">${esc(q[1])}</div>`).join('')
+        || '<div class="a" style="color:var(--sub)">（空です）</div>'}
+    </div>`;
+  }).join('') : '<div class="empty">まだふりかえりがありません。</div>';
+
+  $$('#rvList [data-rv]').forEach(b => b.addEventListener('click', () => {
+    const [t,p2,by] = b.dataset.rv.split('|');
+    if (!confirm('このふりかえりを消します。よろしいですか。')) return;
+    DB.reviews = DB.reviews.filter(r => !(r.type===t && r.period===p2 && (r.by||'')===by));
+    save(); renderReview();
+  }));
+}
+
+/* ═══════════════════════════════════════════════
+   画面：④ 配分計算
+   ═══════════════════════════════════════════════ */
+const CH = ["角田","大西","半分","なし"];
+const CLS = {'角田':'k','大西':'o','半分':'h','なし':'n'};
+let cPlan = 'A';
+let cState = [];   // 各作業を、誰がやったか
+let cWork  = [];   // 各作業に、やったこと（記録用）
+let cSnap = null;
+
+function flatItems(plan){ return PLANS[plan].groups.flatMap(g => g.items); }
+
+function buildSplit(reset){
+  const p = PLANS[cPlan];
+  $('#pTabs').innerHTML = Object.entries(PLANS).map(([k,v]) =>
+    `<button data-p="${k}" class="${k===cPlan?'on':''}"><b>${k}</b>${esc(v.label.replace(/（.*/,''))}</button>`).join('');
+  $$('#pTabs button').forEach(b => b.addEventListener('click', () => {
+    cPlan = b.dataset.p; buildSplit(true);
+  }));
+  $('#planLabel').textContent = p.label;
+  $('#planNote').textContent = p.note;
+
+  const items = flatItems(cPlan);
+  if (reset || cState.length !== items.length){
+    cState = items.map(i => i.who);
+    cWork  = items.map(() => '');
+  }
+
+  let n = 0;
+  $('#cItems').innerHTML = p.groups.map(g => `
+    <div class="sec">${esc(g.title)}</div>
+    ${g.items.map(it => {
+      const i = n++;
+      return `<div class="spl">
+        <div class="top">
+          <div class="info">
+            <div class="nm">${esc(it.name)}</div>
+            ${it.desc ? `<div class="ds">${esc(it.desc)}</div>` : ''}
+          </div>
+          <div class="pc">${it.pct}%</div>
+        </div>
+        <div class="pick">
+          ${CH.map(c => `<label><input type="radio" name="w${i}" value="${c}" data-i="${i}"
+            ${c===cState[i]?'checked':''}><span>${c}</span></label>`).join('')}
+        </div>
+        <input class="work" type="text" data-w="${i}" value="${esc(cWork[i]||'')}"
+          placeholder="やったこと　${esc(it.eg||'例：20分')}">
+      </div>`;
+    }).join('')}
+  `).join('');
+
+  $$('#cItems .pick input').forEach(r => r.addEventListener('change', () => {
+    cState[+r.dataset.i] = r.value; calcSplit();
+  }));
+  $$('#cItems .work').forEach(el => el.addEventListener('input', () => {
+    cWork[+el.dataset.w] = el.value;
+    renderSplitDetail();          // 書いたそばから内訳表にも出す
+  }));
+  calcSplit();
+}
+
+function calcSplit(){
+  const items = flatItems(cPlan);
+  const amount = clamp0($('#c_amount').value);
+  const jihi   = clamp0($('#c_jihi').value);
+  const tate   = $('#c_tate').value;
+  const base   = Math.max(0, amount - jihi);
+
+  let den = 0;
+  const raw = {}; MEMBERS.forEach(m => raw[m] = 0);
+  items.forEach((it, i) => {
+    const w = cState[i];
+    if (w === 'なし') return;
+    den += it.pct;
+    if (w === '半分') MEMBERS.forEach(m => raw[m] += it.pct / 2);
+    else if (raw[w] !== undefined) raw[w] += it.pct;
+  });
+
+  const warn = $('#cWarn');
+  warn.classList.toggle('hide', den !== 0);
+  if (den === 0) warn.textContent = '全部「なし」になっています。やった作業を選んでください。';
+
+  const share = {}, money = {};
+  MEMBERS.forEach(m => { share[m] = div(raw[m], den); money[m] = Math.round(share[m] * base); });
+  // 端数は、割合の大きいほうに寄せる
+  const d0 = base - MEMBERS.reduce((s,m)=>s+money[m],0);
+  if (d0 !== 0 && den) money[MEMBERS.slice().sort((a,b)=>share[b]-share[a])[0]] += d0;
+
+  $('#cRes').innerHTML = MEMBERS.map((m,i) => `
+    ${i ? '<div class="bar"></div>' : ''}
+    <div class="who">
+      <div class="n">${esc(m)}</div>
+      <div class="p">${(share[m]*100).toFixed(1)}%</div>
+      <div class="y">${yen(money[m] + (jihi && tate===m ? jihi : 0))}</div>
+      ${jihi && tate===m ? `<div class="ex">うち実費 ${yen(jihi)}</div>` : ''}
+    </div>`).join('');
+
+  cSnap = {items, den, raw, share, money, amount, jihi, tate, base};
+  renderSplitDetail();
+}
+
+function renderSplitDetail(){
+  const d = cSnap; if (!d) return;
+  const p = PLANS[cPlan];
+  const m0 = MEMBERS[0], m1 = MEMBERS[1];
+  let n = 0, rows = '';
+  p.groups.forEach(g => {
+    rows += `<tr><td colspan="5" style="background:var(--paper2);color:var(--gold-d);
+      font-weight:700;font-size:11px">${esc(g.title)}</td></tr>`;
+    g.items.forEach(it => {
+      const i = n++, w = cState[i];
+      const my = MEMBERS.map(m => {
+        if (w === 'なし') return '—';
+        if (w === '半分') return (it.pct/2) + '%';
+        return w === m ? it.pct + '%' : '—';
+      });
+      rows += `<tr>
+        <td>${esc(it.name)}</td>
+        <td style="color:var(--${CLS[w]==='k'?'k':CLS[w]==='o'?'o':CLS[w]==='h'?'half':'none'});
+          font-weight:700">${esc(w)}</td>
+        <td style="white-space:normal;color:var(--sub);font-size:11.5px;min-width:110px">${esc(cWork[i]||'')}</td>
+        <td class="n">${my[0]}</td><td class="n">${my[1]}</td>
+      </tr>`;
+    });
+  });
+  rows += `<tr><td style="border-top:2px solid var(--gold);font-weight:700">合計（なしを除く）</td>
+    <td style="border-top:2px solid var(--gold);font-weight:700">${d.den}%</td>
+    <td style="border-top:2px solid var(--gold)"></td>
+    <td class="n" style="border-top:2px solid var(--gold);font-weight:700">${d.raw[m0]}%</td>
+    <td class="n" style="border-top:2px solid var(--gold);font-weight:700">${d.raw[m1]}%</td></tr>`;
+
+  $('#cDetail').innerHTML = `<tr><th>作業</th><th>やった人</th><th>やったこと</th>
+    <th style="text-align:right">${esc(m0)}</th><th style="text-align:right">${esc(m1)}</th></tr>` + rows;
+
+  $('#cCalc').innerHTML = `
+    <div class="h">どう計算したか</div>
+    1　「なし」を除いた割合の合計　<code>${d.den}%</code>　これが分母になります<br>
+    2　${esc(m0)}　<code>${d.raw[m0]} ÷ ${d.den} = ${(d.share[m0]*100).toFixed(1)}%</code><br>
+    　　${esc(m1)}　<code>${d.raw[m1]} ÷ ${d.den} = ${(d.share[m1]*100).toFixed(1)}%</code><br>
+    3　分ける元のお金　<code>${yen(d.amount)} − 実費${yen(d.jihi)} = ${yen(d.base)}</code><br>
+    4　${esc(m0)}　<code>${yen(d.base)} × ${(d.share[m0]*100).toFixed(1)}% = ${yen(d.money[m0])}</code><br>
+    　　${esc(m1)}　<code>${yen(d.base)} × ${(d.share[m1]*100).toFixed(1)}% = ${yen(d.money[m1])}</code><br>
+    ${d.jihi ? `5　立て替えた実費 <code>${yen(d.jihi)}</code> を ${esc(d.tate)} に戻します<br>` : ''}
+    <br>
+    <b>お渡しする金額　${esc(m0)} ${yen(d.money[m0] + (d.jihi && d.tate===m0 ? d.jihi : 0))}　／　${esc(m1)} ${yen(d.money[m1] + (d.jihi && d.tate===m1 ? d.jihi : 0))}</b><br>
+    <span style="color:var(--sub)">合計 ${yen(d.amount)}（入金額とぴったり合います）</span>`;
+}
+
+function splitText(){
+  const d = cSnap; if (!d) return '';
+  const p = PLANS[cPlan], m0 = MEMBERS[0], m1 = MEMBERS[1];
+  const dt = $('#c_date').value || TODAY;
+  const dp = dt.split('-');
+  let s = `【報酬の分け方】${num(dp[0])}年${num(dp[1])}月${num(dp[2])}日\n`;
+  if ($('#c_cust').value.trim()) s += `お客様　${$('#c_cust').value.trim()}\n`;
+  s += `案件の種類　${p.label}\n入金額　${yen(d.amount)}\n`;
+  if (d.jihi) s += `立て替えた実費　${yen(d.jihi)}（${d.tate}）\n`;
+  s += `\n■ やった人とやったこと\n`;
+  let n = 0;
+  p.groups.forEach(g => {
+    s += `《${g.title}》\n`;
+    g.items.forEach(it => {
+      const i = n++;
+      s += `　${it.name}　${it.pct}%　… ${cState[i]}`;
+      if (cWork[i]) s += `　（${cWork[i]}）`;
+      s += `\n`;
+    });
+  });
+  s += `\n■ 計算\n　分母（なしを除く）　${d.den}%\n`;
+  s += `　${m0}　${d.raw[m0]} ÷ ${d.den} ＝ ${(d.share[m0]*100).toFixed(1)}%\n`;
+  s += `　${m1}　${d.raw[m1]} ÷ ${d.den} ＝ ${(d.share[m1]*100).toFixed(1)}%\n`;
+  s += `　分ける元　${yen(d.base)}\n`;
+  s += `\n■ お渡しする金額\n`;
+  s += `　${m0}　${yen(d.money[m0] + (d.jihi && d.tate===m0 ? d.jihi : 0))}\n`;
+  s += `　${m1}　${yen(d.money[m1] + (d.jihi && d.tate===m1 ? d.jihi : 0))}\n`;
+  s += `　合計　${yen(d.amount)}\n`;
+  return s;
+}
+
+function renderSplitList(){
+  const list = DB.splits.slice().sort((a,b) => String(b.date).localeCompare(String(a.date)));
+  $('#cList').innerHTML = list.length ? list.map(r => `
+    <div class="rev">
+      <div class="h"><span>${esc(r.date)}　${esc(r.customer||'（名前なし）')}
+        <span class="tag k">${esc(r.plan)}</span></span>
+        <button class="btn r" data-sp="${esc(r.id)}">消す</button></div>
+      <div class="a">入金 ${yen(r.amount)}　→　角田 ${yen(r.pay['角田'])}／大西 ${yen(r.pay['大西'])}</div>
+      ${r.works && r.works.length
+        ? `<div class="q">やったこと</div><div class="a">${esc(r.works.join('　／　'))}</div>` : ''}
+      <div class="btns"><button class="btn g" data-spc="${esc(r.id)}">この記録をコピー</button></div>
+    </div>`).join('') : '<div class="empty">まだ配分の記録がありません。</div>';
+
+  $$('#cList [data-sp]').forEach(b => b.addEventListener('click', () => {
+    if (!confirm('この配分の記録を消します。よろしいですか。')) return;
+    DB.splits = DB.splits.filter(x => x.id !== b.dataset.sp);
+    save(); renderSplitList(); renderGoal();
+  }));
+  $$('#cList [data-spc]').forEach(b => b.addEventListener('click', () => {
+    const r = DB.splits.find(x => x.id === b.dataset.spc); if (!r) return;
+    copyText(r.text, b, 'この記録をコピー');
+  }));
+}
+
+function copyText(txt, btn, back){
+  const done = () => { btn.textContent = 'コピーしました';
+    setTimeout(()=>btn.textContent = back, 2000); };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(done, ()=>prompt('この文をコピーしてください', txt));
+  } else { prompt('この文をコピーしてください', txt); }
+}
+
+/* ═══════════════════════════════════════════════
+   画面：⑤ 結果入力
+   ═══════════════════════════════════════════════ */
+function renderEnter(){
+  if (!$('#dDate').value) $('#dDate').value = TODAY;
+  loadDay();
+  if (!$('#n_svc').options.length){
+    $('#n_svc').innerHTML = SERVICES.map((s,i) => `<option value="${i}">${esc(s.n)}</option>`).join('');
+    $('#n_plan').innerHTML = Object.entries(PLANS).map(([k,v]) =>
+      `<option value="${k}">${k}　${esc(v.label)}</option>`).join('');
+    $('#n_date').value = TODAY;
+    applySvc();
+  }
+  renderDeals(); renderPay();
+}
+function loadDay(){
+  const d = dayOfWho($('#dDate').value, $('#dWho').value);
+  DKEYS.forEach(k => { const el = $('#d_'+k); if (el) el.value = d[k]; });
+}
+function applySvc(){
+  const s = SERVICES[num($('#n_svc').value)] || SERVICES[0];
+  $('#n_kind').value = s.k; $('#n_amt').value = s.a; $('#n_months').value = s.m;
+  toggleKind();
+}
+function toggleKind(){
+  const mon = $('#n_kind').value === 'mon';
+  $('#n_mBox').classList.toggle('hide', !mon);
+  const amt = num($('#n_amt').value), m = num($('#n_months').value);
+  $('#n_hint').innerHTML = mon
+    ? (m > 0
+        ? `契約した時点で <b>${yen(amt*m)}</b> が確定売上になります（${yen(amt)} × ${m}ヶ月）。`
+        : `期間の定めがない契約です。MRRには入りますが、確定売上には入りません。`)
+    : `着手時に <b>${yen(Math.round(amt/2))}</b>、公開前に <b>${yen(amt-Math.round(amt/2))}</b> の2回に分けて計上します。`;
+}
+function renderDeals(){
+  const list = DB.deals.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  $('#dealEmpty').classList.toggle('hide', list.length > 0);
+  if (!list.length){ $('#dealTbl').innerHTML = ''; return; }
+  const head = ['成約日','お客様','サービス','種別','金額','着手日','公開日','解約月','動いた人','区分','角田さんの分',''];
+  $('#dealTbl').innerHTML = '<tr>' + head.map(h=>`<th>${esc(h)}</th>`).join('') + '</tr>'
+    + list.map(d => {
+      const sh = planShare(d.plan||'A')['角田'];
+      return `<tr>
+        <td>${esc(d.date)}</td>
+        <td>${esc(d.customer)}</td>
+        <td>${esc(d.service)}</td>
+        <td><span class="tag">${d.kind==='mon'?'月額':'買い切り'}</span></td>
+        <td class="n">${yen(d.amount)}${d.kind==='mon'?'/月':''}</td>
+        <td>${d.kind==='one'?`<input type="date" data-d="${d.id}" data-f="startDate" value="${esc(d.startDate||'')}">`:'—'}</td>
+        <td>${d.kind==='one'?`<input type="date" data-d="${d.id}" data-f="pubDate" value="${esc(d.pubDate||'')}">`:'—'}</td>
+        <td>${d.kind==='mon'?`<input type="month" data-d="${d.id}" data-f="cancelYm" value="${esc(d.cancelYm||'')}">`:'—'}</td>
+        <td>${esc(d.via)}</td>
+        <td><span class="tag k">${esc(d.plan||'A')}</span></td>
+        <td class="n">${yen(num(d.amount)*sh)}</td>
+        <td><button class="btn r" data-del="${d.id}">消す</button></td>
+      </tr>`;
+    }).join('');
+
+  $$('#dealTbl input').forEach(el => el.addEventListener('change', () => {
+    const d = DB.deals.find(x => x.id === el.dataset.d); if (!d) return;
+    d[el.dataset.f] = el.value; save(); renderAll();
+  }));
+  $$('#dealTbl [data-del]').forEach(b => b.addEventListener('click', () => {
+    const d = DB.deals.find(x => x.id === b.dataset.del); if (!d) return;
+    if (!confirm('「'+(d.customer||'この案件')+'」を消します。よろしいですか。')) return;
+    DB.deals = DB.deals.filter(x => x.id !== b.dataset.del);
+    Object.keys(DB.invoices).forEach(k => { if (k.indexOf(b.dataset.del+'::')===0) delete DB.invoices[k]; });
+    save(); renderAll();
+  }));
+}
+function renderPay(){
+  const rows = invoiceRows().sort((a,b) => (b.ym+b.label).localeCompare(a.ym+a.label));
+  $('#payEmpty').classList.toggle('hide', rows.length > 0);
+  if (!rows.length){ $('#payTbl').innerHTML = ''; return; }
+  $('#payTbl').innerHTML =
+    '<tr><th>計上月</th><th>お客様</th><th>内容</th><th>予定額</th><th>請求日</th><th>請求額</th><th>入金日</th><th>入金額</th><th>未回収</th></tr>'
+    + rows.map(r => {
+      const rest = r.billedAmt - r.paid;
+      const late = r.billed && rest > 0 && daysBetween(r.billed, TODAY) > SETTINGS.OVERDUE_DAYS;
+      return `<tr>
+        <td>${esc(r.ym)}</td><td>${esc(r.deal.customer)}</td><td>${esc(r.label)}</td>
+        <td class="n">${yen(r.plan)}</td>
+        <td><input type="date" data-i="${esc(r.id)}" data-f="billed" value="${esc(r.billed)}"></td>
+        <td><input type="number" inputmode="numeric" data-i="${esc(r.id)}" data-f="amount" value="${r.billed?r.billedAmt:''}" placeholder="${r.plan}"></td>
+        <td><input type="date" data-i="${esc(r.id)}" data-f="paidDate" value="${esc(r.paidDate)}"></td>
+        <td><input type="number" inputmode="numeric" data-i="${esc(r.id)}" data-f="paid" value="${r.paidDate?r.paid:''}" placeholder="${r.plan}"></td>
+        <td class="n ${late?'red':''}">${rest>0?yen(rest):'—'}${late?'<br>'+daysBetween(r.billed,TODAY)+'日':''}</td>
+      </tr>`;
+    }).join('');
+  $$('#payTbl input').forEach(el => el.addEventListener('change', () => {
+    const id = el.dataset.i;
+    DB.invoices[id] = DB.invoices[id] || {};
+    DB.invoices[id][el.dataset.f] = el.value;
+    save(); renderAll();
+  }));
+}
+
+/* ═══════════════════════════════════════════════
+   タブ
+   ═══════════════════════════════════════════════ */
+const TABS = [
+  {id:'result', n:'① 結果'},
+  {id:'goal',   n:'② 目標設定'},
+  {id:'review', n:'③ ふりかえり'},
+  {id:'split',  n:'④ 配分計算'},
+  {id:'enter',  n:'⑤ 結果入力'},
+];
+let tab = 'result';
+function renderTabs(){
+  $('#tabs').innerHTML = TABS.map(t =>
+    `<button data-t="${t.id}" class="${t.id===tab?'on':''}">${esc(t.n)}</button>`).join('');
+  $$('#tabs button').forEach(b => b.addEventListener('click', () => {
+    tab = b.dataset.t; renderAll(); window.scrollTo(0,0);
+  }));
+  TABS.forEach(t => $('#p-'+t.id).classList.toggle('hide', t.id !== tab));
+}
+function renderAll(){
+  renderTabs();
+  try{
+    if (tab==='result') renderResult();
+    if (tab==='goal')   renderGoal();
+    if (tab==='review') renderReview();
+    if (tab==='split')  { if (!cSnap) buildSplit(true); else calcSplit(); renderSplitList(); }
+    if (tab==='enter')  renderEnter();
+  }catch(e){ console.error(e); }
+}
+
+/* ═══════════════════════════════════════════════
+   ログイン
+   ═══════════════════════════════════════════════ */
+/* 名前を選ぶ欄は、入力するところに置いてある */
+['#dWho','#rWho','#mWho','#n_via','#c_tate'].forEach(s => {
+  const el = $(s); if (!el) return;
+  el.innerHTML = ['大西','角田'].map(n => `<option>${esc(n)}</option>`).join('');
+});
+
+/* SHA-256（外部ライブラリなし。file:// でも動きます） */
+function sha256Hex(msg){
+  const K=[
+  0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+  0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+  0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+  0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+  0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+  0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+  0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+  0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  let H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const b=[];
+  for(let i=0;i<msg.length;i++){
+    let c=msg.codePointAt(i);
+    if(c>0xffff) i++;
+    if(c<0x80) b.push(c);
+    else if(c<0x800) b.push(0xc0|(c>>6),0x80|(c&63));
+    else if(c<0x10000) b.push(0xe0|(c>>12),0x80|((c>>6)&63),0x80|(c&63));
+    else b.push(0xf0|(c>>18),0x80|((c>>12)&63),0x80|((c>>6)&63),0x80|(c&63));
+  }
+  const bitLen=b.length*8;
+  b.push(0x80);
+  while(b.length%64!==56) b.push(0);
+  for(let i=7;i>=0;i--) b.push((Math.floor(bitLen/Math.pow(2,i*8)))&0xff);
+  const rr=(v,a)=>((v>>>a)|(v<<(32-a)))>>>0;
+  const w=new Array(64);
+  for(let off=0;off<b.length;off+=64){
+    for(let i=0;i<16;i++)
+      w[i]=((b[off+i*4]<<24)|(b[off+i*4+1]<<16)|(b[off+i*4+2]<<8)|b[off+i*4+3])>>>0;
+    for(let i=16;i<64;i++){
+      const s0=(rr(w[i-15],7)^rr(w[i-15],18)^(w[i-15]>>>3))>>>0;
+      const s1=(rr(w[i-2],17)^rr(w[i-2],19)^(w[i-2]>>>10))>>>0;
+      w[i]=(w[i-16]+s0+w[i-7]+s1)>>>0;
+    }
+    let a=H[0],bb=H[1],c=H[2],dd=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+    for(let i=0;i<64;i++){
+      const S1=(rr(e,6)^rr(e,11)^rr(e,25))>>>0;
+      const ch=((e&f)^((~e)&g))>>>0;
+      const t1=(h+S1+ch+K[i]+w[i])>>>0;
+      const S0=(rr(a,2)^rr(a,13)^rr(a,22))>>>0;
+      const mj=((a&bb)^(a&c)^(bb&c))>>>0;
+      const t2=(S0+mj)>>>0;
+      h=g; g=f; f=e; e=(dd+t1)>>>0; dd=c; c=bb; bb=a; a=(t1+t2)>>>0;
+    }
+    H=[H[0]+a,H[1]+bb,H[2]+c,H[3]+dd,H[4]+e,H[5]+f,H[6]+g,H[7]+h].map(x=>x>>>0);
+  }
+  return H.map(x=>x.toString(16).padStart(8,'0')).join('');
+}
+/* メールとパスワードを変えるとき、コンソールで叩く道具 */
+function newHash(mail, pass){
+  return sha256Hex(SETTINGS.AUTH.SALT + '|' + String(mail).trim().toLowerCase()
+    + '\n' + String(pass));
+}
+window.newHash = newHash;
+
+/* ── 鍵のあけしめ ───────────────────────────
+   開いた状態はメモリにしか持ちません。
+   だから、読み込み直したら必ずログインからになります。 */
+let unlockedAt = 0;
+let lockTimer = null, clockTimer = null, tries = 0;
+const isUnlocked = () => unlockedAt > 0 &&
+  (Date.now() - unlockedAt) < SETTINGS.AUTH.SESSION_MINUTES * 60000;
+
+function lock(reason){
+  unlockedAt = 0;
+  if (lockTimer) { clearTimeout(lockTimer); lockTimer = null; }
+  if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
+  $('#hClock').textContent = '';
+  $('#app').classList.add('hide');
+  $('#gate').classList.remove('hide');
+  $('#gPass').value = '';
+  $('#gErr').textContent = '';
+  $('#gMemo').innerHTML = reason
+    ? esc(reason) + '<br>もう一度、メールアドレスとパスワードを入れてください。'
+    : '二人とも同じメールとパスワードで入ります。<br>'
+      + '誰がやったかは、数字を入れるときに名前を選んで記録します。<br>'
+      + SETTINGS.AUTH.SESSION_MINUTES + '分たつか、別のアプリに移ると、もう一度ここに戻ります。';
+}
+
+function unlock(){
+  unlockedAt = Date.now();
+  $('#gate').classList.add('hide');
+  $('#app').classList.remove('hide');
+  $('#gMail').value = ''; $('#gPass').value = '';
+  tab = 'result'; renderAll();
+
+  const ms = SETTINGS.AUTH.SESSION_MINUTES * 60000;
+  lockTimer = setTimeout(() => lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。'), ms);
+  const tick = () => {
+    const left = Math.max(0, Math.ceil((unlockedAt + ms - Date.now())/60000));
+    $('#hClock').textContent = left > 0 ? 'あと' + left + '分' : '';
+  };
+  tick(); clockTimer = setInterval(tick, 30000);
+}
+
+function tryLogin(){
+  const mail = $('#gMail').value.trim().toLowerCase();
+  const pass = $('#gPass').value;
+  if (!mail || !pass){ $('#gErr').textContent = '両方を入れてください'; return; }
+
+  if (sha256Hex(SETTINGS.AUTH.SALT + '|' + mail + '\n' + pass) === SETTINGS.AUTH.HASH){
+    tries = 0; unlock();
+    return;
+  }
+  // 間違えるほど待たせる（当てずっぽうを遅くするため）
+  tries++;
+  const wait = Math.min(5000, tries * 700);
+  $('#gErr').textContent = 'メールアドレスかパスワードが違います';
+  $('#gPass').value = '';
+  $('#gGo').disabled = true;
+  setTimeout(() => { $('#gGo').disabled = false; $('#gPass').focus(); }, wait);
+}
+
+$('#gGo').addEventListener('click', tryLogin);
+['#gMail','#gPass'].forEach(s =>
+  $(s).addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); }));
+$('#hOut').addEventListener('click', () => lock('閉じました。'));
+
+/* 別のアプリ・別のタブに移ったら閉じる */
+if (SETTINGS.AUTH.LOCK_ON_LEAVE){
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && isUnlocked())
+      lock('いったん離れたので、閉じました。');
+  });
+  window.addEventListener('pagehide', () => { if (isUnlocked()) lock(); });
+}
+/* 時間切れを、操作のたびにも確かめる */
+['click','keydown'].forEach(t => document.addEventListener(t, () => {
+  if (unlockedAt > 0 && !isUnlocked())
+    lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。');
+}, true));
+
+/* ═══════════════════════════════════════════════
+   入力の保存
+   ═══════════════════════════════════════════════ */
+function flash(sel){ const el=$(sel); el.classList.remove('hide');
+  setTimeout(()=>el.classList.add('hide'), 1800); }
+
+/* ＋ − ボタン */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-step]'); if (!b) return;
+  const el = $('#'+b.dataset.for); if (!el) return;
+  el.value = Math.max(0, num(el.value) + num(b.dataset.step));
+});
+
+$('#dDate').addEventListener('change', loadDay);
+$('#dWho').addEventListener('change', loadDay);
+$('#dSave').addEventListener('click', () => {
+  const k = $('#dDate').value || TODAY;
+  const who = $('#dWho').value;
+  const o = {};
+  DKEYS.forEach(x => { const el = $('#d_'+x); o[x] = clamp0(el ? el.value : 0); });
+  DB.daily[k] = DB.daily[k] || {};
+  DB.daily[k][who] = o;                 // 名前ごとに分けて持つので、相手のぶんは消えない
+  save(); flash('#dOk'); renderEnter();
+});
+
+$('#n_svc').addEventListener('change', applySvc);
+$('#n_kind').addEventListener('change', toggleKind);
+['n_amt','n_months'].forEach(id => $('#'+id).addEventListener('input', toggleKind));
+$('#nSave').addEventListener('click', () => {
+  const cust = $('#n_cust').value.trim();
+  if (!cust){ alert('お客様名を入れてください。'); return; }
+  const amt = clamp0($('#n_amt').value);
+  if (amt <= 0){ alert('金額を入れてください。'); return; }
+  const svc = SERVICES[num($('#n_svc').value)] || SERVICES[0];
+  DB.deals.push({
+    id: 'd' + Date.now() + Math.floor(Math.random()*1000),
+    date: $('#n_date').value || TODAY,
+    customer: cust,
+    service: svc.n === 'その他（自分で入力）' ? 'その他' : svc.n,
+    kind: $('#n_kind').value,
+    amount: amt,
+    months: clamp0($('#n_months').value),
+    plan: $('#n_plan').value,
+    via: $('#n_via').value,
+    startDate: $('#n_kind').value === 'one' ? ($('#n_date').value || TODAY) : '',
+    pubDate: '', cancelYm: '',
+  });
+  save(); $('#n_cust').value=''; flash('#nOk'); renderEnter();
+});
+
+/* 目標設定 */
+$('#s_year').addEventListener('change', () => {
+  DB.settings.yearTarget = clamp0($('#s_year').value); save(); renderGoal(); });
+$('#s_fy').addEventListener('change', () => {
+  DB.settings.fyStart = num($('#s_fy').value); save(); renderGoal(); });
+$('#mtEven').addEventListener('click', () => {
+  DB.settings.monthTargets = {}; save(); renderGoal(); });
+$('#mtSave').addEventListener('click', () => {
+  const t = {};
+  $$('#mtTbl input[data-mt]').forEach(el => t[el.dataset.mt] = clamp0(el.value));
+  DB.settings.monthTargets = t; save(); renderGoal(); flash('#mtOk'); });
+
+/* ふりかえり */
+function saveReview(type, by, obj){
+  const period = type==='week' ? weekKey() : ym(new Date());
+  DB.reviews = DB.reviews.filter(r => !(r.type===type && r.period===period && (r.by||'')===by));
+  DB.reviews.push(Object.assign({type, period, by, savedAt: TODAY}, obj));
+  save(); renderReview();
+}
+$('#rWho').addEventListener('change', renderReview);
+$('#mWho').addEventListener('change', renderReview);
+$('#rSaveW').addEventListener('click', () => {
+  saveReview('week', $('#rWho').value, {good:$('#r_good').value.trim(),
+    stuck:$('#r_stuck').value.trim(), change:$('#r_change').value.trim()});
+  flash('#rOkW');
+});
+$('#rSaveM').addEventListener('click', () => {
+  saveReview('month', $('#mWho').value, {gap:$('#m_gap').value.trim(), stage:$('#m_stage').value,
+    stageMemo:$('#m_stageMemo').value.trim(), reason:$('#m_reason').value.trim(),
+    change:$('#m_change').value.trim()});
+  flash('#rOkM');
+});
+
+/* 配分計算 */
+['c_amount','c_jihi'].forEach(id => $('#'+id).addEventListener('input', calcSplit));
+$('#c_tate').addEventListener('change', calcSplit);
+$$('#p-split [data-all], #p-split [data-reset]').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.reset){ buildSplit(true); return; }
+  cState = cState.map(() => b.dataset.all);
+  $$('#cItems .pick input').forEach(r => r.checked = (r.value === b.dataset.all));
+  calcSplit();
+}));
+$('#cCopy').addEventListener('click', e => copyText(splitText(), e.target, '記録用の文をコピー'));
+$('#cSave').addEventListener('click', () => {
+  if (!cSnap || cSnap.den === 0){ alert('やった作業を選んでください。'); return; }
+  const d = cSnap;
+  const pay = {};
+  MEMBERS.forEach(m => pay[m] = d.money[m] + (d.jihi && d.tate===m ? d.jihi : 0));
+  const works = [];
+  flatItems(cPlan).forEach((it,i) => { if (cWork[i]) works.push(it.name+'：'+cWork[i]); });
+  DB.splits.push({
+    id: 's' + Date.now() + Math.floor(Math.random()*1000),
+    date: $('#c_date').value || TODAY,
+    customer: $('#c_cust').value.trim(),
+    plan: cPlan, amount: d.amount, jihi: d.jihi, tate: d.tate,
+    who: cState.slice(), works, pay, text: splitText(),
+  });
+  save(); flash('#cOk'); renderSplitList();
+});
+
+/* バックアップ */
+$('#bOut').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(DB, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'shiraume_kpi_' + TODAY.replace(/-/g,'') + '.json';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 300);
+});
+$('#bIn').addEventListener('click', () => $('#bFile').click());
+$('#bFile').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try{
+      const o = JSON.parse(rd.result);
+      if (!o || typeof o !== 'object') throw 0;
+      if (!confirm('今このパソコンにある数字を、読み込んだファイルの中身で置き換えます。よろしいですか。')) return;
+      DB = adopt(o); save(); renderAll(); alert('読み込みました。');
+    }catch(_){ alert('このファイルは読めませんでした。書き出したJSONファイルを選んでください。'); }
+    e.target.value = '';
+  };
+  rd.readAsText(f);
+});
+$('#bClear').addEventListener('click', () => {
+  if (!confirm('保存されている数字を全部消します。元に戻せません。よろしいですか。')) return;
+  if (!confirm('本当に消してよろしいですか。先に「書き出す」をしておくことをおすすめします。')) return;
+  DB = blank(); save(); cSnap = null; renderAll(); alert('消しました。');
+});
+
+/* ═══════════════════════════════════════════════
+   起動
+   ═══════════════════════════════════════════════ */
+load();
+$('#c_date').value = TODAY;
+/* 開いた状態は保存しないので、読み込むたびに必ずログインからです */
+$('#gMail').focus();
+</script>
+</body>
+</html>
