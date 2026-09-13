@@ -387,6 +387,12 @@
 .shop-cat__list li::before{content:"";position:absolute;left:0;top:.85em;width:5px;height:5px;border-radius:50%;background:#D9C48A;}
 .shop-cat__sub{font-size:12px;color:#8A8079;line-height:1.85;margin:12px 0 0;}
 .shop-cat__sub a{color:#8A6E1E;}
+.shop-cat__incl{margin-bottom:10px;}
+.shop-cat__list--2col{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 28px;}
+.shop-cat__opt-h{display:block;font-size:12.5px;letter-spacing:.12em;color:#8A6E1E;font-weight:600;margin:34px 0 6px;}
+.shop-cat__opt-n{font-size:12.5px;color:#6B6467;line-height:1.9;margin:0 0 22px;}
+.shop-cat__ct--opt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+.shop-cat__ct-p{font-size:15px;color:#8A6E1E;font-weight:700;letter-spacing:0;white-space:nowrap;}
 .shop-cat__add{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:16px 22px;margin-bottom:24px;
   background:#FBF8F1;border-left:3px solid #B8912F;border-radius:3px;}
 .shop-cat__add-t{font-size:13.5px;color:#2B2A2E;font-weight:600;}
@@ -884,7 +890,7 @@
       <span class="shop-cat__eyebrow">ONLINE SHOP</span>
       <h2 class="shop-cat__title">ネットショップ開設サポート</h2>
       <p class="shop-cat__desc">
-        BASEでのショップ開設から、Instagram・公式LINEとのつなぎ込みまで。<br class="br-desktop">
+        BASEでのショップ開設を、一式で承ります。<br class="br-desktop">
         「作ったけれど、そこから先で止まってしまった」という方に一番多くご依頼いただく内容です。
       </p>
 
@@ -894,19 +900,24 @@
         <span class="shop-cat__price-note">商品登録 5点まで込み</span>
       </div>
 
+      <div class="shop-cat__incl">
+        <span class="shop-cat__ct">一式に含まれるもの｜ショップの開設</span>
+        <ul class="shop-cat__list shop-cat__list--2col">
+          <li>BASEでのショップ開設</li>
+          <li>ショップ名・説明文の設定</li>
+          <li>特定商取引法の表記の設定</li>
+          <li>配送方法・送料の設定</li>
+          <li>お支払い方法の設定</li>
+          <li>商品登録 5点まで</li>
+        </ul>
+      </div>
+
+      <span class="shop-cat__opt-h">追加でご依頼いただけるもの</span>
+      <p class="shop-cat__opt-n">こちらは開設サポート一式には含まれません。必要なものだけ、お選びいただけます。</p>
+
       <div class="shop-cat__grid">
         <div class="shop-cat__col">
-          <span class="shop-cat__ct">ショップの開設</span>
-          <ul class="shop-cat__list">
-            <li>BASEでのショップ開設</li>
-            <li>ショップ名・説明文の設定</li>
-            <li>特定商取引法の表記の設定</li>
-            <li>配送方法・送料の設定</li>
-            <li>お支払い方法の設定</li>
-          </ul>
-        </div>
-        <div class="shop-cat__col">
-          <span class="shop-cat__ct">Instagramとの連携</span>
+          <span class="shop-cat__ct shop-cat__ct--opt">Instagramとの連携<span class="shop-cat__ct-p">¥11,000</span></span>
           <ul class="shop-cat__list">
             <li>プロアカウントへの切り替え</li>
             <li>Facebookページのご用意</li>
@@ -916,7 +927,7 @@
           </ul>
         </div>
         <div class="shop-cat__col">
-          <span class="shop-cat__ct">公式LINEとの連携</span>
+          <span class="shop-cat__ct shop-cat__ct--opt">公式LINEとの連携<span class="shop-cat__ct-p">¥11,000</span></span>
           <ul class="shop-cat__list">
             <li>リッチメニューからショップへの導線</li>
             <li>あいさつメッセージへのリンク設置</li>
