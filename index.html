@@ -83,6 +83,14 @@
   .sd-btn{width:100%;min-height:50px;font-size:14.5px;}
   .sd-intro__note{font-size:11.5px;}
 }
+/* FV高さ調整（2026-09-15） */
+.stage-intro__content{gap:14px;}
+.sd-nw{white-space:nowrap;}
+@media (min-width:768px){ .stage-intro__scroll{display:none;} }
+@media (max-width:767px){
+  .stage-intro__title--ja{font-size:23.5px;line-height:1.66;}
+  .sd-intro__price{font-size:12.5px;line-height:1.9;}
+}
 @media (prefers-reduced-motion:reduce){
   .sd-intro__en,.sd-intro__price,.sd-intro__cta,.sd-intro__note{animation:none!important;opacity:1!important;}
 }
@@ -98,7 +106,7 @@
       </h1>
       <p class="sd-intro__en">Designing Growth, Building Trust.</p>
       <span class="stage-intro__rule" aria-hidden="true"></span>
-      <p class="sd-intro__price">買い切り 49,800円〜／月額 6,980円〜（初期費用0円）<br>料金はオプションまで、すべて公開しています。</p>
+      <p class="sd-intro__price"><span class="sd-nw">買い切り 49,800円〜</span>／<span class="sd-nw">月額 6,980円〜</span><span class="sd-nw">（初期費用0円）</span><br>料金はオプションまで、すべて公開しています。</p>
       <p class="stage-intro__services">ホームページ制作　｜　LP制作　｜　LINE構築<br>SNS運用　｜　SEO　｜　AI導入支援</p>
       <div class="sd-intro__cta">
         <a class="sd-btn sd-btn--line" href="https://lin.ee/zZOLYKc" target="_blank" rel="noopener">LINEで無料相談する</a>
