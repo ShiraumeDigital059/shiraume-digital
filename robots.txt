@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shiraumedigital.com/sitemap.xml
