@@ -27,6 +27,27 @@
   'use strict';
 
   var TEXT = {
+    /* --- 2026-09-15 ネットショップB --- */
+    "作り方を2つからお選びいただけます。": "Two ways to build it.",
+    "A｜BASEで開設する": "A | Open a shop on BASE",
+    "BASEにショップを開設して、そこで販売します。いちばん早く、いちばん安く始められる形です。": "We set up your shop on BASE and you sell from there. The fastest and least expensive way to start.",
+    "含まれるもの": "What is included",
+    "B｜ホームページの中に作る": "B | Build it inside your website",
+    "商品を見るところから、お買い物かご、お支払いまで、すべてホームページの中で完結します。BASEなどのサービスは使わず、ほかのサイトに移動しません。": "Browsing, cart and checkout all happen inside your own website. No BASE, no jumping to another site.",
+    "サイト内ショップ制作": "In-site shop build",
+    "商品登録 10点まで込み": "Includes up to 10 products",
+    "商品一覧ページの制作": "Product listing page",
+    "商品ページの制作": "Individual product pages",
+    "お買い物かご": "Shopping cart",
+    "クレジットカード決済の設置": "Card payment setup",
+    "ご注文時の自動返信メール": "Automatic order confirmation email",
+    "特定商取引法の表記": "Legal trading disclosures",
+    "商品登録 10点まで": "Up to 10 products registered",
+    "A・Bどちらにも、こちらは含まれません。必要なものだけ、お選びいただけます。": "None of these are included in A or B. Choose only what you need.",
+    "Aは6点目以降、Bは11点目以降。写真・説明文はお客様にご用意いただきます。": "From the 6th product for A, the 11th for B. Photos and copy are provided by you.",
+    "すでにお持ちのショップを、サイトにつなぐ": "Connect the shop you already have",
+    "今お使いのネットショップはそのままに、ホームページから行き来できるようにします。": "Keep the shop you use now, and let visitors move between it and your website.",
+    "決済手数料は、Stripeへ直接お支払いいただきます。月々の固定費はかかりません。": "Payment processing fees go directly to Stripe. There is no monthly fixed cost.",
     /* --- 2026-09-15 追加 --- */
     "中小企業と店舗のための、": "Websites and web marketing",
     "Web集客": "for small businesses and shops",
