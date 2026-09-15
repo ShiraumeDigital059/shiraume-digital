@@ -264,6 +264,17 @@ input,select,textarea{font-size:16px}
   color:#fff;font-size:16px;font-weight:700;border-radius:2px;letter-spacing:.08em}
 #gate .go:disabled{background:var(--none)}
 header .clock{font-size:11px;color:var(--sub);white-space:nowrap;font-variant-numeric:tabular-nums}
+header .sybadge{font-size:10.5px;color:var(--gold-d);background:var(--paper2);
+  border:1px solid var(--line);border-radius:2px;padding:3px 8px;white-space:nowrap}
+.syrow{display:flex;align-items:center;gap:10px;padding:12px 13px;border:1px solid var(--line);
+  background:var(--paper2);font-size:13px;line-height:1.6}
+.syrow.on{background:#F4F8F4;border-color:#D4E4D4}
+.syrow .dot{width:9px;height:9px;border-radius:50%;background:var(--none);flex-shrink:0}
+.syrow.on .dot{background:var(--green)}
+.syrow .t{flex:1;min-width:0}
+.syrow .t small{display:block;font-size:11px;color:var(--sub);word-break:break-all}
+.card code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--white);
+  padding:1px 5px;border:1px solid var(--line);border-radius:2px}
 #gate .err{color:var(--red);font-size:12.5px;text-align:center;margin-top:12px;min-height:20px}
 #gate .memo{font-size:11px;color:var(--sub);line-height:1.75;margin-top:18px;
   padding-top:14px;border-top:1px solid var(--line)}
@@ -638,6 +649,7 @@ details .in{padding-top:14px}
       <img src="../assets/images/shiraume-symbol-mark.png" alt="" onerror="this.style.display='none'">
       <span>白梅デジタル</span>
     </a>
+    <span class="sybadge hide" id="syncBadge"></span>
     <span class="clock" id="hClock"></span>
     <button class="out" id="hOut">出る</button>
   </div>
@@ -820,6 +832,207 @@ details .in{padding-top:14px}
       仮の値のままでも動きます。実績が3ヶ月ぶんたまり、母数が20件を超えた段階から、
       自動で実測値に入れ替わります。
     </div>
+  </div>
+
+  <div class="card">
+    <h2>ほかの端末と同じ数字にする</h2>
+    <div class="note">
+      今のままだと、数字は<b>この端末のこのブラウザの中だけ</b>に保存されます。
+      スマホで入れた数字は、パソコンには出てきません。<br>
+      Googleスプレッドシートにつなぐと、どの端末で開いても同じ数字になります。
+    </div>
+    <div id="syncState"></div>
+
+    <div class="fg" style="margin-top:14px">
+      <div class="f"><label>つなぎ先のURL</label>
+        <input type="text" id="sy_url" placeholder="https://script.google.com/macros/s/……/exec"
+               autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+      <div class="f"><label>あいことば</label>
+        <input type="text" id="sy_word" placeholder="スクリプトに書いたものと同じ文字"
+               autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+    </div>
+    <div class="btns">
+      <button class="btn" id="syConnect">つなぐ</button>
+      <button class="btn g hide" id="syNow">今すぐ同期</button>
+      <button class="btn r hide" id="syOff">切る</button>
+      <span class="ok hide" id="syOk"></span>
+    </div>
+
+    <details><summary>つなぎ方（はじめの1回だけ）</summary>
+      <div class="in">
+        <div class="info" style="margin-top:0">
+          <b>1</b>　Googleドライブで、新しいスプレッドシートを作ります。名前は「白梅デジタル 売上」など何でも構いません。<br>
+          <b>2</b>　メニューの「拡張機能」→「Apps Script」を開きます。<br>
+          <b>3</b>　最初から書いてある文字を全部消して、下のボタンでコピーしたものを貼り付けます。<br>
+          <b>4</b>　貼り付けた文の3行目あたりにある <code>AIKOTOBA</code> を、自分だけの文字に書き換えます
+          （英数字で少し長め。例：<code>shiraume-2026-abc123</code>）。<br>
+          <b>5</b>　保存して、右上の「デプロイ」→「新しいデプロイ」。種類は<b>ウェブアプリ</b>、
+          「次のユーザーとして実行」は<b>自分</b>、「アクセスできるユーザー」は<b>全員</b>を選びます。<br>
+          <b>6</b>　出てきた <b>ウェブアプリのURL</b> をコピーして、上の「つなぎ先のURL」に貼ります。
+          「あいことば」には、4で決めた文字を入れます。<br>
+          <b>7</b>　「つなぐ」を押します。
+        </div>
+        <div class="btns">
+          <button class="btn g" id="syCopy">スクリプトをコピー</button>
+        </div>
+<script type="text/plain" id="gasCode">/* 白梅デジタル 売上管理ページ 同期用スクリプト */
+
+const AIKOTOBA = "shiraume-sync-2026";   // ★ここを自分だけの文字に書き換える
+
+const DATA_SHEET = "_data";
+const CHUNK = 40000;
+
+function doGet(e) {
+  try {
+    if (!e || !e.parameter || e.parameter.k !== AIKOTOBA)
+      return out_({ ok: false, error: "あいことばが違います" });
+    return out_({ ok: true, data: read_() });
+  } catch (err) { return out_({ ok: false, error: String(err) }); }
+}
+
+function doPost(e) {
+  const lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(25000);
+    const body = JSON.parse(e.postData.contents);
+    if (body.k !== AIKOTOBA) return out_({ ok: false, error: "あいことばが違います" });
+    write_(body.data);
+    try { sheets_(body.data); } catch (_) {}
+    return out_({ ok: true, savedAt: new Date().toISOString() });
+  } catch (err) {
+    return out_({ ok: false, error: String(err) });
+  } finally { try { lock.releaseLock(); } catch (_) {} }
+}
+
+function out_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+function book_() { return SpreadsheetApp.getActiveSpreadsheet(); }
+function dataSheet_() {
+  const ss = book_();
+  let sh = ss.getSheetByName(DATA_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(DATA_SHEET);
+    sh.getRange(1, 1).setValue("ここは自動で使う場所です。手で書き換えないでください。");
+    sh.hideSheet();
+  }
+  return sh;
+}
+function read_() {
+  const sh = dataSheet_();
+  const last = sh.getLastRow();
+  if (last < 2) return null;
+  const s = sh.getRange(2, 1, last - 1, 1).getValues().map(r => String(r[0] || "")).join("");
+  if (!s) return null;
+  try { return JSON.parse(s); } catch (_) { return null; }
+}
+function write_(data) {
+  const sh = dataSheet_();
+  const s = JSON.stringify(data);
+  const rows = [];
+  for (let i = 0; i < s.length; i += CHUNK) rows.push([s.substr(i, CHUNK)]);
+  if (!rows.length) rows.push([""]);
+  const last = sh.getLastRow();
+  if (last > 1) sh.getRange(2, 1, last - 1, 1).clearContent();
+  sh.getRange(2, 1, rows.length, 1).setValues(rows);
+}
+
+function sheets_(d) {
+  if (!d) return;
+  const ss = book_();
+  const yen = n => Number(n || 0);
+  const byDeal = {};
+  (d.deals || []).forEach(x => { byDeal[x.id] = x; });
+
+  const cust = {};
+  (d.deals || []).forEach(x => {
+    const k = x.customer || "（名前なし）";
+    cust[k] = cust[k] || { name: k, paid: 0, yet: 0, deals: 0, monthly: 0 };
+    cust[k].deals++;
+    if (x.kind === "mon" && !(x.cancelYm && x.cancelYm < ym_(new Date())))
+      cust[k].monthly += yen(x.amount);
+  });
+  Object.keys(d.invoices || {}).forEach(key => {
+    const rec = d.invoices[key] || {};
+    const deal = byDeal[key.split("::")[0]];
+    if (!deal) return;
+    const c = cust[deal.customer || "（名前なし）"];
+    if (!c) return;
+    const billed = rec.billed ? yen(rec.amount) : 0;
+    const paid = rec.paidDate ? yen(rec.paid) : 0;
+    c.paid += paid;
+    c.yet += Math.max(0, billed - paid);
+  });
+  put_(ss, "お客さん",
+    [["お客様", "受け取った", "まだ受け取っていない", "月額/月", "件数"]].concat(
+      Object.keys(cust).map(k => {
+        const c = cust[k];
+        return [c.name, c.paid, c.yet, c.monthly, c.deals];
+      })));
+
+  put_(ss, "案件",
+    [["成約日", "お客様", "サービス", "払い方", "金額", "最低期間", "着手日", "完成日", "解約月", "動いた人", "区分"]].concat(
+      (d.deals || []).map(x => [
+        x.date || "", x.customer || "", x.service || "",
+        x.kind === "mon" ? "月額" : (x.payway === "full" ? "一括（1回）" : "一括（2回）"),
+        yen(x.amount), x.months || "", x.startDate || "", x.pubDate || "",
+        x.cancelYm || "", x.via || "", x.plan || ""])));
+
+  put_(ss, "入金",
+    [["お客様", "内容", "請求した日", "請求額", "受け取った日", "受け取った額"]].concat(
+      Object.keys(d.invoices || {}).map(key => {
+        const rec = d.invoices[key] || {};
+        const deal = byDeal[key.split("::")[0]];
+        return [deal ? (deal.customer || "") : "（消された案件）",
+          key.split("::")[1] || "",
+          rec.billed || "", rec.billed ? yen(rec.amount) : "",
+          rec.paidDate || "", rec.paidDate ? yen(rec.paid) : ""];
+      })));
+
+  const rows = [];
+  Object.keys(d.daily || {}).sort().forEach(date => {
+    const day = d.daily[date] || {};
+    Object.keys(day).forEach(who => {
+      const v = day[who] || {};
+      rows.push([date, who, v.dm || 0, v.reply || 0, v.doc || 0,
+        v.call || 0, v.connect || 0, v.appt || 0, v.meeting || 0, v.callmin || 0]);
+    });
+  });
+  put_(ss, "日々の数字",
+    [["日付", "やった人", "DM送信", "返信", "資料送付", "架電", "つながった", "アポ", "商談", "電話(分)"]].concat(rows));
+
+  put_(ss, "ふりかえり",
+    [["種類", "時期", "書いた人", "中身"]].concat(
+      (d.reviews || []).map(r => [
+        r.type === "week" ? "週" : "月", r.period || "", r.by || "",
+        [r.good, r.stuck, r.change, r.gap, r.stage, r.stageMemo, r.reason]
+          .filter(Boolean).join(" / ")])));
+}
+
+function put_(ss, name, rows) {
+  let sh = ss.getSheetByName(name);
+  if (!sh) sh = ss.insertSheet(name);
+  sh.clear();
+  if (!rows.length) return;
+  const w = Math.max.apply(null, rows.map(r => r.length));
+  const norm = rows.map(r => { const a = r.slice(); while (a.length < w) a.push(""); return a; });
+  sh.getRange(1, 1, norm.length, w).setValues(norm);
+  sh.getRange(1, 1, 1, w).setFontWeight("bold").setBackground("#FBF8F1");
+  sh.setFrozenRows(1);
+}
+function ym_(dt) {
+  return dt.getFullYear() + "-" + ("0" + (dt.getMonth() + 1)).slice(-2);
+}
+</script>
+        <div class="info">
+          ★ ほかの端末でも、同じURLとあいことばを入れれば、同じ数字が出ます。<br>
+          ★ このURLとあいことばは<b>この端末にだけ</b>保存されます。公開しているページの中には入りません。<br>
+          ★「アクセスできるユーザー：全員」は、URLを知っている人という意味です。
+          あいことばが合わないと中身は出ません。
+        </div>
+      </div>
+    </details>
   </div>
 
   <div class="card">
@@ -1147,6 +1360,8 @@ function blank(){
     invoices: {},                // "dealId::key": {billed:"",amount:0,paidDate:"",paid:0}
     reviews: [],                 // ふりかえり（by＝書いた人）
     splits: [],                  // 配分計算の記録
+    meta: {updatedAt: 0, device: ''},   // いつ・どの端末で直したか
+    tomb: {},                    // 消したものの覚え書き（他の端末で復活しないように）
   };
 }
 let DB = blank();
@@ -1198,6 +1413,8 @@ function adopt(o){
   db.invoices = (o.invoices && typeof o.invoices === 'object') ? o.invoices : {};
   db.reviews  = Array.isArray(o.reviews) ? o.reviews : [];
   db.splits   = Array.isArray(o.splits)  ? o.splits  : [];
+  db.meta     = Object.assign({updatedAt:0, device:''}, o.meta || {});
+  db.tomb     = (o.tomb && typeof o.tomb === 'object') ? o.tomb : {};
   return migrate(db);
 }
 function load(){
@@ -1208,10 +1425,169 @@ function load(){
     if(o && typeof o === 'object') DB = adopt(o);
   }catch(e){ console.warn('保存データを読めませんでした', e); }
 }
-function save(){
+function save(opt){
+  DB.meta = DB.meta || {};
+  if (!(opt && opt.quiet)) {
+    DB.meta.updatedAt = Date.now();
+    DB.meta.device = deviceId();
+  }
   try{ localStorage.setItem(SETTINGS.STORAGE_KEY, JSON.stringify(DB)); }
   catch(e){ alert('保存できませんでした。ブラウザの設定を確認してください。'); }
+  if (!(opt && opt.quiet)) pushSoon();
 }
+/* 消したものを覚えておく（ほかの端末で復活しないように）*/
+function bury(key){ DB.tomb = DB.tomb || {}; DB.tomb[key] = Date.now(); }
+
+/* ═══════════════════════════════════════════════
+   ほかの端末と同じ数字にする（Googleスプレッドシート）
+   ★つなぎ先は、この端末だけに保存します。
+   　公開しているファイルの中には入りません。
+   ═══════════════════════════════════════════════ */
+const SYNC_KEY = 'shiraume_kpi_sync';
+let SYNC = {url:'', word:'', lastAt:0, lastMsg:''};
+let pushTimer = null, syncing = false;
+
+function deviceId(){
+  try{
+    let d = localStorage.getItem('shiraume_kpi_device');
+    if (!d){ d = 'D' + Math.random().toString(36).slice(2,8); localStorage.setItem('shiraume_kpi_device', d); }
+    return d;
+  }catch(_){ return 'D?'; }
+}
+function loadSync(){
+  try{ const o = JSON.parse(localStorage.getItem(SYNC_KEY) || '{}');
+    SYNC = Object.assign({url:'', word:'', lastAt:0, lastMsg:''}, o);
+  }catch(_){}
+}
+function saveSync(){ try{ localStorage.setItem(SYNC_KEY, JSON.stringify(SYNC)); }catch(_){} }
+const syncOn = () => !!(SYNC.url && SYNC.word);
+
+/* ── 2つの記録を合わせる（消し合わない）── */
+function mergeDB(a, b){
+  // a・b どちらが新しいかで、ぶつかったときの勝ちを決める
+  const aNew = num((a.meta||{}).updatedAt) >= num((b.meta||{}).updatedAt);
+  const win = aNew ? a : b, lose = aNew ? b : a;
+  const out = blank();
+
+  out.settings = Object.assign({}, lose.settings, win.settings);
+  out.settings.monthTargets = Object.assign({},
+    (lose.settings||{}).monthTargets, (win.settings||{}).monthTargets);
+
+  out.tomb = Object.assign({}, a.tomb || {}, b.tomb || {});
+  const buried = k => Object.prototype.hasOwnProperty.call(out.tomb, k);
+
+  // 日々の数字：日付＋名前ごと。同じところがぶつかったら新しい方
+  out.daily = {};
+  [lose.daily||{}, win.daily||{}].forEach(src => {
+    Object.keys(src).forEach(date => {
+      out.daily[date] = Object.assign({}, out.daily[date], src[date]);
+    });
+  });
+
+  // 案件：id ごと
+  const dmap = {};
+  [lose.deals||[], win.deals||[]].forEach(list =>
+    list.forEach(d => { if (d && d.id) dmap[d.id] = d; }));
+  out.deals = Object.values(dmap).filter(d => !buried('deal:' + d.id));
+
+  // 入金：キーごと。案件が消されていれば、その入金も消す
+  const alive = new Set(out.deals.map(d => d.id));
+  out.invoices = {};
+  [lose.invoices||{}, win.invoices||{}].forEach(src =>
+    Object.keys(src).forEach(k => { out.invoices[k] = src[k]; }));
+  Object.keys(out.invoices).forEach(k => {
+    if (!alive.has(k.split('::')[0])) delete out.invoices[k];
+  });
+
+  // ふりかえり：種類＋時期＋書いた人ごと
+  const rk = r => 'review:' + r.type + '|' + r.period + '|' + (r.by||'');
+  const rmap = {};
+  [lose.reviews||[], win.reviews||[]].forEach(list =>
+    list.forEach(r => { if (r && r.type) rmap[rk(r)] = r; }));
+  out.reviews = Object.keys(rmap).filter(k => !buried(k)).map(k => rmap[k]);
+
+  // 配分の記録：id ごと
+  const smap = {};
+  [lose.splits||[], win.splits||[]].forEach(list =>
+    list.forEach(s => { if (s && s.id) smap[s.id] = s; }));
+  out.splits = Object.values(smap).filter(s => !buried('split:' + s.id));
+
+  out.meta = {
+    updatedAt: Math.max(num((a.meta||{}).updatedAt), num((b.meta||{}).updatedAt)),
+    device: (win.meta||{}).device || deviceId(),
+  };
+  return out;
+}
+
+function syncStatus(msg){
+  SYNC.lastMsg = msg || '';
+  const el = $('#syncBadge');
+  if (el){
+    el.textContent = syncOn() ? (msg || '') : '';
+    el.classList.toggle('hide', !syncOn() || !msg);
+  }
+  const box = $('#syncState');
+  if (box) renderSyncCard();
+}
+
+async function pullMerge(){
+  if (!syncOn() || syncing) return {ok:false};
+  syncing = true; syncStatus('確認中…');
+  try{
+    const r = await fetch(SYNC.url + (SYNC.url.indexOf('?')<0?'?':'&') + 'k='
+      + encodeURIComponent(SYNC.word) + '&t=' + Date.now(), {cache:'no-store', redirect:'follow'});
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'つながりませんでした');
+    if (j.data){
+      const remote = adopt(j.data);
+      const before = JSON.stringify(DB);
+      DB = mergeDB(DB, remote);
+      const changed = JSON.stringify(DB) !== before;
+      save({quiet:true});
+      if (changed) renderAll();
+    }
+    SYNC.lastAt = Date.now(); saveSync();
+    syncStatus('同期しました');
+    return {ok:true};
+  }catch(e){
+    syncStatus('つながりません');
+    return {ok:false, error:String(e.message||e)};
+  }finally{ syncing = false; }
+}
+
+async function pushNow(){
+  if (!syncOn()) return {ok:false};
+  try{
+    syncStatus('保存中…');
+    const r = await fetch(SYNC.url, {
+      method:'POST', redirect:'follow',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({k: SYNC.word, data: DB}),
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || '保存できませんでした');
+    SYNC.lastAt = Date.now(); saveSync();
+    syncStatus('同期しました');
+    return {ok:true};
+  }catch(e){
+    syncStatus('保存できません');
+    return {ok:false, error:String(e.message||e)};
+  }
+}
+function pushSoon(){
+  if (!syncOn()) return;
+  if (pushTimer) clearTimeout(pushTimer);
+  syncStatus('あとで保存します');
+  pushTimer = setTimeout(() => { pushTimer = null; pushNow(); }, 2500);
+}
+/* 画面を閉じる前に、たまっている分を送る */
+window.addEventListener('pagehide', () => {
+  if (syncOn() && pushTimer && navigator.sendBeacon){
+    clearTimeout(pushTimer); pushTimer = null;
+    try{ navigator.sendBeacon(SYNC.url,
+      new Blob([JSON.stringify({k:SYNC.word, data:DB})], {type:'text/plain;charset=utf-8'})); }catch(_){}
+  }
+});
 
 /* ═══════════════════════════════════════════════
    期間
@@ -1971,6 +2347,7 @@ function renderGoal(){
         <td class="n">${r.b>0 ? r.a+' / '+r.b : '—'}</td></tr>`;
     }).join('');
 
+  renderSyncCard();
   $('#bStat').textContent = '記録した日数 ' + Object.keys(DB.daily).length
     + '日／案件 ' + DB.deals.length + '件／ふりかえり ' + DB.reviews.length
     + '件／配分の記録 ' + DB.splits.length + '件';
@@ -2017,6 +2394,7 @@ function renderReview(){
   $$('#rvList [data-rv]').forEach(b => b.addEventListener('click', () => {
     const [t,p2,by] = b.dataset.rv.split('|');
     if (!confirm('このふりかえりを消します。よろしいですか。')) return;
+    bury('review:' + t + '|' + p2 + '|' + by);
     DB.reviews = DB.reviews.filter(r => !(r.type===t && r.period===p2 && (r.by||'')===by));
     save(); renderReview();
   }));
@@ -2216,6 +2594,7 @@ function renderSplitList(){
 
   $$('#cList [data-sp]').forEach(b => b.addEventListener('click', () => {
     if (!confirm('この配分の記録を消します。よろしいですか。')) return;
+    bury('split:' + b.dataset.sp);
     DB.splits = DB.splits.filter(x => x.id !== b.dataset.sp);
     save(); renderSplitList(); renderGoal();
   }));
@@ -2520,6 +2899,7 @@ function renderDealCards(){
   $$('#dealCards [data-del]').forEach(b => b.addEventListener('click', () => {
     const d = DB.deals.find(x => x.id === b.dataset.del); if (!d) return;
     if (!confirm('「'+(d.customer||'このお客さん')+'」を消します。よろしいですか。')) return;
+    bury('deal:' + b.dataset.del);
     DB.deals = DB.deals.filter(x => x.id !== b.dataset.del);
     Object.keys(DB.invoices).forEach(k => { if (k.indexOf(b.dataset.del+'::')===0) delete DB.invoices[k]; });
     if (editingId === b.dataset.del) cancelEdit();
@@ -2816,6 +3196,7 @@ function unlock(){
   $('#app').classList.remove('hide');
   $('#gMail').value = ''; $('#gPass').value = '';
   tab = 'result'; renderAll();
+  if (syncOn()) pullMerge();          // ほかの端末で入れた分を取りに行く
 
   const ms = SETTINGS.AUTH.SESSION_MINUTES * 60000;
   lockTimer = setTimeout(() => lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。'), ms);
@@ -3022,6 +3403,57 @@ $('#cSave').addEventListener('click', () => {
   save(); flash('#cOk'); renderSplitList();
 });
 
+/* ほかの端末と同じ数字にする */
+function renderSyncCard(){
+  const box = $('#syState') || $('#syncState'); if (!box) return;
+  const on = syncOn();
+  const ago = SYNC.lastAt ? Math.round((Date.now()-SYNC.lastAt)/60000) : null;
+  box.innerHTML = `<div class="syrow ${on?'on':''}">
+    <span class="dot"></span>
+    <span class="t">${on ? 'つながっています' : 'つながっていません'}
+      <small>${on
+        ? (ago===null ? 'まだ同期していません'
+           : (ago<1 ? 'さっき同期しました' : ago+'分前に同期しました'))
+          + (SYNC.lastMsg ? '　/　' + esc(SYNC.lastMsg) : '')
+        : 'この端末の中だけに保存されています'}</small></span>
+  </div>`;
+  $('#syNow').classList.toggle('hide', !on);
+  $('#syOff').classList.toggle('hide', !on);
+  $('#syConnect').textContent = on ? 'つなぎ直す' : 'つなぐ';
+  if ($('#sy_url') && document.activeElement !== $('#sy_url')) $('#sy_url').value = SYNC.url;
+  if ($('#sy_word') && document.activeElement !== $('#sy_word')) $('#sy_word').value = SYNC.word;
+}
+$('#syConnect').addEventListener('click', async () => {
+  const url = $('#sy_url').value.trim(), word = $('#sy_word').value.trim();
+  if (!url || !word){ alert('URLとあいことばの両方を入れてください。'); return; }
+  if (!/^https:\/\/script\.google\.com\//.test(url)){
+    if (!confirm('GoogleのURLではないようです。このまま試しますか。')) return;
+  }
+  SYNC.url = url; SYNC.word = word; saveSync();
+  const r = await pullMerge();
+  if (r.ok){ await pushNow(); $('#syOk').textContent = 'つながりました'; flash('#syOk'); }
+  else {
+    alert('つながりませんでした。\n' + (r.error||'') +
+      '\n\nURLとあいことばを確かめてください。デプロイの「アクセスできるユーザー」が「全員」になっているかも確認を。');
+  }
+  renderSyncCard();
+});
+$('#syNow').addEventListener('click', async () => {
+  const r = await pullMerge();
+  if (r.ok) await pushNow();
+  $('#syOk').textContent = r.ok ? '同期しました' : 'つながりません'; flash('#syOk');
+  renderAll();
+});
+$('#syOff').addEventListener('click', () => {
+  if (!confirm('この端末のつながりを切ります。数字はこの端末に残ります。よろしいですか。')) return;
+  SYNC = {url:'', word:'', lastAt:0, lastMsg:''}; saveSync();
+  syncStatus(''); renderSyncCard();
+});
+$('#syCopy').addEventListener('click', e => {
+  const code = document.getElementById('gasCode').textContent;
+  copyText(code, e.target, 'スクリプトをコピー');
+});
+
 /* バックアップ */
 $('#bOut').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(DB, null, 2)], {type:'application/json'});
@@ -3056,6 +3488,8 @@ $('#bClear').addEventListener('click', () => {
    起動
    ═══════════════════════════════════════════════ */
 load();
+loadSync();
+renderSyncCard();          // 目標設定を開く前から、つながり具合が分かるように
 $('#c_date').value = TODAY;
 /* 開いた状態は保存しないので、読み込むたびに必ずログインからです */
 $('#gMail').focus();
