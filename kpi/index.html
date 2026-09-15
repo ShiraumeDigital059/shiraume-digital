@@ -149,27 +149,72 @@ const PLANS = {
   ]},
 };
 
-/* サービスと料金（すべて税込）★サイトの料金を変えたら、ここも直す */
-const SERVICES = [
-  {n:"ホームページ STARTER",             k:"one", a:49800,  m:0},
-  {n:"ホームページ STANDARD",            k:"one", a:109800, m:0},
-  {n:"ホームページ BUSINESS",            k:"one", a:169800, m:0},
-  {n:"Googleマップ 初期設定・最適化",    k:"one", a:39000,  m:0},
-  {n:"Googleマップ 初期設定（月額同時）", k:"one", a:19800,  m:0},
-  {n:"ページ追加（1ページ）",            k:"one", a:6500,   m:0},
-  {n:"ホームページ月額 LIGHT",           k:"mon", a:6980,   m:6},
-  {n:"ホームページ月額 STANDARD",        k:"mon", a:11980,  m:6},
-  {n:"ホームページ月額 BUSINESS",        k:"mon", a:17980,  m:6},
-  {n:"保守・運用 BASIC",                 k:"mon", a:2980,   m:0},
-  {n:"保守・運用 STANDARD",              k:"mon", a:5980,   m:0},
-  {n:"保守・運用 PREMIUM",               k:"mon", a:9980,   m:0},
-  {n:"SNS運用 LIGHT",                    k:"mon", a:19800,  m:3},
-  {n:"SNS運用 STANDARD",                 k:"mon", a:39800,  m:3},
-  {n:"SNS運用 BUSINESS",                 k:"mon", a:69800,  m:3},
-  {n:"Googleマップ LIGHT",               k:"mon", a:9800,   m:3},
-  {n:"Googleマップ STANDARD",            k:"mon", a:19800,  m:3},
-  {n:"Googleマップ PREMIUM",             k:"mon", a:29800,  m:3},
-  {n:"その他（自分で入力）",              k:"one", a:0,      m:0},
+/* ═══════════════════════════════════════════════════════════════
+   サービスと料金（すべて税込）
+   Pricing.html に合わせてあります。★サイトの料金を変えたら、ここも直す
+
+   one … 一括（買い切り）で頼めるときの金額
+   mon … 月額で頼めるときの金額
+   min … 月額の最低契約期間（月）
+   ═══════════════════════════════════════════════════════════════ */
+const CATALOG = [
+  { cat:"セットプラン", note:"2つ以上の組み合わせ。単品より約20%お得", items:[
+    {n:"SET 01　ホームページだけ",            one:49800, mon:6980,  min:6},
+    {n:"SET 02　ホームページ＋Googleマップ",   one:55800, mon:7480,  min:6},
+    {n:"SET 03　ホームページ＋公式LINE",       one:71800, mon:9480,  min:6},
+    {n:"SET 04　まるごとおまかせ",            one:87800, mon:11380, min:6},
+  ]},
+  { cat:"ホームページ制作", note:"月額は初期費用0円・最低6ヶ月・解約3ヶ月前予告", items:[
+    {n:"STARTER（1〜3ページ）",   one:49800,  mon:6980,  min:6},
+    {n:"STANDARD（4〜7ページ）",  one:109800, mon:11980, min:6},
+    {n:"BUSINESS（8〜10ページ）", one:169800, mon:17980, min:6},
+  ]},
+  { cat:"保守・運用", note:"公開後の更新・改善", items:[
+    {n:"BASIC　預かる・止めない",        mon:2980, min:6},
+    {n:"STANDARD　直す・毎月変えられる", mon:5980, min:6},
+    {n:"PREMIUM　育てる・数字を見る",    mon:9980, min:6},
+  ]},
+  { cat:"SNS運用サポート", note:"★最低契約期間は要確認（3ヶ月と6ヶ月で資料が食い違っています）", items:[
+    {n:"LIGHT　考えるところを任せる",    mon:19800, min:3},
+    {n:"STANDARD　作るところまで任せる", mon:39800, min:3},
+    {n:"BUSINESS　売上につなげるまで",   mon:69800, min:3},
+  ]},
+  { cat:"LINE公式アカウント", note:"構築費。LINE公式のプラン費用は別途", items:[
+    {n:"STARTER　使える状態にする",   one:19800},
+    {n:"STANDARD　集客導線を作る",    one:39800},
+    {n:"BUSINESS　売れる仕組みまで",  one:69800},
+  ]},
+  { cat:"Googleマップ対策", note:"月額は最低3ヶ月。2店舗目以降は月額半額", items:[
+    {n:"LIGHT　投稿 月2回",             mon:9800,  min:3},
+    {n:"STANDARD　投稿 月4回",          mon:19800, min:3},
+    {n:"PREMIUM　投稿 月8回・競合追跡", mon:29800, min:3},
+    {n:"初期設定・最適化だけ",           one:39000},
+  ]},
+  { cat:"広告サポート", note:"広告費は別途", items:[
+    {n:"初期設計",         one:19800},
+    {n:"簡易運用サポート", mon:19800, min:0},
+  ]},
+  { cat:"ネットショップ", note:"", items:[
+    {n:"A　BASEで開設（商品5点込み）",      one:19800},
+    {n:"B　サイト内ショップ（商品10点込み）", one:39800},
+  ]},
+  { cat:"写真撮影", note:"内容に応じてお見積り", items:[
+    {n:"撮影の手配",  one:0},
+  ]},
+  { cat:"その他", note:"", items:[
+    {n:"その他（金額を自分で入れる）", one:0, mon:0, min:0},
+  ]},
+];
+
+/* オプション（すべて一括で計上します）*/
+const OPTIONS = [
+  {n:"Googleマップ 初期設定・最適化",       price:39000, note:"月額と同時なら ¥19,800"},
+  {n:"Googleマップ 初期設定（月額と同時）", price:19800},
+  {n:"Instagramとの連携",                   price:11000},
+  {n:"公式LINEとの連携",                    price:11000},
+  {n:"既存ショップをサイトにつなぐ",         price:5500},
+  {n:"商品登録の追加",                      price:1500, qty:true, unit:"点"},
+  {n:"ページ追加",                          price:6500, qty:true, unit:"ページ"},
 ];
 </script>
 
@@ -255,6 +300,29 @@ nav button.on{color:var(--gold-d);border-bottom-color:var(--gold);font-weight:70
 .wk.bad .bar i{background:var(--red)}
 .wk.bad .rest{color:var(--red);font-weight:700}
 
+/* ── お金の大きい表示 ── */
+.money{padding:22px 18px}
+.money > h2{font-size:13px;color:var(--sub);font-weight:600;letter-spacing:.08em;
+  margin-bottom:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.two > div{min-width:0}
+.two .l{font-size:12px;color:var(--sub);line-height:1.5}
+.two .n{font-size:30px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums;
+  letter-spacing:-.01em;margin-top:3px;word-break:break-all}
+.two .n.green{color:var(--green)} .two .n.red{color:var(--red)}
+.two .n.zero{color:var(--none)}
+.two .d{font-size:11px;color:var(--sub);margin-top:3px;line-height:1.6}
+.tot{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tot .l{font-size:12.5px;color:var(--sub)}
+.tot .n{font-size:21px;font-weight:700;font-variant-numeric:tabular-nums}
+.bars{display:flex;height:8px;border-radius:5px;overflow:hidden;margin-top:14px;
+  background:var(--paper2)}
+.bars i{display:block;height:100%}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--sub)}
+.legend span{display:flex;align-items:center;gap:5px}
+.legend b{width:9px;height:9px;border-radius:2px;display:block}
+
 /* ── 数字の表示 ── */
 .big{font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
 .big.red{color:var(--red)} .big.green{color:var(--green)}
@@ -318,6 +386,71 @@ nav button.on{color:var(--gold-d);border-bottom-color:var(--gold);font-weight:70
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
 .ok{color:var(--green);font-size:13px}
 a.btn{text-decoration:none;display:inline-block;text-align:center}
+
+/* ── 選ぶ（払い方・プラン・オプション）── */
+.step{font-size:12px;font-weight:700;color:#fff;background:var(--gold-d);display:inline-block;
+  padding:5px 12px;border-radius:2px;letter-spacing:.06em;margin:22px 0 11px}
+.step small{font-weight:400;opacity:.85}
+.pay2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay2 input{position:absolute;opacity:0;pointer-events:none}
+.pay2 span{display:block;padding:16px 10px;border:2px solid var(--line);border-radius:3px;
+  background:var(--white);font-size:12px;color:var(--sub);line-height:1.6;text-align:center}
+.pay2 span b{display:block;font-size:19px;color:var(--ink);margin-bottom:3px}
+.pay2 input:checked + span{border-color:var(--gold);background:#FCF7EA}
+.pay2 input:checked + span b{color:var(--gold-d)}
+.pay2 input:checked + span::after{content:"　選択中";font-size:10.5px;color:var(--gold-d);
+  font-weight:700;display:block;margin-top:4px}
+.planc{display:block;margin-bottom:8px}
+.planc input{position:absolute;opacity:0;pointer-events:none}
+.planc span{display:flex;align-items:center;gap:10px;padding:14px 13px;border:2px solid var(--line);
+  border-radius:3px;background:var(--white)}
+.planc span b{flex:1;font-size:14px;font-weight:600;line-height:1.5;min-width:0}
+.planc span i{font-style:normal;font-weight:700;font-size:15px;white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.planc span i small{display:block;font-size:10.5px;color:var(--sub);font-weight:400;text-align:right}
+.planc input:checked + span{border-color:var(--gold);background:#FCF7EA}
+.planc input:checked + span b::after{content:"　✓ 選択中";font-size:10.5px;color:var(--gold-d);
+  font-weight:700;white-space:nowrap}
+.planc input:disabled + span{opacity:.35}
+.optr{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line2)}
+.optr:last-child{border-bottom:0}
+.optr input[type=checkbox]{width:22px;height:22px;flex-shrink:0;accent-color:var(--gold)}
+.optr .on{flex:1;min-width:0;font-size:13.5px;line-height:1.5}
+.optr .on small{display:block;font-size:11px;color:var(--sub)}
+.optr .op{font-size:13px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.optr .oq{width:64px;flex-shrink:0;padding:8px 6px;border:1px solid var(--line);
+  border-radius:2px;text-align:center}
+.sumbox{background:var(--ink);color:#fff;padding:16px 15px;margin-top:22px;font-size:13px;
+  line-height:1.9}
+.sumbox .r{display:flex;justify-content:space-between;gap:12px}
+.sumbox .r.big{border-top:1px solid rgba(255,255,255,.22);margin-top:9px;padding-top:9px;
+  font-size:15px;font-weight:700}
+.sumbox .r.big span:last-child{font-size:21px;font-variant-numeric:tabular-nums}
+.sumbox .memo{font-size:11.5px;opacity:.72;margin-top:8px;line-height:1.75}
+
+/* ── お客さんカード ── */
+.dcard{border:1px solid var(--line);background:var(--white);padding:14px;margin-bottom:11px}
+.dcard .dh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.dcard .dn{font-size:15px;font-weight:600;line-height:1.45}
+.dcard .dn small{display:block;font-size:11.5px;color:var(--sub);font-weight:400;margin-top:2px}
+.dcard .dy{font-size:17px;font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}
+.dcard .dy small{display:block;font-size:10.5px;color:var(--sub);font-weight:400;text-align:right}
+.dcard .dopt{font-size:11.5px;color:var(--sub);margin-top:7px;line-height:1.7}
+.dcard .dx{display:grid;gap:9px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line2);
+  grid-template-columns:1fr 1fr}
+.dcard .dx .f{margin:0}
+.dcard .dx .f label{font-size:11px}
+.dcard .dx input{padding:9px 8px;font-size:14px}
+.dcard .db{display:flex;gap:7px;margin-top:11px}
+
+/* ── 月をめくる ── */
+.mnav{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.mnav button{width:42px;height:38px;border:1px solid var(--line);background:var(--white);
+  color:var(--gold-d);font-size:15px;border-radius:2px;flex-shrink:0}
+.mnav button:disabled{opacity:.3}
+.mnav .lb{flex:1;text-align:center;font-size:15px;font-weight:700}
+.mnav .lb small{display:block;font-size:10.5px;color:var(--sub);font-weight:400}
+.mnav .now{width:auto;padding:0 12px;font-size:11.5px;color:var(--sub)}
 
 /* ── 表 ── */
 .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:4px}
@@ -399,6 +532,14 @@ details .in{padding-top:14px}
   .card{padding:17px 14px;margin:13px 0}
   .grid2{grid-template-columns:1fr 1fr}
   .fg.c2,.fg.c3,.fg.c4{grid-template-columns:1fr 1fr}
+  .money{padding:18px 14px}
+  .two{gap:12px}
+  .two .n{font-size:24px}
+  .tot .n{font-size:19px}
+  .dcard .dx{grid-template-columns:1fr}
+  .planc span{padding:13px 11px}
+  .planc span b{font-size:13px}
+  .sumbox .r.big span:last-child{font-size:19px}
   .wk{flex-wrap:wrap;gap:8px}
   .wk .nm{width:auto;flex:1 1 120px}
   .wk .bar{order:5;flex:1 1 100%}
@@ -456,72 +597,121 @@ details .in{padding-top:14px}
 
 <!-- ───────── ① 結果 ───────── -->
 <section id="p-result" class="pane">
-  <div class="card">
-    <h2 id="moTitle">今月</h2>
-    <div class="note" id="moNote"></div>
-    <div class="big" id="moBig">¥0</div>
-    <div class="note" style="margin:4px 0 12px" id="moRate"></div>
-    <div class="kv ind"><span class="k">買い切り</span><span class="v" id="moOne">¥0</span></div>
-    <div class="kv ind"><span class="k">月額（今月分）</span><span class="v" id="moMon">¥0</span></div>
-    <div class="grid2" style="margin-top:16px">
-      <div class="stat"><div class="l">MRR（毎月入る額）</div><div class="n green" id="moMrr">¥0</div>
-        <div class="d" id="moMrrCnt">契約 0件</div></div>
-      <div class="stat"><div class="l">確定売上</div><div class="n green" id="moFix">¥0</div>
-        <div class="d">最低契約期間の残りぶん。<br>これから確実に入る額です</div></div>
+
+  <!-- 月ごと -->
+  <div class="card money">
+    <div class="mnav">
+      <button id="mPrev" title="前の月">◀</button>
+      <div class="lb"><span id="moTitle">今月</span><small id="moTitleSub"></small></div>
+      <button id="mNext" title="次の月">▶</button>
+      <button class="now hide" id="mNow">今月</button>
     </div>
-    <div id="moMrrWarn"></div>
+    <div class="two">
+      <div><div class="l">入った</div>
+        <div class="n green" id="mIn">¥0</div>
+        <div class="d" id="mInSub"></div></div>
+      <div><div class="l">まだ入ってない</div>
+        <div class="n" id="mOut">¥0</div>
+        <div class="d" id="mOutSub"></div></div>
+    </div>
+    <div class="tot"><span class="l" id="mWorkL">この月ぶんの仕事</span>
+      <span class="n" id="mWork">¥0</span></div>
+    <div class="note" id="mRate" style="margin-top:6px"></div>
+    <div id="mOverdue"></div>
+    <div id="mDeals"></div>
   </div>
 
-  <div class="card">
-    <div class="sec">入金</div>
-    <div class="kv"><span class="k">請求済</span><span class="v" id="moBilled">¥0</span></div>
-    <div class="kv"><span class="k">入金済</span><span class="v" id="moPaid">¥0</span></div>
-    <div class="kv"><span class="k">未回収</span><span class="v" id="moUnpaid">¥0</span></div>
-    <div id="moOverdue"></div>
+  <!-- ぜんぶで -->
+  <div class="card money">
+    <h2>ぜんぶで</h2>
+    <div class="two">
+      <div><div class="l">これまでもらった</div>
+        <div class="n" id="tPaid">¥0</div>
+        <div class="d" id="tPaidSub"></div></div>
+      <div><div class="l">これから入る</div>
+        <div class="n green" id="tFuture">¥0</div>
+        <div class="d" id="tFutureSub"></div></div>
+    </div>
+    <div class="bars" id="tBars"></div>
+    <div class="legend" id="tLegend"></div>
+    <div class="tot"><span class="l">合計（これまで ＋ これから）</span>
+      <span class="n" id="tAll">¥0</span></div>
   </div>
 
+  <!-- お客さん -->
   <div class="card">
-    <h2 id="yrTitle">今年</h2>
-    <div class="note" id="yrRange"></div>
-    <div class="big" id="yrBig">¥0</div>
-    <div class="note" style="margin:4px 0 14px" id="yrSub"></div>
-    <div class="grid2">
-      <div class="stat"><div class="l">残り</div><div class="n" id="yrRest">¥0</div>
-        <div class="d" id="yrRestM">残り0ヶ月</div></div>
-      <div class="stat"><div class="l">このペースだと着地</div><div class="n" id="yrLand">¥0</div>
-        <div class="d" id="yrLandR">目標比 0%</div></div>
+    <h2>お客さん</h2>
+    <div class="note" id="custNote">お客さんごとの、もらった額とこれから入る額です。</div>
+    <div class="tw"><table class="t" id="custTbl"></table></div>
+    <div class="empty hide" id="custEmpty">
+      まだお客さんがいません。<br>下のボタンから登録してください。
     </div>
-    <div class="chartbox" style="margin-top:18px"><canvas id="yrChart"></canvas></div>
-    <div class="note" id="yrChartNote" style="margin-top:10px"></div>
-    <div id="yrMove"></div>
+    <div class="btns"><button class="btn w-sp" id="goEnter">＋ お客さんを登録する</button></div>
   </div>
 
+  <!-- 以下は、見たいときだけ開く -->
   <div class="card">
-    <h2>角田さんの数字（今月）</h2>
-    <div class="note">角田さんの名前で入れたぶんだけを見ています。</div>
-    <div class="grid2">
-      <div class="stat"><div class="l">架電 → つながった</div><div class="n" id="kCall">0 → 0</div>
-        <div class="d" id="kCallR"></div></div>
-      <div class="stat"><div class="l">アポ → 商談</div><div class="n" id="kAppt">0 → 0</div>
-        <div class="d" id="kApptR"></div></div>
-    </div>
-    <div class="grid2" style="margin-top:14px">
-      <div class="stat"><div class="l">角田さん経由の成約</div><div class="n" id="kClose">0件</div>
-        <div class="d" id="kCloseYen">¥0</div></div>
-      <div class="stat"><div class="l">報酬分配（目安）</div><div class="n" id="kShare">¥0</div>
-        <div class="d">正式には「④ 配分計算」で</div></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>今週やること</h2>
-    <div class="note" id="wkRange"></div>
-    <div id="wkRows"></div>
-    <div id="wkMove"></div>
-    <details><summary>今月あと必要な数（成約からDM・架電まで）</summary>
+    <details><summary>毎月かならず入る額（MRR）</summary>
       <div class="in">
-        <div id="moBack"></div>
-        <div class="info" id="moRateSrc"></div>
+        <div class="grid2">
+          <div class="stat"><div class="l">MRR（毎月入る額）</div>
+            <div class="n green" id="moMrr">¥0</div>
+            <div class="d" id="moMrrCnt">契約 0件</div></div>
+          <div class="stat"><div class="l">確定売上</div><div class="n green" id="moFix">¥0</div>
+            <div class="d">最低契約期間の残りぶん</div></div>
+        </div>
+        <div id="moMrrWarn"></div>
+        <div class="kv" style="margin-top:12px"><span class="k">請求済</span>
+          <span class="v" id="moBilled">¥0</span></div>
+        <div class="kv"><span class="k">入金済</span><span class="v" id="moPaid">¥0</span></div>
+        <div class="kv"><span class="k">未回収</span><span class="v" id="moUnpaid">¥0</span></div>
+      </div>
+    </details>
+
+    <details><summary id="yrSummary">今年の推移</summary>
+      <div class="in">
+        <div class="note" id="yrRange"></div>
+        <div class="big" id="yrBig">¥0</div>
+        <div class="note" style="margin:4px 0 14px" id="yrSub"></div>
+        <div class="grid2">
+          <div class="stat"><div class="l">残り</div><div class="n" id="yrRest">¥0</div>
+            <div class="d" id="yrRestM">残り0ヶ月</div></div>
+          <div class="stat"><div class="l">このペースだと着地</div>
+            <div class="n" id="yrLand">¥0</div>
+            <div class="d" id="yrLandR">目標比 0%</div></div>
+        </div>
+        <div class="chartbox" style="margin-top:18px"><canvas id="yrChart"></canvas></div>
+        <div class="note" id="yrChartNote" style="margin-top:10px"></div>
+        <div id="yrMove"></div>
+      </div>
+    </details>
+
+    <details><summary>今週やること</summary>
+      <div class="in">
+        <div class="note" id="wkRange"></div>
+        <div id="wkRows"></div>
+        <div id="wkMove"></div>
+        <div style="margin-top:16px"><div class="sec">今月あと必要な数</div>
+          <div id="moBack"></div>
+          <div class="info" id="moRateSrc"></div></div>
+      </div>
+    </details>
+
+    <details><summary>角田さんの数字（今月）</summary>
+      <div class="in">
+        <div class="grid2">
+          <div class="stat"><div class="l">架電 → つながった</div>
+            <div class="n" id="kCall">0 → 0</div><div class="d" id="kCallR"></div></div>
+          <div class="stat"><div class="l">アポ → 商談</div>
+            <div class="n" id="kAppt">0 → 0</div><div class="d" id="kApptR"></div></div>
+        </div>
+        <div class="grid2" style="margin-top:14px">
+          <div class="stat"><div class="l">角田さん経由の成約</div>
+            <div class="n" id="kClose">0件</div><div class="d" id="kCloseYen">¥0</div></div>
+          <div class="stat"><div class="l">報酬分配（目安）</div>
+            <div class="n" id="kShare">¥0</div>
+            <div class="d">正式には「④ 配分計算」で</div></div>
+        </div>
       </div>
     </details>
   </div>
@@ -712,8 +902,66 @@ details .in{padding-top:14px}
 
 <!-- ───────── ⑤ 結果入力 ───────── -->
 <section id="p-enter" class="pane hide">
+
+  <!-- お客さんの登録 -->
+  <div class="card" id="regCard">
+    <h2 id="regTitle">お客さんを登録する</h2>
+    <div class="note" id="regNote">
+      お客様が「お願いします」と言った時点で登録します。入金ではありません。
+    </div>
+
+    <div class="fg c2">
+      <div class="f"><label>成約日</label><input type="date" id="n_date"></div>
+      <div class="f"><label>お客様名</label><input type="text" id="n_cust" placeholder="○○様"></div>
+    </div>
+
+    <div class="step">1　払い方</div>
+    <div class="pay2" id="n_pay">
+      <label><input type="radio" name="paytype" value="one" checked>
+        <span><b>一括</b>まとめて払う<br>（買い切り）</span></label>
+      <label><input type="radio" name="paytype" value="mon">
+        <span><b>月額</b>毎月はらう</span></label>
+    </div>
+
+    <div class="step">2　サービス</div>
+    <div class="f"><label>種類</label><select id="n_cat"></select></div>
+    <div class="note" id="n_catNote" style="margin:-8px 0 10px"></div>
+    <div id="n_plans"></div>
+    <div class="fg c2" style="margin-top:12px">
+      <div class="f"><label id="n_amtL">金額（税込）</label>
+        <input type="number" id="n_amt" min="0" step="100" value="0" inputmode="numeric"></div>
+      <div class="f" id="n_mBox"><label>最低契約期間（月）</label>
+        <input type="number" id="n_months" min="0" value="0" inputmode="numeric"></div>
+    </div>
+
+    <div class="step">3　オプション　<small>必要なものだけ</small></div>
+    <div id="n_opts"></div>
+
+    <div class="step">4　だれが動いたか</div>
+    <div class="fg c2">
+      <div class="f"><label>案件の区分（報酬の分け方）</label><select id="n_plan"></select></div>
+      <div class="f"><label>主に動いた人</label><select id="n_via"></select></div>
+    </div>
+
+    <div class="sumbox" id="n_sum"></div>
+    <div class="btns">
+      <button class="btn w-sp" id="nSave">この内容で登録する</button>
+      <button class="btn g hide" id="nCancel">やめる</button>
+      <span class="ok hide" id="nOk">登録しました</span>
+    </div>
+  </div>
+
+  <!-- 登録したお客さん -->
   <div class="card">
-    <h2>今日の数字</h2>
+    <h2>登録したお客さん</h2>
+    <div class="note">行の「直す」で内容を変えられます。</div>
+    <div id="dealCards"></div>
+    <div class="empty hide" id="dealEmpty">まだ登録がありません。</div>
+  </div>
+
+  <!-- 以下は、使うときだけ開く -->
+  <div class="card">
+  <details><summary>今日の数字（DM・架電・商談）</summary><div class="in">
     <div class="note">＋ と − で数えられます。0のところは触らなくて大丈夫です。</div>
     <div class="fg c2" style="max-width:440px">
       <div class="f"><label>やった人</label><select id="dWho"></select></div>
@@ -762,51 +1010,18 @@ details .in{padding-top:14px}
     <div class="info">
       名前ごとに別々に保存されます。二人が同じ日を入れても、上書きになりません。<br>
       アポ＝次の日時が決まったもの。「また連絡します」はアポに入れません。<br>
-      商談＝金額の話をしたもの。ヒアリングだけは商談に入れません。<br>
-      成約は、下の「案件の登録」で登録すると自動で数えられます。
+      商談＝金額の話をしたもの。ヒアリングだけは商談に入れません。
     </div>
-  </div>
+  </div></details>
 
-  <div class="card">
-    <h2>案件の登録（成約したとき）</h2>
-    <div class="note">お客様が「お願いします」と言った時点で登録します。入金ではありません。</div>
-    <div class="fg c2">
-      <div class="f"><label>成約日</label><input type="date" id="n_date"></div>
-      <div class="f"><label>お客様名</label><input type="text" id="n_cust" placeholder="○○様"></div>
-    </div>
-    <div class="f"><label>サービス</label><select id="n_svc"></select></div>
-    <div class="fg c3">
-      <div class="f"><label>種別</label><select id="n_kind">
-        <option value="one">買い切り</option><option value="mon">月額</option></select></div>
-      <div class="f"><label>金額（税込）</label>
-        <input type="number" id="n_amt" min="0" step="100" value="0" inputmode="numeric"></div>
-      <div class="f" id="n_mBox"><label>最低契約期間（月）</label>
-        <input type="number" id="n_months" min="0" value="0" inputmode="numeric"></div>
-    </div>
-    <div class="fg c2">
-      <div class="f"><label>案件の区分（報酬の分け方）</label><select id="n_plan"></select></div>
-      <div class="f"><label>主に動いた人</label><select id="n_via"></select></div>
-    </div>
-    <div class="btns"><button class="btn w-sp" id="nSave">この案件を登録</button>
-      <span class="ok hide" id="nOk">登録しました</span></div>
-    <div class="info" id="n_hint"></div>
-  </div>
-
-  <div class="card">
-    <h2>案件の一覧</h2>
-    <div class="note">着手日・公開日を入れると、その月の売上として計上されます。解約は「解約月」に。</div>
-    <div class="tw"><table class="t" id="dealTbl"></table></div>
-    <div class="empty hide" id="dealEmpty">まだ案件がありません。</div>
-  </div>
-
-  <div class="card">
-    <h2>入金の記録</h2>
+  <details><summary>入金の記録（請求した・振り込まれた）</summary><div class="in">
     <div class="note">
-      買い切りは「着手50% ＋ 公開前50%」なので、1件が2行になります。<br>
+      一括は「着手50% ＋ 公開前50%」なので、1件が2行になります。<br>
       月額は、月がくるたびに1行ずつ増えます。
     </div>
     <div class="tw"><table class="t" id="payTbl"></table></div>
-    <div class="empty hide" id="payEmpty">まだ請求の行がありません。案件を登録すると出てきます。</div>
+    <div class="empty hide" id="payEmpty">まだ請求の行がありません。お客さんを登録すると出てきます。</div>
+  </div></details>
   </div>
 </section>
 
@@ -955,9 +1170,20 @@ function sumDays(fromISO, toISO, who){
 /* ═══════════════════════════════════════════════
    案件・売上・MRR・確定売上
    ═══════════════════════════════════════════════ */
+/* オプションの合計（オプションは、いつも一括で計上します）*/
+function optTotal(d){
+  return (d.opts || []).reduce((a,o) => a + num(o.price) * Math.max(1, num(o.qty) || 1), 0);
+}
+function optText(d){
+  return (d.opts || []).map(o =>
+    o.n + (num(o.qty) > 1 ? ' ×' + num(o.qty) : '') + ' ' + yen(num(o.price)*Math.max(1,num(o.qty)||1))
+  ).join('　／　');
+}
+/* 成約1件の価値（平均成約単価に使う）*/
 function dealValue(d){
-  if (d.kind === 'mon') return num(d.amount) * Math.max(1, num(d.months) || 3);
-  return num(d.amount);
+  const ex = optTotal(d);
+  if (d.kind === 'mon') return num(d.amount) * Math.max(1, num(d.months) || 3) + ex;
+  return num(d.amount) + ex;
 }
 function dealsIn(fromISO, toISO, filterVia){
   return DB.deals.filter(d => d.date >= fromISO && d.date <= toISO
@@ -967,12 +1193,16 @@ function revenueRows(){
   const rows = [];
   const nowYm = ym(new Date());
   DB.deals.forEach(d => {
+    const ex = optTotal(d);
     if (d.kind === 'one'){
-      const a = Math.round(num(d.amount)/2);
-      const b = num(d.amount) - a;
+      const whole = num(d.amount) + ex;             // 一括はオプションも込みで半分ずつ
+      const a = Math.round(whole/2);
+      const b = whole - a;
       rows.push({dealId:d.id, key:'着手50%', ym: ym(parseISO(d.startDate || d.date)), amount:a, deal:d});
       rows.push({dealId:d.id, key:'公開前50%', ym: d.pubDate ? ym(parseISO(d.pubDate)) : null, amount:b, deal:d});
     } else {
+      // 月額のオプション（初期費用）は、成約した月に一度だけ
+      if (ex > 0) rows.push({dealId:d.id, key:'初期費用', ym: ym(parseISO(d.date)), amount:ex, deal:d});
       const from = ym(parseISO(d.date));
       const end  = d.cancelYm || nowYm;
       const n = ymDiff(from, end);
@@ -989,7 +1219,8 @@ function monthRevenue(k){
   let one=0, mon=0;
   revenueRows().forEach(r => {
     if (r.ym !== k) return;
-    if (r.deal.kind === 'one') one += r.amount; else mon += r.amount;
+    // 「初期費用」は月額契約でも一括ぶんとして数えます
+    if (r.deal.kind === 'one' || r.key === '初期費用') one += r.amount; else mon += r.amount;
   });
   return {one, mon, total: one+mon};
 }
@@ -1040,6 +1271,67 @@ function paymentStats(){
     }
   });
   return {billed, paid, unpaid: billed - paid, overdue, late, rows};
+}
+
+/* ═══════════════════════════════════════════════
+   お金（もらった額・これから入る額・お客さんごと）
+   ═══════════════════════════════════════════════ */
+/* その月に実際に振り込まれた額 */
+function paidInMonth(k){
+  let v = 0;
+  invoiceRows().forEach(r => { if (r.paidDate && ym(parseISO(r.paidDate)) === k) v += r.paid; });
+  return v;
+}
+/* これまでに実際に振り込まれた総額 */
+function paidTotal(){
+  let v = 0; invoiceRows().forEach(r => v += r.paid); return v;
+}
+/* まだ請求していない月額のぶん（今月ぶんはもう請求行になっているので、来月から数える）
+   ★ここを「最低契約期間の残り」にすると、今月ぶんを未回収と二重に数えてしまいます */
+function notYetBilled(){
+  const nowYm = ym(new Date());
+  let v = 0;
+  DB.deals.forEach(d => {
+    if (d.kind !== 'mon') return;
+    if (d.cancelYm && d.cancelYm < nowYm) return;
+    const passed = Math.max(0, ymDiff(ym(parseISO(d.date)), nowYm));
+    const rest = Math.max(0, (num(d.months)||0) - passed - 1);   // 来月以降のぶん
+    v += num(d.amount) * rest;
+  });
+  return v;
+}
+/* これから入る額 ＝ 請求したのに未入金 ＋ まだ請求していない月額のぶん */
+function futureMoney(){
+  const unpaid = paymentStats().unpaid;
+  const committed = notYetBilled();
+  return {unpaid, committed, total: unpaid + committed};
+}
+/* お客さんごとの、もらった額とこれから入る額 */
+function customerRows(){
+  const nowYm = ym(new Date());
+  const map = {};
+  const get = c => (map[c] = map[c] || {name:c, paid:0, unpaid:0, committed:0,
+    monthly:0, deals:0, first:'', active:false});
+
+  DB.deals.forEach(d => {
+    const c = get(d.customer || '（名前なし）');
+    c.deals++;
+    if (!c.first || d.date < c.first) c.first = d.date;
+    if (d.kind === 'mon' && !(d.cancelYm && d.cancelYm < nowYm)){
+      c.monthly += num(d.amount);
+      c.active = true;
+      const passed = Math.max(0, ymDiff(ym(parseISO(d.date)), nowYm));
+      c.committed += num(d.amount) * Math.max(0, (num(d.months)||0) - passed);
+    }
+  });
+  invoiceRows().forEach(r => {
+    const c = map[r.deal.customer || '（名前なし）'];
+    if (!c) return;
+    c.paid += r.paid;
+    c.unpaid += Math.max(0, r.billedAmt - r.paid);
+  });
+  return Object.values(map)
+    .sort((a,b) => (b.paid + b.unpaid + b.committed) - (a.paid + a.unpaid + a.committed));
 }
 
 /* ═══════════════════════════════════════════════
@@ -1194,20 +1486,100 @@ function planShare(planKey){
    画面：① 結果
    ═══════════════════════════════════════════════ */
 let chart = null;
+let viewYm = null;              // 見ている月（null＝今月）
+
+/* その月に請求して、まだ入っていない額 */
+function unpaidBilledIn(k){
+  let v = 0;
+  invoiceRows().forEach(r => {
+    if (r.billed && ym(parseISO(r.billed)) === k) v += Math.max(0, r.billedAmt - r.paid);
+  });
+  return v;
+}
+
 function renderResult(){
-  /* ── 今月 ── */
-  const k = ym(new Date());
+  const nowK = ym(new Date());
+  const k = viewYm || nowK;
   const p = k.split('-');
+  const isNow = k === nowK;
   $('#moTitle').textContent = num(p[0]) + '年' + num(p[1]) + '月';
+  $('#moTitleSub').textContent = isNow ? '今月' : '';
+  $('#mNow').classList.toggle('hide', isNow);
+  $('#mNext').disabled = k >= nowK;
 
+  const P = paymentStats();
   const rev = monthRevenue(k), tgt = monthTarget(k);
-  $('#moNote').textContent = '目標 ' + yen(tgt);
-  $('#moBig').textContent = yen(rev.total);
-  $('#moBig').className = 'big' + (tgt>0 && rev.total>=tgt ? ' green' : '');
-  $('#moRate').textContent = tgt>0 ? '達成率 ' + pct(rev.total, tgt) + '%' : '目標が未設定です';
-  $('#moOne').textContent = yen(rev.one);
-  $('#moMon').textContent = yen(rev.mon);
+  const gotIn = paidInMonth(k);
 
+  /* ── 今月　入った／まだ入ってない ── */
+  const setN = (sel, v, cls) => {
+    const el = $(sel);
+    el.textContent = yen(v);
+    el.className = 'n' + (v === 0 ? ' zero' : (cls ? ' ' + cls : ''));
+  };
+  const outM = unpaidBilledIn(k);
+  setN('#mIn', gotIn, 'green');
+  setN('#mOut', outM, outM > 0 ? 'red' : '');
+  $('#mInSub').textContent = gotIn > 0 ? 'この月に振り込まれた額' : 'この月の入金はありません';
+  $('#mOutSub').textContent = outM > 0
+    ? 'この月に請求して、まだ入っていない額' : 'この月の未回収はありません';
+
+  $('#mWork').textContent = yen(rev.total);
+  $('#mWorkL').textContent = 'この月ぶんの仕事（一括 ' + yen(rev.one)
+    + '＋月額 ' + yen(rev.mon) + '）';
+  $('#mRate').textContent = tgt > 0
+    ? 'この月の目標 ' + yen(tgt) + '　達成率 ' + pct(rev.total, tgt) + '%'
+    : 'この月の目標が未設定です';
+
+  $('#mOverdue').innerHTML = (isNow && P.overdue > 0)
+    ? `<div class="warn"><b>${SETTINGS.OVERDUE_DAYS}日を過ぎても入っていない額　${yen(P.overdue)}</b><br>`
+      + P.late.sort((a,b)=>b.days-a.days).map(x =>
+          `${esc(x.r.deal.customer||'（名前なし）')}　${yen(x.rest)}　${x.days}日経過`
+        ).join('<br>') + `</div>`
+    : '';
+
+  /* この月の中身（どのお客さんから、いくら）*/
+  const rowsM = invoiceRows().filter(r => r.ym === k || (r.paidDate && ym(parseISO(r.paidDate)) === k));
+  $('#mDeals').innerHTML = rowsM.length
+    ? `<div class="sec" style="margin-top:20px">この月の中身</div>`
+      + `<div class="tw"><table class="t">
+        <tr><th>お客様</th><th>内容</th><th style="text-align:right">金額</th><th>入金</th></tr>`
+      + rowsM.sort((a,b)=>String(a.deal.customer).localeCompare(String(b.deal.customer))).map(r => `
+        <tr><td>${esc(r.deal.customer||'（名前なし）')}</td>
+          <td>${esc(r.label)}</td>
+          <td class="n">${yen(r.plan)}</td>
+          <td>${r.paid>0
+            ? `<span class="tag k">入金済 ${esc(r.paidDate)}</span>`
+            : (r.billed ? `<span class="tag" style="color:var(--red)">未入金</span>`
+                        : `<span class="tag">未請求</span>`)}</td></tr>`).join('')
+      + `</table></div>`
+    : `<div class="empty" style="padding:16px 0">この月の請求はありません。</div>`;
+
+  /* ── ぜんぶで ── */
+  const tp = paidTotal(), F = futureMoney();
+  setN('#tPaid', tp, '');
+  setN('#tFuture', F.total, 'green');
+  $('#tPaidSub').textContent = tp > 0 ? 'これまでの入金の合計' : 'まだ入金がありません';
+  $('#tFutureSub').innerHTML = F.total > 0
+    ? '未回収 ' + yen(F.unpaid) + '<br>月額の残り ' + yen(F.committed)
+    : '契約が入ると出ます';
+  $('#tAll').textContent = yen(tp + F.total);
+
+  const sum = tp + F.unpaid + F.committed;
+  $('#tBars').innerHTML = sum > 0
+    ? [[tp,'var(--gold)'],[F.unpaid,'var(--red)'],[F.committed,'var(--green)']]
+        .map(([v,c]) => v>0 ? `<i style="width:${v/sum*100}%;background:${c}"></i>` : '').join('')
+    : '';
+  $('#tLegend').innerHTML = sum > 0
+    ? [['もらった',tp,'var(--gold)'],['未回収',F.unpaid,'var(--red)'],
+       ['月額の残り',F.committed,'var(--green)']]
+        .filter(x=>x[1]>0)
+        .map(([n,v,c]) => `<span><b style="background:${c}"></b>${n} ${yen(v)}</span>`).join('')
+    : '';
+
+  renderCustomers();
+
+  /* ── 折りたたみの中 ── */
   const M = calcMRR();
   $('#moMrr').textContent = yen(M.mrr);
   $('#moMrrCnt').textContent = '契約 ' + M.cnt + '件';
@@ -1215,24 +1587,55 @@ function renderResult(){
   const ma = moneyAlert();
   $('#moMrrWarn').innerHTML = (ma && ma.text.indexOf('月額') === 0)
     ? `<div class="warn">${esc(ma.text)}</div>` : '';
-
-  /* ── 入金 ── */
-  const P = paymentStats();
   $('#moBilled').textContent = yen(P.billed);
   $('#moPaid').textContent = yen(P.paid);
   $('#moUnpaid').textContent = yen(P.unpaid);
   $('#moUnpaid').className = 'v' + (P.unpaid > 0 ? ' red' : '');
-  $('#moOverdue').innerHTML = P.overdue > 0
-    ? `<div class="warn"><b>${SETTINGS.OVERDUE_DAYS}日を過ぎた未回収　${yen(P.overdue)}</b><br>`
-      + P.late.sort((a,b)=>b.days-a.days).map(x =>
-          `${esc(x.r.deal.customer||'（名前なし）')}　${esc(x.r.label)}　${yen(x.rest)}　${x.days}日経過`
-        ).join('<br>') + `</div>`
-    : '';
 
   renderYear();
   renderKakuda(k, p);
   renderWeek();
   renderBackcast();
+}
+
+/* 月をめくる */
+$('#mPrev').addEventListener('click', () => {
+  viewYm = ymAdd(viewYm || ym(new Date()), -1); renderResult(); });
+$('#mNext').addEventListener('click', () => {
+  const nowK = ym(new Date());
+  const next = ymAdd(viewYm || nowK, 1);
+  viewYm = next > nowK ? nowK : next; renderResult(); });
+$('#mNow').addEventListener('click', () => { viewYm = null; renderResult(); });
+
+function renderCustomers(){
+  const list = customerRows();
+  $('#custEmpty').classList.toggle('hide', list.length > 0);
+  $('#custNote').textContent = list.length
+    ? list.length + '人のお客さん。もらった額の多い順です。'
+    : '';
+  if (!list.length){ $('#custTbl').innerHTML = ''; return; }
+
+  $('#custTbl').innerHTML =
+    '<tr><th>お客様</th><th style="text-align:right">もらった</th>'
+    + '<th style="text-align:right">まだ入ってない</th>'
+    + '<th style="text-align:right">これから入る</th><th>契約</th></tr>'
+    + list.map(c => `<tr>
+        <td>${esc(c.name)}</td>
+        <td class="n">${c.paid>0 ? yen(c.paid) : '—'}</td>
+        <td class="n ${c.unpaid>0?'red':''}">${c.unpaid>0 ? yen(c.unpaid) : '—'}</td>
+        <td class="n">${c.committed>0 ? yen(c.committed) : '—'}</td>
+        <td>${c.active
+          ? `<span class="tag k">月額 ${yen(c.monthly)}/月</span>`
+          : `<span class="tag">${c.deals}件</span>`}</td>
+      </tr>`).join('')
+    + (() => {
+        const t = list.reduce((a,c)=>({p:a.p+c.paid, u:a.u+c.unpaid, c:a.c+c.committed}),
+          {p:0,u:0,c:0});
+        return `<tr><th>合計</th>
+          <th style="text-align:right">${yen(t.p)}</th>
+          <th style="text-align:right">${yen(t.u)}</th>
+          <th style="text-align:right">${yen(t.c)}</th><th></th></tr>`;
+      })();
 }
 
 function renderYear(){
@@ -1247,6 +1650,8 @@ function renderYear(){
   const s = months[0].split('-'), e = months[11].split('-');
   $('#yrRange').textContent = num(s[0])+'年'+num(s[1])+'月 〜 '+num(e[0])+'年'+num(e[1])+'月'
     + '　目標 ' + yen(target);
+  $('#yrSummary').textContent = '今年の推移　' + yen(got)
+    + (target > 0 ? '（目標の ' + pct(got, target) + '%）' : '');
   $('#yrBig').textContent = yen(got);
   $('#yrBig').className = 'big' + (target>0 && got>=target ? ' green' : '');
   $('#yrSub').textContent = target>0 ? '達成率 ' + pct(got, target) + '%' : '目標が未設定です';
@@ -1718,72 +2123,247 @@ function copyText(txt, btn, back){
 /* ═══════════════════════════════════════════════
    画面：⑤ 結果入力
    ═══════════════════════════════════════════════ */
+let editingId = null;          // 直しているお客さんの id（新規のときは null）
+let pickCat = 0, pickPlan = -1;
+
+function payType(){ const el = $('#n_pay input:checked'); return el ? el.value : 'one'; }
+
 function renderEnter(){
   if (!$('#dDate').value) $('#dDate').value = TODAY;
   loadDay();
-  if (!$('#n_svc').options.length){
-    $('#n_svc').innerHTML = SERVICES.map((s,i) => `<option value="${i}">${esc(s.n)}</option>`).join('');
+  if (!$('#n_cat').options.length){
+    $('#n_cat').innerHTML = CATALOG.map((c,i) => `<option value="${i}">${esc(c.cat)}</option>`).join('');
     $('#n_plan').innerHTML = Object.entries(PLANS).map(([k,v]) =>
       `<option value="${k}">${k}　${esc(v.label)}</option>`).join('');
     $('#n_date').value = TODAY;
-    applySvc();
+    renderOptions();
+    renderPlans();
   }
-  renderDeals(); renderPay();
+  renderDealCards(); renderPay();
 }
 function loadDay(){
   const d = dayOfWho($('#dDate').value, $('#dWho').value);
   DKEYS.forEach(k => { const el = $('#d_'+k); if (el) el.value = d[k]; });
 }
-function applySvc(){
-  const s = SERVICES[num($('#n_svc').value)] || SERVICES[0];
-  $('#n_kind').value = s.k; $('#n_amt').value = s.a; $('#n_months').value = s.m;
-  toggleKind();
-}
-function toggleKind(){
-  const mon = $('#n_kind').value === 'mon';
-  $('#n_mBox').classList.toggle('hide', !mon);
-  const amt = num($('#n_amt').value), m = num($('#n_months').value);
-  $('#n_hint').innerHTML = mon
-    ? (m > 0
-        ? `契約した時点で <b>${yen(amt*m)}</b> が確定売上になります（${yen(amt)} × ${m}ヶ月）。`
-        : `期間の定めがない契約です。MRRには入りますが、確定売上には入りません。`)
-    : `着手時に <b>${yen(Math.round(amt/2))}</b>、公開前に <b>${yen(amt-Math.round(amt/2))}</b> の2回に分けて計上します。`;
-}
-function renderDeals(){
-  const list = DB.deals.slice().sort((a,b)=> b.date.localeCompare(a.date));
-  $('#dealEmpty').classList.toggle('hide', list.length > 0);
-  if (!list.length){ $('#dealTbl').innerHTML = ''; return; }
-  const head = ['成約日','お客様','サービス','種別','金額','着手日','公開日','解約月','動いた人','区分','角田さんの分',''];
-  $('#dealTbl').innerHTML = '<tr>' + head.map(h=>`<th>${esc(h)}</th>`).join('') + '</tr>'
-    + list.map(d => {
-      const sh = planShare(d.plan||'A')['角田'];
-      return `<tr>
-        <td>${esc(d.date)}</td>
-        <td>${esc(d.customer)}</td>
-        <td>${esc(d.service)}</td>
-        <td><span class="tag">${d.kind==='mon'?'月額':'買い切り'}</span></td>
-        <td class="n">${yen(d.amount)}${d.kind==='mon'?'/月':''}</td>
-        <td>${d.kind==='one'?`<input type="date" data-d="${d.id}" data-f="startDate" value="${esc(d.startDate||'')}">`:'—'}</td>
-        <td>${d.kind==='one'?`<input type="date" data-d="${d.id}" data-f="pubDate" value="${esc(d.pubDate||'')}">`:'—'}</td>
-        <td>${d.kind==='mon'?`<input type="month" data-d="${d.id}" data-f="cancelYm" value="${esc(d.cancelYm||'')}">`:'—'}</td>
-        <td>${esc(d.via)}</td>
-        <td><span class="tag k">${esc(d.plan||'A')}</span></td>
-        <td class="n">${yen(num(d.amount)*sh)}</td>
-        <td><button class="btn r" data-del="${d.id}">消す</button></td>
-      </tr>`;
-    }).join('');
 
-  $$('#dealTbl input').forEach(el => el.addEventListener('change', () => {
-    const d = DB.deals.find(x => x.id === el.dataset.d); if (!d) return;
-    d[el.dataset.f] = el.value; save(); renderAll();
+/* ── サービスのプランを並べる（どれを選んだか分かるように）── */
+function renderPlans(keepAmount){
+  const mon = payType() === 'mon';
+  const cat = CATALOG[pickCat] || CATALOG[0];
+  $('#n_catNote').textContent = cat.note || '';
+  $('#n_amtL').textContent = mon ? '月額（税込）' : '金額（税込）';
+  $('#n_mBox').classList.toggle('hide', !mon);
+
+  $('#n_plans').innerHTML = cat.items.map((it,i) => {
+    const price = mon ? it.mon : it.one;
+    const can = price != null;
+    const label = can
+      ? (price > 0 ? yen(price) + (mon ? '<small>／月</small>' : '') : '<small>お見積り</small>')
+      : '<small>' + (mon ? '月額なし' : '一括なし') + '</small>';
+    return `<label class="planc"><input type="radio" name="planpick" value="${i}"
+        ${can?'':'disabled'} ${i===pickPlan&&can?'checked':''}>
+      <span><b>${esc(it.n)}</b><i>${label}</i></span></label>`;
+  }).join('');
+
+  $$('#n_plans input').forEach(r => r.addEventListener('change', () => {
+    pickPlan = num(r.value);
+    const it = cat.items[pickPlan];
+    const price = mon ? it.mon : it.one;
+    $('#n_amt').value = clamp0(price);
+    $('#n_months').value = mon ? clamp0(it.min) : 0;
+    renderSum();
   }));
-  $$('#dealTbl [data-del]').forEach(b => b.addEventListener('click', () => {
+
+  if (!keepAmount && pickPlan >= 0){
+    const it = cat.items[pickPlan];
+    const price = mon ? it.mon : it.one;
+    if (price == null){ pickPlan = -1; $('#n_amt').value = 0; $('#n_months').value = 0; }
+    else { $('#n_amt').value = clamp0(price); $('#n_months').value = mon ? clamp0(it.min) : 0; }
+  }
+  renderSum();
+}
+
+/* ── オプション ── */
+function renderOptions(){
+  $('#n_opts').innerHTML = OPTIONS.map((o,i) => `
+    <div class="optr">
+      <input type="checkbox" id="opt${i}" data-o="${i}">
+      <label class="on" for="opt${i}">${esc(o.n)}
+        ${o.note?`<small>${esc(o.note)}</small>`:''}</label>
+      ${o.qty?`<input class="oq" type="number" min="1" value="1" data-oq="${i}" inputmode="numeric">`:''}
+      <div class="op">${yen(o.price)}${o.qty?'<small>/'+esc(o.unit)+'</small>':''}</div>
+    </div>`).join('');
+  $$('#n_opts input').forEach(el => el.addEventListener('change', renderSum));
+  $$('#n_opts input').forEach(el => el.addEventListener('input', renderSum));
+}
+function pickedOptions(){
+  const out = [];
+  OPTIONS.forEach((o,i) => {
+    const cb = $('#opt'+i);
+    if (cb && cb.checked){
+      const q = $(`[data-oq="${i}"]`);
+      out.push({n:o.n, price:o.price, qty: q ? Math.max(1, clamp0(q.value)) : 1});
+    }
+  });
+  return out;
+}
+
+/* ── いくらになるか、その場で見せる ── */
+function renderSum(){
+  const mon = payType() === 'mon';
+  const amt = clamp0($('#n_amt').value);
+  const m = clamp0($('#n_months').value);
+  const opts = pickedOptions();
+  const ex = opts.reduce((a,o)=>a+o.price*o.qty, 0);
+  const rows = [];
+
+  if (mon){
+    rows.push(['毎月', yen(amt) + ' / 月']);
+    if (ex > 0) rows.push(['初期費用（オプション）', yen(ex)]);
+    if (m > 0){
+      rows.push(['最低契約期間', m + 'ヶ月']);
+      rows.push(['big', '契約で決まる額', yen(amt*m + ex)]);
+    } else {
+      rows.push(['big', '毎月の額', yen(amt)]);
+    }
+  } else {
+    rows.push(['本体', yen(amt)]);
+    if (ex > 0) rows.push(['オプション', yen(ex)]);
+    rows.push(['big', '合計', yen(amt + ex)]);
+  }
+
+  $('#n_sum').innerHTML = rows.map(r =>
+    r[0]==='big'
+      ? `<div class="r big"><span>${esc(r[1])}</span><span>${esc(r[2])}</span></div>`
+      : `<div class="r"><span>${esc(r[0])}</span><span>${esc(r[1])}</span></div>`
+  ).join('')
+  + `<div class="memo">${mon
+      ? (m>0 ? '月額は毎月ぶんを、その月の売上として数えます。'
+               + (ex>0 ? '初期費用は成約した月に一度だけ数えます。' : '')
+             : '期間の定めがない契約です。MRRには入りますが、確定売上には入りません。')
+      : '着手時に ' + yen(Math.round((amt+ex)/2)) + '、公開前に '
+        + yen((amt+ex)-Math.round((amt+ex)/2)) + ' の2回に分けて数えます。'}</div>`;
+}
+
+/* ── 登録したお客さん（直す・消す）── */
+function renderDealCards(){
+  const list = DB.deals.slice().sort((a,b)=> String(b.date).localeCompare(String(a.date)));
+  $('#dealEmpty').classList.toggle('hide', list.length > 0);
+  $('#dealCards').innerHTML = list.map(d => {
+    const ex = optTotal(d);
+    const mon = d.kind === 'mon';
+    return `<div class="dcard">
+      <div class="dh">
+        <div class="dn">${esc(d.customer||'（名前なし）')}
+          <small>${esc(d.date)}　${esc(d.service||'')}</small></div>
+        <div class="dy">${yen(d.amount)}${mon?'<small>／月</small>':''}
+          <small>${mon
+            ? (num(d.months)>0 ? '最低'+num(d.months)+'ヶ月' : '期間なし')
+            : '一括'}</small></div>
+      </div>
+      <div class="dh" style="margin-top:6px">
+        <span class="tag ${mon?'k':''}">${mon?'月額':'一括'}</span>
+        <span class="tag">区分 ${esc(d.plan||'A')}</span>
+        <span class="tag">${esc(d.via||'')}</span>
+        <span style="flex:1"></span>
+        <span class="tag">角田さん ${yen(num(d.amount)*planShare(d.plan||'A')['角田'])}</span>
+      </div>
+      ${ex>0?`<div class="dopt">オプション　${esc(optText(d))}　＝ ${yen(ex)}</div>`:''}
+      <div class="dx">
+        ${mon
+          ? `<div class="f"><label>解約月（最後の請求月）</label>
+              <input type="month" data-d="${d.id}" data-f="cancelYm" value="${esc(d.cancelYm||'')}"></div>`
+          : `<div class="f"><label>着手日</label>
+              <input type="date" data-d="${d.id}" data-f="startDate" value="${esc(d.startDate||'')}"></div>
+             <div class="f"><label>公開日（入れると残り50%を計上）</label>
+              <input type="date" data-d="${d.id}" data-f="pubDate" value="${esc(d.pubDate||'')}"></div>`}
+      </div>
+      <div class="db">
+        <button class="btn g" data-edit="${d.id}">直す</button>
+        <button class="btn r" data-del="${d.id}">消す</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  $$('#dealCards input').forEach(el => el.addEventListener('change', () => {
+    const d = DB.deals.find(x => x.id === el.dataset.d); if (!d) return;
+    d[el.dataset.f] = el.value; save(); renderEnter();
+  }));
+  $$('#dealCards [data-edit]').forEach(b => b.addEventListener('click', () => startEdit(b.dataset.edit)));
+  $$('#dealCards [data-del]').forEach(b => b.addEventListener('click', () => {
     const d = DB.deals.find(x => x.id === b.dataset.del); if (!d) return;
-    if (!confirm('「'+(d.customer||'この案件')+'」を消します。よろしいですか。')) return;
+    if (!confirm('「'+(d.customer||'このお客さん')+'」を消します。よろしいですか。')) return;
     DB.deals = DB.deals.filter(x => x.id !== b.dataset.del);
     Object.keys(DB.invoices).forEach(k => { if (k.indexOf(b.dataset.del+'::')===0) delete DB.invoices[k]; });
-    save(); renderAll();
+    if (editingId === b.dataset.del) cancelEdit();
+    save(); renderEnter();
   }));
+}
+
+/* ── 直す ── */
+function findCatPlan(d){
+  // 登録したときに種類とプランを覚えてあるので、それで探します
+  if (d.cat){
+    const c = CATALOG.findIndex(x => x.cat === d.cat);
+    if (c >= 0){
+      const i = CATALOG[c].items.findIndex(x => x.n === d.item);
+      return [c, i >= 0 ? i : -1];
+    }
+  }
+  // 古い記録のために、サービス名からも探します
+  const s = String(d.service || '');
+  const key = n => n.split(/[　（(]/)[0].trim();     // 「STANDARD　作るところまで」→「STANDARD」
+  // まず、種類の名前が入っているものを探す
+  for (let c=0;c<CATALOG.length;c++){
+    if (s.indexOf(CATALOG[c].cat) < 0) continue;
+    const i = CATALOG[c].items.findIndex(x => key(x.n) && s.indexOf(key(x.n)) >= 0);
+    return [c, i];
+  }
+  // 種類の名前が無いもっと古い記録は、プラン名だけで探す
+  for (let c=0;c<CATALOG.length;c++){
+    const i = CATALOG[c].items.findIndex(x => s.indexOf(x.n) >= 0);
+    if (i >= 0) return [c,i];
+  }
+  return [CATALOG.length-1, -1];
+}
+function startEdit(id){
+  const d = DB.deals.find(x => x.id === id); if (!d) return;
+  editingId = id;
+  $('#n_date').value = d.date;
+  $('#n_cust').value = d.customer || '';
+  $$('#n_pay input').forEach(r => r.checked = (r.value === d.kind));
+  const [c,i] = findCatPlan(d);
+  pickCat = c; pickPlan = i;
+  $('#n_cat').value = c;
+  renderPlans(true);
+  $('#n_amt').value = num(d.amount);
+  $('#n_months').value = num(d.months);
+  OPTIONS.forEach((o,k) => {
+    const found = (d.opts||[]).find(x => x.n === o.n);
+    const cb = $('#opt'+k); if (cb) cb.checked = !!found;
+    const q = $(`[data-oq="${k}"]`); if (q && found) q.value = Math.max(1, num(found.qty)||1);
+  });
+  $('#n_plan').value = d.plan || 'A';
+  $('#n_via').value = d.via || '大西';
+  renderSum();
+  $('#regTitle').textContent = '「' + (d.customer||'このお客さん') + '」を直す';
+  $('#regNote').textContent = '内容を変えて「この内容で更新する」を押してください。';
+  $('#nSave').textContent = 'この内容で更新する';
+  $('#nCancel').classList.remove('hide');
+  const card = $('#regCard');
+  if (card && card.scrollIntoView) card.scrollIntoView({block:'start'});
+}
+function cancelEdit(){
+  editingId = null;
+  $('#regTitle').textContent = 'お客さんを登録する';
+  $('#regNote').textContent = 'お客様が「お願いします」と言った時点で登録します。入金ではありません。';
+  $('#nSave').textContent = 'この内容で登録する';
+  $('#nCancel').classList.add('hide');
+  $('#n_cust').value = '';
+  $('#n_date').value = TODAY;
+  pickPlan = -1;
+  $$('#n_opts input[type=checkbox]').forEach(cb => cb.checked = false);
+  renderPlans();
 }
 function renderPay(){
   const rows = invoiceRows().sort((a,b) => (b.ym+b.label).localeCompare(a.ym+a.label));
@@ -1990,6 +2570,14 @@ if (SETTINGS.AUTH.LOCK_ON_LEAVE){
 function flash(sel){ const el=$(sel); el.classList.remove('hide');
   setTimeout(()=>el.classList.add('hide'), 1800); }
 
+/* 「お客さんを登録する」から、登録欄へ飛ぶ */
+$('#goEnter').addEventListener('click', () => {
+  tab = 'enter'; renderAll();
+  const el = $('#n_cust');
+  if (el && el.scrollIntoView) el.scrollIntoView({block:'center'});
+  if (el) el.focus();
+});
+
 /* ＋ − ボタン */
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-step]'); if (!b) return;
@@ -2009,29 +2597,54 @@ $('#dSave').addEventListener('click', () => {
   save(); flash('#dOk'); renderEnter();
 });
 
-$('#n_svc').addEventListener('change', applySvc);
-$('#n_kind').addEventListener('change', toggleKind);
-['n_amt','n_months'].forEach(id => $('#'+id).addEventListener('input', toggleKind));
+$$('#n_pay input').forEach(r => r.addEventListener('change', () => renderPlans()));
+$('#n_cat').addEventListener('change', () => { pickCat = num($('#n_cat').value); pickPlan = -1; renderPlans(); });
+['n_amt','n_months'].forEach(id => $('#'+id).addEventListener('input', renderSum));
+$('#nCancel').addEventListener('click', cancelEdit);
+
 $('#nSave').addEventListener('click', () => {
   const cust = $('#n_cust').value.trim();
   if (!cust){ alert('お客様名を入れてください。'); return; }
+  const kind = payType();
   const amt = clamp0($('#n_amt').value);
-  if (amt <= 0){ alert('金額を入れてください。'); return; }
-  const svc = SERVICES[num($('#n_svc').value)] || SERVICES[0];
-  DB.deals.push({
-    id: 'd' + Date.now() + Math.floor(Math.random()*1000),
+  const opts = pickedOptions();
+  if (amt <= 0 && !opts.length){ alert('プランを選ぶか、金額を入れてください。'); return; }
+  const cat = CATALOG[pickCat] || CATALOG[0];
+  const it = cat.items[pickPlan];
+  const service = it ? (cat.cat + '　' + it.n).replace('その他　その他（金額を自分で入れる）','その他')
+                     : cat.cat;
+
+  const body = {
     date: $('#n_date').value || TODAY,
     customer: cust,
-    service: svc.n === 'その他（自分で入力）' ? 'その他' : svc.n,
-    kind: $('#n_kind').value,
+    service,
+    cat: cat.cat,                 // あとで「直す」ときに、選んだものを戻すため
+    item: it ? it.n : '',
+    kind,
     amount: amt,
-    months: clamp0($('#n_months').value),
+    months: kind === 'mon' ? clamp0($('#n_months').value) : 0,
+    opts,
     plan: $('#n_plan').value,
     via: $('#n_via').value,
-    startDate: $('#n_kind').value === 'one' ? ($('#n_date').value || TODAY) : '',
+  };
+
+  if (editingId){
+    const d = DB.deals.find(x => x.id === editingId);
+    if (d){
+      const changedKind = d.kind !== kind;
+      Object.assign(d, body);
+      if (changedKind){ d.startDate = kind==='one' ? body.date : ''; d.pubDate=''; d.cancelYm=''; }
+    }
+    save(); cancelEdit(); flash('#nOk'); renderEnter();
+    return;
+  }
+
+  DB.deals.push(Object.assign({
+    id: 'd' + Date.now() + Math.floor(Math.random()*1000),
+    startDate: kind === 'one' ? ($('#n_date').value || TODAY) : '',
     pubDate: '', cancelYm: '',
-  });
-  save(); $('#n_cust').value=''; flash('#nOk'); renderEnter();
+  }, body));
+  save(); cancelEdit(); flash('#nOk'); renderEnter();
 });
 
 /* 目標設定 */
