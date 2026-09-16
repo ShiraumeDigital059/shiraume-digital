@@ -70,6 +70,8 @@ const SETTINGS = {
   DM_SHARE_OF_MEETINGS: 0.5,  // 商談のうちDM経由で取る割合（残りは電話経由）
   AVG_DEAL_FALLBACK: 100000,  // 成約実績が0件のときに使う平均成約単価
   OVERDUE_DAYS: 30,           // 未回収を赤で別枠に出す日数
+  BUILD: '2026-09-16-08',     // ★このページの版。新しくするたびに増やします
+
   SYNC_WAIT_TRIES: 12,        // 保存が届いたか、何回まで読んで待つか
   SYNC_WAIT_GAP: 4000,        // その間隔（ミリ秒）
   STORAGE_KEY: "shiraume_kpi_v1",
@@ -3739,6 +3741,29 @@ function renderSyncCard(){
   if ($('#sy_url') && document.activeElement !== $('#sy_url')) $('#sy_url').value = SYNC.url;
   if ($('#sy_word') && document.activeElement !== $('#sy_word')) $('#sy_word').value = SYNC.word;
 }
+/* ページが古いままになっていないか見て、古ければ静かに読み直します
+   ─────────────────────────────────────────────
+   ★ スマホは一度読んだページを長く覚えていることがあります。
+     数字は同じなのに、計算する側が古いせいで結果がずれる、ということが起きます。
+     ここで版を見比べて、違っていれば新しいアドレスで開き直します。
+     何度も読み直しにならないよう、同じ版では一度だけにしています。 */
+const BUILD_RE = /BUILD:\s*'([^']+)'/;
+async function checkUpdate(){
+  try{
+    const r = await fetch(location.pathname + '?cb=' + Date.now(), {cache:'no-store'});
+    if (!r.ok) return;
+    const m = BUILD_RE.exec(await r.text());
+    if (!m || m[1] === SETTINGS.BUILD) return;          // 最新です
+    let done = null;
+    try{ done = sessionStorage.getItem('shiraume_build'); }catch(_){}
+    if (done === m[1]) return;                          // もう読み直しました
+    try{ sessionStorage.setItem('shiraume_build', m[1]); }catch(_){}
+    const next = location.pathname + '?v=' + encodeURIComponent(m[1]);
+    window.__nextBuild = next;        // 何をしようとしたか、あとから分かるように
+    location.replace(next);
+  }catch(_){}
+}
+
 /* 設定を渡すリンク（#s=… の中に URL とあいことばを入れて持ち歩きます）
    ★ ページ本体には書きません。リンクを知っている人だけが設定を受け取れます。 */
 function b64e(o){
@@ -3865,6 +3890,7 @@ load();
 loadSync();
 renderSyncCard();          // 目標設定を開く前から、つながり具合が分かるように
 takeSetupFromLink();       // リンクで渡された設定があれば、その場でつなぐ
+checkUpdate();             // 古いページを覚えていたら、静かに新しくする
 /* 開いた状態は保存しないので、読み込むたびに必ずログインからです */
 $('#gMail').focus();
 </script>
