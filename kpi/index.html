@@ -566,6 +566,25 @@ table.t input[type=number]{text-align:right;width:104px}
 .calcbox code{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:var(--white);
   padding:1px 5px;border:1px solid var(--line);border-radius:2px}
 
+/* ── 受け取ったとき：分け方を選ぶ ── */
+#p-enter.settling > .card:not(#payCard){display:none}
+#p-enter.settling #payCard{border-color:var(--gold)}
+.smode{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px}
+.smode label{cursor:pointer;position:relative;display:block}
+.smode input{position:absolute;opacity:0;pointer-events:none}
+.smode span{display:block;text-align:center;padding:13px 3px;border:1px solid var(--line);
+  font-size:11px;background:var(--white);border-radius:2px;line-height:1.4;color:var(--sub)}
+.smode span b{display:block;font-size:14.5px;color:var(--ink);margin-bottom:2px}
+.smode input:checked + span{background:var(--ink);border-color:var(--ink);color:rgba(255,255,255,.7)}
+.smode input:checked + span b{color:#fff}
+.sethead{background:var(--paper2);border:1px solid var(--line);padding:13px 14px;
+  margin-bottom:18px;font-size:12.5px;line-height:1.7;color:var(--sub);
+  display:flex;align-items:center;gap:12px}
+.sethead .l{flex:1;min-width:0}
+.sethead .l b{display:block;font-size:15px;color:var(--ink);font-weight:600;margin-bottom:2px}
+.sethead .y{font-size:19px;font-weight:700;color:var(--gold-d);white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+
 /* ── その他 ── */
 .warn{background:#FCF2F0;border:1px solid #E8C4BE;color:var(--red);padding:11px 13px;
   font-size:12.5px;line-height:1.75;margin-top:12px}
@@ -595,6 +614,7 @@ details .in{padding-top:14px}
   .two{gap:12px}
   .two .n{font-size:24px}
   .tot .n{font-size:19px}
+  .smode{grid-template-columns:1fr 1fr}
   .dcard .dx{grid-template-columns:1fr}
   .schr .sd{grid-template-columns:1fr}
   .optx{margin-left:0}
@@ -773,9 +793,9 @@ details .in{padding-top:14px}
         <div class="grid2" style="margin-top:14px">
           <div class="stat"><div class="l">角田さん経由の成約</div>
             <div class="n" id="kClose">0件</div><div class="d" id="kCloseYen">¥0</div></div>
-          <div class="stat"><div class="l">報酬分配（目安）</div>
+          <div class="stat"><div class="l">角田さんへの分配</div>
             <div class="n" id="kShare">¥0</div>
-            <div class="d">正式には「④ 配分計算」で</div></div>
+            <div class="d">入金のときに決めて記録したぶん</div></div>
         </div>
       </div>
     </details>
@@ -948,7 +968,7 @@ function sheets_(d) {
   const cust = {};
   (d.deals || []).forEach(x => {
     const k = x.customer || "（名前なし）";
-    cust[k] = cust[k] || { name: k, paid: 0, yet: 0, deals: 0, monthly: 0 };
+    cust[k] = cust[k] || { name: k, paid: 0, yet: 0, deals: 0, monthly: 0, kak: 0, oni: 0 };
     cust[k].deals++;
     if (x.kind === "mon" && !(x.cancelYm && x.cancelYm < ym_(new Date())))
       cust[k].monthly += yen(x.amount);
@@ -964,11 +984,18 @@ function sheets_(d) {
     c.paid += paid;
     c.yet += Math.max(0, billed - paid);
   });
+  (d.splits || []).forEach(x => {
+    const deal = byDeal[x.dealId];
+    const k = deal ? (deal.customer || "（名前なし）") : (x.customer || "");
+    if (!cust[k]) return;
+    cust[k].kak += yen((x.pay || {})["角田"]);
+    cust[k].oni += yen((x.pay || {})["大西"]);
+  });
   put_(ss, "お客さん",
-    [["お客様", "受け取った", "まだ受け取っていない", "月額/月", "件数"]].concat(
+    [["お客様", "受け取った", "まだ受け取っていない", "角田さんへ", "大西さんへ", "月額/月", "件数"]].concat(
       Object.keys(cust).map(k => {
         const c = cust[k];
-        return [c.name, c.paid, c.yet, c.monthly, c.deals];
+        return [c.name, c.paid, c.yet, c.kak, c.oni, c.monthly, c.deals];
       })));
 
   put_(ss, "案件",
@@ -1001,6 +1028,15 @@ function sheets_(d) {
   });
   put_(ss, "日々の数字",
     [["日付", "やった人", "DM送信", "返信", "資料送付", "架電", "つながった", "アポ", "商談", "電話(分)"]].concat(rows));
+
+  put_(ss, "分け方",
+    [["受け取った日", "お客様", "内容", "入金額", "角田さんへ", "大西さんへ", "区分", "実費", "立て替えた人"]].concat(
+      (d.splits || []).slice()
+        .sort((a, b) => String(a.date || "").localeCompare(String(b.date || "")))
+        .map(x => [
+          x.date || "", x.customer || "", x.invLabel || "",
+          yen(x.amount), yen((x.pay || {})["角田"]), yen((x.pay || {})["大西"]),
+          x.plan || "", yen(x.jihi), x.tate || ""])));
 
   put_(ss, "ふりかえり",
     [["種類", "時期", "書いた人", "中身"]].concat(
@@ -1107,66 +1143,7 @@ function ym_(dt) {
   </div>
 </section>
 
-<!-- ───────── ④ 配分計算 ───────── -->
-<section id="p-split" class="pane hide">
-  <div class="card">
-    <h2>報酬の分け方</h2>
-    <div class="note">金額を入れて、やった人を選ぶだけです。割合は二人で決めたものと同じです。</div>
-    <div class="ptabs" id="pTabs"></div>
-    <div style="font-size:14px;font-weight:600" id="planLabel"></div>
-    <div class="note" id="planNote" style="margin-bottom:14px"></div>
-    <div class="f"><label>入金額（税込）</label>
-      <input type="number" id="c_amount" min="0" step="100" inputmode="numeric" value="39800"></div>
-    <div class="fg c2">
-      <div class="f"><label>立て替えた実費（ドメイン代など）</label>
-        <input type="number" id="c_jihi" min="0" step="100" inputmode="numeric" value="0"></div>
-      <div class="f"><label>立て替えた人</label><select id="c_tate"></select></div>
-    </div>
-    <div class="res" id="cRes"></div>
-  </div>
-
-  <div class="card">
-    <h2>やった人と、やったこと</h2>
-    <div class="note">
-      発生しなかった作業は「なし」にします。その分は、やった人で按分されます。<br>
-      「やったこと」は記録用です。書いても割合は変わりません。あとで見返すためのものです。
-    </div>
-    <div class="btns" style="margin-bottom:6px">
-      <button class="btn g" data-all="角田">全部 角田</button>
-      <button class="btn g" data-all="大西">全部 大西</button>
-      <button class="btn g" data-all="半分">全部 半分</button>
-      <button class="btn g" data-reset="1">最初の想定に戻す</button>
-    </div>
-    <div id="cItems"></div>
-    <div class="warn hide" id="cWarn"></div>
-  </div>
-
-  <div class="card">
-    <h2>計算の内訳</h2>
-    <div class="tw"><table class="t" id="cDetail"></table></div>
-    <div class="calcbox" id="cCalc"></div>
-    <div class="fg c2" style="margin-top:16px">
-      <div class="f"><label>日付</label><input type="date" id="c_date"></div>
-      <div class="f"><label>お客様名（記録用）</label>
-        <input type="text" id="c_cust" placeholder="○○様"></div>
-    </div>
-    <div class="btns">
-      <button class="btn w-sp" id="cSave">この計算を記録に残す</button>
-      <button class="btn g" id="cCopy">記録用の文をコピー</button>
-      <span class="ok hide" id="cOk">記録しました</span>
-    </div>
-    <div class="note" style="margin-top:8px">
-      コピーした文は、そのままLINEやメールでお互いに送れます。
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>これまでの配分</h2>
-    <div id="cList"></div>
-  </div>
-</section>
-
-<!-- ───────── ⑤ 結果入力 ───────── -->
+<!-- ───────── ④ 結果入力 ───────── -->
 <section id="p-enter" class="pane hide">
 
   <!-- お客さんの登録 -->
@@ -1216,8 +1193,11 @@ function ym_(dt) {
     <div id="n_sched"></div>
 
     <div class="step">5　だれが動いたか</div>
+    <div class="note" style="margin:-4px 0 10px">
+      ここは記録用のひな形です。実際にだれの取り分になるかは、
+      お金を受け取ったときに決めます。</div>
     <div class="fg c2">
-      <div class="f"><label>案件の区分（報酬の分け方）</label><select id="n_plan"></select></div>
+      <div class="f"><label>案件の区分（分け方のひな形）</label><select id="n_plan"></select></div>
       <div class="f"><label>主に動いた人</label><select id="n_via"></select></div>
     </div>
 
@@ -1227,6 +1207,19 @@ function ym_(dt) {
       <button class="btn g hide" id="nCancel">やめる</button>
       <span class="ok hide" id="nOk">登録しました</span>
     </div>
+  </div>
+
+  <!-- お金を受け取ったとき -->
+  <div class="card" id="payCard">
+    <h2>お金を受け取ったとき</h2>
+    <div class="note">
+      受け取ったら「受け取った」を押します。そのあと、そのお金をどう分けるかを決めて記録します。
+    </div>
+    <div id="payList">
+      <div id="payCards"></div>
+      <div class="empty hide" id="payEmpty">まだ支払いの予定がありません。お客さんを登録すると出てきます。</div>
+    </div>
+    <div id="paySettle" class="hide"></div>
   </div>
 
   <!-- 登録したお客さん -->
@@ -1292,13 +1285,8 @@ function ym_(dt) {
     </div>
   </div></details>
 
-  <details id="payFold"><summary>お金を受け取ったとき</summary><div class="in">
-    <div class="note">
-      受け取ったら「受け取った」を押すだけです。今日の日付が入ります。<br>
-      日付を変えたいときは、右の日付欄で選んでください。
-    </div>
-    <div id="payCards"></div>
-    <div class="empty hide" id="payEmpty">まだ支払いの予定がありません。お客さんを登録すると出てきます。</div>
+  <details><summary>これまでの配分の記録</summary><div class="in">
+    <div id="cList"></div>
   </div></details>
   </div>
 </section>
@@ -1510,7 +1498,8 @@ function mergeDB(a, b){
   const smap = {};
   [lose.splits||[], win.splits||[]].forEach(list =>
     list.forEach(s => { if (s && s.id) smap[s.id] = s; }));
-  out.splits = Object.values(smap).filter(s => !buried('split:' + s.id));
+  out.splits = Object.values(smap).filter(s =>
+    !buried('split:' + s.id) && (!s.dealId || alive.has(s.dealId)));
 
   out.meta = {
     updatedAt: Math.max(num((a.meta||{}).updatedAt), num((b.meta||{}).updatedAt)),
@@ -1971,6 +1960,23 @@ function planShare(planKey){
   return o;
 }
 
+/* 記録した配分（案件ごと／期間ごと）★推定ではなく、入金のときに決めたぶんだけ */
+function splitsOfDeal(id){ return DB.splits.filter(x => x.dealId === id); }
+function splitPayOfDeal(id){
+  const o = {}; MEMBERS.forEach(m => o[m] = 0);
+  let n = 0;
+  splitsOfDeal(id).forEach(x => { n++; MEMBERS.forEach(m => o[m] += num((x.pay||{})[m])); });
+  o.n = n; return o;
+}
+function splitPayBetween(from, to){
+  const o = {}; MEMBERS.forEach(m => o[m] = 0);
+  DB.splits.forEach(x => {
+    const d = String(x.date||'');
+    if (d >= from && d <= to) MEMBERS.forEach(m => o[m] += num((x.pay||{})[m]));
+  });
+  return o;
+}
+
 /* ═══════════════════════════════════════════════
    画面：① 結果
    ═══════════════════════════════════════════════ */
@@ -2207,8 +2213,7 @@ function renderKakuda(k, p){
   const kd = dealsIn(from, to, '角田');
   $('#kClose').textContent = kd.length + '件';
   $('#kCloseYen').textContent = yen(kd.reduce((a,d)=>a+num(d.amount),0)) + '（入金1回ぶん）';
-  $('#kShare').textContent = yen(kd.reduce((a,d)=>
-    a + num(d.amount) * planShare(d.plan||'A')['角田'], 0));
+  $('#kShare').textContent = yen(splitPayBetween(from, to)['角田']);
 }
 
 function renderWeek(){
@@ -2584,9 +2589,10 @@ function renderSplitList(){
   $('#cList').innerHTML = list.length ? list.map(r => `
     <div class="rev">
       <div class="h"><span>${esc(r.date)}　${esc(r.customer||'（名前なし）')}
-        <span class="tag k">${esc(r.plan)}</span></span>
+        ${r.invLabel ? `<span class="tag">${esc(r.invLabel)}</span>` : ''}
+        <span class="tag k">区分 ${esc(r.plan)}</span></span>
         <button class="btn r" data-sp="${esc(r.id)}">消す</button></div>
-      <div class="a">入金 ${yen(r.amount)}　→　角田 ${yen(r.pay['角田'])}／大西 ${yen(r.pay['大西'])}</div>
+      <div class="a">入金 ${yen(r.amount)}　→　角田さん ${yen((r.pay||{})['角田'])}　／　大西さん ${yen((r.pay||{})['大西'])}</div>
       ${r.works && r.works.length
         ? `<div class="q">やったこと</div><div class="a">${esc(r.works.join('　／　'))}</div>` : ''}
       <div class="btns"><button class="btn g" data-spc="${esc(r.id)}">この記録をコピー</button></div>
@@ -2631,7 +2637,7 @@ function renderEnter(){
     renderOptions();
     renderPlans();
   }
-  renderDealCards(); renderPay();
+  renderDealCards(); renderPay(); renderSplitList();
 }
 function loadDay(){
   const d = dayOfWho($('#dDate').value, $('#dWho').value);
@@ -2866,7 +2872,9 @@ function renderDealCards(){
         <span class="tag">区分 ${esc(d.plan||'A')}</span>
         <span class="tag">${esc(d.via||'')}</span>
         <span style="flex:1"></span>
-        <span class="tag">角田さん ${yen((num(d.amount)+(mon?0:ex))*planShare(d.plan||'A')['角田'])}</span>
+        ${(() => { const sp = splitPayOfDeal(d.id);
+          return sp.n ? `<span class="tag k">角田さん ${yen(sp['角田'])}　大西さん ${yen(sp['大西'])}</span>`
+                      : `<span class="tag">分け方はまだ決めていません</span>`; })()}
       </div>
       <div class="dopt">${installments(d).map(r => {
         const rec = DB.invoices[d.id+'::'+r.id];
@@ -2902,6 +2910,8 @@ function renderDealCards(){
     bury('deal:' + b.dataset.del);
     DB.deals = DB.deals.filter(x => x.id !== b.dataset.del);
     Object.keys(DB.invoices).forEach(k => { if (k.indexOf(b.dataset.del+'::')===0) delete DB.invoices[k]; });
+    DB.splits.filter(x => x.dealId === b.dataset.del).forEach(x => bury('split:' + x.id));
+    DB.splits = DB.splits.filter(x => x.dealId !== b.dataset.del);
     if (editingId === b.dataset.del) cancelEdit();
     save(); renderEnter();
   }));
@@ -3007,7 +3017,19 @@ function cancelEdit(){
   onOptChange();
   renderPlans();
 }
+/* ── お金を受け取ったとき ──────────────────────
+   受け取った → そのお金をどう分けるかを決める → まとめて記録する
+   ★ 推定で角田さんに配ることはしません。ここで決めたぶんだけが記録されます。
+   ───────────────────────────────────────────── */
+let payTarget = null;          // いま精算している入金の id
+let sMode = 'o';               // o=大西ぜんぶ / k=角田ぜんぶ / h=半分 / x=くわしく
+
 function renderPay(){
+  if (payTarget){ renderSettle(); return; }
+  $('#p-enter').classList.remove('settling');
+  $('#payList').classList.remove('hide');
+  $('#paySettle').classList.add('hide');
+
   const rows = invoiceRows().sort((a,b) => {
     const A = (a.paidDate ? '2' : '0') + (a.date || '9999'), B = (b.paidDate ? '2' : '0') + (b.date || '9999');
     return A === B ? 0 : (A < B ? -1 : 1);
@@ -3015,22 +3037,26 @@ function renderPay(){
   $('#payEmpty').classList.toggle('hide', rows.length > 0);
   if (!rows.length){ $('#payCards').innerHTML = ''; return; }
 
-  const yet = rows.filter(r => !r.paidDate);
+  const yet  = rows.filter(r => !r.paidDate);
   const done = rows.filter(r => r.paidDate);
   const card = r => {
     const late = r.billed && !r.paidDate && daysBetween(r.billed, TODAY) > SETTINGS.OVERDUE_DAYS;
+    const sp = DB.splits.find(x => x.inv === r.id);
     return `<div class="pcard ${r.paidDate?'done':(late?'late':'')}">
       <div class="ph">
         <div class="pn">${esc(r.deal.customer || '（名前なし）')}
           <small>${esc(r.label)}${r.date ? '　' + esc(r.date) : '　<span class="nd">日付がまだです</span>'}</small></div>
-        <div class="py">${yen(r.plan)}</div>
+        <div class="py">${yen(r.paidDate ? r.paid : r.plan)}</div>
       </div>
       ${r.paidDate
         ? `<div class="pok">受け取りました　${esc(r.paidDate)}
-             <button class="btn r" data-undo="${esc(r.id)}">取り消す</button></div>`
+             <button class="btn r" data-undo="${esc(r.id)}">取り消す</button></div>
+           <div class="dopt">${sp
+             ? '分け方　角田さん ' + yen((sp.pay||{})['角田']) + '　／　大西さん ' + yen((sp.pay||{})['大西'])
+             : '<span style="color:var(--red)">分け方がまだ決まっていません</span>'}
+             <button class="btn g" data-redo="${esc(r.id)}" style="margin-left:8px">分け方を決め直す</button></div>`
         : `<div class="pb">
              <button class="btn" data-got="${esc(r.id)}">受け取った</button>
-             <input type="date" data-i="${esc(r.id)}" data-f="paidDate" value="">
            </div>
            <div class="pf">
              <label>請求した日</label>
@@ -3046,29 +3072,202 @@ function renderPay(){
     + (done.length ? `<div class="sec">受け取りました　${yen(done.reduce((a,r)=>a+r.paid,0))}</div>`
        + done.map(card).join('') : '');
 
-  const put = (id, f, v) => {
-    DB.invoices[id] = DB.invoices[id] || {};
-    DB.invoices[id][f] = v;
-    if (f === 'paidDate' && v){
-      const r = invoiceRows().find(x => x.id === id);
-      if (r){ DB.invoices[id].paid = r.plan;
-        if (!DB.invoices[id].billed) DB.invoices[id].billed = v;
-        DB.invoices[id].amount = r.plan; }
-    }
-    save(); renderEnter();
-  };
-  $$('#payCards [data-got]').forEach(b => b.addEventListener('click', () => {
-    put(b.dataset.got, 'paidDate', TODAY);
-  }));
+  $$('#payCards [data-got]').forEach(b => b.addEventListener('click', () => startSettle(b.dataset.got)));
+  $$('#payCards [data-redo]').forEach(b => b.addEventListener('click', () => startSettle(b.dataset.redo)));
   $$('#payCards [data-undo]').forEach(b => b.addEventListener('click', () => {
     const id = b.dataset.undo;
+    const r  = invoiceRows().find(x => x.id === id);
+    const nm = r ? (r.deal.customer || 'このお客さん') : 'このお客さん';
+    if (!confirm('「' + nm + '」の入金を取り消します。\n分け方の記録も一緒に消えます。よろしいですか。')) return;
     DB.invoices[id] = DB.invoices[id] || {};
     DB.invoices[id].paidDate = ''; DB.invoices[id].paid = 0;
+    DB.splits.filter(x => x.inv === id).forEach(x => bury('split:' + x.id));
+    DB.splits = DB.splits.filter(x => x.inv !== id);
     save(); renderEnter();
   }));
   $$('#payCards input').forEach(el => el.addEventListener('change', () => {
-    if (el.value) put(el.dataset.i, el.dataset.f, el.value);
+    if (!el.value) return;
+    DB.invoices[el.dataset.i] = DB.invoices[el.dataset.i] || {};
+    DB.invoices[el.dataset.i][el.dataset.f] = el.value;
+    save(); renderEnter();
   }));
+}
+
+/* この入金は、どの区分の割合で分けるか（月額の2ヶ月目以降は営業がないのでB） */
+function planForRow(r){
+  if (r.deal.kind === 'mon' && r.ym && r.ym !== ym(parseISO(r.deal.date))) return 'B';
+  return PLANS[r.deal.plan] ? r.deal.plan : 'A';
+}
+
+function startSettle(id){
+  const r = invoiceRows().find(x => x.id === id); if (!r) return;
+  payTarget = id;
+  cPlan = planForRow(r);
+  const old = DB.splits.find(x => x.inv === id);
+  sMode = old ? (old.mode || 'x') : 'o';
+  renderSettle(true, old, r);
+  const el = $('#paySettle'); if (el && el.scrollIntoView) el.scrollIntoView({block:'start'});
+}
+
+function closeSettle(){ payTarget = null; renderEnter(); }
+
+function renderSettle(build, old, row){
+  const r = row || invoiceRows().find(x => x.id === payTarget);
+  if (!r){ closeSettle(); return; }
+  $('#p-enter').classList.add('settling');
+  $('#payList').classList.add('hide');
+  const box = $('#paySettle');
+  box.classList.remove('hide');
+
+  if (build !== true){ return; }
+
+  box.innerHTML = `
+    <div class="sethead">
+      <div class="l"><b>${esc(r.deal.customer || '（名前なし）')}</b>
+        ${esc(r.label)}${r.deal.service ? '　'+esc(r.deal.service) : ''}</div>
+      <div class="y">${yen(r.plan)}</div>
+    </div>
+
+    <div class="fg c2">
+      <div class="f"><label>受け取った日</label>
+        <input type="date" id="c_date" value="${esc(old ? old.date : TODAY)}"></div>
+      <div class="f"><label>受け取った額（税込）</label>
+        <input type="number" id="c_amount" min="0" step="100" inputmode="numeric"
+          value="${old ? num(old.amount) : r.plan}"></div>
+    </div>
+
+    <div class="step">このお金を、だれの取り分にするか</div>
+    <div class="smode" id="sModeBox">
+      <label><input type="radio" name="smode" value="o"><span><b>大西</b>ぜんぶ</span></label>
+      <label><input type="radio" name="smode" value="k"><span><b>角田</b>ぜんぶ</span></label>
+      <label><input type="radio" name="smode" value="h"><span><b>半分</b>ずつ</span></label>
+      <label><input type="radio" name="smode" value="x"><span><b>くわしく</b>作業ごと</span></label>
+    </div>
+
+    <details style="margin-top:14px"><summary>立て替えた実費があるとき</summary><div class="in">
+      <div class="fg c2">
+        <div class="f"><label>立て替えた実費（ドメイン代など）</label>
+          <input type="number" id="c_jihi" min="0" step="100" inputmode="numeric"
+            value="${old ? num(old.jihi) : 0}"></div>
+        <div class="f"><label>立て替えた人</label><select id="c_tate"></select></div>
+      </div>
+      <div class="note" style="margin:8px 0 0">
+        実費は先に取り分から外して、立て替えた人にそのまま戻します。</div>
+    </div></details>
+
+    <div class="res" id="cRes"></div>
+
+    <div id="sDetail" class="hide" style="margin-top:20px">
+      <div class="sec">案件の区分</div>
+      <div class="ptabs" id="pTabs"></div>
+      <div style="font-size:14px;font-weight:600" id="planLabel"></div>
+      <div class="note" id="planNote" style="margin-bottom:14px"></div>
+      <div class="sec">やった人と、やったこと</div>
+      <div class="note">
+        発生しなかった作業は「なし」にします。その分は、やった人で按分されます。<br>
+        「やったこと」は記録用です。書いても割合は変わりません。
+      </div>
+      <div class="btns" style="margin-bottom:6px">
+        <button class="btn g" data-all="大西">全部 大西</button>
+        <button class="btn g" data-all="角田">全部 角田</button>
+        <button class="btn g" data-all="半分">全部 半分</button>
+        <button class="btn g" data-reset="1">最初の想定に戻す</button>
+      </div>
+      <div id="cItems"></div>
+      <div class="warn hide" id="cWarn"></div>
+      <div class="sec" style="margin-top:18px">計算の内訳</div>
+      <div class="tw"><table class="t" id="cDetail"></table></div>
+      <div class="calcbox" id="cCalc"></div>
+    </div>
+
+    <input type="hidden" id="c_cust" value="${esc(r.deal.customer || '')}">
+
+    <div class="btns" style="margin-top:20px">
+      <button class="btn w-sp" id="sDone">受け取ったことにして、分け方も記録する</button>
+      <button class="btn g" id="sCopy">記録用の文をコピー</button>
+      <button class="btn g" id="sCancel">やめる</button>
+    </div>`;
+
+  $('#c_tate').innerHTML = ['大西','角田'].map(n => `<option>${esc(n)}</option>`).join('');
+  $('#c_tate').value = old ? (old.tate || '大西') : '大西';
+
+  buildSplit(true);
+  if (old && old.who && old.who.length === flatItems(cPlan).length){
+    cState = old.who.slice();
+    cWork  = (old.workRaw && old.workRaw.length === cState.length) ? old.workRaw.slice() : cWork;
+    buildSplitRefresh();
+  }
+  setMode(sMode);
+
+  ['c_amount','c_jihi'].forEach(id => $('#'+id).addEventListener('input', calcSplit));
+  $('#c_tate').addEventListener('change', calcSplit);
+  $$('#sModeBox input').forEach(el => {
+    el.checked = (el.value === sMode);
+    el.addEventListener('change', () => setMode(el.value));
+  });
+  $$('#sDetail [data-all], #sDetail [data-reset]').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.reset){ buildSplit(true); return; }
+    cState = cState.map(() => b.dataset.all);
+    $$('#cItems .pick input').forEach(x => x.checked = (x.value === b.dataset.all));
+    calcSplit();
+  }));
+  $('#sCopy').addEventListener('click', e => copyText(splitText(), e.target, '記録用の文をコピー'));
+  $('#sCancel').addEventListener('click', closeSettle);
+  $('#sDone').addEventListener('click', saveSettle);
+}
+
+/* 選び直したときに、チェックの位置だけ入れ直す */
+function buildSplitRefresh(){
+  $$('#cItems .pick input').forEach(x => {
+    const i = +x.dataset.i; x.checked = (x.value === cState[i]);
+  });
+  $$('#cItems .work').forEach(el => { el.value = cWork[+el.dataset.w] || ''; });
+  calcSplit();
+}
+
+function setMode(m){
+  sMode = m;
+  $('#sDetail').classList.toggle('hide', m !== 'x');
+  if (m === 'x'){ calcSplit(); return; }
+  const lab = m === 'o' ? '大西' : m === 'k' ? '角田' : '半分';
+  cState = flatItems(cPlan).map(() => lab);
+  $$('#cItems .pick input').forEach(x => x.checked = (x.value === lab));
+  calcSplit();
+}
+
+function saveSettle(){
+  const r = invoiceRows().find(x => x.id === payTarget); if (!r) return;
+  const d = cSnap;
+  if (!d || d.den === 0){ alert('やった作業を選んでください。'); return; }
+  const date = $('#c_date').value || TODAY;
+  const amt  = clamp0($('#c_amount').value);
+  if (amt <= 0){ alert('受け取った額を入れてください。'); return; }
+
+  const pay = {};
+  MEMBERS.forEach(m => pay[m] = d.money[m] + (d.jihi && d.tate === m ? d.jihi : 0));
+  const works = [];
+  flatItems(cPlan).forEach((it,i) => { if (cWork[i]) works.push(it.name + '：' + cWork[i]); });
+
+  // 入金として記録する
+  const rec = DB.invoices[payTarget] = DB.invoices[payTarget] || {};
+  rec.paidDate = date;
+  rec.paid     = amt;
+  rec.amount   = amt;
+  if (!rec.billed) rec.billed = date;
+
+  // 分け方を記録する（同じ入金の古い記録は置きかえる）
+  DB.splits.filter(x => x.inv === payTarget).forEach(x => bury('split:' + x.id));
+  DB.splits = DB.splits.filter(x => x.inv !== payTarget);
+  DB.splits.push({
+    id: 's' + Date.now() + Math.floor(Math.random()*1000),
+    inv: payTarget, dealId: r.deal.id, invLabel: r.label,
+    date, customer: r.deal.customer || '',
+    plan: cPlan, mode: sMode, amount: d.amount, jihi: d.jihi, tate: d.tate,
+    who: cState.slice(), workRaw: cWork.slice(), works, pay, text: splitText(),
+  });
+
+  payTarget = null;
+  save(); renderEnter();
 }
 
 /* ═══════════════════════════════════════════════
@@ -3078,8 +3277,7 @@ const TABS = [
   {id:'result', n:'① 結果'},
   {id:'goal',   n:'② 目標設定'},
   {id:'review', n:'③ ふりかえり'},
-  {id:'split',  n:'④ 配分計算'},
-  {id:'enter',  n:'⑤ 結果入力'},
+  {id:'enter',  n:'④ 結果入力'},
 ];
 let tab = 'result';
 function renderTabs(){
@@ -3096,7 +3294,6 @@ function renderAll(){
     if (tab==='result') renderResult();
     if (tab==='goal')   renderGoal();
     if (tab==='review') renderReview();
-    if (tab==='split')  { if (!cSnap) buildSplit(true); else calcSplit(); renderSplitList(); }
     if (tab==='enter')  renderEnter();
   }catch(e){ console.error(e); }
 }
@@ -3376,32 +3573,6 @@ $('#rSaveM').addEventListener('click', () => {
   flash('#rOkM');
 });
 
-/* 配分計算 */
-['c_amount','c_jihi'].forEach(id => $('#'+id).addEventListener('input', calcSplit));
-$('#c_tate').addEventListener('change', calcSplit);
-$$('#p-split [data-all], #p-split [data-reset]').forEach(b => b.addEventListener('click', () => {
-  if (b.dataset.reset){ buildSplit(true); return; }
-  cState = cState.map(() => b.dataset.all);
-  $$('#cItems .pick input').forEach(r => r.checked = (r.value === b.dataset.all));
-  calcSplit();
-}));
-$('#cCopy').addEventListener('click', e => copyText(splitText(), e.target, '記録用の文をコピー'));
-$('#cSave').addEventListener('click', () => {
-  if (!cSnap || cSnap.den === 0){ alert('やった作業を選んでください。'); return; }
-  const d = cSnap;
-  const pay = {};
-  MEMBERS.forEach(m => pay[m] = d.money[m] + (d.jihi && d.tate===m ? d.jihi : 0));
-  const works = [];
-  flatItems(cPlan).forEach((it,i) => { if (cWork[i]) works.push(it.name+'：'+cWork[i]); });
-  DB.splits.push({
-    id: 's' + Date.now() + Math.floor(Math.random()*1000),
-    date: $('#c_date').value || TODAY,
-    customer: $('#c_cust').value.trim(),
-    plan: cPlan, amount: d.amount, jihi: d.jihi, tate: d.tate,
-    who: cState.slice(), works, pay, text: splitText(),
-  });
-  save(); flash('#cOk'); renderSplitList();
-});
 
 /* ほかの端末と同じ数字にする */
 function renderSyncCard(){
@@ -3490,7 +3661,6 @@ $('#bClear').addEventListener('click', () => {
 load();
 loadSync();
 renderSyncCard();          // 目標設定を開く前から、つながり具合が分かるように
-$('#c_date').value = TODAY;
 /* 開いた状態は保存しないので、読み込むたびに必ずログインからです */
 $('#gMail').focus();
 </script>
