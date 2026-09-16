@@ -878,6 +878,14 @@ details .in{padding-top:14px}
       <span class="ok hide" id="syOk"></span>
     </div>
 
+    <div class="btns hide" id="syShareBox" style="margin-top:4px">
+      <button class="btn g" id="syShare">ほかの端末用のリンクをコピー</button>
+    </div>
+    <div class="note hide" id="syShareNote" style="margin-top:6px">
+      このリンクを開くだけで、その端末もつながります。スマホや角田さんに渡すときに使ってください。<br>
+      <b style="color:var(--red)">あいことばが入っているので、パスワードと同じ扱いにしてください。</b>
+    </div>
+
     <details><summary>つなぎ方（はじめの1回だけ）</summary>
       <div class="in">
         <div class="info" style="margin-top:0">
@@ -899,6 +907,7 @@ details .in{padding-top:14px}
 
 const AIKOTOBA = "shiraume-sync-2026";   // ★ここを自分だけの文字に書き換える
 
+const SHEET_ID = "";   // 別のスプレッドシートに保存するときだけ、そのIDを入れます
 const DATA_SHEET = "_data";
 const CHUNK = 40000;
 
@@ -928,7 +937,10 @@ function out_(obj) {
   return ContentService.createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
 }
-function book_() { return SpreadsheetApp.getActiveSpreadsheet(); }
+function book_() {
+  if (SHEET_ID) return SpreadsheetApp.openById(SHEET_ID);
+  return SpreadsheetApp.getActiveSpreadsheet();
+}
 function dataSheet_() {
   const ss = book_();
   let sh = ss.getSheetByName(DATA_SHEET);
@@ -3590,10 +3602,45 @@ function renderSyncCard(){
   </div>`;
   $('#syNow').classList.toggle('hide', !on);
   $('#syOff').classList.toggle('hide', !on);
+  if ($('#syShareBox')) $('#syShareBox').classList.toggle('hide', !on);
+  if ($('#syShareNote')) $('#syShareNote').classList.toggle('hide', !on);
   $('#syConnect').textContent = on ? 'つなぎ直す' : 'つなぐ';
   if ($('#sy_url') && document.activeElement !== $('#sy_url')) $('#sy_url').value = SYNC.url;
   if ($('#sy_word') && document.activeElement !== $('#sy_word')) $('#sy_word').value = SYNC.word;
 }
+/* 設定を渡すリンク（#s=… の中に URL とあいことばを入れて持ち歩きます）
+   ★ ページ本体には書きません。リンクを知っている人だけが設定を受け取れます。 */
+function b64e(o){
+  return btoa(String.fromCharCode.apply(null, new TextEncoder().encode(JSON.stringify(o))))
+    .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
+function b64d(t){
+  const b = atob(String(t).replace(/-/g,'+').replace(/_/g,'/'));
+  return JSON.parse(new TextDecoder().decode(Uint8Array.from(b, c => c.charCodeAt(0))));
+}
+function shareLink(){
+  return location.origin + location.pathname + '#s=' + b64e({u: SYNC.url, w: SYNC.word});
+}
+/* 開いたときに #s= が付いていたら、その場でつなぐ */
+async function takeSetupFromLink(){
+  const m = /^#s=(.+)$/.exec(location.hash || '');
+  if (!m) return false;
+  history.replaceState(null, '', location.pathname);   // アドレス欄から消す
+  let o; try { o = b64d(m[1]); } catch(_) { return false; }
+  if (!o || !o.u || !o.w) return false;
+  if (SYNC.url === o.u && SYNC.word === o.w) return false;   // もうつながっている
+  SYNC.url = o.u; SYNC.word = o.w; saveSync();
+  const r = await pullMerge();
+  if (r.ok){ await pushNow(); renderAll(); }
+  else alert('リンクの設定でつなげませんでした。\n' + (r.error||''));
+  renderSyncCard();
+  return true;
+}
+
+$('#syShare').addEventListener('click', e => {
+  if (!syncOn()){ alert('先に「つなぐ」を押してください。'); return; }
+  copyText(shareLink(), e.target, 'ほかの端末用のリンクをコピー');
+});
 $('#syConnect').addEventListener('click', async () => {
   const url = $('#sy_url').value.trim(), word = $('#sy_word').value.trim();
   if (!url || !word){ alert('URLとあいことばの両方を入れてください。'); return; }
@@ -3661,6 +3708,7 @@ $('#bClear').addEventListener('click', () => {
 load();
 loadSync();
 renderSyncCard();          // 目標設定を開く前から、つながり具合が分かるように
+takeSetupFromLink();       // リンクで渡された設定があれば、その場でつなぐ
 /* 開いた状態は保存しないので、読み込むたびに必ずログインからです */
 $('#gMail').focus();
 </script>
