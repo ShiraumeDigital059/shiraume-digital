@@ -70,6 +70,8 @@ const SETTINGS = {
   DM_SHARE_OF_MEETINGS: 0.5,  // 商談のうちDM経由で取る割合（残りは電話経由）
   AVG_DEAL_FALLBACK: 100000,  // 成約実績が0件のときに使う平均成約単価
   OVERDUE_DAYS: 30,           // 未回収を赤で別枠に出す日数
+  SYNC_WAIT_TRIES: 12,        // 保存が届いたか、何回まで読んで待つか
+  SYNC_WAIT_GAP: 4000,        // その間隔（ミリ秒）
   STORAGE_KEY: "shiraume_kpi_v1",
 };
 </script>
@@ -1620,27 +1622,34 @@ async function pushNow(){
   syncStatus('保存中…');
 
   // 1　ふつうの送り方
-  try{
-    const r = await fetch(SYNC.url, {
-      method:'POST', redirect:'follow',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: payload,
-    });
-    const txt = await r.text();
-    let j = null; try { j = JSON.parse(txt); } catch(_) {}
-    if (j && j.ok) return pushOk_();
-    if (j && j.error && /あいことば/.test(j.error)){
-      syncStatus('あいことばが違います');
-      return {ok:false, error: j.error};
-    }
-  }catch(_){}
+  //    ★この端末では前回ふつうの送り方が通らなかった、と分かっていれば飛ばします
+  if (!SYNC.useForm){
+    try{
+      const r = await fetch(SYNC.url, {
+        method:'POST', redirect:'follow',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body: payload,
+      });
+      const txt = await r.text();
+      let j = null; try { j = JSON.parse(txt); } catch(_) {}
+      if (j && j.ok) return pushOk_();
+      if (j && j.error && /あいことば/.test(j.error)){
+        syncStatus('あいことばが違います');
+        return {ok:false, error: j.error};
+      }
+    }catch(_){}
 
-  // 2　返事が読めなかったとき。入ったかどうかを読んで確かめる
-  if (await landed_(stamp)) return pushOk_();
+    // 2　返事が読めなかったとき。入ったかどうかを読んで確かめる
+    if (await landedWait_(stamp, 3, Math.min(3000, SETTINGS.SYNC_WAIT_GAP))) return pushOk_();
+  }
 
   // 3　届いていない。送り方を変えてもう一度（Safari はこちらで通ります）
+  //    ★Google は表を作り終えるまで少し時間がかかるので、何度か読んで待ちます
   try{ await formPost(SYNC.url, payload); }catch(_){}
-  if (await landed_(stamp)) return pushOk_();
+  if (await landedWait_(stamp, SETTINGS.SYNC_WAIT_TRIES, SETTINGS.SYNC_WAIT_GAP)){
+    if (!SYNC.useForm){ SYNC.useForm = true; saveSync(); }   // 次からは最初からこちらで送る
+    return pushOk_();
+  }
 
   syncStatus('保存できません');
   return {ok:false, error:'向こうに届きませんでした'};
@@ -1658,6 +1667,14 @@ async function landed_(stamp){
     const j = await readRemote();
     return !!(j && j.ok && j.data && num((j.data.meta||{}).updatedAt) === num(stamp));
   }catch(_){ return false; }
+}
+/* 何度か読んで待ちます（Google が表を作り終えるまで少しかかるため）*/
+async function landedWait_(stamp, tries, gap){
+  for (let i = 0; i < tries; i++){
+    if (await landed_(stamp)) return true;
+    await new Promise(r => setTimeout(r, gap));
+  }
+  return false;
 }
 
 /* 見えない枠に、ふつうのフォームとして送ります。
@@ -1686,7 +1703,7 @@ function formPost(url, payload){
       if (f.parentNode) f.parentNode.removeChild(f);
       if (ifr.parentNode) ifr.parentNode.removeChild(ifr);
       resolve();
-    }, 7000);
+    }, 2500);
   });
 }
 function pushSoon(){
@@ -3764,7 +3781,7 @@ async function takeSetupFromLink(){
   if (SYNC.url === o.u && SYNC.word === o.w) return false;   // もうつながっている
 
   const back = {url: SYNC.url, word: SYNC.word, lastAt: SYNC.lastAt, lastMsg: SYNC.lastMsg};
-  SYNC.url = o.u; SYNC.word = o.w; saveSync();
+  SYNC.url = o.u; SYNC.word = o.w; SYNC.useForm = false; saveSync();
   const r = await pullMerge();
   if (r.ok){ await pushNow(); renderAll(); }
   else {
@@ -3786,7 +3803,7 @@ $('#syConnect').addEventListener('click', async () => {
   if (!/^https:\/\/script\.google\.com\//.test(url)){
     if (!confirm('GoogleのURLではないようです。このまま試しますか。')) return;
   }
-  SYNC.url = url; SYNC.word = word; saveSync();
+  SYNC.url = url; SYNC.word = word; SYNC.useForm = false; saveSync();
   const r = await pullMerge();
   if (r.ok){ await pushNow(); $('#syOk').textContent = 'つながりました'; flash('#syOk'); }
   else {
