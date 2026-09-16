@@ -43,8 +43,8 @@ const SETTINGS = {
   AUTH: {
     SALT: "shiraume-kpi-2026",
     HASH: "2e7871edf323ca8e522ab299daf5408b902b66594230115c13207956167b8f2d",
-    SESSION_MINUTES: 60,   // これだけ経つと、もう一度ログインが要ります
-    LOCK_ON_LEAVE: true,   // 別のアプリ・別のタブに移ったら、すぐ閉じる
+    SESSION_MINUTES: 60,   // 最後に使ってから、これだけ経つとログインが要ります
+    LOCK_ON_LEAVE: false,  // タブを閉じたり別のアプリに移っても、閉じません
   },
 
   /* ── 目標 ──────────────────────────────── */
@@ -70,7 +70,7 @@ const SETTINGS = {
   DM_SHARE_OF_MEETINGS: 0.5,  // 商談のうちDM経由で取る割合（残りは電話経由）
   AVG_DEAL_FALLBACK: 100000,  // 成約実績が0件のときに使う平均成約単価
   OVERDUE_DAYS: 30,           // 未回収を赤で別枠に出す日数
-  BUILD: '2026-09-17-01',     // ★このページの版。新しくするたびに増やします
+  BUILD: '2026-09-17-02',     // ★このページの版。新しくするたびに増やします
 
   SYNC_WAIT_TRIES: 12,        // 保存が届いたか、何回まで読んで待つか
   SYNC_WAIT_GAP: 4000,        // その間隔（ミリ秒）
@@ -3509,8 +3509,18 @@ function newHash(mail, pass){
 window.newHash = newHash;
 
 /* ── 鍵のあけしめ ───────────────────────────
-   開いた状態はメモリにしか持ちません。
-   だから、読み込み直したら必ずログインからになります。 */
+   開いた状態はこの端末に覚えておきます。
+   タブを閉じても、読み込み直しても、ログインは要りません。
+   ただし、最後に使ってから SESSION_MINUTES 経つと、もう一度ログインが要ります。
+   ★これは「鍵」ではなく「表札」です。端末を人に渡すときは「出る」を押してください。 */
+const OPEN_KEY = 'shiraume_kpi_open';
+function readOpen(){
+  try{ return num(localStorage.getItem(OPEN_KEY)); }catch(_){ return 0; }
+}
+function writeOpen(t){
+  try{ if (t) localStorage.setItem(OPEN_KEY, String(t));
+       else localStorage.removeItem(OPEN_KEY); }catch(_){}
+}
 let unlockedAt = 0;
 let lockTimer = null, clockTimer = null, tries = 0;
 const isUnlocked = () => unlockedAt > 0 &&
@@ -3518,6 +3528,7 @@ const isUnlocked = () => unlockedAt > 0 &&
 
 function lock(reason){
   unlockedAt = 0;
+  writeOpen(0);
   if (lockTimer) { clearTimeout(lockTimer); lockTimer = null; }
   if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
   $('#hClock').textContent = '';
@@ -3529,11 +3540,23 @@ function lock(reason){
     ? esc(reason) + '<br>もう一度、メールアドレスとパスワードを入れてください。'
     : '二人とも同じメールとパスワードで入ります。<br>'
       + '誰がやったかは、数字を入れるときに名前を選んで記録します。<br>'
-      + SETTINGS.AUTH.SESSION_MINUTES + '分たつか、別のアプリに移ると、もう一度ここに戻ります。';
+      + '最後に使ってから' + SETTINGS.AUTH.SESSION_MINUTES + '分たつと、もう一度ここに戻ります。<br>'
+      + 'タブを閉じても、そのあいだは入り直さなくて大丈夫です。';
 }
 
-function unlock(){
+/* 使っているあいだは、時間を延ばします */
+function touch(){
+  if (!unlockedAt) return;
   unlockedAt = Date.now();
+  writeOpen(unlockedAt);
+  if (lockTimer) clearTimeout(lockTimer);
+  const ms = SETTINGS.AUTH.SESSION_MINUTES * 60000;
+  lockTimer = setTimeout(() => lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。'), ms);
+}
+
+function unlock(at){
+  unlockedAt = at || Date.now();
+  writeOpen(unlockedAt);
   $('#gate').classList.add('hide');
   $('#app').classList.remove('hide');
   $('#gMail').value = ''; $('#gPass').value = '';
@@ -3541,7 +3564,9 @@ function unlock(){
   if (syncOn()) pullMerge();          // ほかの端末で入れた分を取りに行く
 
   const ms = SETTINGS.AUTH.SESSION_MINUTES * 60000;
-  lockTimer = setTimeout(() => lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。'), ms);
+  if (lockTimer) clearTimeout(lockTimer);
+  lockTimer = setTimeout(() => lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。'),
+    Math.max(0, unlockedAt + ms - Date.now()));
   const tick = () => {
     const left = Math.max(0, Math.ceil((unlockedAt + ms - Date.now())/60000));
     $('#hClock').textContent = left > 0 ? 'あと' + left + '分' : '';
@@ -3572,7 +3597,7 @@ $('#gGo').addEventListener('click', tryLogin);
   $(s).addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); }));
 $('#hOut').addEventListener('click', () => lock('閉じました。'));
 
-/* 別のアプリ・別のタブに移ったら閉じる */
+/* 別のアプリ・別のタブに移ったら閉じる（今は使っていません） */
 if (SETTINGS.AUTH.LOCK_ON_LEAVE){
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden' && isUnlocked())
@@ -3580,11 +3605,22 @@ if (SETTINGS.AUTH.LOCK_ON_LEAVE){
   });
   window.addEventListener('pagehide', () => { if (isUnlocked()) lock(); });
 }
-/* 時間切れを、操作のたびにも確かめる */
+/* 時間切れを、操作のたびにも確かめる。切れていなければ、時間を延ばす */
 ['click','keydown'].forEach(t => document.addEventListener(t, () => {
-  if (unlockedAt > 0 && !isUnlocked())
+  if (unlockedAt <= 0) return;
+  if (!isUnlocked())
     lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。');
+  else
+    touch();
 }, true));
+/* 画面に戻ってきたときも確かめる */
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible' || unlockedAt <= 0) return;
+  if (!isUnlocked())
+    lock(SETTINGS.AUTH.SESSION_MINUTES + '分たったので、いったん閉じました。');
+  else
+    touch();
+});
 
 /* ═══════════════════════════════════════════════
    入力の保存
@@ -3896,11 +3932,17 @@ $('#bClear').addEventListener('click', () => {
    ═══════════════════════════════════════════════ */
 load();
 loadSync();
+/* まだ時間内なら、ログインを飛ばします */
+(() => {
+  const at = readOpen();
+  if (at > 0 && (Date.now() - at) < SETTINGS.AUTH.SESSION_MINUTES * 60000) unlock(at);
+  else writeOpen(0);
+})();
 renderSyncCard();          // 目標設定を開く前から、つながり具合が分かるように
 takeSetupFromLink();       // リンクで渡された設定があれば、その場でつなぐ
 checkUpdate();             // 古いページを覚えていたら、静かに新しくする
-/* 開いた状態は保存しないので、読み込むたびに必ずログインからです */
-$('#gMail').focus();
+/* ログイン画面が出ているときだけ、入力欄にカーソルを置きます */
+if (!$('#gate').classList.contains('hide')) $('#gMail').focus();
 </script>
 </body>
 </html>
