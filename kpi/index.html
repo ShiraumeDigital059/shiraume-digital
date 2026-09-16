@@ -3638,7 +3638,11 @@ function b64e(o){
     .replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
 function b64d(t){
-  const b = atob(String(t).replace(/-/g,'+').replace(/_/g,'/'));
+  /* 改行や空白が混ざっても、= が足りなくても読めるようにします
+     ★Safari は = が足りないと読めないことがあるので、ここで足します */
+  let x = String(t).replace(/\s+/g,'').replace(/-/g,'+').replace(/_/g,'/');
+  while (x.length % 4) x += '=';
+  const b = atob(x);
   return JSON.parse(new TextDecoder().decode(Uint8Array.from(b, c => c.charCodeAt(0))));
 }
 function shareLink(){
@@ -3649,13 +3653,34 @@ async function takeSetupFromLink(){
   const m = /^#s=(.+)$/.exec(location.hash || '');
   if (!m) return false;
   history.replaceState(null, '', location.pathname);   // アドレス欄から消す
-  let o; try { o = b64d(m[1]); } catch(_) { return false; }
-  if (!o || !o.u || !o.w) return false;
+  let o = null;
+  try { o = b64d(decodeURIComponent(m[1])); } catch(_) {
+    try { o = b64d(m[1]); } catch(_) { o = null; }
+  }
+  if (!o || !o.u || !o.w){
+    alert('このリンクは途中で切れているようです。\n' +
+          '② 目標設定 の「つなぎ先のURL」と「あいことば」に、手で入れてください。');
+    return false;
+  }
+  o.u = String(o.u).trim(); o.w = String(o.w).trim();
+  let fine = false;
+  try { const t = new URL(o.u); fine = (t.protocol === 'https:'); } catch(_) {}
+  if (!fine){
+    alert('リンクの中のURLが正しくありません。\n' +
+          '② 目標設定 に、手で入れてください。');
+    return false;
+  }
   if (SYNC.url === o.u && SYNC.word === o.w) return false;   // もうつながっている
+
+  const back = {url: SYNC.url, word: SYNC.word, lastAt: SYNC.lastAt, lastMsg: SYNC.lastMsg};
   SYNC.url = o.u; SYNC.word = o.w; saveSync();
   const r = await pullMerge();
   if (r.ok){ await pushNow(); renderAll(); }
-  else alert('リンクの設定でつなげませんでした。\n' + (r.error||''));
+  else {
+    SYNC = back; saveSync();          // ★だめだった設定は残さない
+    alert('リンクの設定でつなげませんでした。\n' + (r.error||'') +
+          '\n\n② 目標設定 で、URLとあいことばを手で入れてみてください。');
+  }
   renderSyncCard();
   return true;
 }
