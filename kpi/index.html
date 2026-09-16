@@ -70,7 +70,7 @@ const SETTINGS = {
   DM_SHARE_OF_MEETINGS: 0.5,  // 商談のうちDM経由で取る割合（残りは電話経由）
   AVG_DEAL_FALLBACK: 100000,  // 成約実績が0件のときに使う平均成約単価
   OVERDUE_DAYS: 30,           // 未回収を赤で別枠に出す日数
-  BUILD: '2026-09-16-08',     // ★このページの版。新しくするたびに増やします
+  BUILD: '2026-09-17-01',     // ★このページの版。新しくするたびに増やします
 
   SYNC_WAIT_TRIES: 12,        // 保存が届いたか、何回まで読んで待つか
   SYNC_WAIT_GAP: 4000,        // その間隔（ミリ秒）
@@ -3803,7 +3803,15 @@ async function takeSetupFromLink(){
           '② 目標設定 に、手で入れてください。');
     return false;
   }
-  if (SYNC.url === o.u && SYNC.word === o.w) return false;   // もうつながっている
+  /* もうつながっていても、黙って何もしないのは間違いでした。
+     つないだ端末を空にしたあとにリンクを開くと、何も出てこなくなります。
+     つながっているときこそ、最新を取りに行きます。 */
+  if (SYNC.url === o.u && SYNC.word === o.w){
+    const again = await pullMerge();
+    if (again.ok){ await pushNow(); renderAll(); }
+    renderSyncCard();
+    return true;
+  }
 
   const back = {url: SYNC.url, word: SYNC.word, lastAt: SYNC.lastAt, lastMsg: SYNC.lastMsg};
   SYNC.url = o.u; SYNC.word = o.w; SYNC.useForm = false; saveSync();
