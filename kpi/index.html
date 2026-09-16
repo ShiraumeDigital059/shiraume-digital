@@ -1558,6 +1558,7 @@ async function pullMerge(){
 
 async function pushNow(){
   if (!syncOn()) return {ok:false};
+  const stamp = num((DB.meta||{}).updatedAt);
   try{
     syncStatus('保存中…');
     const r = await fetch(SYNC.url, {
@@ -1565,7 +1566,20 @@ async function pushNow(){
       headers:{'Content-Type':'text/plain;charset=utf-8'},
       body: JSON.stringify({k: SYNC.word, data: DB}),
     });
-    const j = await r.json();
+    const txt = await r.text();
+    let j = null; try { j = JSON.parse(txt); } catch(_) {}
+
+    /* Googleは、保存できていても返事がHTMLになることがあります。
+       返事が読めなかったときは「入ったかどうか」を読みにいって確かめます。
+       ★ここで嘘の成功を出すと、消えたことに気づけなくなるので、必ず確認します。 */
+    if (!j){
+      if (await landed_(stamp)){
+        SYNC.lastAt = Date.now(); saveSync();
+        syncStatus('同期しました');
+        return {ok:true};
+      }
+      throw new Error('保存できたか確かめられませんでした');
+    }
     if (!j.ok) throw new Error(j.error || '保存できませんでした');
     SYNC.lastAt = Date.now(); saveSync();
     syncStatus('同期しました');
@@ -1574,6 +1588,15 @@ async function pushNow(){
     syncStatus('保存できません');
     return {ok:false, error:String(e.message||e)};
   }
+}
+/* 送ったものが、向こうに入っているか読んで確かめます */
+async function landed_(stamp){
+  try{
+    const r = await fetch(SYNC.url + (SYNC.url.indexOf('?')<0?'?':'&') + 'k='
+      + encodeURIComponent(SYNC.word) + '&t=' + Date.now(), {cache:'no-store', redirect:'follow'});
+    const j = await r.json();
+    return !!(j && j.ok && j.data && num((j.data.meta||{}).updatedAt) >= stamp);
+  }catch(_){ return false; }
 }
 function pushSoon(){
   if (!syncOn()) return;
