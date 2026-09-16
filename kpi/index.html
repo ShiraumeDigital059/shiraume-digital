@@ -914,9 +914,9 @@ const CHUNK = 40000;
 function doGet(e) {
   try {
     if (!e || !e.parameter || e.parameter.k !== AIKOTOBA)
-      return out_({ ok: false, error: "あいことばが違います" });
-    return out_({ ok: true, data: read_() });
-  } catch (err) { return out_({ ok: false, error: String(err) }); }
+      return out_({ ok: false, error: "あいことばが違います" }, e);
+    return out_({ ok: true, data: read_() }, e);
+  } catch (err) { return out_({ ok: false, error: String(err) }, e); }
 }
 
 function doPost(e) {
@@ -933,9 +933,14 @@ function doPost(e) {
   } finally { try { lock.releaseLock(); } catch (_) {} }
 }
 
-function out_(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+function out_(obj, e) {
+  const s = JSON.stringify(obj);
+  // cb= が付いていたら JavaScript として返す（Safari でも受け取れる読み方）
+  const cb = e && e.parameter && e.parameter.cb;
+  if (cb && /^[A-Za-z0-9_$]{1,60}$/.test(cb))
+    return ContentService.createTextOutput(cb + "(" + s + ");")
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  return ContentService.createTextOutput(s).setMimeType(ContentService.MimeType.JSON);
 }
 function book_() {
   if (SHEET_ID) return SpreadsheetApp.openById(SHEET_ID);
@@ -1531,14 +1536,51 @@ function syncStatus(msg){
   if (box) renderSyncCard();
 }
 
+/* Google からの返事の受け取り方
+   ─────────────────────────────────────────────
+   ふつうは fetch で読みます。ただしブラウザによっては、Google のリダイレクトの都合で
+   返事がHTMLになってしまい、読めないことがあります（Safari で起きました）。
+   そのときは <script> で読み直します。この読み方ならリダイレクトも素通りできます。 */
+function jsonpGet(base, query, ms){
+  return new Promise((resolve, reject) => {
+    const cb = 'shcb' + Date.now() + Math.floor(Math.random()*100000);
+    const el = document.createElement('script');
+    let done = false;
+    const clean = () => {
+      try { delete window[cb]; } catch(_) { window[cb] = undefined; }
+      if (el.parentNode) el.parentNode.removeChild(el);
+    };
+    const timer = setTimeout(() => {
+      if (done) return; done = true; clean(); reject(new Error('返事がありませんでした'));
+    }, ms || 20000);
+    window[cb] = v => { if (done) return; done = true; clearTimeout(timer); clean(); resolve(v); };
+    el.onerror = () => {
+      if (done) return; done = true; clearTimeout(timer); clean();
+      reject(new Error('つなぎ先を読み込めませんでした'));
+    };
+    el.src = base + (base.indexOf('?')<0?'?':'&') + query + '&cb=' + cb;
+    document.head.appendChild(el);
+  });
+}
+/* 向こうの数字を読む。fetch → だめなら script タグ、の順で試します */
+async function readRemote(){
+  const q = 'k=' + encodeURIComponent(SYNC.word) + '&t=' + Date.now();
+  try{
+    const r = await fetch(SYNC.url + (SYNC.url.indexOf('?')<0?'?':'&') + q,
+      {cache:'no-store', redirect:'follow'});
+    const txt = await r.text();
+    return JSON.parse(txt);          // HTMLが返ってきたら、ここで失敗します
+  }catch(_){
+    return await jsonpGet(SYNC.url, q);
+  }
+}
+
 async function pullMerge(){
   if (!syncOn() || syncing) return {ok:false};
   syncing = true; syncStatus('確認中…');
   try{
-    const r = await fetch(SYNC.url + (SYNC.url.indexOf('?')<0?'?':'&') + 'k='
-      + encodeURIComponent(SYNC.word) + '&t=' + Date.now(), {cache:'no-store', redirect:'follow'});
-    const j = await r.json();
-    if (!j.ok) throw new Error(j.error || 'つながりませんでした');
+    const j = await readRemote();
+    if (!j || !j.ok) throw new Error((j && j.error) || 'つながりませんでした');
     if (j.data){
       const remote = adopt(j.data);
       const before = JSON.stringify(DB);
@@ -1592,9 +1634,7 @@ async function pushNow(){
 /* 送ったものが、向こうに入っているか読んで確かめます */
 async function landed_(stamp){
   try{
-    const r = await fetch(SYNC.url + (SYNC.url.indexOf('?')<0?'?':'&') + 'k='
-      + encodeURIComponent(SYNC.word) + '&t=' + Date.now(), {cache:'no-store', redirect:'follow'});
-    const j = await r.json();
+    const j = await readRemote();
     return !!(j && j.ok && j.data && num((j.data.meta||{}).updatedAt) >= stamp);
   }catch(_){ return false; }
 }
