@@ -923,13 +923,16 @@ function doPost(e) {
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(25000);
-    const body = JSON.parse(e.postData.contents);
-    if (body.k !== AIKOTOBA) return out_({ ok: false, error: "あいことばが違います" });
+    // payload= はフォームとして送られてきたとき（Safari はこちらで届きます）
+    let body = null;
+    if (e && e.parameter && e.parameter.payload) body = JSON.parse(e.parameter.payload);
+    else if (e && e.postData) body = JSON.parse(e.postData.contents);
+    if (!body || body.k !== AIKOTOBA) return out_({ ok: false, error: "あいことばが違います" }, e);
     write_(body.data);
     try { sheets_(body.data); } catch (_) {}
-    return out_({ ok: true, savedAt: new Date().toISOString() });
+    return out_({ ok: true, savedAt: new Date().toISOString() }, e);
   } catch (err) {
-    return out_({ ok: false, error: String(err) });
+    return out_({ ok: false, error: String(err) }, e);
   } finally { try { lock.releaseLock(); } catch (_) {} }
 }
 
@@ -1598,45 +1601,93 @@ async function pullMerge(){
   }finally{ syncing = false; }
 }
 
+/* 送る
+   ─────────────────────────────────────────────
+   ★ 送るたびに「何時何分何秒に送ったか」の印を押します。
+     そのうえで、その印が向こうに入っているかを読んで確かめます。
+     印を使わずに「新しければOK」にすると、
+     まだ何も入っていないのに成功に見えてしまいます（実際に起きました）。 */
 async function pushNow(){
   if (!syncOn()) return {ok:false};
-  const stamp = num((DB.meta||{}).updatedAt);
+
+  DB.meta = DB.meta || {};
+  DB.meta.updatedAt = Date.now();
+  DB.meta.device = deviceId();
+  const stamp = DB.meta.updatedAt;
+  try{ localStorage.setItem(SETTINGS.STORAGE_KEY, JSON.stringify(DB)); }catch(_){}
+  const payload = JSON.stringify({k: SYNC.word, data: DB});
+
+  syncStatus('保存中…');
+
+  // 1　ふつうの送り方
   try{
-    syncStatus('保存中…');
     const r = await fetch(SYNC.url, {
       method:'POST', redirect:'follow',
       headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body: JSON.stringify({k: SYNC.word, data: DB}),
+      body: payload,
     });
     const txt = await r.text();
     let j = null; try { j = JSON.parse(txt); } catch(_) {}
-
-    /* Googleは、保存できていても返事がHTMLになることがあります。
-       返事が読めなかったときは「入ったかどうか」を読みにいって確かめます。
-       ★ここで嘘の成功を出すと、消えたことに気づけなくなるので、必ず確認します。 */
-    if (!j){
-      if (await landed_(stamp)){
-        SYNC.lastAt = Date.now(); saveSync();
-        syncStatus('同期しました');
-        return {ok:true};
-      }
-      throw new Error('保存できたか確かめられませんでした');
+    if (j && j.ok) return pushOk_();
+    if (j && j.error && /あいことば/.test(j.error)){
+      syncStatus('あいことばが違います');
+      return {ok:false, error: j.error};
     }
-    if (!j.ok) throw new Error(j.error || '保存できませんでした');
-    SYNC.lastAt = Date.now(); saveSync();
-    syncStatus('同期しました');
-    return {ok:true};
-  }catch(e){
-    syncStatus('保存できません');
-    return {ok:false, error:String(e.message||e)};
-  }
+  }catch(_){}
+
+  // 2　返事が読めなかったとき。入ったかどうかを読んで確かめる
+  if (await landed_(stamp)) return pushOk_();
+
+  // 3　届いていない。送り方を変えてもう一度（Safari はこちらで通ります）
+  try{ await formPost(SYNC.url, payload); }catch(_){}
+  if (await landed_(stamp)) return pushOk_();
+
+  syncStatus('保存できません');
+  return {ok:false, error:'向こうに届きませんでした'};
 }
-/* 送ったものが、向こうに入っているか読んで確かめます */
+function pushOk_(){
+  SYNC.lastAt = Date.now(); saveSync();
+  syncStatus('同期しました');
+  return {ok:true};
+}
+
+/* 送ったものが、向こうに入っているか読んで確かめます
+   ★ 印がぴったり一致したときだけ「入った」と見なします */
 async function landed_(stamp){
   try{
     const j = await readRemote();
-    return !!(j && j.ok && j.data && num((j.data.meta||{}).updatedAt) >= stamp);
+    return !!(j && j.ok && j.data && num((j.data.meta||{}).updatedAt) === num(stamp));
   }catch(_){ return false; }
+}
+
+/* 見えない枠に、ふつうのフォームとして送ります。
+   この送り方なら、ブラウザの制限にかからずに届きます。
+   返事は読めないので、届いたかどうかは landed_ で確かめます。 */
+function formPost(url, payload){
+  return new Promise(resolve => {
+    const name = 'shfr' + Date.now() + Math.floor(Math.random()*100000);
+    const ifr = document.createElement('iframe');
+    ifr.name = name;
+    ifr.setAttribute('aria-hidden','true');
+    ifr.style.cssText = 'position:absolute;left:-9999px;width:0;height:0;border:0';
+    document.body.appendChild(ifr);
+
+    const f = document.createElement('form');
+    f.method = 'POST'; f.action = url; f.target = name;
+    f.enctype = 'application/x-www-form-urlencoded';
+    f.style.display = 'none';
+    const box = document.createElement('input');
+    box.type = 'hidden'; box.name = 'payload'; box.value = payload;
+    f.appendChild(box);
+    document.body.appendChild(f);
+    f.submit();
+
+    setTimeout(() => {
+      if (f.parentNode) f.parentNode.removeChild(f);
+      if (ifr.parentNode) ifr.parentNode.removeChild(ifr);
+      resolve();
+    }, 7000);
+  });
 }
 function pushSoon(){
   if (!syncOn()) return;
