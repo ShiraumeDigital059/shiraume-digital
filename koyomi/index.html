@@ -2708,7 +2708,7 @@ function renderSetup(){
         ・「予定を作成」から、最初の予定を入れてみてください。<br>
         ・メンバーが増えたら、［設定 → メンバー］から招待できます。<br>
         ${SELL?'・お支払いは［設定 → プラン］。お試し中はいつでも解約できます。'
-               :'・ご利用は無料です。［設定 → プラン］でこれからの料金を見られます。'}
+               :'・ご利用は無料です。人数の上限もありません。'}
       </div>
     </div>`;
 
@@ -4154,15 +4154,16 @@ function admSettings(){
           </div>
         </div>
         <div class="field"><label>会社名</label><input type="text" data-set="company.name" value="${esc(c.name)}"></div>
+        ${SELL?`
         <div class="field"><label>請求先メールアドレス</label>
           <input type="email" data-set="company.billing.contact" value="${esc((c.billing||{}).contact||'')}">
           <span class="muted" style="font-size:12.5px">請求書と領収書がここに届きます。</span></div>
         <div class="field"><label>住所（請求書に印刷されます）</label>
-          <input type="text" data-set="company.billing.addr" value="${esc((c.billing||{}).addr||'')}" placeholder="東京都千代田区…"></div>
+          <input type="text" data-set="company.billing.addr" value="${esc((c.billing||{}).addr||'')}" placeholder="東京都千代田区…"></div>`:''}
         <div class="row" style="margin-top:2px"><button class="btn sm q" data-act="setup-again">初期設定をやり直す</button></div>
         <div class="field"><label>基準タイムゾーン</label><select data-set="company.tz">
           ${[...new Set(Object.values(CITIES).map(v=>v.tz))].map(tz=>`<option value="${tz}" ${c.tz===tz?'selected':''}>${tz}（${offLabel(tz,Date.now())}）</option>`).join('')}</select>
-          <span class="muted" style="font-size:12.5px">操作ログの日時と請求日はこの時間で記録されます。</span></div>
+          <span class="muted" style="font-size:12.5px">${SELL?'操作ログの日時と請求日はこの時間で記録されます。':'操作ログの日時はこの時間で記録されます。'}</span></div>
         <div class="grid2">
           <div class="field"><label>既定の始業</label><input type="time" data-set="company.defaultWork.s" value="${c.defaultWork.s}"></div>
           <div class="field"><label>既定の終業</label><input type="time" data-set="company.defaultWork.e" value="${c.defaultWork.e}"></div>
@@ -4209,7 +4210,7 @@ function admAudit(){
       <td>${esc(person(a.by)?.name||a.by)}</td><td>${esc(a.action)}</td><td class="muted">${esc(a.detail)}</td></tr>`;}).join('')
       :'<tr><td colspan="4"><div class="empty left">操作履歴はまだありません。</div></td></tr>'}
   </tbody></table></div>
-  <div class="muted" style="font-size:13px;margin-top:12px">日時は会社の基準タイムゾーン（${DB.company.tz}）で表示 ・ 保持期間 ${curPlan().id==='starter'?'30日':curPlan().id==='business'?'90日':'1年'}（プランにより異なります）</div>`;
+  <div class="muted" style="font-size:13px;margin-top:12px">日時は会社の基準タイムゾーン（${DB.company.tz}）で表示 ・ 保持期間 ${SELL?(curPlan().id==='starter'?'30日':curPlan().id==='business'?'90日':'1年')+'（プランにより異なります）':'90日'}</div>`;
 }
 
 /* ================= PROFILE ================= */
@@ -4255,7 +4256,7 @@ function viewProfile(){
       <div class="block">
         <div class="sec"><h2>アカウント</h2></div>
         <div class="pbody">
-          <button class="btn sm" data-act="account">別のメンバーとしてログイン（デモ）</button>
+          <button class="btn sm" data-act="account">${DB.demo?'別のメンバーとしてログイン（デモ）':'アカウント・ログアウト'}</button>
         </div>
       </div>
     </div>
