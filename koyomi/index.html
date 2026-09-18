@@ -2124,6 +2124,8 @@ let STORE_PRICE = null;
    有料App契約（銀行口座・税務情報）が済んで、はじめて true にする。
    config.js で window.KOYOMI_SELL = true と書けば有効になる。 */
 const SELL = (()=>{ try{ return window.KOYOMI_SELL === true; }catch(e){ return false; } })();
+/* プラン選択の見出し。無料モード（SELL=false）のときは金額を出さない。 */
+const planOptLabel = pl => `${pl.name}${SELL?'｜'+(pl.price?'¥'+pl.price.toLocaleString()+' / 月':'要相談'):''}｜${pl.seats?pl.seats+'名まで':'人数無制限'}`;
 
 const TAX=0.10;
 const YEN=n=>'¥'+Number(n||0).toLocaleString('ja-JP');
@@ -2814,7 +2816,7 @@ function renderAuth(){
             <div class="field"><label for="s-we">終業</label><input type="time" id="s-we" value="18:00"></div>
           </div>
           <div class="field"><label for="s-plan">プラン</label><select id="s-plan">
-            ${DB.plans.map(pl=>`<option value="${pl.id}">${pl.name}｜${pl.price?'¥'+pl.price.toLocaleString()+' / 月':'要相談'}｜${pl.seats?pl.seats+'名まで':'人数無制限'}</option>`).join('')}
+            ${DB.plans.map(pl=>`<option value="${pl.id}">${planOptLabel(pl)}</option>`).join('')}
           </select></div>
           <label class="authcheck"><input type="checkbox" id="s-agree">
             <span><a data-act="show-terms" style="color:var(--accent-3);text-decoration:underline;cursor:pointer">利用規約</a>と<a data-act="show-priv" style="color:var(--accent-3);text-decoration:underline;cursor:pointer">プライバシーポリシー</a>に同意します</span></label>
@@ -2880,7 +2882,7 @@ function renderOnboard(){
         </div>
         ${t==='make'?`
         <div class="field"><label for="o-plan">プラン</label><select id="o-plan">
-          ${DB.plans.map(pl=>`<option value="${pl.id}" ${v.plan===pl.id?'selected':''}>${pl.name}｜${pl.price?'¥'+pl.price.toLocaleString()+' / 月':'要相談'}｜${pl.seats?pl.seats+'名まで':'人数無制限'}</option>`).join('')}
+          ${DB.plans.map(pl=>`<option value="${pl.id}" ${v.plan===pl.id?'selected':''}>${planOptLabel(pl)}</option>`).join('')}
         </select></div>
         <label class="authcheck"><input type="checkbox" id="o-agree" ${v.agree?'checked':''}> <span>利用規約とプライバシーポリシーに同意します</span></label>`:''}
         <button class="btn pri big" type="submit" ${busy?'disabled':''}>${busy?'処理しています…':(t==='make'?'会社を作る':'参加する')}</button>
