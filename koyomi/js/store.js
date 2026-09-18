@@ -43,12 +43,12 @@
   const newId = () => (crypto.randomUUID ? crypto.randomUUID()
     : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
         const r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+      }));
   /* 旧データや試作版で作った id（先頭に p / u / n が付いたもの）は uuid ではないので、
      送る前にここで uuid に直す。DB 側のオブジェクトも書き換わるので次回からは一致する。 */
   const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const fixId = (o) => { if (o && !UUID_RE.test(o.id || '')) o.id = newId(); return o.id; };
-        return (c === 'x' ? r : (r & 3 | 8)).toString(16);
-      }));
 
   /* ---------- 初期化 ---------- */
   async function init(url, anonKey) {
@@ -360,14 +360,17 @@
   }
 
   async function pushAudit(DB) {
-    const rows = (DB.audit || []).filter(a => !a.id).map(a => {
-      a.id = newId();
+    /* サーバから読んだぶん（snap にあるもの）以外を送る。
+       アプリ側で作った記録にも id が入っているので、id の有無では判定しない。 */
+    const old = byId(snap && snap.audit);
+    const rows = (DB.audit || []).filter(a => !old[a.id]).map(a => {
+      fixId(a);
       return { id: a.id, company_id: companyId, by_id: a.by || null,
-               action: a.action, detail: a.detail || '', at: undefined,
+               action: a.action, detail: a.detail || '',
                created_at: iso(a.at || Date.now()) };
     });
     if (!rows.length) return;
-    const { error } = await sb.from('audit_logs').insert(rows);
+    const { error } = await sb.from('audit_logs').upsert(rows);
     if (error) throw error;
   }
 
