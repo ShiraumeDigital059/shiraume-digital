@@ -4385,7 +4385,7 @@ function saveEvent(id){
       if(h){toast((person(pid)||{}).name+' さんはこの日は休暇です。日付を変えてください。');return;}
     }
   }
-  const ev={id:id||('u'+uid()),title,kind,start,end,tz,place:$('#e-place').value.trim(),
+  const ev={id:id||uid(),title,kind,start,end,tz,place:$('#e-place').value.trim(),
     url:$('#e-url').value.trim(),who,note:$('#e-note').value.trim(),vis:$('#e-vis').value,
     rem:+$('#e-rem').value,owner:id?DB.events.find(x=>x.id===id).owner:me().id,seed:false};
   const i=DB.events.findIndex(x=>x.id===id);
@@ -4551,7 +4551,7 @@ document.addEventListener('click',ev=>{
         const seats=curPlan().seats;
         if(seats&&DB.people.length>=seats){toast('席数の上限です。プランを変更してください');return;}
         const city=$('#i-city').value;
-        const p={id:'p'+uid(),name:n,nameEn:n,city,dept:$('#i-dept').value,title:$('#i-dept').value,role:$('#i-role').value,location:'office',
+        const p={id:uid(),name:n,nameEn:n,city,dept:$('#i-dept').value,title:$('#i-dept').value,role:$('#i-role').value,location:'office',
           work:{s:$('#i-ws').value,e:$('#i-we').value,days:[1,2,3,4,5]},tz:CITIES[city].tz,email:m,privacy:DB.company.locPolicy==='hidden'?'hidden':'city',override:null,tripCity:null};
         DB.people.push(p);DB.invites.push({email:m,at:Date.now(),by:DB.userId});
         audit('メンバーを招待',`${n} <${m}>`);save();closeLayer();render();toast(`${n} さんを招待しました`);return;}
@@ -4879,7 +4879,7 @@ function dailyDigest(){
   const txt=hol?`今日は休暇です（${hol.title}）。ゆっくり。`
     :mine.length?`今日は ${mine.length}件。最初は ${hhmm(mine[0].start,tz)} 「${mine[0].title}」です。`
     :'今日の予定はありません。';
-  DB.notifs.unshift({id:'n'+uid(),to:u.id,by:u.id,type:'daily',day:k,text:'今日のダイジェスト ・ '+txt,ref:'',at:now,read:false});
+  DB.notifs.unshift({id:uid(),to:u.id,by:u.id,type:'daily',day:k,text:'今日のダイジェスト ・ '+txt,ref:'',at:now,read:false});
   save();
 }
 

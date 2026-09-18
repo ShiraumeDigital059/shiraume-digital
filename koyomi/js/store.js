@@ -43,6 +43,10 @@
   const newId = () => (crypto.randomUUID ? crypto.randomUUID()
     : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
         const r = Math.random() * 16 | 0;
+  /* 旧データや試作版で作った id（先頭に p / u / n が付いたもの）は uuid ではないので、
+     送る前にここで uuid に直す。DB 側のオブジェクトも書き換わるので次回からは一致する。 */
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const fixId = (o) => { if (o && !UUID_RE.test(o.id || '')) o.id = newId(); return o.id; };
         return (c === 'x' ? r : (r & 3 | 8)).toString(16);
       }));
 
@@ -260,6 +264,7 @@
     for (const e of DB.events) {
       const o = old[e.id];
       if (o && same(e, o)) continue;
+      fixId(e);
       const row = {
         id: e.id, company_id: companyId, title: e.title, kind: e.kind,
         starts_at: iso(e.start), ends_at: iso(e.end), tz: e.tz,
@@ -320,7 +325,7 @@
     const old = byId(snap && snap.notifs);
     (DB.notifs || []).forEach(n => {
       if (!n.id || !old[n.id]) {
-        n.id = n.id || newId();
+        fixId(n);
         if (!old[n.id]) {
           ins.push({ id: n.id, company_id: companyId, to_id: n.to, by_id: n.by || null,
                      type: n.type, body: n.text, ref: n.ref || '', day: n.day || null,
