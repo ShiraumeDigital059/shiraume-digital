@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>パスワードの再設定 — Koyomi</title>
+<meta name="theme-color" content="#12704F">
+<link rel="icon" href="icons/favicon.png" sizes="512x512" type="image/png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Zen+Old+Mincho:wght@700&display=swap">
+<style>
+  :root{
+    --paper:#fff; --side:#FAF9F7; --ink:#08090B; --ink-2:#272B31; --ink-3:#4E545D;
+    --line:#DBD8D2; --line-2:#B9B5AC; --accent:#12704F; --accent-2:#E2F0E9; --accent-3:#0A4632;
+    --jp:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic Medium",sans-serif;
+    --disp:"Zen Old Mincho","Hiragino Mincho ProN",serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--paper:#15161A;--side:#101115;--ink:#F7F7F5;--ink-2:#D2D6DC;--ink-3:#A0A6AE;
+          --line:#33363D;--line-2:#494D56;--accent:#54C795;--accent-2:#122B21;--accent-3:#8BE0B8}
+  }
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;
+    background:var(--side);font-family:var(--jp);color:var(--ink-2);line-height:1.75;font-size:15px}
+  .card{width:100%;max-width:440px;background:var(--paper);border:1.5px solid var(--line-2);
+    border-radius:8px;padding:32px 28px}
+  .mark{display:flex;flex-direction:column;align-items:center;gap:9px;margin-bottom:6px}
+  .mark svg{width:86px;height:47px;color:var(--accent)}
+  .mark b{font-family:var(--disp);font-size:19px;font-weight:700;letter-spacing:.38em;
+    text-indent:.38em;color:var(--ink)}
+  h1{font-family:var(--disp);font-size:18px;font-weight:700;letter-spacing:.06em;
+    text-align:center;color:var(--ink);margin:22px 0 6px}
+  p.lead{text-align:center;font-size:13.5px;color:var(--ink-3);margin:0 0 22px}
+  label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-2);margin:0 0 5px;letter-spacing:.03em}
+  input{width:100%;height:44px;padding:0 13px;border:1.5px solid var(--line-2);border-radius:5px;
+    background:var(--paper);color:var(--ink);font-size:15px;font-weight:600;font-family:inherit}
+  input:focus{outline:2px solid var(--accent-2);border-color:var(--accent)}
+  .f+.f{margin-top:14px}
+  button{width:100%;height:48px;margin-top:20px;border:0;border-radius:5px;background:var(--accent);
+    color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer}
+  button:disabled{opacity:.55;cursor:progress}
+  .msg{margin-top:18px;padding:12px 14px;border-radius:5px;font-size:13.5px;line-height:1.75}
+  .ok{background:var(--accent-2);color:var(--accent-3);border:1.5px solid var(--accent)}
+  .ng{background:#FBECE7;color:#A5321F;border:1.5px solid #E0B5A8}
+  @media (prefers-color-scheme:dark){.ng{background:#3A211B;color:#F0A08C;border-color:#5C3428}}
+  .note{margin-top:20px;font-size:12.5px;color:var(--ink-3);text-align:center;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="mark">
+    <svg viewBox="0 0 48 26" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round">
+      <path d="M4 23.4A20 20 0 0 1 44 23.4"/>
+      <path d="M11.1 23.4A12.9 12.9 0 0 1 36.9 23.4"/>
+      <path d="M17.5 23.4A6.5 6.5 0 0 1 30.5 23.4"/>
+      <path d="M0.4 23.4H47.6"/>
+    </svg>
+    <b>KOYOMI</b>
+  </div>
+
+  <h1>パスワードの再設定</h1>
+  <p class="lead">新しいパスワードを決めてください。</p>
+
+  <form id="form" hidden>
+    <div class="f">
+      <label for="p1">新しいパスワード（8文字以上）</label>
+      <input type="password" id="p1" autocomplete="new-password">
+    </div>
+    <div class="f">
+      <label for="p2">もう一度入力</label>
+      <input type="password" id="p2" autocomplete="new-password">
+    </div>
+    <button type="submit" id="go">この内容で変更する</button>
+  </form>
+
+  <div id="msg"></div>
+  <p class="note" id="note"></p>
+</div>
+
+<script src="vendor/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+(function(){
+  var form=document.getElementById('form'),
+      msg=document.getElementById('msg'),
+      note=document.getElementById('note'),
+      go=document.getElementById('go');
+
+  function show(kind,text){ msg.className='msg '+kind; msg.textContent=text; }
+
+  if(!window.KOYOMI_SUPABASE_URL||!window.KOYOMI_SUPABASE_ANON_KEY){
+    show('ng','設定ファイル（config.js）が読み込めていません。');
+    return;
+  }
+
+  var sb=window.supabase.createClient(
+    window.KOYOMI_SUPABASE_URL, window.KOYOMI_SUPABASE_ANON_KEY,
+    { auth:{ detectSessionInUrl:true, persistSession:true, flowType:'pkce' } });
+
+  sb.auth.getSession().then(function(r){
+    if(r.data && r.data.session){
+      form.hidden=false;
+    }else{
+      sb.auth.onAuthStateChange(function(ev){
+        if(ev==='PASSWORD_RECOVERY'||ev==='SIGNED_IN'){
+          form.hidden=false; msg.className=''; msg.textContent=''; note.textContent='';
+        }
+      });
+      show('ng','このページは、パスワード再設定メールのリンクから開いてください。リンクの有効期限は1時間です。');
+      note.textContent='もう一度メールを送るには、アプリのログイン画面で「パスワードをお忘れですか？」を押してください。';
+    }
+  });
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var p1=document.getElementById('p1').value, p2=document.getElementById('p2').value;
+    if(p1.length<8) return show('ng','パスワードは8文字以上にしてください。');
+    if(p1!==p2)     return show('ng','2つのパスワードが一致しません。');
+    go.disabled=true; go.textContent='変更しています…';
+    try{
+      var r=await sb.auth.updateUser({password:p1});
+      if(r.error) throw r.error;
+      form.hidden=true;
+      show('ok','パスワードを変更しました。Koyomi のアプリに戻って、新しいパスワードでログインしてください。');
+      note.textContent='このページは閉じて大丈夫です。';
+    }catch(err){
+      go.disabled=false; go.textContent='この内容で変更する';
+      var m=(err.message||'').toLowerCase();
+      show('ng', m.indexOf('same')>=0 ? '前と同じパスワードは使えません。'
+                : m.indexOf('expired')>=0||m.indexOf('invalid')>=0 ? 'リンクの有効期限が切れています。もう一度送り直してください。'
+                : '変更できませんでした：'+err.message);
+    }
+  });
+})();
+</script>
+</body>
+</html>
