@@ -2600,7 +2600,7 @@ function setupBar(){
   if(!needSetup())return '';
   return `<div class="setnudge">
     <b>初期設定がまだです</b>
-    <span>会社の情報を入れると、請求書が正しく発行されます。3分ほどで終わります。</span>
+    <span>${SELL?'会社の情報を入れると、請求書が正しく発行されます。':'会社名と働きかたを決めると、チームの表示が整います。'}3分ほどで終わります。</span>
     <button class="btn sm pri" data-act="su-open">つづきから設定する</button>
   </div>`;
 }
@@ -2637,19 +2637,20 @@ function renderSetup(){
   st===1?`
     <div class="setsec">
       <h2>会社の情報</h2>
-      <div class="sethint">ここに入れた内容が、毎月の請求書にそのまま印刷されます。</div>
+      <div class="sethint">${SELL?'ここに入れた内容が、毎月の請求書にそのまま印刷されます。':'チームの画面に出る名前です。あとから直せます。'}</div>
       <div class="setgrid">
         ${f('su-name','会社名（正式名称）',c.name,'株式会社〇〇','text','登記どおりの名前を入れてください。')}
         ${f('su-en','英語表記（任意）',c.nameEn,'Shiraume Digital')}
+        ${SELL?`
         ${f('su-billto','請求書の宛名（任意）',b.billTo,'経理部 御中','text','空欄なら会社名がそのまま入ります。')}
         ${f('su-mail','請求先メールアドレス',b.contact,'keiri@company.co.jp','email','請求書と領収書がここに届きます。')}
         ${f('su-zip','郵便番号',b.zip,'100-0001')}
         ${f('su-tel','電話番号',b.tel,'03-0000-0000','tel')}
-        <div class="wide">${f('su-addr','住所',b.addr,'東京都千代田区…')}</div>
+        <div class="wide">${f('su-addr','住所',b.addr,'東京都千代田区…')}</div>`:''}
         <div class="field wide"><label for="su-tz">基準タイムゾーン</label>
           <select id="su-tz">${[...new Set(Object.values(CITIES).map(v=>v.tz))].map(tz=>
             `<option value="${tz}" ${c.tz===tz?'selected':''}>${tz}（${offLabel(tz,Date.now())}）</option>`).join('')}</select>
-          <span class="sethint">操作ログの日時と請求日は、この時間で記録されます。</span></div>
+          <span class="sethint">${SELL?'操作ログの日時と請求日は、この時間で記録されます。':'操作ログの日時は、この時間で記録されます。'}</span></div>
       </div>
     </div>`
   :st===2?`
@@ -2745,9 +2746,9 @@ function setupCollect(){
   if(st===1){
     const name=g('su-name');
     if(!name){S.setup.err='会社名を入れてください。';return false;}
-    if(!g('su-mail')){S.setup.err='請求先のメールアドレスを入れてください。';return false;}
+    if(SELL && !g('su-mail')){S.setup.err='請求先のメールアドレスを入れてください。';return false;}
     c.name=name; c.nameEn=g('su-en'); c.tz=$('#su-tz').value;
-    c.billing=Object.assign({},c.billing,{
+    if(SELL) c.billing=Object.assign({},c.billing,{
       billTo:g('su-billto'),contact:g('su-mail'),zip:g('su-zip'),tel:g('su-tel'),addr:g('su-addr')});
   }
   if(st===2){
