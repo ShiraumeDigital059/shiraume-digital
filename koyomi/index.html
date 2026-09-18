@@ -1916,6 +1916,12 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
   .hero::before{transform:translate(-50%,-50%) scale(2.6)}
 }
 
+/* ログイン画面の3つのタブ（後ろの .seg button より後に置いて効かせる） */
+.authtabs button{flex:1 1 0;min-width:0;justify-content:center;height:36px;padding:0 8px;white-space:nowrap}
+@media (max-width:460px){ .authtabs button{font-size:12px;padding:0 5px;letter-spacing:-.01em} }
+@media (max-width:380px){ .authtabs button{font-size:11px;padding:0 4px} }
+@media (max-width:340px){ .authtabs button{font-size:10px;padding:0 2px} }
+
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
   padding:12px 14px;margin-bottom:16px;font-size:13.5px;line-height:1.75;color:var(--accent-3);font-weight:500}
@@ -2680,7 +2686,7 @@ function renderSetup(){
   :st===3?`
     <div class="setsec">
       <h2>メンバーを招待する</h2>
-      <div class="sethint">この6桁を伝えてください。ログイン画面の「招待コードで参加」から入れます。</div>
+      <div class="sethint">この6桁を伝えてください。ログイン画面の「コードで参加」から入れます。</div>
       <div class="setcode">
         <span class="joincode">${esc(c.joinCode||'------')}</span>
         <button type="button" class="btn sm" data-act="su-copy">コードをコピー</button>
@@ -2780,7 +2786,7 @@ function renderAuth(){
         <p class="authtag">世界のどこにいても、チームの「今」が見えるカレンダー</p>
       </div>
       <div class="seg authtabs">
-        ${[['login','ログイン'],['signup','会社を登録'],['join','招待コードで参加']].map(x=>
+        ${[['login','ログイン'],['signup','会社を登録'],['join','コードで参加']].map(x=>
           `<button data-authtab="${x[0]}" aria-pressed="${t===x[0]}">${x[1]}</button>`).join('')}
       </div>
       ${err?`<div class="autherr">${esc(err)}</div>`:''}
@@ -3810,7 +3816,7 @@ function admImages(){
 }
 function admMembers(){
   const now=Date.now();
-  return `<div class="block"><div class="sec"><h2>招待コード</h2><span class="note">「招待コードで参加」画面でこのコードを入力します</span></div>
+  return `<div class="block"><div class="sec"><h2>招待コード</h2><span class="note">「コードで参加」画面でこのコードを入力します</span></div>
     <div class="row" style="padding:14px 16px;align-items:center">
       <span class="joincode">${esc(DB.company.joinCode||'------')}</span>
       <button class="btn sm" data-act="newcode">コードを再発行</button>
