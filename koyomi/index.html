@@ -1922,6 +1922,31 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 @media (max-width:380px){ .authtabs button{font-size:11px;padding:0 4px} }
 @media (max-width:340px){ .authtabs button{font-size:10px;padding:0 2px} }
 
+/* 今日の画面：休みの日の大きな表示 */
+.restbig{display:flex;align-items:baseline;gap:12px;margin:10px 0 2px;flex-wrap:wrap}
+.restbig .rb{font-family:var(--disp);font-size:44px;line-height:1;font-weight:600;letter-spacing:.12em;
+  color:var(--accent-3);background:var(--paper);border-radius:12px;padding:8px 18px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.restbig .rt{font-size:13.5px;font-weight:600;color:var(--ink-2)}
+:root[data-ui="dark"] .restbig .rb{color:var(--accent);background:rgba(0,0,0,.28)}
+@media (max-width:560px){ .restbig .rb{font-size:36px;padding:6px 14px 8px} }
+/* 曜日ごとの働きかたエディタ */
+.dowset{display:flex;flex-direction:column;gap:7px}
+.dowrow{display:grid;grid-template-columns:44px 1fr 14px 1fr auto;align-items:center;gap:8px}
+.dowrow .dowtog{height:34px;border:1px solid var(--line-2);border-radius:9px;background:var(--paper);
+  font-weight:700;font-size:13.5px;color:var(--ink-2)}
+.dowrow .dowtog[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.dowrow input[type=time]{width:100%;min-width:0;padding-left:9px;padding-right:6px}
+@media (max-width:430px){
+  .dowrow{gap:6px;grid-template-columns:38px 1fr 9px 1fr}
+  .dowrow input[type=time]{font-size:13.5px;padding-left:6px;padding-right:2px}
+  .dowrow .dowtog{font-size:13px}
+}
+.dowrow .dash{text-align:center;color:var(--ink-4)}
+.dowrow .offlabel{display:none;font-size:13px;color:var(--ink-3);font-weight:600}
+.dowrow.off input[type=time],.dowrow.off .dash{display:none}
+.dowrow.off .offlabel{display:inline;grid-column:2 / -1}
+
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
   padding:12px 14px;margin-bottom:16px;font-size:13.5px;line-height:1.75;color:var(--accent-3);font-weight:500}
@@ -2284,7 +2309,7 @@ const DEF={
              billTo:'',zip:'',addr:'',tel:'',
              status:'trial',interval:'month',trialEnds:null,cancelAtEnd:false,seats:null,ready:false},
     setupDone:true,
-    notify:{invite:true,daily:true,change:true}},
+    notify:{invite:true,daily:true,change:true,done:true}},
   plans:PLANS.map(p=>({...p})),
   images:JSON.parse(JSON.stringify(BUILTIN_IMG)), imgVer:3,
   people:[],events:[],threads:{},dms:{},audit:[],invites:[],notifs:[],logs:{},
@@ -2370,10 +2395,77 @@ function eventsOf(pid,from,to){
 function onHoliday(p,ms){
   return DB.events.some(e=>e.kind==='holiday'&&e.who.includes(p.id)&&e.start<=ms&&e.end>ms);
 }
+/* ============================================================
+   曜日ごとの働きかた
+   work = { s, e, days:[0..6], dow:{ "0":{off:true} | {s,e}, ... } }
+   dow があればそれを優先。無ければ従来どおり days / s / e を見る。
+   ============================================================ */
+function dayWork(p,dow){
+  const w=(p&&p.work)||{};
+  const bs=w.s||'09:00', be=w.e||'18:00';
+  const d=w.dow&&w.dow[dow];
+  if(d) return d.off?{off:true,s:bs,e:be}:{off:false,s:d.s||bs,e:d.e||be};
+  return {off:!(w.days||[1,2,3,4,5]).includes(dow),s:bs,e:be};
+}
+/* その日の勤務時間（その人の現地の曜日で見る） */
+function workOn(p,ms){ return dayWork(p,P(ms,effTz(p)).dow); }
+/* その日が休みか（曜日の休み・休暇の予定・勤務場所が休暇） */
+function isDayOff(p,ms){
+  if(!p)return false;
+  if(p.location==='holiday'||onHoliday(p,ms))return true;
+  return workOn(p,ms).off;
+}
+/* 曜日ごとの働きかたを一行で（例: 日 休み ・ 月火水木金 09:00–18:00 ・ 土 休み） */
+function dowSummary(w){
+  const g=[];
+  for(let i=0;i<7;i++){
+    const d=dayWork({work:w||{}},i);
+    const key=d.off?'off':d.s+'-'+d.e;
+    if(g.length&&g[g.length-1].key===key) g[g.length-1].ds.push(i);
+    else g.push({key,ds:[i],d});
+  }
+  return g.map(x=>{
+    const lbl=x.ds.map(i=>DOWJA[i]).join('');
+    return x.d.off?`<span class="muted">${lbl} 休み</span>`:`${lbl} <b>${x.d.s}–${x.d.e}</b>`;
+  }).join('<span class="muted"> ・ </span>');
+}
+/* 曜日ごとの働きかたを編集する部品。pref は id の接頭辞（画面内で重複しない文字列） */
+function dowEditor(pref,w){
+  return `<div class="dowset" data-dowset="${pref}">${DOWJA.map((lbl,i)=>{
+    const d=dayWork({work:w||{}},i);
+    return `<div class="dowrow ${d.off?'off':''}" data-dowrow="${pref}|${i}">
+      <button type="button" class="dowtog" data-dowtog="${pref}|${i}" aria-pressed="${!d.off}">${lbl}</button>
+      <input type="time" id="${pref}-s-${i}" value="${d.s}">
+      <span class="dash">–</span>
+      <input type="time" id="${pref}-e-${i}" value="${d.e}">
+      <span class="offlabel">休み</span>
+    </div>`;}).join('')}</div>`;
+}
+/* 編集結果を work の形にまとめる */
+function dowCollect(pref){
+  const dow={};
+  for(let i=0;i<7;i++){
+    const tog=document.querySelector(`[data-dowtog="${pref}|${i}"]`);
+    const on=tog?tog.getAttribute('aria-pressed')==='true':true;
+    if(!on){dow[i]={off:true};continue;}
+    const g=id=>{const el=$('#'+id);return el&&el.value?el.value:null;};
+    dow[i]={s:g(pref+'-s-'+i)||'09:00',e:g(pref+'-e-'+i)||'18:00'};
+  }
+  const days=[0,1,2,3,4,5,6].filter(i=>!dow[i].off);
+  const base=days.length?dow[days[0]]:{s:'09:00',e:'18:00'};
+  return {s:base.s,e:base.e,days,dow};
+}
+/* 画面に出す「その日の勤務時間」 */
+function workLabel(p,ms){
+  const w=workOn(p,ms);
+  return w.off?'休み':`${w.s}–${w.e}`;
+}
 function isWorking(p,ms){
   if(p.location==='holiday'||onHoliday(p,ms))return false;
   const tz=effTz(p),pt=P(ms,tz),min=pt.h*60+pt.mi;
-  return p.work.days.includes(pt.dow)&&min>=T(p.work.s)&&min<T(p.work.e);
+  const w=dayWork(p,pt.dow);
+  if(w.off)return false;
+  return min>=T(w.s)&&min<T(w.e);
 }
 function statusOf(p,ms){
   if(p.override&&p.override.until>ms)return p.override.status;
@@ -2663,13 +2755,8 @@ function renderSetup(){
     <div class="setsec">
       <h2>働きかた</h2>
       <div class="sethint">新しく参加したメンバーの初期値になります。ひとりずつ後から変えられます。</div>
-      <div class="setgrid">
-        <div class="field"><label for="su-ws">既定の始業</label><input type="time" id="su-ws" value="${c.defaultWork.s}"></div>
-        <div class="field"><label for="su-we">既定の終業</label><input type="time" id="su-we" value="${c.defaultWork.e}"></div>
-        <div class="field wide"><label>営業日</label>
-          <div class="setdow">${DOWJA.map((d,i)=>
-            `<button type="button" data-act="su-dow" data-id="${i}" aria-pressed="${(S.setup.days||c.defaultWork.days).includes(i)}">${d}</button>`).join('')}</div>
-        </div>
+      <div class="field">${dowEditor('su-dw',c.defaultWork)}
+        <span class="sethint">曜日のボタンを押すと「休み」になります。休みの日は「今日」の画面に大きく <b>休み</b> と出ます。</span>
       </div>
     </div>
     <div class="setsec">
@@ -2758,9 +2845,9 @@ function setupCollect(){
       billTo:g('su-billto'),contact:g('su-mail'),zip:g('su-zip'),tel:g('su-tel'),addr:g('su-addr')});
   }
   if(st===2){
-    const days=S.setup.days||c.defaultWork.days;
-    if(!days.length){S.setup.err='営業日を1日以上えらんでください。';return false;}
-    c.defaultWork={s:g('su-ws')||'09:00',e:g('su-we')||'18:00',days:days.slice().sort()};
+    const w=dowCollect('su-dw');
+    if(!w.days.length){S.setup.err='働く曜日を1日以上えらんでください。';return false;}
+    c.defaultWork=w;
     const r=document.querySelector('input[name="su-loc"]:checked');
     c.locPolicy=r?r.value:c.locPolicy;
   }
@@ -3105,22 +3192,26 @@ function todayTimeline(u,tz,now,ds,de,mine){
     </div></div>`;
   }
   const evs=mine.filter(e=>e.kind!=='holiday');
-  const ws=ds+T(u.work.s)*60000, we=ds+T(u.work.e)*60000;
+  const tw=workOn(u,now);
+  const off=isDayOff(u,now);                   /* 休みの日は始業・終業の線を出さない */
+  const ws=ds+T(tw.s)*60000, we=ds+T(tw.e)*60000;
   const rows=[];
-  rows.push({k:'m',t:ws,label:'始業',v:u.work.s});
+  if(!off)rows.push({k:'m',t:ws,label:'始業',v:tw.s});
   let cur=ws;
   evs.forEach(e=>{
-    if(e.start-cur>=30*60000&&e.start>ws)rows.push({k:'g',t:cur,to:e.start});
+    if(!off&&e.start-cur>=30*60000&&e.start>ws)rows.push({k:'g',t:cur,to:e.start});
     rows.push({k:'e',t:e.start,e});
     cur=Math.max(cur,e.end);
   });
-  if(we-cur>=30*60000)rows.push({k:'g',t:cur,to:we});
-  rows.push({k:'m',t:we,label:'終業',v:u.work.e});
+  if(!off&&we-cur>=30*60000)rows.push({k:'g',t:cur,to:we});
+  if(!off)rows.push({k:'m',t:we,label:'終業',v:tw.e});
   if(now>ds&&now<de){
     let i=rows.findIndex(r=>r.t>now);
     if(i<0)i=rows.length;
     rows.splice(i,0,{k:'n',t:now});
   }
+  if(off&&!evs.length)
+    return `<div class="empty">${icon('clock')}今日はお休みです。ゆっくり休んでください。</div>`;
   return `<div class="tday">${rows.map(r=>{
     if(r.k==='n')return `<div class="tnow"><span class="lb">いま</span><span class="tv">${hhmm(now,tz)}</span></div>`;
     if(r.k==='m')return `<div class="tmk"><span class="tt">${r.v}</span><span class="lb">${r.label}</span></div>`;
@@ -3164,12 +3255,14 @@ function viewToday(){
             <span class="d">${c.m}<i>月</i>${c.d}<i>日</i></span>
             <span class="w dw-${cdow(c)}">${DOWJA[cdow(c)]}曜日</span>
           </div>
+          ${isDayOff(u,now)?`<div class="restbig"><span class="rb">休み</span>
+            <span class="rt">${onHoliday(u,now)?'休暇':u.location==='holiday'?'休暇':DOWJA[cdow(c)]+'曜日はお休みです'}</span></div>`:''}
           <div class="hero-st">
             <span class="stt s-${st} on" style="font-size:15px">${sdot(st)}${STATUS[st].ja}</span>
             <span class="hs-sep"></span>
             <span class="hs-i">${LOCS[u.location]}</span>
-            <span class="hs-sep"></span>
-            <span class="hs-i">勤務 <b>${u.work.s}–${u.work.e}</b></span>
+            ${isDayOff(u,now)?'':`<span class="hs-sep"></span>
+            <span class="hs-i">勤務 <b>${workLabel(u,now)}</b></span>`}
           </div>
         </div>
         <div class="hero-r">
@@ -3236,7 +3329,7 @@ function peopleList(list,now,compact){
       <span class="info">
         <span class="nm">${esc(p.name)}</span>
         <span class="role">${esc(p.title||p.dept)}</span>
-        <span class="meta">${canSeeCity(p)?cityTag(effCity(p)):'<span class="hid">拠点 非公開</span>'}<span class="sep">·</span>${p.work.s}–${p.work.e}<span class="sep">·</span>${canSeeLoc(p)?LOCS[p.location]:'<span class="hid">勤務場所 非公開</span>'}</span>
+        <span class="meta">${canSeeCity(p)?cityTag(effCity(p)):'<span class="hid">拠点 非公開</span>'}<span class="sep">·</span>${workLabel(p,Date.now())}<span class="sep">·</span>${canSeeLoc(p)?LOCS[p.location]:'<span class="hid">勤務場所 非公開</span>'}</span>
         ${nx?`<span class="next">次の予定　<b>${hhmm(nx.start,tz)}</b>　${esc(nx.title)}</span>`:'<span class="next off">この先の予定なし</span>'}
       </span>
       <span class="now">
@@ -3356,10 +3449,10 @@ function dayGrid(c,tz,days){
   cols.forEach(d=>{
     const ds=zToUTC(d.y,d.m,d.d,0,0,tz),de=ds+86400000;
     const lay=lanes(evs.filter(e=>e.end>ds&&e.start<de));
-    const wk=me().work.days.includes(cdow(d));
+    const dw=dayWork(me(),cdow(d)); const wk=!dw.off;
     const hol=holidayFor(me().id,ds,de);
     body+=`<div class="col dow-${cdow(d)} ${ckey(d)===today?'today':''} ${hol?'holcol':''}">`+
-      Array.from({length:24},(_,h)=>`<div class="h ${!wk||h<T(me().work.s)/60||h>=T(me().work.e)/60?'off':''}"${hol?'':` data-newslot="${ckey(d)}|${pad2(h)}:00"`}></div>`).join('')+
+      Array.from({length:24},(_,h)=>`<div class="h ${!wk||h<T(dw.s)/60||h>=T(dw.e)/60?'off':''}"${hol?'':` data-newslot="${ckey(d)}|${pad2(h)}:00"`}></div>`).join('')+
       (hol?`<div class="holmask"><span>休暇</span></div>`:'');
     lay.forEach(o=>{
       const e=o.e,s2=Math.max(e.start,ds),en=Math.min(e.end,de);
@@ -3509,7 +3602,7 @@ function personDrawer(id){
         <dt>あなたとの時差</dt><dd>${diffLabel(p,u,now)}</dd>
         <dt>拠点</dt><dd>${canSeeCity(p)?`${cityTag(effCity(p))}<span class="muted" style="font-weight:400"> / ${CITIES[effCity(p)].countryEn}</span>`:'<span class="muted" style="font-weight:400">非公開</span>'}</dd>
         <dt>勤務場所</dt><dd>${showLoc?LOCS[p.location]:'<span class="muted" style="font-weight:400">非公開</span>'}</dd>
-        <dt>勤務時間</dt><dd>${p.work.s}–${p.work.e} <span class="muted" style="font-weight:400">${p.work.days.map(d=>DOWJA[d]).join('')}</span></dd>
+        <dt>勤務時間</dt><dd>${dowSummary(p.work)}</dd>
         <dt>メール</dt><dd style="font-weight:400;word-break:break-all">${esc(p.email)}</dd>
       </dl>
       <div>
@@ -3545,9 +3638,10 @@ function diffLabel(a,b,now){
 function freeGaps(p,from,to){
   if(p.location==='holiday')return [];
   const tz=effTz(p),c=civil(from,tz);
-  if(!p.work.days.includes(P(from,tz).dow))return [];
-  const ws=zToUTC(c.y,c.m,c.d,+p.work.s.split(':')[0],+p.work.s.split(':')[1],tz);
-  const we=zToUTC(c.y,c.m,c.d,+p.work.e.split(':')[0],+p.work.e.split(':')[1],tz);
+  const dw=dayWork(p,P(from,tz).dow);
+  if(dw.off)return [];
+  const ws=zToUTC(c.y,c.m,c.d,+dw.s.split(':')[0],+dw.s.split(':')[1],tz);
+  const we=zToUTC(c.y,c.m,c.d,+dw.e.split(':')[0],+dw.e.split(':')[1],tz);
   let cur=Math.max(from,ws);const out=[];
   DB.events.filter(e=>e.who.includes(p.id)&&e.end>cur&&e.start<we).sort((a,b)=>a.start-b.start)
     .forEach(e=>{if(e.start-cur>=15*60000)out.push([cur,e.start]);cur=Math.max(cur,e.end);});
@@ -3605,8 +3699,9 @@ function findSlots(){
     for(const p of ps){
       if(p.location==='holiday'){ok=false;break;}
       const tz=effTz(p),a=P(t,tz),b=P(e-1,tz);
-      if(!p.work.days.includes(a.dow)||a.h*60+a.mi<T(p.work.s)){ok=false;break;}
-      if(b.h*60+b.mi>=T(p.work.e)||b.dow!==a.dow){ok=false;break;}
+      const dwa=dayWork(p,a.dow);
+      if(dwa.off||a.h*60+a.mi<T(dwa.s)){ok=false;break;}
+      if(b.h*60+b.mi>=T(dwa.e)||b.dow!==a.dow){ok=false;break;}
       if(DB.events.some(ev=>ev.who.includes(p.id)&&ev.start<e&&ev.end>t)){ok=false;break;}
     }
     if(ok){
@@ -3852,7 +3947,7 @@ function admMembers(){
         <span class="f"><i>権限</i><b>${p.role==='admin'?'管理者':'メンバー'}</b></span>
         <span class="f"><i>拠点</i><b>${CITIES[p.city].ja}</b><em>${offLabel(p.tz,now)}</em></span>
         <span class="f"><i>現地時間</i><b class="tnum" data-tz="${effTz(p)}">${hhmm(now,effTz(p))}</b></span>
-        <span class="f"><i>勤務</i><b>${p.work.s}–${p.work.e}</b></span>
+        <span class="f"><i>勤務</i><b>${workLabel(p,Date.now())}</b></span>
         <span class="f"><i>場所</i><b>${LOCS[p.location]}</b></span>
       </div>
       <div class="ops">
@@ -4184,10 +4279,10 @@ function admSettings(){
         <div class="field"><label>基準タイムゾーン</label><select data-set="company.tz">
           ${[...new Set(Object.values(CITIES).map(v=>v.tz))].map(tz=>`<option value="${tz}" ${c.tz===tz?'selected':''}>${tz}（${offLabel(tz,Date.now())}）</option>`).join('')}</select>
           <span class="muted" style="font-size:12.5px">${SELL?'操作ログの日時と請求日はこの時間で記録されます。':'操作ログの日時はこの時間で記録されます。'}</span></div>
-        <div class="grid2">
-          <div class="field"><label>既定の始業</label><input type="time" data-set="company.defaultWork.s" value="${c.defaultWork.s}"></div>
-          <div class="field"><label>既定の終業</label><input type="time" data-set="company.defaultWork.e" value="${c.defaultWork.e}"></div>
-          <span class="muted" style="font-size:12.5px;grid-column:1/-1">新しく参加したメンバーの初期値になります。既存メンバーは変わりません。</span>
+        <div class="field"><label>既定の働きかた（曜日ごと）</label>
+          ${dowEditor('co-dw',c.defaultWork)}
+          <div class="row" style="margin-top:10px"><button class="btn sm pri" data-act="save-dow-co">この内容で保存</button></div>
+          <span class="muted" style="font-size:12.5px">新しく参加したメンバーの初期値になります。既存メンバーは変わりません。</span>
         </div>
       </div>
     </div>
@@ -4212,6 +4307,8 @@ function admSettings(){
             <span><b>参加の通知</b><small>新しいメンバーが招待コードで参加したとき、全員に通知します。</small></span></label>
           <label class="sw"><input type="checkbox" data-set="company.notify.daily" ${c.notify.daily?'checked':''}>
             <span><b>毎朝のダイジェスト</b><small>その日はじめて開いたとき、今日の件数と最初の予定を通知します。</small></span></label>
+          <label class="sw"><input type="checkbox" data-set="company.notify.done" ${c.notify.done!==false?'checked':''}>
+            <span><b>終業のお知らせ</b><small>その日の終業時刻を過ぎたら「今日はここまで。おつかれさまでした」とお知らせします。休みの日は鳴りません。</small></span></label>
           <label class="sw"><input type="checkbox" data-set="company.notify.change" ${c.notify.change?'checked':''}>
             <span><b>予定変更の通知</b><small>既存の予定が編集されたとき、参加者に通知します。新規作成は常に通知します。</small></span></label>
         </div>
@@ -4246,9 +4343,10 @@ function viewProfile(){
       </div>
       <div class="pbody" style="display:flex;flex-direction:column;gap:14px">
         <div class="field"><label>拠点</label><select data-set="me.city">${Object.entries(CITIES).map(([k,v])=>`<option value="${k}" ${u.city===k?'selected':''}>${v.ja} / ${v.en}</option>`).join('')}</select></div>
-        <div class="grid2">
-          <div class="field"><label>始業</label><input type="time" data-set="me.work.s" value="${u.work.s}"></div>
-          <div class="field"><label>終業</label><input type="time" data-set="me.work.e" value="${u.work.e}"></div>
+        <div class="field"><label>曜日ごとの働きかた</label>
+          ${dowEditor('me-dw',u.work)}
+          <div class="row" style="margin-top:10px"><button class="btn sm pri" data-act="save-dow-me">この内容で保存</button></div>
+          <span class="muted" style="font-size:12.5px">曜日のボタンを押すと「休み」になります。休みの日は「今日」の画面に大きく <b>休み</b> と出て、終業のお知らせも鳴りません。</span>
         </div>
         <div class="field"><label>勤務場所</label><select data-set="me.location">${Object.entries(LOCS).map(([k,v])=>`<option value="${k}" ${u.location===k?'selected':''}>${v}</option>`).join('')}</select></div>
         <div class="field"><label>位置情報の公開範囲</label><select data-set="me.privacy">
@@ -4304,7 +4402,7 @@ function tzRows(e){
     const dd=Math.round((zToUTC(p.y,p.m,p.d,0,0,tz)-zToUTC(base.y,base.m,base.d,0,0,effTz(u)))/86400000);
     const mem=e.who.map(person).filter(x=>x&&effCity(x)===c);
     const a=p.h*60+p.mi;
-    const out=mem.filter(pp=>!pp.work.days.includes(p.dow)||a<T(pp.work.s)||a>=T(pp.work.e));
+    const out=mem.filter(pp=>{const w=dayWork(pp,p.dow);return w.off||a<T(w.s)||a>=T(w.e);});
     const night=p.h<7||p.h>=21;
     return `<div class="tzr ${c===effCity(u)?'self':''} ${out.length?'warn':''}">
       <span class="fl">${C.flag}</span>
@@ -4429,7 +4527,7 @@ function statusPicker(){
 }
 function notifCenter(){
   const tz=effTz(me()),list=myNotifs().slice(0,60);
-  const ico={msg:'msg',event:'cal',member:'people',daily:'today'};
+  const ico={msg:'msg',event:'cal',member:'people',daily:'today',done:'clock'};
   layer(modal('通知',`
     <div class="row" style="justify-content:space-between">
       <span class="muted" style="font-size:13px">${unread()?`未読 ${unread()}件`:'未読はありません'}</span>
@@ -4534,12 +4632,10 @@ function personEditor(id){
       <div class="field"><label>権限</label><select id="m-role"><option value="member" ${p.role==='member'?'selected':''}>メンバー</option><option value="admin" ${p.role==='admin'?'selected':''}>管理者</option></select></div>
       <div class="field"><label>拠点</label><select id="m-city">${Object.entries(CITIES).map(([k,c])=>`<option value="${k}" ${p.city===k?'selected':''}>${c.ja}</option>`).join('')}</select></div>
       <div class="field"><label>勤務場所</label><select id="m-loc">${Object.entries(LOCS).map(([k,v])=>`<option value="${k}" ${p.location===k?'selected':''}>${v}</option>`).join('')}</select></div>
-      <div class="field"><label>始業 / 終業</label><div class="row" style="flex-wrap:nowrap;gap:6px">
-        <input type="time" id="m-ws" value="${p.work.s}"><input type="time" id="m-we" value="${p.work.e}"></div></div>
     </div>
-    <div class="field"><label>勤務曜日</label><div class="row" style="gap:5px">${DOWJA.map((d,i)=>`<button type="button" class="btn sm" data-dow="${i}" aria-pressed="${p.work.days.includes(i)}" style="${p.work.days.includes(i)?'background:var(--ink);color:var(--paper);border-color:var(--ink)':''}">${d}</button>`).join('')}</div></div>`,
+    <div class="field"><label>曜日ごとの働きかた</label>${dowEditor('mm-dw',p.work)}
+      <span class="muted" style="font-size:12.5px">曜日のボタンを押すと「休み」になります。</span></div>`,
     `<button class="btn pri" data-act="save-person" data-id="${id}">保存</button><button class="btn q" data-act="close-layer">キャンセル</button>`,true));
-  S._dow=p.work.days.slice();
 }
 </script>
 <script>
@@ -4562,7 +4658,7 @@ document.addEventListener('click',ev=>{
   const t=ev.target;
   const scrim=t.closest?.('[data-scrim]');
   if(scrim&&t===scrim){closeLayer();return;}
-  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-setstatus],[data-login],[data-setui],[data-authtab],[data-onb]');
+  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-dowtog],[data-setstatus],[data-login],[data-setui],[data-authtab],[data-onb]');
   if(!el)return;
   const d=el.dataset;
   if(d.act){
@@ -4573,6 +4669,14 @@ document.addEventListener('click',ev=>{
       case 'read-all':{markRead();closeLayer();render();return;}
       case 'savelog':{const el=$('#daylog');if(el){setLog(el.value.trim());toast('今日の記録を保存しました');softRender();}return;}
       case 'logout':logout();return;
+      case 'save-dow-me':{
+        me().work=dowCollect('me-dw');
+        audit('働きかたを変更',me().work.days.map(d=>DOWJA[d]).join('')||'休みのみ');
+        save();softRender();toast('働きかたを保存しました');return;}
+      case 'save-dow-co':{
+        DB.company.defaultWork=dowCollect('co-dw');
+        audit('既定の働きかたを変更',DB.company.defaultWork.days.map(d=>DOWJA[d]).join('')||'休みのみ');
+        save();softRender();toast('既定の働きかたを保存しました');return;}
       case 'del-account':delAccountModal();return;
       case 'del-account-go':doDeleteAccount();return;
       case 'newcode':{
@@ -4635,7 +4739,7 @@ document.addEventListener('click',ev=>{
         const p=person(d.id);
         p.name=$('#m-name').value.trim()||p.name;p.email=$('#m-mail').value.trim();
         p.dept=$('#m-dept').value;p.title=$('#m-title').value.trim();p.role=$('#m-role').value;p.city=$('#m-city').value;p.tz=CITIES[p.city].tz;
-        p.location=$('#m-loc').value;p.work={s:$('#m-ws').value,e:$('#m-we').value,days:(S._dow&&S._dow.length?S._dow:p.work.days)};
+        p.location=$('#m-loc').value;p.work=dowCollect('mm-dw');
         audit('メンバー情報を更新',p.name);save();closeLayer();render();toast('保存しました');return;}
       case 'del-person':{
         const p=person(d.id);
@@ -4668,10 +4772,6 @@ document.addEventListener('click',ev=>{
       case 'su-back':{S.setup.err='';S.setup.step--;renderSetup();return;}
       case 'su-skip':{S.setup.skip=true;render();toast('あとで［設定 → 会社］から続けられます');return;}
       case 'su-open':{S.setup.skip=false;S.setup.step=1;S.setup.err='';renderSetup();return;}
-      case 'su-dow':{
-        const days=(S.setup.days||DB.company.defaultWork.days).slice(),i=+d.id;
-        const k=days.indexOf(i); if(k>=0)days.splice(k,1); else days.push(i);
-        S.setup.days=days; renderSetup(); return;}
       case 'su-copy':{
         const code=DB.company.joinCode||'';
         (navigator.clipboard?navigator.clipboard.writeText(code):Promise.reject())
@@ -4781,6 +4881,12 @@ document.addEventListener('click',ev=>{
   if(d.calmode){S.cal=d.calmode;render();return;}
   if(d.pmode){S.pmode=d.pmode;render();return;}
   if(d.thread){const[type,id]=d.thread.split(':');S.thread={type,id};render();return;}
+  if(d.dowtog){
+    const on=el.getAttribute('aria-pressed')==='true';
+    el.setAttribute('aria-pressed', on?'false':'true');
+    const row=el.closest('[data-dowrow]'); if(row)row.classList.toggle('off',on);
+    return;
+  }
   if(d.adm){S.adm=d.adm;softRender();return;}
   if(d.ftp){S.ft.sel=S.ft.sel.includes(d.ftp)?S.ft.sel.filter(i=>i!==d.ftp):S.ft.sel.concat(d.ftp);S.ft.res=null;softRender();return;}
   if(d.ftpick){const r=S.ft.res[+d.ftpick];eventEditor(null,{start:r.s,dur:(r.e-r.s)/60000,who:S.ft.sel.slice()});return;}
@@ -4946,6 +5052,23 @@ function dailyDigest(){
   save();
 }
 
+/* 終業したら「おつかれさま」を1日1回 */
+function endOfDayCheck(){
+  if(!DB.authed||!person(DB.userId))return;
+  if(DB.company.notify&&DB.company.notify.done===false)return;
+  const u=me(),tz=effTz(u),now=Date.now(),k=dkey(now,tz);
+  if(isDayOff(u,now))return;
+  const w=workOn(u,now),pt=P(now,tz);
+  if(pt.h*60+pt.mi<T(w.e))return;                 /* まだ終業前 */
+  if(DB.notifs.some(n=>n.type==='done'&&n.to===u.id&&n.day===k))return;
+  const[ds,de]=dayBounds(civil(now,tz),tz);
+  const cnt=DB.events.filter(e=>e.who.includes(u.id)&&e.kind!=='holiday'&&e.end>ds&&e.start<de).length;
+  DB.notifs.unshift({id:uid(),to:u.id,by:u.id,type:'done',day:k,
+    text:`今日はここまで。おつかれさまでした。${cnt?'（今日の予定 '+cnt+'件）':''}`,ref:'',at:now,read:false});
+  save();
+  if(!$('#layer').innerHTML)softRender();
+}
+
 /* ================= boot ================= */
 load();
 try{applyTheme(curTheme());}catch(e){}
@@ -4969,7 +5092,8 @@ render();
   }
 })();
 setInterval(tick,1000);
-setInterval(()=>{if(!$('#layer').innerHTML&&['today','people','map','admin'].includes(S.view))softRender();},60000);
+setInterval(()=>{try{endOfDayCheck();}catch(e){}
+  if(!$('#layer').innerHTML&&['today','people','map','admin'].includes(S.view))softRender();},60000);
 </script>
 
 <script src="native.js"></script>

@@ -69,6 +69,31 @@
       .filter(Boolean);
   }
 
+  /* ---- 終業のお知らせを予約する（これから7日ぶん・休みの日は入れない） ---- */
+  function endOfDayPayload() {
+    if (!window.DB || !DB.authed) return [];
+    if (DB.company && DB.company.notify && DB.company.notify.done === false) return [];
+    if (typeof dayWork !== 'function') return [];
+    const now = Date.now(), u = me(), tz = effTz(u), out = [];
+    for (let i = 0; i < 7; i++) {
+      const c = addDays(civil(now, tz), i);
+      const ms = zToUTC(c.y, c.m, c.d, 12, 0, tz);          /* その日の正午で判定 */
+      if (typeof isDayOff === 'function' && isDayOff(u, ms)) continue;
+      const w = dayWork(u, cdow(c));
+      if (w.off) continue;
+      const [h, mi] = w.e.split(':').map(Number);
+      const at = zToUTC(c.y, c.m, c.d, h, mi, tz);
+      if (at <= now + 60000) continue;
+      out.push({
+        id: 'eod-' + c.y + '-' + c.m + '-' + c.d,
+        at: Math.round(at / 1000),
+        title: '今日はここまで',
+        body: 'おつかれさまでした。'
+      });
+    }
+    return out;
+  }
+
   /* ---- まとめて送る（連続で呼ばれても最後の1回だけ） ---- */
   let t = null, lastW = '', lastR = '';
   function sync(force) {
@@ -80,7 +105,7 @@
           const j = JSON.stringify(w);
           if (force || j !== lastW) { lastW = j; await native().setWidgetData({ json: j }); }
         }
-        const r = reminderPayload();
+        const r = reminderPayload().concat(endOfDayPayload());
         const rj = JSON.stringify(r);
         if (force || rj !== lastR) { lastR = rj; await native().scheduleReminders({ items: r }); }
       } catch (e) { console.warn('[Koyomi] native sync', e); }
