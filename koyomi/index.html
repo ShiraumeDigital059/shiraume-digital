@@ -4070,7 +4070,7 @@ function admPlan(){
   <div class="block">
     <div class="sec"><h2>ご契約</h2></div>
     <dl class="kv billkv" style="max-width:560px">
-      <dt>プラン</dt><dd>${!SELL?'すべての機能':B.planName+`<span class="muted" style="font-weight:400">（${B.interval==='year'?'年払い':'月払い'}）</span>`}</dd>
+      <dt>プラン</dt><dd>${!SELL?`${esc(B.planName||'')}<span class="muted" style="font-weight:400">（すべての機能）</span>`:B.planName+`<span class="muted" style="font-weight:400">（${B.interval==='year'?'年払い':'月払い'}）</span>`}</dd>
       <dt>ご利用料金</dt><dd>${!SELL?'<span style="color:var(--accent)">無料</span>':B.price?`${YEN(B.interval==='year'?B.priceYear:B.price)} <span class="muted" style="font-weight:400">/ ${B.interval==='year'?'年':'月'}（税別）・税込 ${YEN(INTAX(B.interval==='year'?B.priceYear:B.price))}</span>`:'お問い合わせ'}</dd>
       <dt>人数</dt><dd><span class="seatbar ${full?'full':''}">${B.used} / ${!SELL?'無制限':(B.seats||'無制限')}
         <span class="usage"><span style="width:${pct}%"></span></span>
