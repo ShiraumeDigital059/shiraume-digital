@@ -2874,9 +2874,9 @@ function renderOnboard(){
       ${err?`<div class="autherr">${esc(err)}</div>`:''}
       <form class="authform" data-act="do-onboard">
         ${t==='make'
-          ? f('o-co','会社名','text','白梅デジタル','',esc(v.co||''))
+          ? f('o-co','会社名','text','株式会社〇〇','',esc(v.co||''))
           : f('o-code','招待コード（6桁）','text','ABC123','maxlength="8" style="text-transform:uppercase"',esc(v.code||''))}
-        ${f('o-name','あなたの名前','text','大西 一輝','',esc(v.name||S.appleName||''))}
+        ${f('o-name','あなたの名前','text','山田 太郎','',esc(v.name||S.appleName||''))}
         ${t==='make'?`
         <div class="grid2">
           ${f('o-title','役割','text','代表 / 制作','',esc(v.title||''))}
