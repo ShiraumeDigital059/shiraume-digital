@@ -1992,6 +1992,18 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
    iOS の起動画面は端末の設定で決まるので、そこから切れ目なくつながるようにするため。
    アプリ本体の白黒は、ロゴが消えたあとの画面から反映される。 */
 
+/* iPhone の時計やホームバーに重ならないようにする。
+   この規則は必ずスタイルの最後に置くこと（前に .topbar の height / padding を
+   書き換えている規則がいくつもあり、順番で負けると効かなくなる）。 */
+@supports (padding:env(safe-area-inset-top)){
+  .topbar{padding-top:env(safe-area-inset-top);height:calc(64px + env(safe-area-inset-top))}
+  @media (max-width:980px){
+    .topbar{height:calc(60px + env(safe-area-inset-top))}
+  }
+  .content{padding-bottom:env(safe-area-inset-bottom,0px)}
+  #splash .spl{bottom:calc(12% + env(safe-area-inset-bottom,0px))}
+}
+
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
   padding:12px 14px;margin-bottom:16px;font-size:13.5px;line-height:1.75;color:var(--accent-3);font-weight:500}
