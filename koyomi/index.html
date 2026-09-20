@@ -1987,10 +1987,9 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 @keyframes sp-late{to{opacity:.85}}
 @media (prefers-reduced-motion:reduce){#splash .spw{animation:none}}
 @media (prefers-color-scheme:dark){#splash{background:#15161A}#splash .spw{color:#54C795}}
-:root[data-ui="dark"] #splash{background:#15161A}
-:root[data-ui="dark"] #splash .spw{color:#54C795}
-:root[data-ui="light"] #splash{background:#fff}
-:root[data-ui="light"] #splash .spw{color:#12704F}
+/* 起動ロゴだけは iPhone の見た目（明るい／暗い）に合わせる。
+   iOS の起動画面は端末の設定で決まるので、そこから切れ目なくつながるようにするため。
+   アプリ本体の白黒は、ロゴが消えたあとの画面から反映される。 */
 
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
