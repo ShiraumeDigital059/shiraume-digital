@@ -27,6 +27,17 @@
   'use strict';
 
   var TEXT = {
+    /* --- 2026-09-20 SNS初期費用 --- */
+    "はじめに「初期アカウント設計」¥20,000をいただきます。": "A one-off account setup fee of \\u00a520,000 applies.",
+    "初回のみ、プランに関わらず一律です。コンセプト・ターゲット・投稿ジャンルの設計と、最初の投稿のアイデア出しまでを行います。": "Charged once, the same on every plan. It covers concept, audience and content direction, plus ideas for your first posts.",
+    "すべてのプランに必ず入ります。": "Included on every plan.",
+    "初回のみ、プランに関わらず一律です。": "Charged once, the same on every plan.",
+    "最初の設計を誤ると伸びにくいため、ここは必ず行います": "Getting the foundation wrong makes growth hard, so we always do this first",
+    "※はじめに「初期アカウント設計」": "An account setup fee of ",
+    "¥20,000（初回のみ・プランに関わらず一律）": "\\u00a520,000 (once only, the same on every plan)",
+    "を行います。": " applies at the start.",
+    "※月額プランの最低契約期間は3ヶ月です。4ヶ月目以降は1ヶ月ごとの更新になります。": "Monthly plans run for a minimum of three months, then continue month to month.",
+    "※撮影は含まれません。写真・動画の素材はお客様にご用意いただきます。": "Photography is not included. Photos and video are provided by you.",
     /* --- 2026-09-15 ネットショップB --- */
     "作り方を2つからお選びいただけます。": "Two ways to build it.",
     "A｜BASEで開設する": "A | Open a shop on BASE",
