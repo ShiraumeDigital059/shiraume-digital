@@ -1970,17 +1970,17 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 
 /* 起動したときのロゴ（アプリの起動画面からそのまま続く） */
 #splash{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;
-  background:#fff;opacity:1;transition:opacity .6s ease}
+  background:#fff;opacity:1;transition:opacity .95s cubic-bezier(.33,0,.2,1)}
 #splash.go{opacity:0;pointer-events:none}
 #splash .spw{width:126px;color:#12704F;display:flex;flex-direction:column;align-items:center;gap:7px;
-  animation:sp-hold 1s ease both}
+  transition:transform .95s cubic-bezier(.33,0,.2,1),opacity .95s ease}
+#splash.go .spw{transform:scale(1.09)}
 #splash .spw svg{width:100%;display:block}
 #splash .spn{font-family:var(--disp);font-weight:700;font-size:19px;
   letter-spacing:.38em;text-indent:.38em;line-height:1}
 #splash .spl{position:absolute;left:0;right:0;bottom:12%;text-align:center;
   font-size:12.5px;font-weight:600;color:var(--ink-3);opacity:0;animation:sp-late .5s ease 2.2s both}
-/* iOS の起動画面と同じ絵がそのまま出ていて、最後にすっと息をするだけ */
-@keyframes sp-hold{0%{transform:none}70%{transform:none}100%{transform:scale(1.04)}}
+
 @keyframes sp-late{to{opacity:.85}}
 @media (prefers-reduced-motion:reduce){#splash .spw{animation:none}}
 @media (prefers-color-scheme:dark){#splash{background:#15161A}#splash .spw{color:#54C795}}
@@ -2000,13 +2000,22 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
   #splash .spl{bottom:calc(12% + env(safe-area-inset-bottom,0px))}
 }
 
-/* --- スマホの上バー：ロゴだけだと何の画面か分からないので、画面の名前を出す --- */
-@media (max-width:420px){
-  .ptitle{display:flex}
-  .topbar .brand{display:none}            /* まん中のロゴは外して、名前に席をゆずる */
-  .topbar{gap:10px;padding:0 12px}
-  .ptitle h1{font-size:17px}
-  .ptitle .en{font-size:8.5px}
+/* --- スマホの上バー ---
+   ［＋］［こよみのアーチ］［画面の名前］……［ベル］［自分］の順に一列。
+   英字の小見出し（TODAY など）は縦の余裕がないので、この幅では出さない。 */
+@media (max-width:560px){
+  .topbar{gap:9px;padding:0 13px}
+  .topbar .btn.pri{order:0}
+  .topbar .brand{position:static;transform:none;margin:0;padding:0 8px;order:1;flex:none;
+    flex-direction:row;align-items:center;gap:0}
+  .topbar .brand .bname{display:none}
+  .topbar .brand .bmark{width:31px;height:16.8px}
+  .topbar .ptitle{display:flex;order:2;flex:1 1 auto;min-width:0;margin:0}
+  .topbar .ptitle .en{display:none}
+  .topbar .ptitle h1{font-size:18.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .topbar .sp{order:3}
+  .topbar .ibtn{order:4}
+  .topbar .ibtn .bdg{transform:translate(2px,-2px)}
 }
 
 /* --- メッセージ：スマホでは画面いっぱいに開き、書くところを下に固定する --- */
@@ -2064,6 +2073,346 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const pad2=n=>String(n).padStart(2,'0');
 const uid=()=>Store.newId();
 const DOWJA=['日','月','火','水','木','金','土'];
+/* ============================================================
+   ことば（日本語 / English）
+   ・LANG はこの端末の設定。会社ではなく端末ごとに持つ。
+   ・はじめては端末の言語に合わせ、あとは設定で切り替える。
+   ============================================================ */
+var LANG=(()=>{ try{ const v=localStorage.getItem('koyomi.lang');
+    if(v==='ja'||v==='en')return v; }catch(e){}
+  try{ return /^ja/i.test(navigator.language||navigator.userLanguage||'')?'ja':'en'; }catch(e){}
+  return 'ja'; })();
+const L=(ja,en)=>LANG==='en'?en:ja;
+function setLang(v){
+  LANG=(v==='en')?'en':'ja';
+  try{localStorage.setItem('koyomi.lang',LANG);}catch(e){}
+  try{document.documentElement.lang=LANG;}catch(e){}
+  render();
+}
+const DOWEN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DOWEN_L=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONEN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONEN_L=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const dowN =i=>LANG==='en'?DOWEN[i]:DOWJA[i];                 /* 日 / Sun */
+const dowW =i=>LANG==='en'?DOWEN_L[i]:DOWJA[i]+'曜日';        /* 日曜日 / Sunday */
+const fmtMD =(m,d)=>LANG==='en'?`${MONEN[m-1]} ${d}`:`${m}月${d}日`;
+const fmtYM =(y,m)=>LANG==='en'?`${MONEN_L[m-1]} ${y}`:`${y}年${m}月`;
+const fmtYMD=(y,m,d)=>LANG==='en'?`${MONEN[m-1]} ${d}, ${y}`:`${y}年${m}月${d}日`;
+const cityN =k=>{const C=CITIES[k]||{};return LANG==='en'?(C.en||k):(C.ja||k);};
+const cityPair=k=>{const C=CITIES[k]||{};return LANG==='en'?(C.en||k):`${C.ja} / ${C.en}`;};
+/* ============================================================
+   英語表記
+   画面に出た日本語を、そのまま引き当てて置き換える。
+   ここに無いものは日本語のまま残るので、見つけしだい足していく。
+   ============================================================ */
+const TR={
+/* --- ログイン・登録 --- */
+'読み込んでいます…':'Loading…',
+'世界のどこにいても、チームの「今」が見えるカレンダー':'See where your team is right now, wherever you are',
+'ログイン':'Sign in','会社を登録':'Create a company','コードで参加':'Join with a code',
+'メールアドレス':'Email','パスワード':'Password','または':'or',
+'デモデータで試す':'Try the demo','デモ:':'Demo:','/ パスワード':'/ password',
+'白梅デジタル ・ Koyomi（プロトタイプ）':'Shiraume Digital · Koyomi (prototype)',
+'白梅デジタル ・ Koyomi':'Shiraume Digital · Koyomi',
+'パスワードをお忘れですか？':'Forgot your password?',
+'会社名':'Company name','あなたの名前':'Your name','役割':'Role','担当':'Team',
+'制作':'Production','営業':'Sales','SNS運用':'Social','マーケティング':'Marketing',
+'サポート':'Support','管理':'Admin',
+'パスワード（8文字以上）':'Password (8 characters or more)','パスワード（確認）':'Password (confirm)',
+'拠点':'Location','プラン':'Plan',
+'Starter｜10名まで':'Starter | up to 10 people','Business｜30名まで':'Business | up to 30 people',
+'Pro｜100名まで':'Pro | up to 100 people','Enterprise｜人数無制限':'Enterprise | unlimited people',
+'利用規約':'Terms of Service','と':'and','プライバシーポリシー':'Privacy Policy','に同意します':'',
+'会社アカウントを作成':'Create company account',
+'作成すると、このブラウザの既存データ（デモを含む）は新しい会社に置き換わります。':'Creating one replaces any data in this browser (including the demo) with the new company.',
+'株式会社〇〇':'Acme Inc.','山田 太郎':'Alex Taylor','山田 花子':'Jamie Lee','代表 / 制作':'Founder / Production',
+'招待コード（6桁）':'Invite code (6 digits)','参加する':'Join',
+'招待コードは管理者が「管理 → メンバー」で確認・発行できます。':'An admin can find or reissue the invite code under Settings → Members.',
+'招待コードを入力してください。':'Enter an invite code.',
+/* --- 画面の名前・ナビ --- */
+'今日':'Today','カレンダー':'Calendar','メンバー':'Members','メッセージ':'Messages',
+'空き時間':'Free time','設定':'Settings','予定':'Schedule','通知':'Notifications','アカウント':'Account',
+'予定を作成':'New event','すべて':'See all','一覧':'List','地図':'Map',
+/* --- 今日 --- */
+'勤務中':'Working','勤務時間外':'Off hours','勤務':'Hours','オフィス':'Office',
+'リモート':'Remote','出張・外回り':'Travelling','休暇':'Time off','休み':'Off',
+'ステータスを変更':'Change status','勤務場所':'Where you work',
+'今日の予定':"Today's schedule",'いま':'now','この時間に追加':'Add an event here',
+'今日の記録':"Today's note",'あとから見返せます':'You can look back on it later','記録を保存':'Save note',
+'今日やったこと・決まったこと・次にやること':'What you did, what was decided, what comes next',
+'今日の記録を保存しました':'Saved today’s note',
+'チームの状況':'How the team is doing','打ち合わせ':'Meeting','件':'','タイムゾーン':'time zones','地域':'regions',
+'今日はお休みです。ゆっくり休んでください。':'A day off. Enjoy the rest.',
+'今日はここまで。おつかれさまでした。':'That’s it for today. Nice work.',
+'今日はここまで':'That’s it for today','おつかれさまでした。':'Nice work today.',
+'始業':'Start of day','終業':'End of day','空き':'free',
+'予定はありません。':'Nothing scheduled.','今日の予定はまだありません。':'Nothing scheduled today yet.',
+/* --- カレンダー --- */
+'全員の予定':'Everyone','自分の予定':'Only me','月':'Month','週':'Week','日':'Day',
+'前の期間':'Previous','次の期間':'Next','クリックで予定を追加':'Click to add an event','この日を開く':'Open this day',
+'商談・営業':'Sales','制作・集中':'Focus','撮影':'Shoot','納品':'Delivery',
+'SNS・投稿':'Social','外出・移動':'Travel','個人':'Personal',
+/* --- メンバー --- */
+'全員の空き時間をさがす':'Find time for everyone','メンバーを招待':'Invite a member','次の予定':'Next up',
+'今日の稼働帯':'Working hours today','全員が重なる時間':'When everyone overlaps',
+'重なる時間はありません':'No overlapping hours','解除':'Clear',
+/* --- メッセージ --- */
+'宛先を選ぶ':'Choose a recipient','予定のスレッド':'Event threads','ダイレクトメッセージ':'Direct messages',
+'送信':'Send','一覧へ戻る':'Back to list','スレッドはありません':'No threads yet',
+'スレッドを選択してください。':'Choose a thread.','まだメッセージはありません。':'No messages yet.',
+'この予定について書く':'Write about this event','開始':'Start',
+/* --- 空き時間 --- */
+'条件':'Search','参加者':'People','所要時間':'Length','検索範囲':'Range','検索':'Search','候補':'Results',
+'15 分':'15 min','30 分':'30 min','45 分':'45 min','60 分':'60 min','90 分':'90 min',
+'今後 3 日':'Next 3 days','今後 5 日':'Next 5 days','今後 7 日':'Next 7 days','今後 14 日':'Next 14 days',
+'勤務時間・勤務曜日・既存の予定・タイムゾーンをすべて考慮します。':'Working hours, working days, existing events and time zones are all taken into account.',
+'条件を指定して「検索」を押してください。':'Set the conditions and press Search.',
+'空いている時間は見つかりませんでした。':'No free time was found.',
+'参加者を選んでください。':'Choose at least one person.',
+/* --- 設定・プロフィール --- */
+'マイ設定':'My settings','概要':'Overview','ロゴ・写真':'Logo & photos','会社':'Company','ログ':'Log',
+'プロフィール':'Profile','写真をアップロード':'Upload a photo','正方形 / 400px 以上を推奨':'Square, 400px or larger',
+'曜日ごとの働きかた':'Working days and hours','はたらく日：':'Working days: ',
+'はたらく日がえらばれていません。':'No working days are selected.',
+'曜日ごとに時間を変える':'Set different hours per day','すべて同じ時間にもどす':'Use the same hours every day',
+'この内容で保存':'Save','保存':'Save','保存しました':'Saved',
+'曜日のボタンを押すと「休み」になります。休みの日は「今日」の画面に大きく':'Tap a day to mark it as off. On days off, the Today screen shows a big',
+'と出て、終業のお知らせも鳴りません。':'and no end-of-day notice is sent.',
+'曜日のボタンを押すと「休み」になります。':'Tap a day to mark it as off.',
+'位置情報の公開範囲':'Who can see your location',
+'正確な現在地':'Exact location','都市のみ':'City only','非表示':'Hidden',
+'正確な現在地（会社設定により選べません）':'Exact location (not available under company policy)',
+'都市のみ（会社設定により選べません）':'City only (not available under company policy)',
+'いま他のメンバーに見えるのは':'Others currently see','いまのステータス':'Your status right now',
+'変更':'Change','自動判定に戻す':'Back to automatic',
+'勤務時間と予定から自動で判定されます。':'Set automatically from your hours and your schedule.',
+'画面の背景':'Appearance','白':'Light','黒':'Dark','ことば':'Language','表示':'Display','背景の色':'Appearance',
+'この端末のブラウザにのみ保存されます。':'Stored only in this browser on this device.',
+'アカウント・ログアウト':'Account & sign out','別のメンバーとしてログイン（デモ）':'Sign in as someone else (demo)',
+'プロフィール設定':'Profile settings','ログアウト':'Sign out','退会する':'Delete account',
+/* --- 管理：概要 --- */
+'勤務時間内':'Within hours','外出・出張':'Out or travelling','今日の打ち合わせ':'Meetings today',
+'カバー時間':'Hours covered','時間 / 24':'hours / 24',
+'時間':'Time','タイトル':'Title','場所':'Place','都市':'City','国':'Country','現地時間':'Local time','人数':'People',
+'ベトナム':'Vietnam','日本':'Japan','ハンガリー':'Hungary',
+/* --- 管理：メンバー --- */
+'招待コード':'Invite code','「コードで参加」画面でこのコードを入力します':'People enter this code on the “Join with a code” screen',
+'コードを再発行':'Reissue code','権限':'Role','管理者':'Admin','編集':'Edit','削除':'Delete',
+'メンバーを追加':'Add a member','メンバー一覧へ':'Go to members',
+/* --- 管理：プラン --- */
+'無料でご利用中':'Free to use',
+'いまは人数の上限もなく、すべての機能をお使いいただけます。有料プランのご用意ができましたら、アプリの中でお知らせします。':'There is no limit on people and every feature is available. We will let you know in the app when paid plans are ready.',
+'ご契約':'Your plan','（すべての機能）':' (all features)','ご利用料金':'Price','無料':'Free','お問い合わせ':'Contact',
+'いまは無料でお使いいただけます。料金をいただくようになるときは、事前にかならずお知らせします。':'Koyomi is free to use right now. If that ever changes, we will tell you well in advance.',
+'これからのプラン':'Plans to come','準備中です。いまは全機能をお使いいただけます':'Coming soon. Everything is available for now',
+'準備中':'Coming soon','10名まで':'up to 10 people','30名まで':'up to 30 people','100名まで':'up to 100 people','人数無制限':'unlimited people',
+'/月':'/month',
+/* --- 管理：ログ --- */
+'日時':'When','実行者':'Who','操作':'What','対象':'Details','操作履歴はまだありません。':'No history yet.',
+/* --- 管理：画像 --- */
+'会社ロゴ':'Company logo','サイドバー左上に表示されます':'Shown at the top of the sidebar','ロゴマーク':'Logo mark',
+'透過PNG / 正方形 256px 以上':'Transparent PNG, square, 256px or larger',
+'透過PNG / 正方形 256px以上':'Transparent PNG, square, 256px or larger',
+'追加':'Add','なし':'None','ロゴをアップロード':'Upload a logo','ロゴを削除':'Remove logo',
+'メンバーの顔写真':'Member photos','メンバー一覧・メッセージ・予定に表示されます':'Shown in the member list, messages and events',
+'画像はこのブラウザ内にのみ保存されます。アイコン類はアプリに内蔵されています。':'Images are stored only in this browser. The icons are built into the app.',
+/* --- 管理：会社設定 --- */
+'初期設定をやり直す':'Run setup again','基準タイムゾーン':'Company time zone',
+'操作ログの日時はこの時間で記録されます。':'Times in the activity log are recorded in this zone.',
+'既定の働きかた（曜日ごと）':'Default working days and hours',
+'新しく参加したメンバーの初期値になります。既存メンバーは変わりません。':'Used as the starting point for people who join from now on. Existing members are unchanged.',
+'プライバシー / 通知':'Privacy & notifications','位置情報の公開範囲（会社の上限）':'Location sharing (company limit)',
+'正確な現在地まで許可':'Allow exact location','都市までに制限':'City only','全員非表示':'Hidden for everyone',
+'本人はこれより狭い範囲をいつでも選べます。管理者と本人には常に表示されます。':'Each person can always choose something narrower. Admins and the person themselves always see it.',
+'参加の通知':'When someone joins','新しいメンバーが招待コードで参加したとき、全員に通知します。':'Notify everyone when someone joins with the invite code.',
+'毎朝のダイジェスト':'Morning digest','その日はじめて開いたとき、今日の件数と最初の予定を通知します。':'On the first open of the day, show how many events there are and the first one.',
+'終業のお知らせ':'End-of-day notice',
+'その日の終業時刻を過ぎたら「今日はここまで。おつかれさまでした」とお知らせします。休みの日は鳴りません。':'Once your end time passes, Koyomi says “That’s it for today.” Nothing is sent on days off.',
+'予定変更の通知':'When an event changes','既存の予定が編集されたとき、参加者に通知します。新規作成は常に通知します。':'Notify people when an existing event is edited. New events are always notified.',
+'端末のお知らせ':'Notifications on this iPhone',
+'許可されています':'Allowed','いまは切られています':'Turned off','まだ確認していません':'Not asked yet',
+'通知を許可する':'Allow notifications','iPhone の設定を開く':'Open iPhone settings',
+'予定のリマインドと終業のお知らせは、iPhone の通知として届きます。':'Event reminders and the end-of-day notice arrive as iPhone notifications.',
+'iPhone の設定 → 通知 から、あとで変えられます':'You can change this later in iPhone Settings → Notifications',
+'デモデータを初期化':'Reset the demo data','このプロトタイプのデータはブラウザ内にのみ保存されます。':'This prototype keeps its data only in the browser.',
+};
+
+Object.assign(TR,{
+/* --- 予定の編集 --- */
+'日付':'Date','入力するタイムゾーン':'Enter times in','終了':'End','種別':'Kind',
+'公開範囲':'Who can see it','公開（全員に表示）':'Open (everyone)','非公開（参加者のみ）':'Private (participants only)',
+'オンラインURL':'Meeting link','メモ':'Notes','作成':'Create','キャンセル':'Cancel','閉じる':'Close',
+'休暇はその日':'A day off takes','まる1日':'the whole day','になります。その日は予定を追加できなくなります。':'. No other events can be added that day.',
+'保存すると各メンバーの現地時間に自動変換されます':'Saved times are shown in each person’s local time',
+'クライアント打ち合わせ':'Client meeting','先方オフィス / Google Meet':'Their office / Google Meet',
+'議題、事前に読むもの、持ち物など':'Agenda, things to read first, what to bring',
+'5分前':'5 min before','10分前':'10 min before','15分前':'15 min before','30分前':'30 min before','1時間前':'1 hour before',
+'通知しない':'No reminder','リマインド':'Reminder',
+'タイトルを入れてください。':'Please enter a title.','終了は開始より後にしてください。':'The end time must be after the start.',
+'予定を作成しました':'Event created','予定を更新しました':'Event updated','予定を削除しました':'Event deleted',
+'この予定を削除しますか？':'Delete this event?','削除する':'Delete',
+'各メンバーの現地時間':'In each person’s local time','この予定を編集':'Edit this event',
+/* --- ステータス --- */
+'手動で設定すると、指定した時刻まで自動判定より優先されます。':'A status you set by hand stays until the time you choose, ahead of the automatic one.',
+'対応できます':'Available','勤務時間内・予定なし':'Within hours, nothing booked',
+'集中作業中':'Focusing','制作・集中作業中':'Heads-down work','打ち合わせ中':'In a meeting',
+'外出中':'Out','外出・移動中':'Out or on the move','休暇中':'On leave',
+'解除する時刻':'Until','1時間後':'In 1 hour','3時間後':'In 3 hours','今日の終業まで':'End of today','明日まで':'Tomorrow',
+'ステータスを変更しました':'Status changed','自動判定に戻しました':'Back to automatic',
+/* --- 通知センター --- */
+'未読はありません':'Nothing unread','通知はまだありません。':'No notifications yet.','すべて既読にする':'Mark all as read',
+'未読':'unread',
+/* --- アカウント --- */
+'デモデータのため、パスワードなしで他のメンバーの画面に切り替えられます（全員のパスワードは':'This is demo data, so you can switch to another member without a password (everyone’s password is',
+'（ログイン中）':' (signed in)',
+/* --- メンバー編集 --- */
+'名前':'Name','メール':'Email','役割（表示名）':'Role (shown to others)',
+'このメンバーを削除しますか？':'Remove this member?',
+/* --- 初期設定 --- */
+'はじめる':'Get started','次へ':'Next','戻る':'Back','あとで':'Later','スキップ':'Skip',
+'会社の情報':'About your company','働きかた':'How you work','チーム':'Your team',
+/* --- 退会 --- */
+'アカウントを削除':'Delete your account','退会':'Delete account',
+'この操作は取り消せません。':'This cannot be undone.',
+/* --- そのほか --- */
+'コピーしました':'Copied','コピー':'Copy','招待':'Invite','招待する':'Send invite',
+'読み込み中…':'Loading…','保存中…':'Saving…','同期に失敗しました':'Could not sync',
+'オフラインです。つながると自動で同期します。':'You are offline. Koyomi will sync once you are back.',
+'参加しました':'Joined','ようこそ':'Welcome',
+});
+
+Object.assign(TR,{
+'表示はすべて税別です。人数を増やして上限に達したときは、上のプランへお移りください。':'Prices exclude tax. When you reach the limit on people, move up to the next plan.',
+'プランを上げたときは差額だけをその月に、下げたときは次回の請求から新しい料金になります。':'Moving up is charged pro rata for that month; moving down takes effect on the next invoice.',
+'表示は App Store での価格です（消費税を含みます）。':'Prices are as shown in the App Store and include tax.',
+'人数を増やして上限に達したときは、上のプランへお移りください。':'When you reach the limit on people, move up to the next plan.',
+'会社の上限は':'Company limit:','です。':'.',
+'購入を復元':'Restore purchases','機種を変えたときや、入れ直したときはこちらから。':'Use this after changing devices or reinstalling.',
+'請求書':'Invoices','適格請求書（インボイス）':'Qualified invoice',
+'席':'seats','使用中':'in use','残り':'left',
+});
+
+Object.assign(TR,{
+/* --- ログイン・登録まわりの知らせ --- */
+'Appleでサインイン':'Sign in with Apple','Apple でサインイン':'Sign in with Apple',
+'Apple でのサインインに失敗しました。':'Sign in with Apple did not work.',
+'キャンセルしました':'Cancelled',
+'メールアドレスを隠したままでも登録できます。':'You can sign up while keeping your email address private.',
+'このメールアドレスがあなたのログインIDになります。あとから招待コードで仲間を追加できます。':'This email becomes your sign-in ID. You can add colleagues later with an invite code.',
+'招待コードは、会社の管理者が［設定 → メンバー］で確認・発行できます。':'A company admin can find or reissue the invite code under Settings → Members.',
+'接続設定がまだ済んでいません。config.js に Supabase の URL とキーを書いてください。':'The connection is not set up yet. Put the Supabase URL and key in config.js.',
+'サーバに接続できませんでした。通信環境を確認して、開き直してください。':'Could not reach the server. Check your connection and open Koyomi again.',
+'メールアドレスとパスワードを入力してください。':'Enter your email and password.',
+'メールアドレスの形式が正しくありません。':'That email address does not look right.',
+'メールアドレスまたはパスワードが違います。':'That email or password is not correct.',
+'このメールアドレスは既に登録されています。':'That email address is already registered.',
+'パスワードは8文字以上にしてください。':'Use at least 8 characters for your password.',
+'パスワードが一致しません。':'The passwords do not match.',
+'会社名を入力してください。':'Enter a company name.','あなたの名前を入力してください。':'Enter your name.',
+'名前を入力してください。':'Enter your name.',
+'利用規約とプライバシーポリシーに同意します':'I agree to the Terms of Service and Privacy Policy',
+'利用規約とプライバシーポリシーへの同意が必要です。':'You need to agree to the Terms of Service and Privacy Policy.',
+'席数の上限に達しています。管理者にプラン変更を依頼してください。':'You have reached the seat limit. Ask an admin to change the plan.',
+'このアカウントはまだ会社に所属していません。「会社を登録」するか、「招待コードで参加」してください。':'This account does not belong to a company yet. Create one, or join with an invite code.',
+'デモは終了しました。メールアドレスでログインしてください。':'The demo has ended. Please sign in with your email address.',
+'先にメールアドレスを入力してから押してください。':'Enter your email address first.',
+'確認しています…':'Checking…','作成しています…':'Creating…','参加しています…':'Joining…','処理しています…':'Working…',
+'会社を作る':'Create a company','招待コードで参加':'Join with an invite code','別のアカウントでやり直す':'Use a different account',
+'あと少しです。会社の情報を入れてください。':'Almost there. Tell us about your company.',
+'初期設定を完了':'Finish setup','招待コードを再発行しました':'A new invite code was issued',
+'再発行できませんでした:':'Could not reissue:','参加に失敗しました:':'Could not join:',
+'代表':'Founder','月払い':'Monthly','年払い':'Yearly','プランを申し込み':'Choose this plan',
+'プランを変更しました':'Plan changed','お支払い情報':'Billing details',
+'お支払い情報の画面をひらいています…':'Opening the billing screen…','手続きの画面をひらいています…':'Opening the checkout…',
+'手続きができませんでした':'That did not go through','画面をひらけませんでした。':'Could not open that screen.',
+'Stripe のお支払い画面':'the Stripe payment page','が開きます。':'will open.',
+'お申し込みを受け付けました（試作版）':'Your request was received (prototype)',
+'退会しました':'Your account has been deleted',
+'同期しています…':'Syncing…',
+});
+
+/* かたちの決まった言い回し（数字が入るもの）。上の表に無いときだけ使う。 */
+const TRP=[
+ [/^(\d+)件$/,                 (m,a)=>a+(a==='1'?' event':' events')],
+ [/^(\d+)名$/,                 (m,a)=>a+(a==='1'?' person':' people')],
+ [/^(\d+)人$/,                 (m,a)=>a+(a==='1'?' person':' people')],
+ [/^(\d+)分$/,                 (m,a)=>a+' min'],
+ [/^(\d+)時間$/,               (m,a)=>a+(a==='1'?' hour':' hours')],
+ [/^(\d+)時間(\d+)分$/,        (m,a,b)=>a+'h '+b+'m'],
+ [/^(\d+)時間 空き$/,          (m,a)=>a+'h free'],
+ [/^(\d+)分 空き$/,            (m,a)=>a+' min free'],
+ [/^次 (\d{1,2}:\d{2})$/,      (m,a)=>'Next '+a],
+ [/^(\d{1,2}:\d{2}) 開始$/,    (m,a)=>'Starts '+a],
+ [/^(\d+)都市 · (\d+)カ国 · (\d+)タイムゾーン$/,
+                               (m,a,b,c)=>a+' cities · '+b+' countries · '+c+' time zones'],
+ [/^残り席数 (\d+)$/,          (m,a)=>a+' seats left'],
+ [/^招待状況 (\d+)$/,          (m,a)=>'Invitations '+a],
+ [/^(\d+) \/ (\d+) 席を使用中（(.+)）$/,(m,a,b,c)=>a+' of '+b+' seats used ('+c+')'],
+ [/^(.+)時間で表示$/,          (m,a)=>'Shown in '+a+' time'],
+ [/^(.+)時間$/,                (m,a)=>a+' time'],
+ [/^(.+) のみ表示中$/,         (m,a)=>'Showing '+a+' only'],
+ [/^(.+) の予定$/,             (m,a)=>a+'’s schedule'],
+ [/^(.+) の設定$/,             (m,a)=>'Settings for '+a],
+ [/^(.+)曜日はお休みです$/,    (m,a)=>a+' is a day off'],
+ [/^(.+) \/ (.+)（(UTC[^）]+)）$/, (m,a,bq,c)=>bq+' ('+c+')'],
+ [/^(.+)（(UTC[^）]+)）$/,     (m,a,c)=>a+' ('+c+')'],
+ [/^(.+)に確認メールを送りました。メール内のリンクを開いてから、「ログイン」タブに戻って入ってください。$/,
+                               (m,a)=>'We sent a confirmation email to '+a+'. Open the link in it, then come back to the Sign in tab.'],
+ [/^(.+)宛に、パスワードを再設定するリンクを送りました。メールを開いて、新しいパスワードを決めてください。$/,
+                               (m,a)=>'We sent a password reset link to '+a+'. Open it and choose a new password.'],
+ [/^(.+)としてログインしました$/,(m,a)=>'Signed in as '+a],
+ [/^(.+)を作成しました$/,       (m,a)=>'Created '+a],
+ [/^(.+)さんがチームに参加しました$/,(m,a)=>a+' joined the team'],
+ [/^(.+)（ログイン中）$/,      (m,a)=>a+' (signed in)'],
+ [/^（週(\d+)日）$/,           (m,a)=>'('+a+' days a week)'],
+ [/^税込 (¥[\d,]+)$/,          (m,a)=>a+' incl. tax'],
+ [/^各メンバーの勤務時間を (.+)時間で並べたもの$/,
+                               (m,a)=>'Everyone’s working hours, lined up in '+a+' time'],
+ [/^です（会社の上限：(.+)）。$/,(m,a)=>'. Company limit: '+a+'.'],
+ [/^(.+) \/ (.+) \/ 正方形 800px 以上$/,(m,a,b)=>a+' / '+b+' / square, 800px or larger'],
+ [/^(.+) \/ 正方形 800px 以上$/,(m,a)=>a+' / square, 800px or larger'],
+ [/^日時は会社の基準タイムゾーン（(.+)）で表示 ・ 保持期間 (\d+)日$/,
+                               (m,a,b)=>'Times shown in the company zone ('+a+') · kept for '+b+' days'],
+ [/^ご不明な点は (\S+) までどうぞ。$/,(m,a)=>'Questions? Write to '+a+'.'],
+ [/^(\d+) \/ 無制限$/,         (m,a)=>a+' / unlimited'],
+];
+
+function trText(t){
+  const k=String(t).replace(/\s+/g,' ').trim();
+  if(!k)return null;
+  let v=TR[k];
+  if(v==null){
+    for(const [re,f] of TRP){ const m=k.match(re); if(m){ v=k.replace(re,f); break; } }
+  }
+  if(v==null)return null;
+  const lead=String(t).match(/^\s*/)[0], tail=String(t).match(/\s*$/)[0];
+  return lead+v+tail;
+}
+/* 画面に出たあと、日本語を英語に置き換えてまわる。
+   まるごと一致したものだけ替えるので、途中で混ざることはない。 */
+function translateDOM(root){
+  if(LANG!=='en'||!root)return;
+  const jobs=[];
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);
+  let n;
+  while(n=w.nextNode()){
+    const pn=n.parentNode;
+    if(!pn||pn.nodeName==='SCRIPT'||pn.nodeName==='STYLE')continue;
+    if(!/[぀-ヿ一-龯]/.test(n.nodeValue))continue;
+    const r=trText(n.nodeValue);
+    if(r!=null)jobs.push([n,r]);
+  }
+  for(const [node,v] of jobs)node.nodeValue=v;
+  const A=['placeholder','aria-label','title','alt'];
+  root.querySelectorAll('[placeholder],[aria-label],[title],[alt]').forEach(el=>{
+    A.forEach(a=>{
+      const v=el.getAttribute(a);
+      if(v==null||!/[぀-ヿ一-龯]/.test(v))return;
+      const r=trText(v); if(r!=null)el.setAttribute(a,r);
+    });
+  });
+}
+
 const DOWMAP={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
 
 function tzOffMin(ms,tz){
@@ -2204,16 +2553,29 @@ function cityTag(k,opt){const C=CITIES[k];if(!C)return '';
 
 const LOCS={office:'オフィス',remote:'リモート',trip:'出張・外回り',holiday:'休暇'};
 const STATUS={
-  available:{ja:'対応できます',sub:'勤務時間内・予定なし'},focus:{ja:'集中作業中',sub:'制作・集中作業中'},
-  meeting:{ja:'打ち合わせ中',sub:'打ち合わせ中'},off:{ja:'勤務時間外',sub:'勤務時間外'},
-  trip:{ja:'外出中',sub:'外出・移動中'},holiday:{ja:'休暇中',sub:'休暇中'}
+  available:{ja:'対応できます',en:'Available',sub:'勤務時間内・予定なし'},
+  focus:{ja:'集中作業中',en:'Focusing',sub:'制作・集中作業中'},
+  meeting:{ja:'打ち合わせ中',en:'In a meeting',sub:'打ち合わせ中'},
+  off:{ja:'勤務時間外',en:'Off hours',sub:'勤務時間外'},
+  trip:{ja:'外出中',en:'Out',sub:'外出・移動中'},
+  holiday:{ja:'休暇中',en:'On leave',sub:'休暇中'}
 };
+const stName=k=>{const v=STATUS[k]||{};return LANG==='en'?(v.en||v.ja||k):(v.ja||k);};
 const PLANS=[
-  {id:'starter',name:'Starter',price:4980,seats:10,feat:['カレンダー / 時差表示','メンバー・World Map','社内メッセージ']},
-  {id:'business',name:'Business',price:9800,seats:30,feat:['Starterの全機能','空き時間検索','勤務時間・部署の管理','監査ログ 90日']},
-  {id:'pro',name:'Pro',price:19800,seats:100,feat:['Businessの全機能','SSO (SAML)','API アクセス','監査ログ 1年','優先サポート']},
-  {id:'enterprise',name:'Enterprise',price:null,seats:null,feat:['Proの全機能','専用サポート','監査ログ 無期限','SLA 99.9%','データ所在地の指定']}
+  {id:'starter',name:'Starter',price:4980,seats:10,
+   feat:['カレンダー / 時差表示','メンバー・World Map','社内メッセージ'],
+   featEn:['Calendar with time zones','Members & World Map','Team messages']},
+  {id:'business',name:'Business',price:9800,seats:30,
+   feat:['Starterの全機能','空き時間検索','勤務時間・部署の管理','監査ログ 90日'],
+   featEn:['Everything in Starter','Free-time search','Working hours & teams','90 days of activity log']},
+  {id:'pro',name:'Pro',price:19800,seats:100,
+   feat:['Businessの全機能','SSO (SAML)','API アクセス','監査ログ 1年','優先サポート'],
+   featEn:['Everything in Business','SSO (SAML)','API access','1 year of activity log','Priority support']},
+  {id:'enterprise',name:'Enterprise',price:null,seats:null,
+   feat:['Proの全機能','専用サポート','監査ログ 無期限','SLA 99.9%','データ所在地の指定'],
+   featEn:['Everything in Pro','Dedicated support','Unlimited activity log','99.9% SLA','Choice of data region']}
 ];
+const planFeat=p=>(LANG==='en'&&p.featEn)?p.featEn:(p.feat||[]);
 const DEPTS=['制作','営業','SNS運用','マーケティング','サポート','管理'];
 
 /* ---------- お支払い ----------
@@ -2250,7 +2612,7 @@ function jdate(x){
   if(!x)return '—';
   const d=(x instanceof Date)?x:new Date(x);
   if(isNaN(d))return '—';
-  return `${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+  return fmtYMD(d.getFullYear(),d.getMonth()+1,d.getDate());
 }
 function daysLeft(x){
   if(!x)return null;
@@ -2510,8 +2872,8 @@ function dowSummary(w){
     else g.push({key,ds:[i],d});
   }
   return g.map(x=>{
-    const lbl=x.ds.map(i=>DOWJA[i]).join('');
-    return x.d.off?`<span class="muted">${lbl} 休み</span>`:`${lbl} <b>${x.d.s}–${x.d.e}</b>`;
+    const lbl=x.ds.map(i=>dowN(i)).join(LANG==='en'?' ':'');
+    return x.d.off?`<span class="muted">${lbl} ${L('休み','off')}</span>`:`${lbl} <b>${x.d.s}–${x.d.e}</b>`;
   }).join('<span class="muted"> ・ </span>');
 }
 /* 時刻の選択肢（15分きざみ・24時間表記でそろえる） */
@@ -2522,6 +2884,11 @@ function timeOpts(val){
   return list.map(t=>`<option value="${t}" ${t===val?'selected':''}>${t}</option>`).join('');
 }
 function dowCapText(days){
+  if(LANG==='en'){
+    if(!days.length)return'Set to <b>off every day</b>';
+    if(days.length===7)return'Working <b>every day</b>';
+    return'Working days: <b>'+days.map(i=>DOWEN[i]).join(' ')+'</b> ('+days.length+' days a week)';
+  }
   if(!days.length)return'<b>毎日おやすみ</b>になっています';
   if(days.length===7)return'<b>毎日</b>はたらく設定です';
   return'はたらく日：<b>'+days.map(i=>DOWJA[i]).join('')+'</b>（週'+days.length+'日）';
@@ -2534,7 +2901,7 @@ function dowEditor(pref,w){
   const adv=days.some(i=>ds[i].s!==base.s||ds[i].e!==base.e);
   return `<div class="dowset" data-dowset="${pref}" data-adv="${adv?1:0}" data-adved="${adv?1:0}">
     <div class="dowdays">${DOWJA.map((lbl,i)=>
-      `<button type="button" class="dowchip" data-dowtog="${pref}|${i}" aria-pressed="${!ds[i].off}">${lbl}</button>`).join('')}</div>
+      `<button type="button" class="dowchip" data-dowtog="${pref}|${i}" aria-pressed="${!ds[i].off}">${dowN(i)}</button>`).join('')}</div>
     <p class="dowcap" data-dowcap="${pref}">${dowCapText(days)}</p>
     <div class="dowbase" data-dowbase="${pref}" ${adv?'hidden':''}>
       <label class="dowt"><span>始業</span><select id="${pref}-bs">${timeOpts(base.s)}</select></label>
@@ -2543,7 +2910,7 @@ function dowEditor(pref,w){
     </div>
     <div class="dowadv" data-dowadv="${pref}" ${adv?'':'hidden'}>
       ${DOWJA.map((lbl,i)=>`<div class="dowrow" data-dowrow="${pref}|${i}" ${ds[i].off?'hidden':''}>
-        <span class="dl">${lbl}</span>
+        <span class="dl">${dowN(i)}</span>
         <select id="${pref}-s-${i}">${timeOpts(ds[i].s)}</select>
         <span class="dash">–</span>
         <select id="${pref}-e-${i}">${timeOpts(ds[i].e)}</select>
@@ -2686,10 +3053,11 @@ function photoEditor(p,inputId){
 }
 function stt(p,now,strong){
   const s=statusOf(p,now);
-  return `<span class="stt s-${s} ${strong?'on':''}"><span class="sdot s-${s}"></span>${STATUS[s].ja}</span>`;
+  return `<span class="stt s-${s} ${strong?'on':''}"><span class="sdot s-${s}"></span>${stName(s)}</span>`;
 }
 const sdot=s=>`<span class="sdot s-${s}"></span>`;
 function toast(msg){
+  try{ const r=trText(msg); if(r!=null)msg=r; }catch(e){}
   const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);
   setTimeout(()=>t.remove(),2200);
 }
@@ -3033,7 +3401,7 @@ function renderAuth(){
         <p class="authtag">世界のどこにいても、チームの「今」が見えるカレンダー</p>
       </div>
       <div class="seg authtabs">
-        ${[['login','ログイン'],['signup','会社を登録'],['join','コードで参加']].map(x=>
+        ${[['login',L('ログイン','Sign in')],['signup',L('会社を登録','New company')],['join',L('コードで参加','Join')]].map(x=>
           `<button data-authtab="${x[0]}" aria-pressed="${t===x[0]}">${x[1]}</button>`).join('')}
       </div>
       ${err?`<div class="autherr">${esc(err)}</div>`:''}
@@ -3104,7 +3472,7 @@ function renderOnboard(){
   const t=S.onb.tab,err=S.onb.err,busy=S.onb.busy;
   $('#app').className='authmode';
   const v=S.onb.v||{};
-  const cityOpts=Object.entries(CITIES).map(([k,c])=>`<option value="${k}" ${k===(v.city||'tokyo')?'selected':''}>${c.ja} / ${c.en}（${offLabel(c.tz,Date.now())}）</option>`).join('');
+  const cityOpts=Object.entries(CITIES).map(([k,c])=>`<option value="${k}" ${k===(v.city||'tokyo')?'selected':''}>${cityPair(k)}（${offLabel(c.tz,Date.now())}）</option>`).join('');
   const f=(id,label,type,ph,extra,val)=>`<div class="field"><label for="${id}">${label}</label>
     <input type="${type}" id="${id}" placeholder="${ph||''}" value="${val||''}" ${extra||''}></div>`;
   $('#app').innerHTML=`
@@ -3115,7 +3483,7 @@ function renderOnboard(){
         <p class="authtag">あと少しです。会社の情報を入れてください。</p>
       </div>
       <div class="seg authtabs">
-        ${[['make','会社を登録'],['join','招待コードで参加']].map(x=>
+        ${[['make',L('会社を登録','New company')],['join',L('招待コードで参加','Join with a code')]].map(x=>
           `<button data-onb="${x[0]}" aria-pressed="${t===x[0]}">${x[1]}</button>`).join('')}
       </div>
       ${err?`<div class="autherr">${esc(err)}</div>`:''}
@@ -3325,6 +3693,7 @@ function viewHTML(){
   return '';
 }
 function afterRender(){
+  try{translateDOM(document.body);}catch(e){}
   if(IS_APP&&S.view==='admin'&&S.adm==='plan'&&!STORE_PRICE)
     setTimeout(()=>{try{syncStorePrices();}catch(e){}},0);
   if((S.view==='people'||S.view==='map')&&S.pmode==='map')drawMap();
@@ -3424,13 +3793,16 @@ function viewToday(){
         <div class="hero-l">
           <div class="hero-top"><span class="yr">${c.y}</span><span class="cyn">${cityTag(effCity(u))}</span></div>
           <div class="dayhead">
-            <span class="d">${c.m}<i>月</i>${c.d}<i>日</i></span>
-            <span class="w dw-${cdow(c)}">${DOWJA[cdow(c)]}曜日</span>
+            <span class="d">${LANG==='en'
+              ?`${MONEN_L[c.m-1]}<i></i>${c.d}`
+              :`${c.m}<i>月</i>${c.d}<i>日</i>`}</span>
+            <span class="w dw-${cdow(c)}">${dowW(cdow(c))}</span>
           </div>
-          ${isDayOff(u,now)?`<div class="restbig"><span class="rb">休み</span>
-            <span class="rt">${onHoliday(u,now)?'休暇':u.location==='holiday'?'休暇':DOWJA[cdow(c)]+'曜日はお休みです'}</span></div>`:''}
+          ${isDayOff(u,now)?`<div class="restbig"><span class="rb">${L('休み','Day off')}</span>
+            <span class="rt">${onHoliday(u,now)||u.location==='holiday'?L('休暇','Time off')
+              :L(DOWJA[cdow(c)]+'曜日はお休みです',DOWEN_L[cdow(c)]+' is a day off')}</span></div>`:''}
           <div class="hero-st">
-            <span class="stt s-${st} on" style="font-size:15px">${sdot(st)}${STATUS[st].ja}</span>
+            <span class="stt s-${st} on" style="font-size:15px">${sdot(st)}${stName(st)}</span>
             <span class="hs-sep"></span>
             <span class="hs-i">${LOCS[u.location]}</span>
             ${isDayOff(u,now)?'':`<span class="hs-sep"></span>
@@ -3482,7 +3854,7 @@ function viewToday(){
             </span>
             <span class="rt">
               <span class="t ${nightAt(ptz)?'dim':''}" data-tz="${ptz}">${hhmm(now,ptz)}</span>
-              <span class="st stt s-${pst}">${sdot(pst)}${STATUS[pst].ja}</span>
+              <span class="st stt s-${pst}">${sdot(pst)}${stName(pst)}</span>
             </span>
           </button>`;}).join('')}</div>
       </section>
@@ -3506,7 +3878,7 @@ function peopleList(list,now,compact){
       </span>
       <span class="now">
         <span class="t ${nightAt(tz)?'dim':''}" data-tz="${tz}">${hhmm(now,tz)}</span>
-        <span class="stt s-${st}">${sdot(st)}${STATUS[st].ja}</span>
+        <span class="stt s-${st}">${sdot(st)}${stName(st)}</span>
       </span>
     </button>`;}).join('')}</div>`;
 }
@@ -3524,7 +3896,7 @@ function viewCalendar(){
   if(!S.cursor)S.cursor=civil(now,tz);
   if(!S.scope)S.scope='all';
   const c=S.cursor;
-  const label=S.cal==='month'?`${c.y}年${c.m}月`:S.cal==='week'?weekLabel(c):`${c.m}月${c.d}日 (${DOWJA[cdow(c)]})`;
+  const label=S.cal==='month'?fmtYM(c.y,c.m):S.cal==='week'?weekLabel(c):`${fmtMD(c.m,c.d)} (${dowN(cdow(c))})`;
   return `
   <div class="calbar">
     <div class="seg">
@@ -3547,7 +3919,9 @@ function viewCalendar(){
   ${S.cal==='month'?monthGrid(c,tz):dayGrid(c,tz,S.cal==='week'?7:1)}`;
 }
 function weekLabel(c){const s=weekStart(c),e=addDays(s,6);
-  return `${s.m}月${s.d}日 – ${e.m!==s.m?e.m+'月':''}${e.d}日`;}
+  return LANG==='en'
+    ? `${MONEN[s.m-1]} ${s.d} – ${e.m!==s.m?MONEN[e.m-1]+' ':''}${e.d}`
+    : `${s.m}月${s.d}日 – ${e.m!==s.m?e.m+'月':''}${e.d}日`;}
 function weekStart(c){return addDays(c,-cdow(c));}
 function evClass(e){return 'k-'+e.kind;}
 function dayBounds(c,tz){const ds=zToUTC(c.y,c.m,c.d,0,0,tz);return [ds,ds+86400000];}
@@ -3569,7 +3943,7 @@ function monthGrid(c,tz){
   const evs=calScopeEvents(),today=ckey(civil(Date.now(),tz));
   const dim=new Date(Date.UTC(c.y,c.m,0)).getUTCDate();
   const weeks=Math.ceil((cdow({y:c.y,m:c.m,d:1})+dim)/7);
-  let html=`<div class="mgrid" style="--weeks:${weeks}"><div class="hd">`+DOWJA.map(d=>`<div>${d}</div>`).join('')+'</div>';
+  let html=`<div class="mgrid" style="--weeks:${weeks}"><div class="hd">`+DOWJA.map((d,i)=>`<div>${dowN(i)}</div>`).join('')+'</div>';
   for(let w=0;w<weeks;w++){
     html+='<div class="wk">';
     for(let i=0;i<7;i++){
@@ -3614,7 +3988,7 @@ function dayGrid(c,tz,days){
   const gt=`grid-template-columns:48px repeat(${days},minmax(0,1fr))`;
   let hd=`<div class="whd" style="${gt}"><div class="c"></div>`+
     cols.map(d=>`<button class="c ${ckey(d)===today?'today':''}" data-jumpday="${ckey(d)}">
-      <span class="dw">${DOWJA[cdow(d)]}</span><span class="dn">${d.d}</span></button>`).join('')+'</div>';
+      <span class="dw">${dowN(cdow(d))}</span><span class="dn">${d.d}</span></button>`).join('')+'</div>';
   let body=`<div class="wbody"><div class="inner" style="${gt}"><div class="gut">`+
     Array.from({length:24},(_,h)=>`<div class="h">${h?pad2(h)+':00':''}</div>`).join('')+'</div>';
   const nowMs=Date.now();
@@ -3652,7 +4026,7 @@ function viewPeople(){
       <button data-pmode="list" aria-pressed="${S.pmode==='list'}">${icon('list')}一覧</button>
       <button data-pmode="map" aria-pressed="${S.pmode==='map'}">${icon('map')}地図</button>
     </div>
-    ${S.city?`<span class="note">${CITIES[S.city].ja} のみ表示中</span><button class="btn sm q" data-city="">解除</button>`:''}
+    ${S.city?`<span class="note">${cityN(S.city)} のみ表示中</span><button class="btn sm q" data-city="">解除</button>`:''}
     <div class="sp"></div>
     <button class="btn sm" data-act="ft-all">${icon('clock')}全員の空き時間をさがす</button>
     ${isAdmin()?`<button class="btn sm" data-act="invite">${icon('userplus')}メンバーを招待</button>`:''}
@@ -3660,7 +4034,7 @@ function viewPeople(){
   ${S.pmode==='map'?mapSection(counts,now)+'<div style="height:26px"></div>':''}
   ${peopleTable(list,now,false)}
   <div style="height:34px"></div>
-  ${bandBlock('今日の稼働帯',`${CITIES[effCity(me())].ja}時間で表示`)}
+  ${bandBlock('今日の稼働帯',`${cityN(effCity(me()))}時間で表示`)}
   <div class="muted" style="font-size:13px;margin-top:-18px">
     ${Object.keys(counts).length}都市 ·
     ${new Set(Object.keys(counts).map(c=>CITIES[c].country)).size}カ国 ·
@@ -3748,7 +4122,7 @@ function dayPanel(k){
         <button class="btn sm q ed" data-act="edit-event" data-id="${e.id}" title="編集">${icon('pencil')}</button>
       </div>`;}).join('')}</div>`
     :`<div class="empty">${icon('cal')}${myHol?'休暇です。':'この日の予定はまだありません。'}</div>`}`;
-  layer(modal(`${y}年${m}月${dd}日 (${DOWJA[dow]})${today?' ・ 今日':''}`,body,
+  layer(modal(`${fmtYMD(y,m,dd)} (${dowN(dow)})${today?L(' ・ 今日',' · Today'):''}`,body,
     `<button class="btn" data-act="open-day" data-day="${k}">${icon('cal')}この日を時間割で見る</button>
      <div class="sp"></div><button class="btn q" data-act="close-layer">閉じる</button>`));
 }
@@ -3778,7 +4152,7 @@ function personDrawer(id){
         <dt>メール</dt><dd style="font-weight:400;word-break:break-all">${esc(p.email)}</dd>
       </dl>
       <div>
-        <div class="sec"><h2>今日の予定</h2><span class="note">${CITIES[effCity(p)].ja}時間</span></div>
+        <div class="sec"><h2>今日の予定</h2><span class="note">${cityN(effCity(p))}時間</span></div>
         ${todays.length?`<div class="tl">${todays.map(e=>`
           <button class="it" data-ev="${e.id}" style="grid-template-columns:52px minmax(0,1fr)">
             <span class="tm">${hhmm(e.start,tz)}</span>
@@ -3850,7 +4224,7 @@ function viewFind(){
         return Object.entries(by).map(([k,arr])=>{
           const c=P(arr[0].r.s,tz);
           return `<div class="slotday">
-            <div class="sd-h"><b>${c.m}月${c.d}日</b><span class="dw dw-${c.dow}">${DOWJA[c.dow]}</span></div>
+            <div class="sd-h"><b>${fmtMD(c.m,c.d)}</b><span class="dw dw-${c.dow}">${dowN(c.dow)}</span></div>
             <div class="sd-b">${arr.map(({r,i})=>`
               <div class="sd-s">
                 <div class="tmw"><span class="hf">${cityFlag(effCity(u))}</span><span class="tm">${hhmm(r.s,tz)}</span><span class="dash">–</span><span class="tm2">${hhmm(r.e,tz)}</span></div>
@@ -3931,7 +4305,7 @@ function viewMessages(){
           <div style="font-weight:600;font-size:14px" class="ell">${esc(cur.title)}</div>
           <div class="muted ell" style="font-size:13px">${cur.type==='ev'
             ?`${P(cur.ev.start,tz).m}/${P(cur.ev.start,tz).d} ${hhmm(cur.ev.start,tz)}–${hhmm(cur.ev.end,tz)} · ${cur.ev.who.length}名`
-            :`${CITIES[effCity(cur.p)].ja} ${hhmm(Date.now(),effTz(cur.p))} · ${STATUS[statusOf(cur.p,Date.now())].ja}`}</div>
+            :`${cityN(effCity(cur.p))} ${hhmm(Date.now(),effTz(cur.p))} · ${stName(statusOf(cur.p,Date.now()))}`}</div>
         </div>
         ${cur.type==='ev'?`<button class="btn sm" data-ev="${cur.id}">予定を開く</button>`:''}
       </div>
@@ -3972,7 +4346,7 @@ function admDash(){
   const covered=Array.from({length:48},(_,i)=>DB.people.some(p=>isWorking(p,ds+i*1800000)&&p.location!=='holiday')).filter(Boolean).length/2;
   return `
   <div class="block">
-    <div class="sec"><h2>${c.m}月${c.d}日 (${DOWJA[cdow(c)]})</h2><span class="note">${CITIES[effCity(me())].ja}時間</span></div>
+    <div class="sec"><h2>${fmtMD(c.m,c.d)} (${dowN(cdow(c))})</h2><span class="note">${L(cityN(effCity(me()))+'時間',cityN(effCity(me()))+' time')}</span></div>
     <div class="summary">
       <span>メンバー <b>${DB.people.length}</b></span>
       <span>勤務時間内 <b>${work}</b></span>
@@ -3985,11 +4359,11 @@ function admDash(){
   </div>
 
   <div class="block">
-    <div class="sec"><h2>今日の稼働帯</h2><span class="note">各メンバーの勤務時間を ${CITIES[effCity(me())].ja}時間で並べたもの</span></div>
+    <div class="sec"><h2>今日の稼働帯</h2><span class="note">各メンバーの勤務時間を ${cityN(effCity(me()))}時間で並べたもの</span></div>
     ${DB.people.map(p=>{
       const segs=workSegs(p,ds);
       return `<div class="band ${isWorking(p,now)&&p.location!=='holiday'?'on':''}">
-        <div class="who"><span class="ell">${esc(p.name)}</span><span class="sub">${CITIES[effCity(p)].ja}</span></div>
+        <div class="who"><span class="ell">${esc(p.name)}</span><span class="sub">${cityN(effCity(p))}</span></div>
         <div class="track">
           ${[6,12,18].map(h=>`<span class="tick" style="left:${h/24*100}%"></span>`).join('')}
           ${segs.map(g=>`<span class="fill" style="left:${g[0]}%;width:${g[1]-g[0]}%"></span>`).join('')}
@@ -4015,7 +4389,7 @@ function admDash(){
     <div class="tscroll"><table class="t" style="min-width:420px"><thead><tr><th>都市</th><th>国</th><th>現地時間</th><th>人数</th><th>勤務時間内</th></tr></thead><tbody>
       ${Object.entries(cities).sort((a,b)=>b[1]-a[1]).map(([k,v])=>{
         const w=DB.people.filter(p=>effCity(p)===k&&isWorking(p,now)&&p.location!=='holiday').length;
-        return `<tr class="clickable" data-city="${k}"><td>${CITIES[k].ja}</td><td class="muted">${CITIES[k].country}</td>
+        return `<tr class="clickable" data-city="${k}"><td>${cityN(k)}</td><td class="muted">${CITIES[k].country}</td>
         <td><span class="tnum ${nightAt(CITIES[k].tz)?'dim':''}" data-tz="${CITIES[k].tz}">${hhmm(now,CITIES[k].tz)}</span></td>
         <td>${v}</td><td class="muted">${w}</td></tr>`;}).join('')}
     </tbody></table></div>
@@ -4040,7 +4414,7 @@ function bandBlock(title,note){
     ${DB.people.map(p=>{
       const segs=workSegs(p,ds);
       return `<div class="band ${isWorking(p,now)&&p.location!=='holiday'?'on':''}">
-        <div class="who"><span class="ell">${esc(p.name)}</span><span class="sub">${CITIES[effCity(p)].ja}</span></div>
+        <div class="who"><span class="ell">${esc(p.name)}</span><span class="sub">${cityN(effCity(p))}</span></div>
         <div class="track">
           ${[6,12,18].map(h=>`<span class="tick" style="left:${h/24*100}%"></span>`).join('')}
           ${segs.map(g=>`<span class="fill" style="left:${g[0]}%;width:${g[1]-g[0]}%"></span>`).join('')}
@@ -4088,7 +4462,7 @@ function admImages(){
   </div>
   <div class="block">
     <div class="sec"><h2>メンバーの顔写真</h2><span class="note">メンバー一覧・メッセージ・予定に表示されます</span></div>
-    ${DB.people.map(p=>imgSlot('person.'+p.id,p.name,(p.title||p.dept)+' / '+CITIES[p.city].ja+' / 正方形 800px 以上',p.photo,true)).join('')}
+    ${DB.people.map(p=>imgSlot('person.'+p.id,p.name,(p.title||p.dept)+' / '+cityN(p.city)+' / 正方形 800px 以上',p.photo,true)).join('')}
     <div class="row" style="padding:14px 16px">
       <button class="btn sm pri" data-act="invite">${icon('userplus')}メンバーを追加</button>
       <button class="btn sm" data-adm="members">メンバー一覧へ</button>
@@ -4119,7 +4493,7 @@ function admMembers(){
       <div class="facts">
         <span class="f"><i>役割</i><b>${esc(p.title||p.dept)}</b></span>
         <span class="f"><i>権限</i><b>${p.role==='admin'?'管理者':'メンバー'}</b></span>
-        <span class="f"><i>拠点</i><b>${CITIES[p.city].ja}</b><em>${offLabel(p.tz,now)}</em></span>
+        <span class="f"><i>拠点</i><b>${cityN(p.city)}</b><em>${offLabel(p.tz,now)}</em></span>
         <span class="f"><i>現地時間</i><b class="tnum" data-tz="${effTz(p)}">${hhmm(now,effTz(p))}</b></span>
         <span class="f"><i>勤務</i><b>${workLabel(p,Date.now())}</b></span>
         <span class="f"><i>場所</i><b>${LOCS[p.location]}</b></span>
@@ -4315,7 +4689,7 @@ function admPlan(){
            <span class="tax">App Store でのお支払い</span>`
         : `${YEN(pr)}<span class="u">/${cyc==='year'?'年':'月'}</span>
            <span class="tax">税込 ${YEN(INTAX(pr))}</span>`):'<span class="u" style="font-size:15px">お問い合わせ</span>'}</div>
-      <div class="ft">${p.feat.join(' ・ ')}</div>
+      <div class="ft">${planFeat(p).join(LANG==='en'?' · ':' ・ ')}</div>
       <div class="go">${!SELL?'<span class="muted" style="font-size:12.5px">準備中</span>'
         :on?'':(pr
         ? `<button class="btn sm ${B.status==='active'?'':'pri'}" data-act="checkout" data-id="${p.id}" data-cyc="${cyc}"
@@ -4463,9 +4837,11 @@ function admSettings(){
     <div class="block">
       <div class="sec"><h2>表示</h2></div>
       <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:26px">
-        <label style="font-size:13px;font-weight:500;color:var(--ink-2)">背景の色</label>
-        <div class="seg">${[['light','白'],['dark','黒']].map(t=>`<button data-setui="${t[0]}" aria-pressed="${curTheme()===t[0]}">${t[1]}</button>`).join('')}</div>
-        <span class="muted" style="font-size:13px">この端末のブラウザにのみ保存されます。</span>
+        <label style="font-size:13px;font-weight:500;color:var(--ink-2)">${L('ことば','Language')}</label>
+        <div class="seg">${[['ja','日本語'],['en','English']].map(t=>`<button data-setlang="${t[0]}" aria-pressed="${LANG===t[0]}">${t[1]}</button>`).join('')}</div>
+        <label style="font-size:13px;font-weight:500;color:var(--ink-2);margin-top:6px">${L('背景の色','Appearance')}</label>
+        <div class="seg">${[['light',L('白','Light')],['dark',L('黒','Dark')]].map(t=>`<button data-setui="${t[0]}" aria-pressed="${curTheme()===t[0]}">${t[1]}</button>`).join('')}</div>
+        <span class="muted" style="font-size:13px">${L('この端末のブラウザにのみ保存されます。','Stored only in this browser on this device.')}</span>
       </div>
       <div class="sec"><h2>プライバシー / 通知</h2></div>
       <div style="display:flex;flex-direction:column;gap:14px">
@@ -4516,7 +4892,7 @@ function viewProfile(){
         ${photoEditor(u,'ph-me')}
       </div>
       <div class="pbody" style="display:flex;flex-direction:column;gap:14px">
-        <div class="field"><label>拠点</label><select data-set="me.city">${Object.entries(CITIES).map(([k,v])=>`<option value="${k}" ${u.city===k?'selected':''}>${v.ja} / ${v.en}</option>`).join('')}</select></div>
+        <div class="field"><label>拠点</label><select data-set="me.city">${Object.entries(CITIES).map(([k,v])=>`<option value="${k}" ${u.city===k?'selected':''}>${cityPair(k)}</option>`).join('')}</select></div>
         <div class="field"><label>曜日ごとの働きかた</label>
           ${dowEditor('me-dw',u.work)}
           <div class="row" style="margin-top:10px"><button class="btn sm pri" data-act="save-dow-me">この内容で保存</button></div>
@@ -4533,7 +4909,8 @@ function viewProfile(){
         <div class="field"><label>位置情報の公開範囲</label><select data-set="me.privacy">
           ${['exact','city','hidden'].map(k=>`<option value="${k}" ${u.privacy===k?'selected':''} ${PRIV_RANK[k]<PRIV_RANK[DB.company.locPolicy]?'disabled':''}>${PRIV_JA[k]}${PRIV_RANK[k]<PRIV_RANK[DB.company.locPolicy]?'（会社設定により選べません）':''}</option>`).join('')}
         </select>
-        <span class="muted" style="font-size:12.5px">いま他のメンバーに見えるのは <b>${PRIV_JA[effPrivacy(u)]}</b> です（会社の上限：${PRIV_JA[DB.company.locPolicy]}）。</span></div>
+        <span class="muted" style="font-size:12.5px">${L('いま他のメンバーに見えるのは','Others currently see')} <b>${PRIV_JA[effPrivacy(u)]}</b>${L('です。','.')}
+          <span>${L('会社の上限は','Company limit:')}</span> <b>${PRIV_JA[DB.company.locPolicy]}</b>${L('です。','.')}</span></div>
       </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:22px">
@@ -4547,9 +4924,13 @@ function viewProfile(){
         </div>
       </div>
       <div class="block">
-        <div class="sec"><h2>画面の背景</h2></div>
-        <div class="pbody">
-          <div class="seg">${[['light','白'],['dark','黒']].map(t=>`<button data-setui="${t[0]}" aria-pressed="${theme===t[0]}">${t[1]}</button>`).join('')}</div>
+        <div class="sec"><h2>${L('表示','Display')}</h2></div>
+        <div class="pbody" style="display:flex;flex-direction:column;gap:14px">
+          <div class="field"><label>${L('ことば','Language')}</label>
+            <div class="seg">${[['ja','日本語'],['en','English']].map(t=>`<button data-setlang="${t[0]}" aria-pressed="${LANG===t[0]}">${t[1]}</button>`).join('')}</div></div>
+          <div class="field"><label>${L('画面の背景','Appearance')}</label>
+            <div class="seg">${[['light',L('白','Light')],['dark',L('黒','Dark')]].map(t=>`<button data-setui="${t[0]}" aria-pressed="${theme===t[0]}">${t[1]}</button>`).join('')}</div></div>
+          <span class="muted" style="font-size:12.5px">${L('どちらもこの端末にだけ残ります。','Both are kept on this device only.')}</span>
         </div>
       </div>
       <div class="block">
@@ -4566,6 +4947,7 @@ function viewProfile(){
 function layer(html){$('#layer').innerHTML=html;if(html)afterLayer();}
 const closeLayer=()=>layer('');
 function afterLayer(){
+  try{translateDOM($('#layer'));}catch(e){}
   const f=$('#layer input,#layer select,#layer textarea');
   if(f&&window.innerWidth>900)f.focus();
 }
@@ -4587,7 +4969,7 @@ function tzRows(e){
     const night=p.h<7||p.h>=21;
     return `<div class="tzr ${c===effCity(u)?'self':''} ${out.length?'warn':''}">
       <span class="fl">${C.flag}</span>
-      <span class="cy"><b>${C.en}</b><small>${C.ja}</small></span>
+      <span class="cy"><b>${C.en}</b>${LANG==='en'?'':`<small>${C.ja}</small>`}</span>
       <span class="who">${mem.length?mem.map(pp=>`<span class="w">${avatar(pp,'s')}<em>${esc(pp.name)}</em></span>`).join(''):'<span class="w none">—</span>'}</span>
       <span class="tt"><b>${pad2(p.h)}:${pad2(p.mi)}</b><i>–</i><span>${pad2(pe.h)}:${pad2(pe.mi)}</span>
         ${dd?`<em class="nd">${dd>0?'翌日':'前日'}</em>`:''}</span>
@@ -4603,8 +4985,8 @@ function openEvent(id){
   const kind=KINDS[e.kind]||'予定';
   layer(modal(e.title,`
     <dl class="kv">
-      <dt>日時</dt><dd>${p.y}年${p.m}月${p.d}日 (${DOWJA[p.dow]}) ${hhmm(e.start,tz)}–${hhmm(e.end,tz)}
-        <span class="muted" style="font-weight:400">${Math.round((e.end-e.start)/60000)}分 / ${CITIES[effCity(u)].ja}時間</span></dd>
+      <dt>日時</dt><dd>${fmtYMD(p.y,p.m,p.d)} (${dowN(p.dow)}) ${hhmm(e.start,tz)}–${hhmm(e.end,tz)}
+        <span class="muted" style="font-weight:400">${Math.round((e.end-e.start)/60000)}分 / ${cityN(effCity(u))}時間</span></dd>
       <dt>種別</dt><dd style="font-weight:400">${kindMark(e.kind,'k-'+e.kind)}${kind}${e.vis==='private'?' · 非公開':''}</dd>
       ${e.place?`<dt>場所</dt><dd style="font-weight:400">${esc(e.place)}</dd>`:''}
       ${e.url?`<dt>オンライン</dt><dd style="font-weight:400;word-break:break-all">${esc(e.url)}</dd>`:''}
@@ -4701,7 +5083,7 @@ function statusPicker(){
     <div class="muted" style="font-size:13px">手動で設定すると、指定した時刻まで自動判定より優先されます。</div>
     <div class="tl" style="border-top:1px solid var(--line)">
     ${Object.entries(STATUS).map(([k,v])=>`<button class="it" data-setstatus="${k}" style="grid-template-columns:130px minmax(0,1fr)">
-      <span class="stt on">${sdot(k)}${v.ja}</span><span class="muted" style="font-size:13px">${v.sub}</span></button>`).join('')}</div>
+      <span class="stt on">${sdot(k)}${stName(k)}</span><span class="muted" style="font-size:13px">${v.sub}</span></button>`).join('')}</div>
     <div class="field" style="max-width:220px"><label>解除する時刻</label><select id="st-until">
       ${[[60,'1時間後'],[180,'3時間後'],[480,'今日の終業まで'],[1440,'明日まで']].map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select></div>`,
     `${u.override?'<button class="btn" data-act="clear-status">自動判定に戻す</button>':''}<div class="sp"></div><button class="btn q" data-act="close-layer">閉じる</button>`));
@@ -4782,7 +5164,7 @@ function accountSwitcher(){
       ${DB.people.map(p=>`<button class="it" data-login="${p.id}" style="grid-template-columns:30px minmax(0,1fr) auto">
         ${avatar(p,'m')}
         <span style="min-width:0"><span style="display:block;font-weight:600;font-size:14px">${esc(p.name)}${p.id===DB.userId?'（ログイン中）':''}</span>
-        <span class="muted" style="font-size:13px">${esc(p.title||p.dept)} · ${CITIES[effCity(p)].ja}</span></span>
+        <span class="muted" style="font-size:13px">${esc(p.title||p.dept)} · ${cityN(effCity(p))}</span></span>
         <span class="tnum">${hhmm(Date.now(),effTz(p))}</span></button>`).join('')}</div>`:''}`,
     `<div class="sp"></div><button class="btn q" data-act="close-layer">閉じる</button>`));
 }
@@ -4793,7 +5175,7 @@ function inviteModal(){
       <div class="field"><label>名前</label><input type="text" id="i-name" placeholder="山田 花子"></div>
       <div class="field"><label>メールアドレス</label><input type="email" id="i-mail" placeholder="hanako@example.com"></div>
       <div class="field"><label>担当</label><select id="i-dept">${DEPTS.map(d=>`<option>${d}</option>`).join('')}</select></div>
-      <div class="field"><label>拠点</label><select id="i-city">${Object.entries(CITIES).map(([k,c])=>`<option value="${k}">${c.ja}</option>`).join('')}</select></div>
+      <div class="field"><label>拠点</label><select id="i-city">${Object.entries(CITIES).map(([k,c])=>`<option value="${k}">${cityN(k)}</option>`).join('')}</select></div>
       <div class="field"><label>権限</label><select id="i-role"><option value="member">メンバー</option><option value="admin">管理者</option></select></div>
       <div class="field"><label>勤務時間</label><div class="row" style="flex-wrap:nowrap;gap:6px">
         <input type="time" id="i-ws" value="${DB.company.defaultWork.s}"><input type="time" id="i-we" value="${DB.company.defaultWork.e}"></div></div>
@@ -4811,7 +5193,7 @@ function personEditor(id){
       <div class="field"><label>担当</label><select id="m-dept">${DEPTS.map(d=>`<option ${p.dept===d?'selected':''}>${d}</option>`).join('')}</select></div>
       <div class="field"><label>役割（表示名）</label><input type="text" id="m-title" value="${esc(p.title||'')}" placeholder="代表 / 制作"></div>
       <div class="field"><label>権限</label><select id="m-role"><option value="member" ${p.role==='member'?'selected':''}>メンバー</option><option value="admin" ${p.role==='admin'?'selected':''}>管理者</option></select></div>
-      <div class="field"><label>拠点</label><select id="m-city">${Object.entries(CITIES).map(([k,c])=>`<option value="${k}" ${p.city===k?'selected':''}>${c.ja}</option>`).join('')}</select></div>
+      <div class="field"><label>拠点</label><select id="m-city">${Object.entries(CITIES).map(([k,c])=>`<option value="${k}" ${p.city===k?'selected':''}>${cityN(k)}</option>`).join('')}</select></div>
       <div class="field"><label>勤務場所</label><select id="m-loc">${Object.entries(LOCS).map(([k,v])=>`<option value="${k}" ${p.location===k?'selected':''}>${v}</option>`).join('')}</select></div>
     </div>
     <div class="field"><label>曜日ごとの働きかた</label>${dowEditor('mm-dw',p.work)}
@@ -4839,7 +5221,7 @@ document.addEventListener('click',ev=>{
   const t=ev.target;
   const scrim=t.closest?.('[data-scrim]');
   if(scrim&&t===scrim){closeLayer();return;}
-  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-dowtog],[data-dowmore],[data-setstatus],[data-login],[data-setui],[data-authtab],[data-onb]');
+  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-dowtog],[data-dowmore],[data-setstatus],[data-login],[data-setui],[data-setlang],[data-authtab],[data-onb]');
   if(!el)return;
   const d=el.dataset;
   if(d.act){
@@ -5070,6 +5452,7 @@ document.addEventListener('click',ev=>{
     return;
   }
   if(d.dowmore){ dowToggleAdv(d.dowmore); return; }
+  if(d.setlang){ setLang(d.setlang); return; }
   if(d.adm){S.adm=d.adm;softRender();return;}
   if(d.ftp){S.ft.sel=S.ft.sel.includes(d.ftp)?S.ft.sel.filter(i=>i!==d.ftp):S.ft.sel.concat(d.ftp);S.ft.res=null;softRender();return;}
   if(d.ftpick){const r=S.ft.res[+d.ftpick];eventEditor(null,{start:r.s,dur:(r.e-r.s)/60000,who:S.ft.sel.slice()});return;}
@@ -5081,7 +5464,7 @@ document.addEventListener('click',ev=>{
   if(d.setstatus){
     const mins=+($('#st-until')?.value||180);
     me().override={status:d.setstatus,until:Date.now()+mins*60000};
-    audit('ステータスを変更',STATUS[d.setstatus].ja);save();closeLayer();render();toast('ステータスを変更しました');return;}
+    audit('ステータスを変更',stName(d.setstatus));save();closeLayer();render();toast('ステータスを変更しました');return;}
   if(d.login){DB.userId=d.login;S.thread=null;S.ft.res=null;save();closeLayer();
     if(S.view==='admin'&&!isAdmin())S.view='today';render();toast(person(d.login).name+' としてログイン中');return;}
 });
@@ -5258,8 +5641,8 @@ let splashGone=false;
 function splashOff(){
   if(splashGone)return; splashGone=true;
   const el=document.getElementById('splash'); if(!el)return;
-  const wait=Math.max(0,1250-(Date.now()-SPLASH_T0));
-  setTimeout(()=>{el.classList.add('go');setTimeout(()=>{try{el.remove();}catch(e){}},700);},wait);
+  const wait=Math.max(0,1200-(Date.now()-SPLASH_T0));
+  setTimeout(()=>{el.classList.add('go');setTimeout(()=>{try{el.remove();}catch(e){}},1050);},wait);
 }
 setTimeout(splashOff,8000);          /* 何があっても必ず消す */
 
@@ -5284,9 +5667,16 @@ async function askNotifPerm(){
   }catch(e){ toast('通知の設定を開けませんでした'); }
 }
 
+/* 認証画面・初期設定の画面も、出したあとに英語へ置き換える */
+(function(){
+  if(typeof renderAuth==='function'){const f=renderAuth;renderAuth=function(){const r=f.apply(this,arguments);try{translateDOM(document.body);}catch(e){}return r;};}
+  if(typeof renderSetup==='function'){const g=renderSetup;renderSetup=function(){const r=g.apply(this,arguments);try{translateDOM(document.body);}catch(e){}return r;};}
+})();
+
 /* ================= boot ================= */
 load();
 try{applyTheme(curTheme());}catch(e){}
+try{document.documentElement.lang=LANG;}catch(e){}
 S.scope='all';
 render();
 /* 前に入ったときのログインが残っていれば、そのまま中へ。
