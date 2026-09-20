@@ -1974,16 +1974,17 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 
 /* 起動したときのロゴ（アプリの起動画面からそのまま続く） */
 #splash{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;
-  background:#fff;opacity:1;transition:opacity .5s ease}
+  background:#fff;opacity:1;transition:opacity .6s ease}
 #splash.go{opacity:0;pointer-events:none}
 #splash .spw{width:126px;color:#12704F;display:flex;flex-direction:column;align-items:center;gap:7px;
-  animation:sp-in .6s cubic-bezier(.2,.75,.3,1) both}
+  animation:sp-hold 1s ease both}
 #splash .spw svg{width:100%;display:block}
 #splash .spn{font-family:var(--disp);font-weight:700;font-size:19px;
   letter-spacing:.38em;text-indent:.38em;line-height:1}
 #splash .spl{position:absolute;left:0;right:0;bottom:12%;text-align:center;
-  font-size:12.5px;font-weight:600;color:var(--ink-3);opacity:0;animation:sp-late .5s ease 1.5s both}
-@keyframes sp-in{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+  font-size:12.5px;font-weight:600;color:var(--ink-3);opacity:0;animation:sp-late .5s ease 2.2s both}
+/* iOS の起動画面と同じ絵がそのまま出ていて、最後にすっと息をするだけ */
+@keyframes sp-hold{0%{transform:none}70%{transform:none}100%{transform:scale(1.04)}}
 @keyframes sp-late{to{opacity:.85}}
 @media (prefers-reduced-motion:reduce){#splash .spw{animation:none}}
 @media (prefers-color-scheme:dark){#splash{background:#15161A}#splash .spw{color:#54C795}}
@@ -5207,8 +5208,8 @@ let splashGone=false;
 function splashOff(){
   if(splashGone)return; splashGone=true;
   const el=document.getElementById('splash'); if(!el)return;
-  const wait=Math.max(0,700-(Date.now()-SPLASH_T0));
-  setTimeout(()=>{el.classList.add('go');setTimeout(()=>{try{el.remove();}catch(e){}},600);},wait);
+  const wait=Math.max(0,1250-(Date.now()-SPLASH_T0));
+  setTimeout(()=>{el.classList.add('go');setTimeout(()=>{try{el.remove();}catch(e){}},700);},wait);
 }
 setTimeout(splashOff,8000);          /* 何があっても必ず消す */
 
