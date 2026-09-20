@@ -1480,10 +1480,6 @@ table.t td{font-size:14.5px;font-weight:600;color:var(--ink-2)}
   .ptitle .en{font-size:9px}
   .btn{height:35px}
 }
-@media (max-width:420px){
-  .ptitle{display:none}
-}
-
 /* v22b */
 :root{--accent-4:#F2F8F5}
 :root[data-ui="dark"]{--accent-4:#0E1A15}
@@ -2003,6 +1999,33 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
   .content{padding-bottom:env(safe-area-inset-bottom,0px)}
   #splash .spl{bottom:calc(12% + env(safe-area-inset-bottom,0px))}
 }
+
+/* --- スマホの上バー：ロゴだけだと何の画面か分からないので、画面の名前を出す --- */
+@media (max-width:420px){
+  .ptitle{display:flex}
+  .topbar .brand{display:none}            /* まん中のロゴは外して、名前に席をゆずる */
+  .topbar{gap:10px;padding:0 12px}
+  .ptitle h1{font-size:17px}
+  .ptitle .en{font-size:8.5px}
+}
+
+/* --- メッセージ：スマホでは画面いっぱいに開き、書くところを下に固定する --- */
+@media (max-width:980px){
+  .msgwrap.on-thread{
+    position:fixed;left:0;right:0;bottom:0;z-index:30;margin:0;
+    top:calc(60px + env(safe-area-inset-top,0px));
+    height:auto;min-height:0;background:var(--paper)}
+  .msgwrap.on-thread .thread{height:100%;max-height:none;border:0;border-radius:0}
+  .msgwrap.on-thread .thread .body{padding-bottom:8px}
+  .msgwrap.on-thread .composer{
+    padding-bottom:calc(14px + 74px + env(safe-area-inset-bottom,0px))}
+  .msgwrap.on-thread #mback{display:inline-flex}
+  .msgwrap .thl{max-height:none}
+  /* 下のタブバーは浮いているので、そのぶん中身の下に余白をつくる
+     （いちばん下の行がタブに隠れてしまうため） */
+  .content:not(.fill){padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+}
+#mback{display:none;flex:none}
 
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
@@ -2679,6 +2702,7 @@ const ICONS={
   admin:'<path d="M10 2.8 4.2 5.2v4.2c0 3.6 2.4 6.5 5.8 7.5 3.4-1 5.8-3.9 5.8-7.5V5.2z"/><path d="m7.8 9.8 1.6 1.7 3-3.3"/>',
   prof:'<circle cx="10" cy="7" r="2.9"/><path d="M4.2 16.8c.7-3.1 2.9-4.7 5.8-4.7s5.1 1.6 5.8 4.7"/>',
   plus:'<path d="M10 4.4v11.2M4.4 10h11.2"/>',
+  bell:'<path d="M10 3.2a4.5 4.5 0 0 0-4.5 4.5c0 3.4-1 4.4-1.6 5.1a.6.6 0 0 0 .45 1h11.3a.6.6 0 0 0 .45-1c-.6-.7-1.6-1.7-1.6-5.1A4.5 4.5 0 0 0 10 3.2z"/><path d="M8.3 15.5a1.9 1.9 0 0 0 3.4 0"/>',
   chevL:'<path d="m12 5.2-4.8 4.8L12 14.8"/>',
   chevR:'<path d="m8 5.2 4.8 4.8L8 14.8"/>',
   x:'<path d="m5.6 5.6 8.8 8.8M14.4 5.6l-8.8 8.8"/>',
@@ -3304,7 +3328,19 @@ function afterRender(){
   if(IS_APP&&S.view==='admin'&&S.adm==='plan'&&!STORE_PRICE)
     setTimeout(()=>{try{syncStorePrices();}catch(e){}},0);
   if((S.view==='people'||S.view==='map')&&S.pmode==='map')drawMap();
-  if(S.view==='calendar'&&S.cal!=='month'){const b=document.querySelector('.wbody');if(b)b.scrollTop=7*46-8;}
+  if(S.view==='calendar'&&S.cal!=='month'){
+    /* いちばん上に出すのは「始業の時刻」。その少し手前も見えるようにしておく。 */
+    const b=document.querySelector('.wbody');
+    if(b){
+      let sh=9;
+      try{
+        const u=me();
+        const st=((u&&u.work&&u.work.s)||(DB.company.defaultWork&&DB.company.defaultWork.s)||'09:00');
+        sh=Math.min(23,Math.max(0,parseInt(st.split(':')[0],10)||9));
+      }catch(e){}
+      b.scrollTop=Math.max(0,sh*46-22);
+    }
+  }
   if(S.view==='messages'){const b=document.querySelector('.thread .body');if(b)b.scrollTop=b.scrollHeight;
     if(unreadOf('msg')){markRead('msg');const n=document.querySelector('.tbnav [data-go="messages"] .bdg');if(n)n.remove();
       document.querySelectorAll('.tabbar [data-go="messages"] .bdg').forEach(x=>x.remove());}}
@@ -3867,7 +3903,9 @@ function threadList(){
 }
 function viewMessages(){
   const u=me(),tz=effTz(u),list=threadList();
-  if(!S.thread){const f=list.find(t=>t.n);S.thread=f?{type:f.type,id:f.id}:null;}
+  /* 画面が広いときだけ、最初のスレッドを自動で開く。
+     スマホは一覧から選んでもらう（自動で開くと「戻る」がすぐ打ち消されてしまう）。 */
+  if(!S.thread&&window.innerWidth>980){const f=list.find(t=>t.n);S.thread=f?{type:f.type,id:f.id}:null;}
   const cur=S.thread&&list.find(t=>t.type===S.thread.type&&t.id===S.thread.id);
   const msgs=cur?(cur.type==='ev'?(DB.threads[cur.id]||[]):(DB.dms[dmKey(u.id,cur.id)]||[])):[];
   return `
@@ -3888,7 +3926,7 @@ function viewMessages(){
     </div>
     ${cur?`<div class="thread">
       <div class="th">
-        <button class="btn sm q ico" data-act="back-threads" id="mback" style="display:none" aria-label="一覧へ戻る">${icon('chevL')}</button>
+        <button class="btn sm q ico" id="mback" data-act="back-threads" aria-label="一覧へ戻る">${icon('chevL')}</button>
         <div style="min-width:0;flex:1">
           <div style="font-weight:600;font-size:14px" class="ell">${esc(cur.title)}</div>
           <div class="muted ell" style="font-size:13px">${cur.type==='ev'
