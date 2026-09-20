@@ -1931,21 +1931,36 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 :root[data-ui="dark"] .restbig .rb{color:var(--accent);background:rgba(0,0,0,.28)}
 @media (max-width:560px){ .restbig .rb{font-size:36px;padding:6px 14px 8px} }
 /* 曜日ごとの働きかたエディタ */
-.dowset{display:flex;flex-direction:column;gap:7px}
-.dowrow{display:grid;grid-template-columns:44px 1fr 14px 1fr auto;align-items:center;gap:8px}
-.dowrow .dowtog{height:34px;border:1px solid var(--line-2);border-radius:9px;background:var(--paper);
-  font-weight:700;font-size:13.5px;color:var(--ink-2)}
-.dowrow .dowtog[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
-.dowrow input[type=time]{width:100%;min-width:0;padding-left:9px;padding-right:6px}
-@media (max-width:430px){
-  .dowrow{gap:6px;grid-template-columns:38px 1fr 9px 1fr}
-  .dowrow input[type=time]{font-size:13.5px;padding-left:6px;padding-right:2px}
-  .dowrow .dowtog{font-size:13px}
-}
+.dowset{display:flex;flex-direction:column;gap:11px}
+.dowset [hidden]{display:none!important}
+.dowdays{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.dowchip{height:44px;border:1.5px solid var(--line-2);border-radius:10px;background:var(--paper);
+  font-weight:700;font-size:14.5px;color:var(--ink-3);cursor:pointer;transition:background .12s,color .12s,border-color .12s;
+  display:flex;align-items:center;justify-content:center}
+.dowchip:hover{background:var(--accent-2);color:var(--accent-3);border-color:var(--accent)}
+.dowchip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-ui="dark"] .dowchip[aria-pressed="true"]{color:#05120D}
+.dowcap{margin:-3px 0 0;font-size:12.5px;font-weight:600;color:var(--ink-3)}
+.dowcap b{color:var(--ink-2)}
+.dowbase{display:flex;align-items:flex-end;gap:10px}
+.dowt{display:flex;flex-direction:column;gap:4px;flex:1 1 0;min-width:0}
+.dowt>span{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.04em}
+.dowar{height:40px;display:flex;align-items:center;color:var(--ink-4);font-size:14px}
+.dowset select{width:100%;min-width:0;padding-left:10px}
+.dowmore{align-self:flex-start;background:none;border:0;padding:1px 0;cursor:pointer;
+  font-size:12.5px;font-weight:700;color:var(--accent-3);text-decoration:underline;text-underline-offset:3px}
+.dowmore:hover{opacity:.75}
+.dowadv{display:flex;flex-direction:column;gap:7px;border-top:1px solid var(--line);padding-top:11px}
+.dowrow{display:grid;grid-template-columns:26px 1fr 12px 1fr;align-items:center;gap:9px}
+.dowrow .dl{font-size:13.5px;font-weight:700;color:var(--ink-2);text-align:center}
 .dowrow .dash{text-align:center;color:var(--ink-4)}
-.dowrow .offlabel{display:none;font-size:13px;color:var(--ink-3);font-weight:600}
-.dowrow.off input[type=time],.dowrow.off .dash{display:none}
-.dowrow.off .offlabel{display:inline;grid-column:2 / -1}
+.dowempty{font-size:13px;color:var(--ink-3);font-weight:600}
+@media (max-width:430px){
+  .dowdays{gap:4px}
+  .dowchip{height:40px;font-size:13.5px}
+  .dowrow{grid-template-columns:22px 1fr 9px 1fr;gap:6px}
+  .dowset select{font-size:13.5px;padding-left:6px}
+}
 
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
@@ -2429,30 +2444,104 @@ function dowSummary(w){
     return x.d.off?`<span class="muted">${lbl} 休み</span>`:`${lbl} <b>${x.d.s}–${x.d.e}</b>`;
   }).join('<span class="muted"> ・ </span>');
 }
+/* 時刻の選択肢（15分きざみ・24時間表記でそろえる） */
+function timeOpts(val){
+  const list=[];
+  for(let h=0;h<24;h++)for(let m=0;m<60;m+=15)list.push(String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'));
+  if(val&&list.indexOf(val)<0){list.push(val);list.sort();}
+  return list.map(t=>`<option value="${t}" ${t===val?'selected':''}>${t}</option>`).join('');
+}
+function dowCapText(days){
+  if(!days.length)return'<b>毎日おやすみ</b>になっています';
+  if(days.length===7)return'<b>毎日</b>はたらく設定です';
+  return'はたらく日：<b>'+days.map(i=>DOWJA[i]).join('')+'</b>（週'+days.length+'日）';
+}
 /* 曜日ごとの働きかたを編集する部品。pref は id の接頭辞（画面内で重複しない文字列） */
 function dowEditor(pref,w){
-  return `<div class="dowset" data-dowset="${pref}">${DOWJA.map((lbl,i)=>{
-    const d=dayWork({work:w||{}},i);
-    return `<div class="dowrow ${d.off?'off':''}" data-dowrow="${pref}|${i}">
-      <button type="button" class="dowtog" data-dowtog="${pref}|${i}" aria-pressed="${!d.off}">${lbl}</button>
-      <input type="time" id="${pref}-s-${i}" value="${d.s}">
-      <span class="dash">–</span>
-      <input type="time" id="${pref}-e-${i}" value="${d.e}">
-      <span class="offlabel">休み</span>
-    </div>`;}).join('')}</div>`;
+  const ds=[];for(let i=0;i<7;i++)ds.push(dayWork({work:w||{}},i));
+  const days=[0,1,2,3,4,5,6].filter(i=>!ds[i].off);
+  const base=days.length?ds[days[0]]:{s:'09:00',e:'18:00'};
+  const adv=days.some(i=>ds[i].s!==base.s||ds[i].e!==base.e);
+  return `<div class="dowset" data-dowset="${pref}" data-adv="${adv?1:0}" data-adved="${adv?1:0}">
+    <div class="dowdays">${DOWJA.map((lbl,i)=>
+      `<button type="button" class="dowchip" data-dowtog="${pref}|${i}" aria-pressed="${!ds[i].off}">${lbl}</button>`).join('')}</div>
+    <p class="dowcap" data-dowcap="${pref}">${dowCapText(days)}</p>
+    <div class="dowbase" data-dowbase="${pref}" ${adv?'hidden':''}>
+      <label class="dowt"><span>始業</span><select id="${pref}-bs">${timeOpts(base.s)}</select></label>
+      <span class="dowar">→</span>
+      <label class="dowt"><span>終業</span><select id="${pref}-be">${timeOpts(base.e)}</select></label>
+    </div>
+    <div class="dowadv" data-dowadv="${pref}" ${adv?'':'hidden'}>
+      ${DOWJA.map((lbl,i)=>`<div class="dowrow" data-dowrow="${pref}|${i}" ${ds[i].off?'hidden':''}>
+        <span class="dl">${lbl}</span>
+        <select id="${pref}-s-${i}">${timeOpts(ds[i].s)}</select>
+        <span class="dash">–</span>
+        <select id="${pref}-e-${i}">${timeOpts(ds[i].e)}</select>
+      </div>`).join('')}
+      <div class="dowempty" data-dowempty="${pref}" ${days.length?'hidden':''}>はたらく日がえらばれていません。</div>
+    </div>
+    <button type="button" class="dowmore" data-dowmore="${pref}">${adv?'すべて同じ時間にもどす':'曜日ごとに時間を変える'}</button>
+  </div>`;
+}
+/* 画面の状態を整える（曜日ボタンを押したとき・表示を切りかえたとき） */
+function dowSync(pref){
+  const set=document.querySelector(`[data-dowset="${pref}"]`); if(!set)return;
+  const days=[];
+  for(let i=0;i<7;i++){
+    const tog=set.querySelector(`[data-dowtog="${pref}|${i}"]`);
+    const on=tog?tog.getAttribute('aria-pressed')==='true':true;
+    if(on)days.push(i);
+    const row=set.querySelector(`[data-dowrow="${pref}|${i}"]`); if(row)row.hidden=!on;
+  }
+  const adv=set.getAttribute('data-adv')==='1';
+  const cap=set.querySelector(`[data-dowcap="${pref}"]`); if(cap)cap.innerHTML=dowCapText(days);
+  const base=set.querySelector(`[data-dowbase="${pref}"]`); if(base)base.hidden=adv||!days.length;
+  const box=set.querySelector(`[data-dowadv="${pref}"]`); if(box)box.hidden=!adv;
+  const emp=set.querySelector(`[data-dowempty="${pref}"]`); if(emp)emp.hidden=!!days.length;
+  const more=set.querySelector(`[data-dowmore="${pref}"]`);
+  if(more){more.textContent=adv?'すべて同じ時間にもどす':'曜日ごとに時間を変える';more.hidden=!days.length;}
+}
+/* 「曜日ごとに時間を変える」の開閉 */
+function dowToggleAdv(pref){
+  const set=document.querySelector(`[data-dowset="${pref}"]`); if(!set)return;
+  const adv=set.getAttribute('data-adv')==='1';
+  const gv=id=>{const el=$('#'+id);return el&&el.value?el.value:null;};
+  const sv=(id,v)=>{const el=$('#'+id);if(el&&v)el.value=v;};
+  if(!adv){
+    // ひらく：いちど目だけ、共通の時間を各曜日にうつす
+    if(set.getAttribute('data-adved')!=='1'){
+      const bs=gv(pref+'-bs')||'09:00',be=gv(pref+'-be')||'18:00';
+      for(let i=0;i<7;i++){sv(pref+'-s-'+i,bs);sv(pref+'-e-'+i,be);}
+      set.setAttribute('data-adved','1');
+    }
+    set.setAttribute('data-adv','1');
+  }else{
+    // とじる：いちばん早い working day の時間を共通にひきつぐ
+    for(let i=0;i<7;i++){
+      const tog=set.querySelector(`[data-dowtog="${pref}|${i}"]`);
+      if(tog&&tog.getAttribute('aria-pressed')==='true'){
+        sv(pref+'-bs',gv(pref+'-s-'+i));sv(pref+'-be',gv(pref+'-e-'+i));break;
+      }
+    }
+    set.setAttribute('data-adv','0');
+  }
+  dowSync(pref);
 }
 /* 編集結果を work の形にまとめる */
 function dowCollect(pref){
+  const set=document.querySelector(`[data-dowset="${pref}"]`);
+  const adv=set?set.getAttribute('data-adv')==='1':false;
+  const g=id=>{const el=$('#'+id);return el&&el.value?el.value:null;};
+  const bs=g(pref+'-bs')||'09:00',be=g(pref+'-be')||'18:00';
   const dow={};
   for(let i=0;i<7;i++){
     const tog=document.querySelector(`[data-dowtog="${pref}|${i}"]`);
     const on=tog?tog.getAttribute('aria-pressed')==='true':true;
     if(!on){dow[i]={off:true};continue;}
-    const g=id=>{const el=$('#'+id);return el&&el.value?el.value:null;};
-    dow[i]={s:g(pref+'-s-'+i)||'09:00',e:g(pref+'-e-'+i)||'18:00'};
+    dow[i]=adv?{s:g(pref+'-s-'+i)||bs,e:g(pref+'-e-'+i)||be}:{s:bs,e:be};
   }
   const days=[0,1,2,3,4,5,6].filter(i=>!dow[i].off);
-  const base=days.length?dow[days[0]]:{s:'09:00',e:'18:00'};
+  const base=days.length?dow[days[0]]:{s:bs,e:be};
   return {s:base.s,e:base.e,days,dow};
 }
 /* 画面に出す「その日の勤務時間」 */
@@ -4658,7 +4747,7 @@ document.addEventListener('click',ev=>{
   const t=ev.target;
   const scrim=t.closest?.('[data-scrim]');
   if(scrim&&t===scrim){closeLayer();return;}
-  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-dowtog],[data-setstatus],[data-login],[data-setui],[data-authtab],[data-onb]');
+  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-dowtog],[data-dowmore],[data-setstatus],[data-login],[data-setui],[data-authtab],[data-onb]');
   if(!el)return;
   const d=el.dataset;
   if(d.act){
@@ -4884,9 +4973,10 @@ document.addEventListener('click',ev=>{
   if(d.dowtog){
     const on=el.getAttribute('aria-pressed')==='true';
     el.setAttribute('aria-pressed', on?'false':'true');
-    const row=el.closest('[data-dowrow]'); if(row)row.classList.toggle('off',on);
+    dowSync(d.dowtog.split('|')[0]);
     return;
   }
+  if(d.dowmore){ dowToggleAdv(d.dowmore); return; }
   if(d.adm){S.adm=d.adm;softRender();return;}
   if(d.ftp){S.ft.sel=S.ft.sel.includes(d.ftp)?S.ft.sel.filter(i=>i!==d.ftp):S.ft.sel.concat(d.ftp);S.ft.res=null;softRender();return;}
   if(d.ftpick){const r=S.ft.res[+d.ftpick];eventEditor(null,{start:r.s,dur:(r.e-r.s)/60000,who:S.ft.sel.slice()});return;}
