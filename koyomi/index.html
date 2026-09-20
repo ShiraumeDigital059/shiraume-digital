@@ -2008,16 +2008,27 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 @media (max-width:560px){
   .topbar{gap:9px;padding:0 13px}
   .topbar .btn.pri{order:0}
-  .topbar .brand{position:static;transform:none;margin:0;padding:0 8px;order:1;flex:none;
-    flex-direction:row;align-items:center;gap:0}
-  .topbar .brand .bname{display:none}
-  .topbar .brand .bmark{width:31px;height:16.8px}
-  .topbar .ptitle{display:flex;order:2;flex:1 1 auto;min-width:0;margin:0}
+  /* ロゴはバーのまん中。左右に何が入っても位置が動かないよう、流れから外して置く。
+     上にすきま（セーフエリア＋13px）があるので、その下の帯のまん中にそろえる。 */
+  .topbar .brand{position:absolute;left:50%;transform:translateX(-50%);margin:0;padding:0;
+    top:calc(env(safe-area-inset-top,0px) + 13px);height:60px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+  .topbar .brand .bmark{width:30px;height:16.3px}
+  .topbar .brand .bname{display:block;font-size:8.5px;letter-spacing:.3em;text-indent:.3em}
+  /* 画面の名前は左。まん中のロゴに重ならないところで止める。 */
+  .topbar .ptitle{display:flex;order:1;flex:0 0 auto;min-width:0;margin:0;
+    width:calc(50% - 82px)}   /* ％はバーの内側の幅にかかるので、ロゴのまん中との差を見込んである */
   .topbar .ptitle .en{display:none}
-  .topbar .ptitle h1{font-size:18.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .topbar .sp{order:3}
-  .topbar .ibtn{order:4}
+  .topbar .ptitle h1{font-size:17px;letter-spacing:.02em;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .topbar .sp{order:2}
+  .topbar .ibtn{order:3}
   .topbar .ibtn .bdg{transform:translate(2px,-2px)}
+}
+@media (max-width:380px){
+  .topbar .ptitle h1{font-size:16px}
+}
+@media (max-width:330px){
+  .topbar .ptitle{display:none}
 }
 
 /* --- メッセージ：スマホでは画面いっぱいに開き、書くところを下に固定する --- */
