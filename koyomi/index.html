@@ -2070,6 +2070,59 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
   .modal .mh{padding:14px 16px}
   .modal .mb{padding:16px;gap:16px}
 }
+/* --- 国の祝日・世界のことわざ --- */
+.holnote{border:1.5px solid var(--gline);background:var(--accent-2);border-radius:11px;
+  padding:11px 14px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
+.holnote .hn{font-size:13.5px;font-weight:700;color:var(--accent-3);display:inline-flex;gap:6px;align-items:baseline}
+.holnote .hn b{font-size:15px}
+.holnote .hn i{font-style:normal;font-weight:600;color:var(--ink-2)}
+.holnote .hnt{font-size:12.5px;color:var(--ink-3);font-weight:600;flex:1 0 100%}
+.mgrid .cell{position:relative}
+.mgrid .cell .natday{position:absolute;top:4px;right:5px;font-size:13px;letter-spacing:-1px;opacity:.95;pointer-events:none;line-height:1}
+.holwarn{font-size:12.5px;color:var(--accent-3);font-weight:600;line-height:1.6}
+.prov .pv{margin:0;padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.prov .pv-o{margin:0;font-family:var(--disp);font-size:19px;font-weight:700;line-height:1.55;color:var(--ink)}
+.prov .pv-r{margin:0;font-family:var(--lat);font-size:11.5px;letter-spacing:.04em;color:var(--ink-4)}
+.prov .pv-m{margin:2px 0 0;font-size:13.5px;line-height:1.75;color:var(--ink-2);font-weight:600}
+@media (max-width:980px){ .prov .pv-o{font-size:18px} }
+/* --- メッセージ：グループ・ピン留め・写真 --- */
+.thl .grp-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-right:9px}
+.thl .grp-h .btn{height:26px;width:26px;padding:0;border-radius:7px}
+.thl .grp-h .btn .ic{width:15px;height:15px;margin:0;opacity:.8}
+.pinbar{display:flex;gap:7px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line);
+  background:var(--accent-2);overflow-x:auto;flex:none}
+.pinbar .pl{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
+  color:var(--accent-3);letter-spacing:.04em;white-space:nowrap;flex:none}
+.pinbar .pl .ic{width:14px;height:14px}
+.pinbar .pi{display:inline-flex;align-items:center;gap:6px;max-width:230px;flex:none;
+  border:1px solid var(--accent);background:var(--paper);border-radius:99px;
+  padding:4px 9px 4px 11px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.pinbar .pi .ic{width:12px;height:12px;opacity:.55;flex:none}
+.pinbar .pi:hover{background:var(--accent);color:#fff}
+.pinbar .pi:hover .ic{opacity:1}
+.msg{position:relative}
+.msg .who{display:flex;align-items:center;gap:0}
+.msg .pinbtn{margin-left:auto;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;
+  color:var(--ink-4);opacity:0;flex:none}
+.msg:hover .pinbtn,.msg .pinbtn.on{opacity:1}
+.msg .pinbtn .ic{width:14px;height:14px}
+.msg .pinbtn.on{color:var(--accent);background:var(--accent-2)}
+.msg.pinned{background:linear-gradient(90deg,var(--accent-2),transparent 60%);
+  margin-left:-10px;padding-left:10px;border-radius:8px}
+.msgimg{display:block;margin-top:8px;border-radius:10px;overflow:hidden;border:1px solid var(--line-2);
+  max-width:280px;line-height:0;background:var(--sunken)}
+.msgimg img{width:100%;height:auto;display:block;max-height:320px;object-fit:cover}
+.composer .btn.ico{width:38px;padding:0;flex:none;cursor:pointer;display:grid;place-items:center}
+.composer .btn.ico .ic{width:18px;height:18px;margin:0;opacity:.7}
+.scrim.imgview{display:grid;place-items:center;background:rgba(10,10,12,.88);padding:24px}
+.scrim.imgview img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 20px 60px -20px #000}
+.scrim.imgview .x{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));right:16px;
+  width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.14);color:#fff}
+.scrim.imgview .x .ic{width:20px;height:20px}
+@media (max-width:560px){
+  .msg .pinbtn{opacity:1;color:var(--ink-4)}
+  .msgimg{max-width:100%}
+}
 
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
@@ -2135,6 +2188,268 @@ const fmtYM =(y,m)=>LANG==='en'?`${MONEN_L[m-1]} ${y}`:`${y}年${m}月`;
 const fmtYMD=(y,m,d)=>LANG==='en'?`${MONEN[m-1]} ${d}, ${y}`:`${y}年${m}月${d}日`;
 const cityN =k=>{const C=CITIES[k]||{};return LANG==='en'?(C.en||k):(C.ja||k);};
 const cityPair=k=>{const C=CITIES[k]||{};return LANG==='en'?(C.en||k):`${C.ja} / ${C.en}`;};
+/* ============================================================
+   国の祝日
+   毎年おなじ日の祝日と、「◯月の第◯月曜」のように決まりで動く祝日だけを持つ。
+   旧正月・イースターのように年ごとに大きく動くものは入れていない。
+   ============================================================ */
+const FLAG={JP:'🇯🇵',VN:'🇻🇳',HU:'🇭🇺',KR:'🇰🇷',CN:'🇨🇳',TW:'🇹🇼',HK:'🇭🇰',SG:'🇸🇬',TH:'🇹🇭',MY:'🇲🇾',
+ ID:'🇮🇩',PH:'🇵🇭',KH:'🇰🇭',IN:'🇮🇳',AE:'🇦🇪',TR:'🇹🇷',AU:'🇦🇺',NZ:'🇳🇿',GB:'🇬🇧',IE:'🇮🇪',FR:'🇫🇷',
+ DE:'🇩🇪',AT:'🇦🇹',CH:'🇨🇭',NL:'🇳🇱',BE:'🇧🇪',CZ:'🇨🇿',PL:'🇵🇱',IT:'🇮🇹',ES:'🇪🇸',PT:'🇵🇹',SE:'🇸🇪',
+ DK:'🇩🇰',FI:'🇫🇮',GR:'🇬🇷',US:'🇺🇸',CA:'🇨🇦',MX:'🇲🇽',BR:'🇧🇷',AR:'🇦🇷',ZA:'🇿🇦',KE:'🇰🇪',EG:'🇪🇬'};
+/* [月, 日, 日本語, English] */
+const HOL_FIX={
+ JP:[[1,1,'元日','New Year’s Day'],[2,11,'建国記念の日','National Foundation Day'],[2,23,'天皇誕生日','Emperor’s Birthday'],
+     [4,29,'昭和の日','Shōwa Day'],[5,3,'憲法記念日','Constitution Day'],[5,4,'みどりの日','Greenery Day'],
+     [5,5,'こどもの日','Children’s Day'],[8,11,'山の日','Mountain Day'],[11,3,'文化の日','Culture Day'],
+     [11,23,'勤労感謝の日','Labour Thanksgiving Day']],
+ VN:[[1,1,'元日','New Year’s Day'],[4,30,'南部解放記念日','Reunification Day'],[5,1,'メーデー','Labour Day'],
+     [9,2,'建国記念日','National Day']],
+ HU:[[1,1,'元日','New Year’s Day'],[3,15,'1848年革命記念日','1848 Revolution Day'],[5,1,'メーデー','Labour Day'],
+     [8,20,'聖イシュトヴァーンの日','St Stephen’s Day'],[10,23,'1956年革命記念日','1956 Revolution Day'],
+     [11,1,'諸聖人の日','All Saints’ Day'],[12,25,'クリスマス','Christmas Day'],[12,26,'クリスマス2日目','Second Day of Christmas']],
+ KR:[[1,1,'元日','New Year’s Day'],[3,1,'三・一節','Independence Movement Day'],[5,5,'こどもの日','Children’s Day'],
+     [6,6,'顕忠日','Memorial Day'],[8,15,'光復節','Liberation Day'],[10,3,'開天節','National Foundation Day'],
+     [10,9,'ハングルの日','Hangul Day'],[12,25,'クリスマス','Christmas Day']],
+ CN:[[1,1,'元旦','New Year’s Day'],[5,1,'労働節','Labour Day'],[10,1,'国慶節','National Day'],
+     [10,2,'国慶節','National Day'],[10,3,'国慶節','National Day']],
+ TW:[[1,1,'中華民国開国記念日','Founding Day'],[2,28,'和平記念日','Peace Memorial Day'],
+     [4,4,'児童節','Children’s Day'],[10,10,'国慶日','National Day']],
+ HK:[[1,1,'元旦','New Year’s Day'],[7,1,'香港特別行政区設立記念日','HKSAR Establishment Day'],
+     [10,1,'国慶日','National Day'],[12,25,'クリスマス','Christmas Day'],[12,26,'ボクシングデー','Boxing Day']],
+ SG:[[1,1,'元日','New Year’s Day'],[5,1,'レイバーデー','Labour Day'],[8,9,'ナショナルデー','National Day'],
+     [12,25,'クリスマス','Christmas Day']],
+ TH:[[1,1,'元日','New Year’s Day'],[4,13,'ソンクラーン','Songkran'],[4,14,'ソンクラーン','Songkran'],
+     [4,15,'ソンクラーン','Songkran'],[12,5,'father の日・国王誕生日','King Bhumibol Memorial Day'],
+     [12,10,'憲法記念日','Constitution Day'],[12,31,'大晦日','New Year’s Eve']],
+ MY:[[1,1,'元日','New Year’s Day'],[5,1,'レイバーデー','Labour Day'],[8,31,'独立記念日','Independence Day'],
+     [9,16,'マレーシアの日','Malaysia Day'],[12,25,'クリスマス','Christmas Day']],
+ ID:[[1,1,'元日','New Year’s Day'],[8,17,'独立記念日','Independence Day'],[12,25,'クリスマス','Christmas Day']],
+ PH:[[1,1,'元日','New Year’s Day'],[4,9,'勇者の日','Day of Valor'],[5,1,'レイバーデー','Labour Day'],
+     [6,12,'独立記念日','Independence Day'],[8,21,'ニノイ・アキノの日','Ninoy Aquino Day'],
+     [11,1,'諸聖人の日','All Saints’ Day'],[11,30,'ボニファシオの日','Bonifacio Day'],
+     [12,25,'クリスマス','Christmas Day'],[12,30,'リサールの日','Rizal Day']],
+ KH:[[1,1,'元日','New Year’s Day'],[5,1,'レイバーデー','Labour Day'],[11,9,'独立記念日','Independence Day']],
+ IN:[[1,26,'共和国記念日','Republic Day'],[8,15,'独立記念日','Independence Day'],[10,2,'ガンディー生誕日','Gandhi Jayanti']],
+ AE:[[1,1,'元日','New Year’s Day'],[12,2,'建国記念日','National Day'],[12,3,'建国記念日','National Day']],
+ TR:[[1,1,'元日','New Year’s Day'],[4,23,'国民主権・子どもの日','National Sovereignty Day'],
+     [5,1,'レイバーデー','Labour Day'],[5,19,'アタテュルク記念日','Atatürk Memorial Day'],
+     [7,15,'民主主義の日','Democracy Day'],[8,30,'戦勝記念日','Victory Day'],[10,29,'共和国記念日','Republic Day']],
+ AU:[[1,1,'元日','New Year’s Day'],[1,26,'オーストラリアの日','Australia Day'],[4,25,'アンザックデー','Anzac Day'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'ボクシングデー','Boxing Day']],
+ NZ:[[1,1,'元日','New Year’s Day'],[1,2,'1月2日','Day after New Year’s'],[2,6,'ワイタンギデー','Waitangi Day'],
+     [4,25,'アンザックデー','Anzac Day'],[12,25,'クリスマス','Christmas Day'],[12,26,'ボクシングデー','Boxing Day']],
+ GB:[[1,1,'元日','New Year’s Day'],[12,25,'クリスマス','Christmas Day'],[12,26,'ボクシングデー','Boxing Day']],
+ IE:[[1,1,'元日','New Year’s Day'],[3,17,'聖パトリックの日','St Patrick’s Day'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'セント・スティーブンズデー','St Stephen’s Day']],
+ FR:[[1,1,'元日','New Year’s Day'],[5,1,'メーデー','Labour Day'],[5,8,'第二次大戦戦勝記念日','Victory in Europe Day'],
+     [7,14,'パリ祭','Bastille Day'],[8,15,'聖母被昇天祭','Assumption'],[11,1,'諸聖人の日','All Saints’ Day'],
+     [11,11,'休戦記念日','Armistice Day'],[12,25,'クリスマス','Christmas Day']],
+ DE:[[1,1,'元日','New Year’s Day'],[5,1,'メーデー','Labour Day'],[10,3,'ドイツ統一の日','German Unity Day'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'クリスマス2日目','Second Day of Christmas']],
+ AT:[[1,1,'元日','New Year’s Day'],[1,6,'公現祭','Epiphany'],[5,1,'国家の祝日','National Holiday'],
+     [8,15,'聖母被昇天祭','Assumption'],[10,26,'建国記念日','National Day'],[11,1,'諸聖人の日','All Saints’ Day'],
+     [12,8,'無原罪の御宿り','Immaculate Conception'],[12,25,'クリスマス','Christmas Day'],[12,26,'聖ステファノの日','St Stephen’s Day']],
+ CH:[[1,1,'元日','New Year’s Day'],[8,1,'建国記念日','Swiss National Day'],[12,25,'クリスマス','Christmas Day'],
+     [12,26,'聖ステファノの日','St Stephen’s Day']],
+ NL:[[1,1,'元日','New Year’s Day'],[4,27,'国王の日','King’s Day'],[5,5,'解放記念日','Liberation Day'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'クリスマス2日目','Second Day of Christmas']],
+ BE:[[1,1,'元日','New Year’s Day'],[5,1,'メーデー','Labour Day'],[7,21,'建国記念日','National Day'],
+     [8,15,'聖母被昇天祭','Assumption'],[11,1,'諸聖人の日','All Saints’ Day'],[11,11,'休戦記念日','Armistice Day'],
+     [12,25,'クリスマス','Christmas Day']],
+ CZ:[[1,1,'元日・独立記念日','New Year & Restoration Day'],[5,1,'メーデー','Labour Day'],
+     [5,8,'解放記念日','Liberation Day'],[7,5,'キリルとメトディオスの日','Sts Cyril and Methodius'],
+     [7,6,'ヤン・フスの日','Jan Hus Day'],[9,28,'聖ヴァーツラフの日','St Wenceslas Day'],
+     [10,28,'独立チェコスロバキア建国記念日','Independence Day'],[11,17,'自由と民主主義の日','Freedom and Democracy Day'],
+     [12,24,'クリスマスイブ','Christmas Eve'],[12,25,'クリスマス','Christmas Day'],[12,26,'聖ステファノの日','St Stephen’s Day']],
+ PL:[[1,1,'元日','New Year’s Day'],[1,6,'公現祭','Epiphany'],[5,1,'メーデー','Labour Day'],
+     [5,3,'憲法記念日','Constitution Day'],[8,15,'聖母被昇天祭','Assumption'],[11,1,'諸聖人の日','All Saints’ Day'],
+     [11,11,'独立記念日','Independence Day'],[12,25,'クリスマス','Christmas Day'],[12,26,'クリスマス2日目','Second Day of Christmas']],
+ IT:[[1,1,'元日','New Year’s Day'],[1,6,'公現祭','Epiphany'],[4,25,'解放記念日','Liberation Day'],
+     [5,1,'メーデー','Labour Day'],[6,2,'共和国記念日','Republic Day'],[8,15,'フェラゴスト','Ferragosto'],
+     [11,1,'諸聖人の日','All Saints’ Day'],[12,8,'無原罪の御宿り','Immaculate Conception'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'聖ステファノの日','St Stephen’s Day']],
+ ES:[[1,1,'元日','New Year’s Day'],[1,6,'公現祭','Epiphany'],[5,1,'メーデー','Labour Day'],
+     [8,15,'聖母被昇天祭','Assumption'],[10,12,'スペインの日','National Day'],[11,1,'諸聖人の日','All Saints’ Day'],
+     [12,6,'憲法記念日','Constitution Day'],[12,8,'無原罪の御宿り','Immaculate Conception'],[12,25,'クリスマス','Christmas Day']],
+ PT:[[1,1,'元日','New Year’s Day'],[4,25,'自由の日','Freedom Day'],[5,1,'メーデー','Labour Day'],
+     [6,10,'ポルトガルの日','Portugal Day'],[8,15,'聖母被昇天祭','Assumption'],[10,5,'共和国記念日','Republic Day'],
+     [11,1,'諸聖人の日','All Saints’ Day'],[12,1,'独立回復記念日','Restoration of Independence'],
+     [12,8,'無原罪の御宿り','Immaculate Conception'],[12,25,'クリスマス','Christmas Day']],
+ SE:[[1,1,'元日','New Year’s Day'],[1,6,'公現祭','Epiphany'],[5,1,'メーデー','Labour Day'],
+     [6,6,'建国記念日','National Day'],[12,25,'クリスマス','Christmas Day'],[12,26,'聖ステファノの日','Boxing Day']],
+ DK:[[1,1,'元日','New Year’s Day'],[6,5,'憲法記念日','Constitution Day'],[12,25,'クリスマス','Christmas Day'],
+     [12,26,'クリスマス2日目','Second Day of Christmas']],
+ FI:[[1,1,'元日','New Year’s Day'],[1,6,'公現祭','Epiphany'],[5,1,'メーデー','Vappu'],
+     [12,6,'独立記念日','Independence Day'],[12,25,'クリスマス','Christmas Day'],[12,26,'聖ステファノの日','Boxing Day']],
+ GR:[[1,1,'元日','New Year’s Day'],[1,6,'公現祭','Epiphany'],[3,25,'独立記念日','Independence Day'],
+     [5,1,'メーデー','Labour Day'],[8,15,'聖母就寝祭','Assumption'],[10,28,'オヒの日','Ochi Day'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'聖ステファノの日','Boxing Day']],
+ US:[[1,1,'元日','New Year’s Day'],[6,19,'ジューンティーンス','Juneteenth'],[7,4,'独立記念日','Independence Day'],
+     [11,11,'退役軍人の日','Veterans Day'],[12,25,'クリスマス','Christmas Day']],
+ CA:[[1,1,'元日','New Year’s Day'],[7,1,'カナダデー','Canada Day'],[12,25,'クリスマス','Christmas Day'],
+     [12,26,'ボクシングデー','Boxing Day']],
+ MX:[[1,1,'元日','New Year’s Day'],[9,16,'独立記念日','Independence Day'],[12,25,'クリスマス','Christmas Day']],
+ BR:[[1,1,'元日','New Year’s Day'],[4,21,'チラデンテスの日','Tiradentes Day'],[5,1,'メーデー','Labour Day'],
+     [9,7,'独立記念日','Independence Day'],[10,12,'アパレシーダの聖母の日','Our Lady of Aparecida'],
+     [11,2,'死者の日','All Souls’ Day'],[11,15,'共和国宣言記念日','Republic Day'],[12,25,'クリスマス','Christmas Day']],
+ AR:[[1,1,'元日','New Year’s Day'],[3,24,'記憶の日','Day of Remembrance'],[4,2,'マルビナス戦没者の日','Malvinas Day'],
+     [5,1,'メーデー','Labour Day'],[5,25,'五月革命記念日','May Revolution'],[7,9,'独立記念日','Independence Day'],
+     [12,8,'無原罪の御宿り','Immaculate Conception'],[12,25,'クリスマス','Christmas Day']],
+ ZA:[[1,1,'元日','New Year’s Day'],[3,21,'人権の日','Human Rights Day'],[4,27,'自由の日','Freedom Day'],
+     [5,1,'労働者の日','Workers’ Day'],[6,16,'青年の日','Youth Day'],[8,9,'女性の日','National Women’s Day'],
+     [9,24,'伝統の日','Heritage Day'],[12,16,'和解の日','Day of Reconciliation'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'親善の日','Day of Goodwill']],
+ KE:[[1,1,'元日','New Year’s Day'],[5,1,'レイバーデー','Labour Day'],[6,1,'マダラカデー','Madaraka Day'],
+     [10,20,'マシュジャアデー','Mashujaa Day'],[12,12,'ジャムフリデー','Jamhuri Day'],
+     [12,25,'クリスマス','Christmas Day'],[12,26,'ボクシングデー','Boxing Day']],
+ EG:[[1,7,'コプト正教クリスマス','Coptic Christmas'],[1,25,'革命記念日・警察の日','Revolution Day'],
+     [4,25,'シナイ解放記念日','Sinai Liberation Day'],[5,1,'レイバーデー','Labour Day'],
+     [6,30,'6月30日革命記念日','June 30 Revolution'],[7,23,'革命記念日','Revolution Day'],
+     [10,6,'軍隊の日','Armed Forces Day']]
+};
+/* 「◯月の第◯◯曜日」で決まるもの。[月, 曜日(0=日), 何番目(-1は最後), 日本語, English] */
+const HOL_NTH={
+ JP:[[1,1,2,'成人の日','Coming of Age Day'],[7,1,3,'海の日','Marine Day'],
+     [9,1,3,'敬老の日','Respect for the Aged Day'],[10,1,2,'スポーツの日','Sports Day']],
+ US:[[1,1,3,'キング牧師記念日','Martin Luther King Jr. Day'],[2,1,3,'大統領の日','Presidents’ Day'],
+     [5,1,-1,'戦没者追悼の日','Memorial Day'],[9,1,1,'レイバーデー','Labor Day'],
+     [10,1,2,'先住民の日','Indigenous Peoples’ Day'],[11,4,4,'感謝祭','Thanksgiving']],
+ GB:[[5,1,1,'アーリーメイ・バンクホリデー','Early May Bank Holiday'],[5,1,-1,'スプリング・バンクホリデー','Spring Bank Holiday'],
+     [8,1,-1,'サマー・バンクホリデー','Summer Bank Holiday']],
+ CA:[[9,1,1,'レイバーデー','Labour Day'],[10,1,2,'感謝祭','Thanksgiving']],
+ AU:[[6,1,2,'国王誕生日','King’s Birthday']],
+ NZ:[[6,1,1,'マタリキ前後の国王誕生日','King’s Birthday'],[10,1,4,'レイバーデー','Labour Day']]
+};
+function nthDow(y,m,dow,nth){            /* その月の第nth 〈dow〉曜日の日にち。nth=-1 は最後 */
+  const last=new Date(Date.UTC(y,m,0)).getUTCDate();
+  if(nth>0){
+    const first=new Date(Date.UTC(y,m-1,1)).getUTCDay();
+    return 1+((dow-first+7)%7)+(nth-1)*7;
+  }
+  const lastDow=new Date(Date.UTC(y,m-1,last)).getUTCDay();
+  return last-((lastDow-dow+7)%7);
+}
+/* その国の、その日の祝日（複数のことも）。{ja,en} の配列を返す。 */
+function holidaysOf(cc,y,m,d){
+  const out=[];
+  (HOL_FIX[cc]||[]).forEach(h=>{ if(h[0]===m&&h[1]===d)out.push({ja:h[2],en:h[3]}); });
+  (HOL_NTH[cc]||[]).forEach(h=>{ if(h[0]===m&&nthDow(y,m,h[1],h[2])===d)out.push({ja:h[3],en:h[4]}); });
+  /* 振替休日：日曜に祝日が当たったら、そのあとの最初の平日が休みになる
+     （祝日が続くゴールデンウィークのような並びも、さかのぼって見る） */
+  if(!out.length&&['JP','GB','HK','KE','ZA'].includes(cc)){
+    const isHol=(yy,mm,dd)=>(HOL_FIX[cc]||[]).some(h=>h[0]===mm&&h[1]===dd)
+      ||(HOL_NTH[cc]||[]).some(h=>h[0]===mm&&nthDow(yy,mm,h[1],h[2])===dd);
+    for(let k=1;k<=5;k++){
+      const dt=new Date(Date.UTC(y,m-1,d-k));
+      const yy=dt.getUTCFullYear(),mm=dt.getUTCMonth()+1,dd=dt.getUTCDate();
+      if(!isHol(yy,mm,dd))break;
+      if(dt.getUTCDay()===0){out.push({ja:'振替休日',en:'Substitute holiday'});break;}
+    }
+  }
+  return out;
+}
+/* いま会社にある国だけ（多すぎても読めないので） */
+function companyCC(){
+  const s=new Set();
+  (DB.people||[]).forEach(p=>{const C=CITIES[effCity(p)];if(C&&C.cc)s.add(C.cc);});
+  return [...s];
+}
+/* その日に祝日のある国を集める。[{cc,flag,land,names}] */
+function holidaysForDate(c){
+  const out=[];
+  companyCC().forEach(cc=>{
+    const hs=holidaysOf(cc,c.y,c.m,c.d);
+    if(!hs.length)return;
+    const C=Object.values(CITIES).find(x=>x.cc===cc)||{};
+    out.push({cc,flag:FLAG[cc]||C.flag||'',land:LANG==='en'?(C.countryEn||cc):(C.country||cc),
+      names:hs.map(h=>LANG==='en'?h.en:h.ja)});
+  });
+  return out;
+}
+/* その人の国の祝日か */
+function isHolidayFor(p,ms){
+  const C=CITIES[effCity(p)]; if(!C||!C.cc)return null;
+  const c=civil(ms,effTz(p));
+  const hs=holidaysOf(C.cc,c.y,c.m,c.d);
+  return hs.length?{cc:C.cc,flag:FLAG[C.cc]||C.flag||'',name:LANG==='en'?hs[0].en:hs[0].ja}:null;
+}
+
+/* ============================================================
+   世界のことわざ ― 1日ひとつ
+   その日（自分の拠点の暦）で決まるので、同じ日ならチームの全員が同じことわざを見る。
+   ============================================================ */
+const PROVERBS=[
+ {cc:'JP',o:'七転び八起き',r:'nana-korobi ya-oki',ja:'七回ころんでも、八回起き上がる。',en:'Fall down seven times, stand up eight.'},
+ {cc:'VN',o:'Có công mài sắt, có ngày nên kim',r:'',ja:'鉄を研ぎつづければ、いつか針になる。',en:'Keep grinding the iron and one day it becomes a needle.'},
+ {cc:'HU',o:'Lassan járj, tovább érsz',r:'',ja:'ゆっくり行け、そのほうが遠くまで行ける。',en:'Walk slowly and you will get further.'},
+ {cc:'KR',o:'시작이 반이다',r:'sijagi banida',ja:'始めれば half 終わったも同じ。',en:'Starting is half of it.'},
+ {cc:'CN',o:'千里之行，始於足下',r:'qiānlǐ zhī xíng, shǐ yú zú xià',ja:'千里の道も一歩から。',en:'A journey of a thousand miles begins with one step.'},
+ {cc:'TH',o:'ช้า ๆ ได้พร้าเล่มงาม',r:'chá chá dâi phráa lêm ngaam',ja:'急がず削れば、美しい刃になる。',en:'Work slowly and you get a fine blade.'},
+ {cc:'SG',o:'Alon-alon asal kelakon',r:'',ja:'ゆっくりでいい、やり遂げさえすれば。',en:'Slowly is fine, as long as it gets done.'},
+ {cc:'GB',o:'Many hands make light work',r:'',ja:'手が多ければ仕事は軽い。',en:'Many hands make light work.'},
+ {cc:'US',o:'The early bird catches the worm',r:'',ja:'早起きの鳥が虫をつかまえる。',en:'The early bird catches the worm.'},
+ {cc:'FR',o:'Petit à petit, l’oiseau fait son nid',r:'',ja:'少しずつ、鳥は巣をつくる。',en:'Little by little, the bird builds its nest.'},
+ {cc:'DE',o:'Übung macht den Meister',r:'',ja:'練習が名人をつくる。',en:'Practice makes the master.'},
+ {cc:'IT',o:'Chi va piano, va sano e va lontano',r:'',ja:'静かに行く者は、健やかに遠くまで行く。',en:'Who goes softly goes safely, and goes far.'},
+ {cc:'ES',o:'No dejes para mañana lo que puedas hacer hoy',r:'',ja:'今日できることを明日に残すな。',en:'Don’t leave for tomorrow what you can do today.'},
+ {cc:'PT',o:'Águas passadas não movem moinhos',r:'',ja:'流れ去った水は、水車を回さない。',en:'Water that has passed cannot turn the mill.'},
+ {cc:'NL',o:'Wie het kleine niet eert, is het grote niet weerd',r:'',ja:'小さなものを大事にしない人に、大きなものは来ない。',en:'Who does not honour the small is not worth the large.'},
+ {cc:'SE',o:'Borta bra men hemma bäst',r:'',ja:'よそもいいが、やはり我が家がいちばん。',en:'Away is good, but home is best.'},
+ {cc:'DK',o:'Man skal kravle før man kan gå',r:'',ja:'歩く前に、まず這うものだ。',en:'You must crawl before you can walk.'},
+ {cc:'FI',o:'Ei kukaan ole seppä syntyessään',r:'',ja:'生まれつきの鍛冶屋などいない。',en:'No one is born a blacksmith.'},
+ {cc:'PL',o:'Bez pracy nie ma kołaczy',r:'',ja:'働かざれば、菓子もなし。',en:'Without work there is no cake.'},
+ {cc:'CZ',o:'Kdo šetří, má za tři',r:'',ja:'節約する者は、三人ぶん持っている。',en:'Who saves has three times as much.'},
+ {cc:'GR',o:'Η αρχή είναι το ήμισυ του παντός',r:'i archí íne to ímisi tou pantós',ja:'始まりは全体の半分である。',en:'The beginning is half of the whole.'},
+ {cc:'TR',o:'Damlaya damlaya göl olur',r:'',ja:'一滴ずつたまって、湖になる。',en:'Drop by drop, a lake is made.'},
+ {cc:'IN',o:'अकेला चना भाड़ नहीं फोड़ता',r:'akela chana bhaad nahin phodta',ja:'豆ひと粒では、かまどは割れない。',en:'One chickpea cannot break the oven.'},
+ {cc:'ID',o:'Sedikit-sedikit, lama-lama menjadi bukit',r:'',ja:'少しずつ積もって、やがて丘になる。',en:'A little at a time becomes a hill.'},
+ {cc:'MY',o:'Di mana ada kemahuan, di situ ada jalan',r:'',ja:'意志のあるところに、道はある。',en:'Where there is a will, there is a way.'},
+ {cc:'PH',o:'Kung may tiyaga, may nilaga',r:'',ja:'辛抱すれば、煮込みにありつける。',en:'If there is patience, there is stew.'},
+ {cc:'VN',o:'Một cây làm chẳng nên non, ba cây chụm lại nên hòn núi cao',r:'',ja:'木は一本では山にならない。三本寄れば高い山になる。',en:'One tree is no mountain; three together make a high one.'},
+ {cc:'JP',o:'急がば回れ',r:'isogaba maware',ja:'急ぐなら、回り道をせよ。',en:'If you are in a hurry, take the long way round.'},
+ {cc:'KR',o:'천 리 길도 한 걸음부터',r:'cheolli gildo han georeumbuteo',ja:'千里の道も一歩から。',en:'Even a thousand-li road starts with one step.'},
+ {cc:'CN',o:'不怕慢，只怕站',r:'búpà màn, zhǐ pà zhàn',ja:'遅いのは怖くない。止まるのが怖い。',en:'Do not fear going slowly; fear standing still.'},
+ {cc:'AU',o:'She’ll be right',r:'',ja:'なんとかなるさ。',en:'It will all work out.'},
+ {cc:'NZ',o:'He waka eke noa',r:'',ja:'私たちは皆、同じ舟に乗っている。',en:'We are all in this canoe together.'},
+ {cc:'BR',o:'Água mole em pedra dura tanto bate até que fura',r:'',ja:'やわらかい水も、打ちつづければ硬い石に穴をあける。',en:'Soft water on hard stone, striking until it bores through.'},
+ {cc:'MX',o:'El que madruga, Dios le ayuda',r:'',ja:'早起きする者を、天は助ける。',en:'Heaven helps the one who rises early.'},
+ {cc:'AR',o:'No hay mal que dure cien años',r:'',ja:'百年つづく不幸はない。',en:'No hardship lasts a hundred years.'},
+ {cc:'ZA',o:'Umuntu ngumuntu ngabantu',r:'',ja:'人は、人によって人になる。',en:'A person is a person through other people.'},
+ {cc:'KE',o:'Haraka haraka haina baraka',r:'',ja:'急ぎすぎに、めぐみはない。',en:'Hurry hurry has no blessing.'},
+ {cc:'EG',o:'الصبر مفتاح الفرج',r:'as-sabru miftāh al-faraj',ja:'忍耐は、救いの鍵である。',en:'Patience is the key to relief.'},
+ {cc:'AE',o:'الرفق بالعمل خير من الشدة',r:'ar-rifqu bil-ʿamal khayrun min ash-shidda',ja:'仕事はやさしく進めるほうが、力づくよりよい。',en:'Gentleness in work beats force.'},
+ {cc:'IE',o:'Ní neart go cur le chéile',r:'',ja:'力は、集まってはじめて力になる。',en:'There is no strength without unity.'},
+ {cc:'AT',o:'Wer rastet, der rostet',r:'',ja:'休みすぎる者は、錆びる。',en:'Who rests, rusts.'},
+ {cc:'CH',o:'Reden ist Silber, Schweigen ist Gold',r:'',ja:'雄弁は銀、沈黙は金。',en:'Speech is silver, silence is gold.'},
+ {cc:'BE',o:'Wie het laatst lacht, lacht het best',r:'',ja:'最後に笑う者が、いちばんよく笑う。',en:'Who laughs last laughs best.'},
+ {cc:'TW',o:'吃緊弄破碗',r:'tsia̍h-kín lōng-phuà uánn',ja:'急いで食べると、茶碗を割る。',en:'Eat in a rush and you break the bowl.'},
+ {cc:'HK',o:'一理通，百理明',r:'yat lei tung, baak lei ming',ja:'ひとつの道理が通れば、百の道理が見える。',en:'Understand one principle and a hundred become clear.'},
+ {cc:'CA',o:'Slow and steady wins the race',r:'',ja:'ゆっくり着実な者が、競争に勝つ。',en:'Slow and steady wins the race.'},
+ {cc:'KH',o:'ដើរយឺតៗ ទៅដល់ជាមិនខាន',r:'daeu yeut yeut, tow dol chea min khan',ja:'ゆっくり歩いても、必ず着く。',en:'Walk slowly and you will still arrive.'},
+ {cc:'JP',o:'石の上にも三年',r:'ishi no ue nimo san-nen',ja:'冷たい石の上でも、三年すわれば温まる。',en:'Even a cold stone warms if you sit on it three years.'}
+];
+/* 何年何月何日か（その人の暦）で決める。同じ日なら世界中の全員が同じことわざ。 */
+function proverbOf(ms,tz){
+  const c=civil(ms,tz);
+  const n=Math.floor(Date.UTC(c.y,c.m-1,c.d)/86400000);
+  return PROVERBS[((n%PROVERBS.length)+PROVERBS.length)%PROVERBS.length];
+}
+function proverbCard(ms,tz){
+  const p=proverbOf(ms,tz);
+  const C=Object.values(CITIES).find(x=>x.cc===p.cc)||{};
+  const land=LANG==='en'?(C.countryEn||p.cc):(C.country||p.cc);
+  return `<section class="block plain prov">
+    <div class="sec"><h2>${L('世界のことわざ','A proverb from somewhere')}</h2>
+      <span class="note">${FLAG[p.cc]||C.flag||''} ${esc(land)}</span></div>
+    <blockquote class="pv">
+      <p class="pv-o" lang="${(p.cc||'').toLowerCase()}">${esc(p.o)}</p>
+      ${p.r?`<p class="pv-r">${esc(p.r)}</p>`:''}
+      <p class="pv-m">${esc(LANG==='en'?p.en:p.ja)}</p>
+    </blockquote>
+  </section>`;
+}
+
 /* ============================================================
    英語表記
    画面に出た日本語を、そのまま引き当てて置き換える。
@@ -2364,6 +2679,26 @@ Object.assign(TR,{
 'お申し込みを受け付けました（試作版）':'Your request was received (prototype)',
 '退会しました':'Your account has been deleted',
 '同期しています…':'Syncing…',
+});
+
+Object.assign(TR,{
+'世界のことわざ':'A proverb from somewhere','この国のメンバーはお休みかもしれません。':'People in these countries may be off today.',
+'この国のメンバーはお休みかもしれません。':'People there may be off.',
+'振替休日':'Substitute holiday',
+});
+
+Object.assign(TR,{
+/* --- グループ・ピン留め・写真 --- */
+'グループ':'Groups','グループを作る':'New group','グループはまだありません':'No groups yet',
+'新しいグループ':'New group','グループの設定':'Group settings','グループ名':'Group name',
+'例：制作チーム':'e.g. Production team','自分は必ず入ります。':'You are always included.',
+'作る':'Create','グループを解散':'Delete group','解散しました':'Group deleted',
+'グループ名を入れてください。':'Enter a group name.','もうひとり以上えらんでください。':'Choose at least one other person.',
+'ピン留め':'Pinned','ピン留めする':'Pin','ピン留めをはずす':'Unpin',
+'ピン留めしました':'Pinned','ピン留めをはずしました':'Unpinned',
+'写真':'Photo','写真を送る':'Send a photo','この予定についてメッセージ':'About this event',
+'この画像は読み込めませんでした':'Could not read that image','画像として読み込めませんでした':'That file is not an image',
+'に招待しました':'group created',
 });
 
 /* かたちの決まった言い回し（数字が入るもの）。上の表に無いときだけ使う。 */
@@ -2792,6 +3127,7 @@ const DEF={
              status:'trial',interval:'month',trialEnds:null,cancelAtEnd:false,seats:null,ready:false},
     setupDone:true,
     notify:{invite:true,daily:true,change:true,done:true}},
+  groups:[],
   plans:PLANS.map(p=>({...p})),
   images:JSON.parse(JSON.stringify(BUILTIN_IMG)), imgVer:3,
   people:[],events:[],threads:{},dms:{},audit:[],invites:[],notifs:[],logs:{},
@@ -3105,6 +3441,7 @@ const ICONS={
   admin:'<path d="M10 2.8 4.2 5.2v4.2c0 3.6 2.4 6.5 5.8 7.5 3.4-1 5.8-3.9 5.8-7.5V5.2z"/><path d="m7.8 9.8 1.6 1.7 3-3.3"/>',
   prof:'<circle cx="10" cy="7" r="2.9"/><path d="M4.2 16.8c.7-3.1 2.9-4.7 5.8-4.7s5.1 1.6 5.8 4.7"/>',
   plus:'<path d="M10 4.4v11.2M4.4 10h11.2"/>',
+  pin:'<path d="M12.4 2.8 17.2 7.6M13.5 3.9 9.9 7.5l-4 .9a.7.7 0 0 0-.35 1.18l5.87 5.87a.7.7 0 0 0 1.18-.35l.9-4 3.6-3.6"/><path d="M7.4 12.6 3.4 16.6"/>',
   bell:'<path d="M10 3.2a4.5 4.5 0 0 0-4.5 4.5c0 3.4-1 4.4-1.6 5.1a.6.6 0 0 0 .45 1h11.3a.6.6 0 0 0 .45-1c-.6-.7-1.6-1.7-1.6-5.1A4.5 4.5 0 0 0 10 3.2z"/><path d="M8.3 15.5a1.9 1.9 0 0 0 3.4 0"/>',
   chevL:'<path d="m12 5.2-4.8 4.8L12 14.8"/>',
   chevR:'<path d="m8 5.2 4.8 4.8L8 14.8"/>',
@@ -3868,6 +4205,7 @@ function viewToday(){
     </div>
 
     <aside class="today-side">
+      ${holidayNote(now)}
       <section class="block plain">
         <div class="sec"><h2>チームの状況</h2></div>
         <dl class="stats">
@@ -3893,8 +4231,18 @@ function viewToday(){
             </span>
           </button>`;}).join('')}</div>
       </section>
+      ${proverbCard(now,tz)}
     </aside>
   </div>`;
+}
+/* 今日、だれかの国が祝日なら、ひとこと出す */
+function holidayNote(ms){
+  const u=me(),c=civil(ms,effTz(u));
+  const hs=holidaysForDate(c);
+  if(!hs.length)return '';
+  return `<div class="holnote">${hs.map(h=>
+    `<span class="hn"><b>${h.flag}</b>${esc(h.land)}<i>${esc(h.names.join(' / '))}</i></span>`).join('')}
+    <span class="hnt">${L('この国のメンバーはお休みかもしれません。','People in these countries may be off today.')}</span></div>`;
 }
 function durLabel(e){
   const m=Math.round((e.end-e.start)/60000);
@@ -3989,8 +4337,10 @@ function monthGrid(c,tz){
       const rest=list.filter(e=>e.kind!=='holiday');
       const tgt=(S.scope==='all'||S.scope==='mine'||!S.scope)?me().id:S.scope;
       const mine=hols.some(e=>e.who.includes(tgt));
+      const nh=holidaysForDate(day);
       html+=`<div class="cell ${day.m!==c.m?'out':''} ${k===today?'today':''} ${mine?'hol':''}" data-newday="${k}" title="${mine?'休暇':'クリックで予定を追加'}">
         <button class="n" data-jumpday="${k}" title="この日を開く">${day.d===1?day.m+'/':''}${day.d}</button>
+        ${nh.length?`<span class="natday" title="${esc(nh.map(h=>h.land+'：'+h.names.join(' / ')).join('　'))}">${nh.map(h=>h.flag).join('')}</span>`:''}
         <span class="evdots">${rest.slice(0,4).map(e=>kindMark(e.kind,'dotic')).join('')}${rest.length>4?`<i class="more">+${rest.length-4}</i>`:''}</span>
         ${hols.map(e=>`<button class="ev holchip" data-ev="${e.id}" title="${esc(e.title)}">${kindMark(e.kind)}<span class="n">${esc(e.who.map(i=>(person(i)||{}).name||'').join('・'))} 休暇</span></button>`).join('')}
         ${rest.slice(0,hols.length?2:3).map(e=>`<button class="ev ${evClass(e)}" data-ev="${e.id}" title="${esc(hhmm(e.start,tz)+'–'+hhmm(e.end,tz)+' '+e.title)}">${kindMark(e.kind)}<span class="n">${esc(e.title)}</span></button>`).join('')}
@@ -4296,6 +4646,10 @@ function findSlots(){
 
 /* ================= MESSAGES ================= */
 const dmKey=(a,b)=>[a,b].sort().join('|');
+const gKey=id=>'g:'+id;                       /* グループの会話も dms に同居させる */
+const groups=()=>DB.groups||(DB.groups=[]);
+const myGroups=()=>groups().filter(g=>(g.who||[]).includes(DB.userId));
+const groupOf=id=>groups().find(g=>g.id===id);
 function threadList(){
   const u=me(),now=Date.now(),out=[];
   DB.events.filter(e=>e.who.includes(u.id)&&(e.who.length>1||(DB.threads[e.id]||[]).length)).forEach(e=>{
@@ -4304,9 +4658,19 @@ function threadList(){
       out.push({type:'ev',id:e.id,title:e.title,sub:m.length?m[m.length-1].text:`${hhmm(e.start,effTz(u))} 開始`,
         at:m.length?m[m.length-1].at:e.start,n:m.length,ev:e});
   });
+  myGroups().forEach(g=>{
+    const m=DB.dms[gKey(g.id)]||[];
+    const last=m[m.length-1];
+    out.push({type:'gr',id:g.id,title:g.name,
+      sub:last?(last.img&&!last.text?L('写真','Photo'):last.text):`${(g.who||[]).length}${L('名','')}`,
+      at:last?last.at:g.at||0,n:m.length,g});
+  });
   DB.people.filter(p=>p.id!==u.id).forEach(p=>{
     const k=dmKey(u.id,p.id),m=DB.dms[k]||[];
-    out.push({type:'dm',id:p.id,title:p.name,sub:m.length?m[m.length-1].text:'メッセージを送る',at:m.length?m[m.length-1].at:0,n:m.length,p});
+    const last=m[m.length-1];
+    out.push({type:'dm',id:p.id,title:p.name,
+      sub:last?(last.img&&!last.text?L('写真','Photo'):last.text):'メッセージを送る',
+      at:last?last.at:0,n:m.length,p});
   });
   return out.sort((a,b)=>(b.n?1:0)-(a.n?1:0)||(a.n&&b.n?b.at-a.at:a.at-b.at));
 }
@@ -4316,7 +4680,8 @@ function viewMessages(){
      スマホは一覧から選んでもらう（自動で開くと「戻る」がすぐ打ち消されてしまう）。 */
   if(!S.thread&&window.innerWidth>980){const f=list.find(t=>t.n);S.thread=f?{type:f.type,id:f.id}:null;}
   const cur=S.thread&&list.find(t=>t.type===S.thread.type&&t.id===S.thread.id);
-  const msgs=cur?(cur.type==='ev'?(DB.threads[cur.id]||[]):(DB.dms[dmKey(u.id,cur.id)]||[])):[];
+  const msgs=cur?msgsOf(cur):[];
+  const pins=msgs.filter(m=>m.pin);
   return `
   <div class="dmpick">
     <span class="lb">宛先を選ぶ</span>
@@ -4328,9 +4693,13 @@ function viewMessages(){
   </div>
   <div class="msgwrap ${cur?'on-thread':''}">
     <div class="thl">
-      <div class="grp">予定のスレッド</div>
-      ${list.filter(t=>t.type==='ev').map(t=>threadBtn(t,cur)).join('')||'<div class="empty left" style="padding:10px 14px">スレッドはありません</div>'}
-      <div class="grp">ダイレクトメッセージ</div>
+      <div class="grp grp-h">${L('グループ','Groups')}
+        <button class="btn sm q ico" data-act="new-group" aria-label="${L('グループを作る','New group')}" title="${L('グループを作る','New group')}">${icon('plus')}</button></div>
+      ${myGroups().length?list.filter(t=>t.type==='gr').map(t=>threadBtn(t,cur)).join('')
+        :`<div class="empty left" style="padding:10px 14px">${L('グループはまだありません','No groups yet')}</div>`}
+      <div class="grp">${L('予定のスレッド','Event threads')}</div>
+      ${list.filter(t=>t.type==='ev').map(t=>threadBtn(t,cur)).join('')||`<div class="empty left" style="padding:10px 14px">${L('スレッドはありません','No threads')}</div>`}
+      <div class="grp">${L('ダイレクトメッセージ','Direct messages')}</div>
       ${list.filter(t=>t.type==='dm').map(t=>threadBtn(t,cur)).join('')}
     </div>
     ${cur?`<div class="thread">
@@ -4340,28 +4709,135 @@ function viewMessages(){
           <div style="font-weight:600;font-size:14px" class="ell">${esc(cur.title)}</div>
           <div class="muted ell" style="font-size:13px">${cur.type==='ev'
             ?`${P(cur.ev.start,tz).m}/${P(cur.ev.start,tz).d} ${hhmm(cur.ev.start,tz)}–${hhmm(cur.ev.end,tz)} · ${cur.ev.who.length}名`
+            :cur.type==='gr'
+            ?(cur.g.who||[]).map(i=>(person(i)||{}).name||'').filter(Boolean).join('・')
             :`${cityN(effCity(cur.p))} ${hhmm(Date.now(),effTz(cur.p))} · ${stName(statusOf(cur.p,Date.now()))}`}</div>
         </div>
         ${cur.type==='ev'?`<button class="btn sm" data-ev="${cur.id}">予定を開く</button>`:''}
+        ${cur.type==='gr'?`<button class="btn sm" data-act="edit-group" data-id="${cur.id}">${L('メンバー','Members')}</button>`:''}
       </div>
+      ${pins.length?`<div class="pinbar">
+        <span class="pl">${icon('pin')}${L('ピン留め','Pinned')}</span>
+        ${pins.map(m=>`<button class="pi" data-unpin="${m.key}" title="${L('ピン留めをはずす','Unpin')}">
+          <span class="ell">${m.img&&!m.text?L('写真','Photo'):esc(m.text)}</span>${icon('x')}</button>`).join('')}
+      </div>`:''}
       <div class="body">
-        ${msgs.length?msgs.map(m=>{const p=person(m.by);return `<div class="msg">
-          ${avatar(p,'m')}
-          <div style="min-width:0"><div class="who">${esc(p.name)}<span class="when">${hhmm(m.at,tz)}</span></div>
-          <div class="tx">${esc(m.text)}</div></div></div>`;}).join('')
-          :`<div class="empty">${icon('msg')}まだメッセージはありません。</div>`}
+        ${msgs.length?msgs.map(m=>msgRow(m,tz)).join('')
+          :`<div class="empty">${icon('msg')}${L('まだメッセージはありません。','No messages yet.')}</div>`}
       </div>
       <form class="composer" data-act="send">
-        <input type="text" id="msgin" placeholder="${cur.type==='ev'?'この予定についてメッセージ':'メッセージ'}" autocomplete="off">
-        <button class="btn pri" type="submit">${icon('send')}送信</button>
+        <label class="btn sm ico" title="${L('写真を送る','Send a photo')}">${icon('camera')}
+          <input type="file" accept="image/*" data-msgimg="1" hidden></label>
+        <input type="text" id="msgin" placeholder="${cur.type==='ev'?L('この予定についてメッセージ','About this event'):L('メッセージ','Message')}" autocomplete="off">
+        <button class="btn pri" type="submit">${icon('send')}${L('送信','Send')}</button>
       </form>
     </div>`:'<div class="empty" style="padding:40px;text-align:center">スレッドを選択してください。</div>'}
   </div>`;
+}
+/* そのスレッドのメッセージ（ピン留め・写真のために key も持たせる） */
+function msgsOf(cur){
+  const u=me();
+  const arr=cur.type==='ev'?(DB.threads[cur.id]||[])
+          :cur.type==='gr'?(DB.dms[gKey(cur.id)]||[])
+          :(DB.dms[dmKey(u.id,cur.id)]||[]);
+  const box=cur.type==='ev'?'t:'+cur.id:cur.type==='gr'?'d:'+gKey(cur.id):'d:'+dmKey(u.id,cur.id);
+  return arr.map((m,i)=>Object.assign({},m,{key:box+'|'+i}));
+}
+function msgByKey(key){
+  const[box,i]=key.split('|');
+  const[kind,id]=[box.slice(0,1),box.slice(2)];
+  const arr=kind==='t'?(DB.threads[id]||[]):(DB.dms[id]||[]);
+  return arr[+i]||null;
+}
+function msgRow(m,tz){
+  const p=person(m.by)||{name:'',id:''};
+  return `<div class="msg ${m.pin?'pinned':''}">
+    ${avatar(p,'m')}
+    <div style="min-width:0">
+      <div class="who">${esc(p.name)}<span class="when">${hhmm(m.at,tz)}</span>
+        <button class="pinbtn ${m.pin?'on':''}" data-pin="${m.key}"
+          aria-label="${m.pin?L('ピン留めをはずす','Unpin'):L('ピン留めする','Pin')}"
+          title="${m.pin?L('ピン留めをはずす','Unpin'):L('ピン留めする','Pin')}">${icon('pin')}</button></div>
+      ${m.text?`<div class="tx">${esc(m.text)}</div>`:''}
+      ${m.img?`<button class="msgimg" data-bigimg="${m.key}"><img src="${m.img}" alt="${L('写真','Photo')}" loading="lazy"></button>`:''}
+    </div></div>`;
 }
 function threadBtn(t,cur){
   return `<button data-thread="${t.type}:${t.id}" aria-current="${cur&&cur.type===t.type&&cur.id===t.id}">
     <span class="t1"><span class="ell">${esc(t.title)}</span>${t.n?`<span class="muted" style="margin-left:auto;font-size:13px;font-weight:400">${t.n}</span>`:''}</span>
     <span class="t2">${esc(t.sub)}</span></button>`;
+}
+
+/* ---------- グループ ---------- */
+function groupModal(id){
+  const g=id?groupOf(id):null, u=me();
+  S._gwho=g?(g.who||[]).slice():[u.id];
+  layer(modal(g?L('グループの設定','Group settings'):L('新しいグループ','New group'),
+   `<div class="field"><label>${L('グループ名','Group name')}</label>
+      <input type="text" id="g-name" value="${g?esc(g.name):''}" placeholder="${L('例：制作チーム','e.g. Production team')}" maxlength="40"></div>
+    <div class="field"><label>${L('メンバー','Members')}</label>
+      <div class="pickr">${DB.people.map(p=>`<button type="button" data-gwho="${p.id}" aria-pressed="${S._gwho.includes(p.id)}"
+        ${p.id===u.id?'disabled':''}>${avatar(p,'s')}${esc(p.name)}</button>`).join('')}</div>
+      <span class="muted" style="font-size:12.5px">${L('自分は必ず入ります。','You are always included.')}</span></div>`,
+   `<button class="btn pri" data-act="save-group" data-id="${id||''}">${g?L('保存','Save'):L('作る','Create')}</button>
+    <button class="btn" data-act="close-layer">${L('キャンセル','Cancel')}</button>
+    ${g?`<div class="sp"></div><button class="btn q danger" data-act="del-group" data-id="${id}">${L('グループを解散','Delete group')}</button>`:''}`));
+}
+function saveGroup(id){
+  const name=($('#g-name').value||'').trim();
+  if(!name)return toast(L('グループ名を入れてください。','Enter a group name.'));
+  const who=[...new Set((S._gwho||[]).concat([me().id]))];
+  if(who.length<2)return toast(L('もうひとり以上えらんでください。','Choose at least one other person.'));
+  if(id){ const g=groupOf(id); if(g){g.name=name;g.who=who;} audit('グループを更新',name); }
+  else { const g={id:uid(),name,who,by:me().id,at:Date.now()}; groups().push(g);
+    S.thread={type:'gr',id:g.id}; audit('グループを作成',name);
+    notify(who.filter(i=>i!==me().id),'msg',`${me().name}：${name} ${L('に招待しました','group created')}`,''); }
+  save();closeLayer();S.view='messages';render();toast(L('保存しました','Saved'));
+}
+function delGroup(id){
+  const g=groupOf(id); if(!g)return;
+  DB.groups=groups().filter(x=>x.id!==id); delete DB.dms[gKey(id)];
+  if(S.thread&&S.thread.type==='gr'&&S.thread.id===id)S.thread=null;
+  audit('グループを解散',g.name);save();closeLayer();render();toast(L('解散しました','Group deleted'));
+}
+/* ---------- 写真を送る ---------- */
+function sendPhoto(file){
+  if(!file||!S.thread)return;
+  const fr=new FileReader();
+  fr.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const max=900,sc=Math.min(1,max/Math.max(img.width,img.height));
+      const w=Math.round(img.width*sc),h=Math.round(img.height*sc);
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(img,0,0,w,h);
+      let data;try{data=c.toDataURL('image/jpeg',0.72);}catch(e){return toast(L('この画像は読み込めませんでした','Could not read that image'));}
+      pushMsg({img:data,text:''});
+    };
+    img.onerror=()=>toast(L('画像として読み込めませんでした','That file is not an image'));
+    img.src=fr.result;
+  };
+  fr.readAsDataURL(file);
+}
+/* ---------- メッセージを1件足す（予定・グループ・DM 共通） ---------- */
+function pushMsg(obj){
+  const u=me(),t=S.thread; if(!t)return;
+  const m=Object.assign({by:u.id,at:Date.now(),text:''},obj);
+  const label=m.img&&!m.text?L('写真','a photo'):m.text;
+  if(t.type==='ev'){
+    (DB.threads[t.id]=DB.threads[t.id]||[]).push(m);
+    const e=DB.events.find(x=>x.id===t.id);
+    if(e)notify(e.who,'msg',`${u.name}：${label}`,'ev:'+e.id);
+  }else if(t.type==='gr'){
+    const g=groupOf(t.id); if(!g)return;
+    (DB.dms[gKey(t.id)]=DB.dms[gKey(t.id)]||[]).push(m);
+    notify((g.who||[]).filter(i=>i!==u.id),'msg',`${g.name} / ${u.name}：${label}`,'gr:'+g.id);
+  }else{
+    const k=dmKey(u.id,t.id);
+    (DB.dms[k]=DB.dms[k]||[]).push(m);
+    notify(t.id,'msg',`${u.name}：${label}`,'dm:'+u.id);
+  }
+  save();render();
 }
 
 /* ================= ADMIN ================= */
@@ -5059,7 +5535,9 @@ function eventEditor(id,pre){
   layer(modal(e?'予定を編集':'予定を作成',`
     <div class="field"><label>タイトル</label><input type="text" id="e-title" value="${e?esc(e.title):''}" placeholder="クライアント打ち合わせ"></div>
     <div class="grid2">
-      <div class="field"><label>日付</label><input type="date" id="e-date" value="${ps.y}-${pad2(ps.m)}-${pad2(ps.d)}"></div>
+      <div class="field"><label>日付</label><input type="date" id="e-date" value="${ps.y}-${pad2(ps.m)}-${pad2(ps.d)}">
+        ${(()=>{const nh=holidaysForDate({y:ps.y,m:ps.m,d:ps.d});return nh.length
+          ?`<span class="muted holwarn">${nh.map(h=>`${h.flag} ${esc(h.land)}：${esc(h.names.join(' / '))}`).join('　')}　${L('この国のメンバーはお休みかもしれません。','People there may be off.')}</span>`:'';})()}</div>
       <div class="field"><label>入力するタイムゾーン</label><select id="e-tz">
         ${tzOpts.map(t=>`<option value="${t}" ${tz===t?'selected':''}>${t}（${offLabel(t,st)}）</option>`).join('')}</select></div>
       <div class="field"><label>開始</label><input type="time" id="e-start" value="${pad2(ps.h)}:${pad2(ps.mi)}" ${dk==='holiday'?'disabled':''}></div>
@@ -5256,12 +5734,16 @@ document.addEventListener('click',ev=>{
   const t=ev.target;
   const scrim=t.closest?.('[data-scrim]');
   if(scrim&&t===scrim){closeLayer();return;}
-  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-dowtog],[data-dowmore],[data-setstatus],[data-login],[data-setui],[data-setlang],[data-authtab],[data-onb]');
+  const el=t.closest?.('[data-act],[data-go],[data-city],[data-person],[data-ev],[data-newday],[data-newslot],[data-jumpday],[data-cal],[data-calmode],[data-pmode],[data-thread],[data-adm],[data-ftp],[data-ftpick],[data-who],[data-dow],[data-dowtog],[data-dowmore],[data-setstatus],[data-login],[data-setui],[data-setlang],[data-authtab],[data-pin],[data-unpin],[data-bigimg],[data-gwho],[data-onb]');
   if(!el)return;
   const d=el.dataset;
   if(d.act){
     switch(d.act){
       case 'close-layer':closeLayer();return;
+      case 'new-group':groupModal(null);return;
+      case 'edit-group':groupModal(d.id);return;
+      case 'save-group':saveGroup(d.id||null);return;
+      case 'del-group':delGroup(d.id);return;
       case 'notif-perm':askNotifPerm();return;
       case 'demo-login':demoLogin();return;
       case 'notifs':notifCenter();return;
@@ -5488,6 +5970,23 @@ document.addEventListener('click',ev=>{
   }
   if(d.dowmore){ dowToggleAdv(d.dowmore); return; }
   if(d.setlang){ setLang(d.setlang); return; }
+  if(d.gwho){
+    S._gwho=(S._gwho||[]).includes(d.gwho)?S._gwho.filter(i=>i!==d.gwho):S._gwho.concat(d.gwho);
+    el.setAttribute('aria-pressed',S._gwho.includes(d.gwho));return;
+  }
+  if(d.pin||d.unpin){
+    const m=msgByKey(d.pin||d.unpin);
+    if(m){ m.pin=!m.pin; save();
+      toast(m.pin?L('ピン留めしました','Pinned'):L('ピン留めをはずしました','Unpinned')); softRender(); }
+    return;
+  }
+  if(d.bigimg){
+    const m=msgByKey(d.bigimg);
+    if(m&&m.img)layer(`<div class="scrim imgview" data-scrim="1">
+      <img src="${m.img}" alt="">
+      <button class="x" data-act="close-layer" aria-label="${L('閉じる','Close')}">${icon('x')}</button></div>`);
+    return;
+  }
   if(d.adm){S.adm=d.adm;softRender();return;}
   if(d.ftp){S.ft.sel=S.ft.sel.includes(d.ftp)?S.ft.sel.filter(i=>i!==d.ftp):S.ft.sel.concat(d.ftp);S.ft.res=null;softRender();return;}
   if(d.ftpick){const r=S.ft.res[+d.ftpick];eventEditor(null,{start:r.s,dur:(r.e-r.s)/60000,who:S.ft.sel.slice()});return;}
@@ -5572,6 +6071,7 @@ function setPhoto(id,file){
 }
 document.addEventListener('change',ev=>{
   const el=ev.target,d=el.dataset;
+  if(d.msgimg!==undefined&&el.files&&el.files[0]){sendPhoto(el.files[0]);el.value='';return;}
   if(d.photo!==undefined&&el.files&&el.files[0]){setPhoto(d.photo,el.files[0]);el.value='';return;}
   if(d.logo!==undefined&&el.files&&el.files[0]){setLogo(el.files[0]);el.value='';return;}
   if(d.img!==undefined&&el.files&&el.files[0]){setImage(d.img,el.files[0]);el.value='';return;}
@@ -5615,16 +6115,7 @@ document.addEventListener('submit',ev=>{
   if(f.dataset.act==='do-onboard'){doOnboard();return;}
   if(f.dataset.act==='send'){
     const inp=$('#msgin'),tx=inp.value.trim();if(!tx)return;
-    const u=me();
-    if(S.thread.type==='ev'){
-      (DB.threads[S.thread.id]=DB.threads[S.thread.id]||[]).push({by:u.id,at:Date.now(),text:tx});
-      const e=DB.events.find(x=>x.id===S.thread.id);
-      if(e)notify(e.who,'msg',`${u.name}：${tx}`,'ev:'+e.id);
-    } else {
-      const k=dmKey(u.id,S.thread.id);(DB.dms[k]=DB.dms[k]||[]).push({by:u.id,at:Date.now(),text:tx});
-      notify(S.thread.id,'msg',`${u.name}：${tx}`,'dm:'+u.id);
-    }
-    save();render();return;
+    inp.value='';pushMsg({text:tx});return;
   }
   if(f.dataset.act==='send-ev'){
     const inp=$('#evmsg'),tx=inp.value.trim();if(!tx)return;

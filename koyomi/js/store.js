@@ -150,7 +150,9 @@
 
     const threads = {}, dms = {};
     msgs.data.forEach(r => {
-      const item = { id: r.id, by: r.author_id, at: ms(r.created_at), text: r.body };
+      const item = { id: r.id, by: r.author_id, at: ms(r.created_at), text: r.body || '' };
+      if (r.pinned) item.pin = true;
+      if (r.img) item.img = r.img;
       if (r.event_id) (threads[r.event_id] = threads[r.event_id] || []).push(item);
       else (dms[r.dm_key] = dms[r.dm_key] || []).push(item);
     });
@@ -171,6 +173,7 @@
         joinCode: c.join_code, defaultWork: c.default_work, locPolicy: c.loc_policy,
         notify: c.notify, logo: c.logo_url || undefined,
         setupDone: !!c.setup_done,
+        settings: c.settings || {},
         billing: Object.assign({}, c.billing || {}, c.billing_info || {}, {
           contact: c.billing_email || '',
           billTo:  c.billing_name  || '',
@@ -200,6 +203,8 @@
         owner: e.owner_id, who: whoOf[e.id] || [], seed: false
       })),
       threads, dms,
+      /* グループの会話は dms に 'g:<id>' の名前で同居。名簿は会社の設定に置く。 */
+      groups: ((c.settings || {}).groups) || [],
       notifs: notifs.data.map(n => ({
         id: n.id, to: n.to_id, by: n.by_id, type: n.type, text: n.body,
         ref: n.ref, day: n.day, at: ms(n.created_at), read: n.read
@@ -255,9 +260,9 @@
 
   async function pushCompany(DB) {
     const a = DB.company, b = snap && snap.company;
-    if (b && same(a, b)) return;
+    if (b && same(a, b) && same(DB.groups || [], (snap && snap.groups) || [])) return;
     const bi = a.billing || {};
-    const { error } = await sb.from('companies').update({
+    const patch = {
       name: a.name, name_en: a.nameEn || '', tz: a.tz,
       default_work: a.defaultWork, loc_policy: a.locPolicy,
       notify: a.notify, logo_url: a.logo || null,
@@ -266,7 +271,12 @@
       billing_name:  bi.billTo  || null,
       billing_info:  { zip: bi.zip || '', addr: bi.addr || '', tel: bi.tel || '' }
       // plan / billing_status などは Stripe 側が正。ここからは送らない。
-    }).eq('id', companyId);
+    };
+    /* settings 列（グループの名簿）は 1.1 で足したもの。
+       まだ足していないデータベースでも止まらないよう、要るときだけ送る。 */
+    const needSettings = (DB.groups && DB.groups.length) || (a.settings && Object.keys(a.settings).length);
+    if (needSettings) patch.settings = Object.assign({}, a.settings || {}, { groups: DB.groups || [] });
+    const { error } = await sb.from('companies').update(patch).eq('id', companyId);
     if (error) throw error;
   }
 
@@ -331,26 +341,39 @@
   }
 
   async function pushMessages(DB) {
-    const rows = [];
+    const rows = [], pins = [];
+    /* 前に送ったときのピン留めの状態を控えておき、変わったものだけ直す */
+    const oldPin = {};
+    const walk = (o) => Object.values(o || {}).forEach(list =>
+      (list || []).forEach(m2 => { if (m2.id) oldPin[m2.id] = !!m2.pin; }));
+    walk(snap && snap.threads); walk(snap && snap.dms);
+
+    const add = (m2, extra) => {
+      if (!m2.id) {
+        m2.id = newId();
+        const row = Object.assign({ id: m2.id, company_id: companyId,
+          author_id: m2.by, body: m2.text || '',
+          created_at: iso(m2.at || Date.now()) }, extra);
+        if (m2.pin) row.pinned = true;      /* 1.1 で足した列。要るときだけ送る */
+        if (m2.img) row.img = m2.img;
+        rows.push(row);
+      } else if (oldPin[m2.id] !== !!m2.pin) {
+        pins.push({ id: m2.id, pinned: !!m2.pin });
+      }
+    };
     Object.entries(DB.threads || {}).forEach(([evId, list]) =>
-      list.forEach(m2 => {
-        if (m2.id) return;
-        m2.id = newId();
-        rows.push({ id: m2.id, company_id: companyId, event_id: evId,
-                    author_id: m2.by, body: m2.text,
-                    created_at: iso(m2.at || Date.now()) });
-      }));
+      (list || []).forEach(m2 => add(m2, { event_id: evId })));
     Object.entries(DB.dms || {}).forEach(([key, list]) =>
-      list.forEach(m2 => {
-        if (m2.id) return;
-        m2.id = newId();
-        rows.push({ id: m2.id, company_id: companyId, dm_key: key,
-                    author_id: m2.by, body: m2.text,
-                    created_at: iso(m2.at || Date.now()) });
-      }));
-    if (!rows.length) return;
-    const { error } = await sb.from('messages').insert(rows);
-    if (error) throw error;
+      (list || []).forEach(m2 => add(m2, { dm_key: key })));
+
+    if (rows.length) {
+      const { error } = await sb.from('messages').insert(rows);
+      if (error) throw error;
+    }
+    for (const p of pins) {
+      const { error } = await sb.from('messages').update({ pinned: p.pinned }).eq('id', p.id);
+      if (error) throw error;
+    }
   }
 
   async function pushNotifs(DB) {
