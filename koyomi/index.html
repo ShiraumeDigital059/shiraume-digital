@@ -1994,7 +1994,9 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 @supports (padding:env(safe-area-inset-top)){
   .topbar{padding-top:env(safe-area-inset-top);height:calc(64px + env(safe-area-inset-top))}
   @media (max-width:980px){
-    .topbar{height:calc(60px + env(safe-area-inset-top))}
+    /* iPhone の時計とのあいだに、ひと息ぶんの間をあける */
+    .topbar{padding-top:calc(env(safe-area-inset-top) + 13px);
+            height:calc(73px + env(safe-area-inset-top))}
   }
   .content{padding-bottom:env(safe-area-inset-bottom,0px)}
   #splash .spl{bottom:calc(12% + env(safe-area-inset-bottom,0px))}
