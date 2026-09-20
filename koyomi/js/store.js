@@ -50,14 +50,47 @@
   const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
   const fixId = (o) => { if (o && !UUID_RE.test(o.id || '')) o.id = newId(); return o.id; };
 
+  /* iOS アプリの中で、ログイン状態を端末側（UserDefaults）にも控えておく。
+     WKWebView の localStorage は、空き容量が減ったときなどに iOS が消してしまうことがあり、
+     それだけに頼ると「たまに勝手にログアウトされる」ことがあるため。
+     ブラウザではこの仕組みは使わず、今までどおり localStorage に保存する。 */
+  function nativeKV() {
+    try {
+      const C = global.Capacitor;
+      const P = (C && C.isNativePlatform && C.isNativePlatform() && C.Plugins) ? C.Plugins.Koyomi : null;
+      return (P && P.storeGet) ? P : null;
+    } catch (e) { return null; }
+  }
+  function authStorage() {
+    const P = nativeKV();
+    if (!P) return undefined;                 // ブラウザ：既定のまま
+    const ls = {
+      get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+      set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+      del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+    };
+    return {
+      async getItem(k) {
+        try { const r = await P.storeGet({ key: k }); if (r && r.value) { ls.set(k, r.value); return r.value; } }
+        catch (e) {}
+        const v = ls.get(k);
+        if (v) { try { await P.storeSet({ key: k, value: v }); } catch (e) {} }   // 端末側にも控える
+        return v;
+      },
+      async setItem(k, v) { ls.set(k, v); try { await P.storeSet({ key: k, value: v }); } catch (e) {} },
+      async removeItem(k) { ls.del(k); try { await P.storeDel({ key: k }); } catch (e) {} }
+    };
+  }
+
   /* ---------- 初期化 ---------- */
   async function init(url, anonKey) {
     if (!url || !anonKey)
       throw new Error('接続設定がまだ済んでいません。config.js に Supabase の URL とキーを書いてください。');
     if (!global.supabase) throw new Error('supabase-js が読み込まれていません');
-    sb = global.supabase.createClient(url, anonKey, {
-      auth: { persistSession: true, autoRefreshToken: true }
-    });
+    const auth = { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true };
+    const st = authStorage();
+    if (st) auth.storage = st;
+    sb = global.supabase.createClient(url, anonKey, { auth });
     return sb;
   }
   const client = () => sb;
@@ -489,6 +522,18 @@
         p_work_s: args.workS || '09:00', p_work_e: args.workE || '18:00'
       });
       if (error) throw new Error(error.message);
+      return data;
+    },
+    /* 退会（アカウントの削除）
+       ひとり会社なら会社ごと、そうでなければ自分の分だけ。
+       ログイン情報（auth.users）も完全に消える。 */
+    async deleteAccount() {
+      need();
+      const { data, error } = await sb.rpc('delete_my_account');
+      if (error) throw new Error(error.message);
+      try { await sb.auth.signOut(); } catch (e) {}
+      if (chan) { try { sb.removeChannel(chan); } catch (e) {} chan = null; }
+      snap = null; me = null; companyId = null;
       return data;
     },
     async rotateJoinCode() {

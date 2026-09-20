@@ -1962,6 +1962,36 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
   .dowset select{font-size:13.5px;padding-left:6px}
 }
 
+/* 端末の通知の状態 */
+.perm{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:999px;
+  font-size:12.5px;font-weight:700;background:var(--sunken);color:var(--ink-2)}
+.perm::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--ink-4)}
+.perm.ok{background:var(--accent-2);color:var(--accent-3)}
+.perm.ok::before{background:var(--accent)}
+.perm.no{background:#FBEEEA;color:#8E3B25}
+.perm.no::before{background:#BF5236}
+:root[data-ui="dark"] .perm.no{background:#2A1A16;color:#E8A08A}
+
+/* 起動したときのロゴ（アプリの起動画面からそのまま続く） */
+#splash{position:fixed;inset:0;z-index:99999;display:grid;place-items:center;
+  background:#fff;opacity:1;transition:opacity .5s ease}
+#splash.go{opacity:0;pointer-events:none}
+#splash .spw{width:126px;color:#12704F;display:flex;flex-direction:column;align-items:center;gap:7px;
+  animation:sp-in .6s cubic-bezier(.2,.75,.3,1) both}
+#splash .spw svg{width:100%;display:block}
+#splash .spn{font-family:var(--disp);font-weight:700;font-size:19px;
+  letter-spacing:.38em;text-indent:.38em;line-height:1}
+#splash .spl{position:absolute;left:0;right:0;bottom:12%;text-align:center;
+  font-size:12.5px;font-weight:600;color:var(--ink-3);opacity:0;animation:sp-late .5s ease 1.5s both}
+@keyframes sp-in{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}
+@keyframes sp-late{to{opacity:.85}}
+@media (prefers-reduced-motion:reduce){#splash .spw{animation:none}}
+@media (prefers-color-scheme:dark){#splash{background:#15161A}#splash .spw{color:#54C795}}
+:root[data-ui="dark"] #splash{background:#15161A}
+:root[data-ui="dark"] #splash .spw{color:#54C795}
+:root[data-ui="light"] #splash{background:#fff}
+:root[data-ui="light"] #splash .spw{color:#12704F}
+
 /* ---- ログインまわり ---- */
 .authok{background:var(--accent-2);border:1.5px solid var(--gline);border-radius:6px;
   padding:12px 14px;margin-bottom:16px;font-size:13.5px;line-height:1.75;color:var(--accent-3);font-weight:500}
@@ -1982,6 +2012,11 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 .authsplit::before,.authsplit::after{content:"";flex:1;border-top:1px solid var(--line)}
 </style>
 
+<div id="splash"><div class="spw">
+<svg viewBox="0 0 48 26" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true">
+<path d="M4 23.4A20 20 0 0 1 44 23.4"/><path d="M11.1 23.4A12.9 12.9 0 0 1 36.9 23.4"/>
+<path d="M17.5 23.4A6.5 6.5 0 0 1 30.5 23.4"/><path d="M0.4 23.4H47.6"/></svg>
+<div class="spn">KOYOMI</div></div><div class="spl">読み込んでいます…</div></div>
 <div id="app"></div>
 <div id="layer"></div>
 <script>
@@ -2330,7 +2365,7 @@ const DEF={
   people:[],events:[],threads:{},dms:{},audit:[],invites:[],notifs:[],logs:{},
   userId:'p1',day:'',authed:false,demo:true
 };
-let DB;
+var DB;   /* native.js（ウィジェット・端末通知）から window.DB として見えるように var */
 function load(){
   const fresh=()=>{const d=JSON.parse(JSON.stringify(DEF));d.people=[];d.events=[];d.authed=false;d.demo=false;return d;};
   let s=null;
@@ -4437,6 +4472,13 @@ function viewProfile(){
           <div class="row" style="margin-top:10px"><button class="btn sm pri" data-act="save-dow-me">この内容で保存</button></div>
           <span class="muted" style="font-size:12.5px">曜日のボタンを押すと「休み」になります。休みの日は「今日」の画面に大きく <b>休み</b> と出て、終業のお知らせも鳴りません。</span>
         </div>
+        ${IS_APP?`<div class="field"><label>端末のお知らせ</label>
+          <div class="row" style="align-items:center;gap:10px">
+            <span class="perm ${NOTIF_PERM==='granted'?'ok':NOTIF_PERM==='denied'?'no':''}">${
+              NOTIF_PERM==='granted'?'許可されています':NOTIF_PERM==='denied'?'いまは切られています':'まだ確認していません'}</span>
+            ${NOTIF_PERM==='granted'?'':`<button class="btn sm" data-act="notif-perm">${NOTIF_PERM==='denied'?'iPhone の設定を開く':'通知を許可する'}</button>`}
+          </div>
+          <span class="muted" style="font-size:12.5px">予定のリマインドと終業のお知らせは、iPhone の通知として届きます。</span></div>`:''}
         <div class="field"><label>勤務場所</label><select data-set="me.location">${Object.entries(LOCS).map(([k,v])=>`<option value="${k}" ${u.location===k?'selected':''}>${v}</option>`).join('')}</select></div>
         <div class="field"><label>位置情報の公開範囲</label><select data-set="me.privacy">
           ${['exact','city','hidden'].map(k=>`<option value="${k}" ${u.privacy===k?'selected':''} ${PRIV_RANK[k]<PRIV_RANK[DB.company.locPolicy]?'disabled':''}>${PRIV_JA[k]}${PRIV_RANK[k]<PRIV_RANK[DB.company.locPolicy]?'（会社設定により選べません）':''}</option>`).join('')}
@@ -4753,6 +4795,7 @@ document.addEventListener('click',ev=>{
   if(d.act){
     switch(d.act){
       case 'close-layer':closeLayer();return;
+      case 'notif-perm':askNotifPerm();return;
       case 'demo-login':demoLogin();return;
       case 'notifs':notifCenter();return;
       case 'read-all':{markRead();closeLayer();render();return;}
@@ -5159,11 +5202,45 @@ function endOfDayCheck(){
   if(!$('#layer').innerHTML)softRender();
 }
 
+/* 起動ロゴ：ひと呼吸だけ見せて、そっと消す */
+const SPLASH_T0=Date.now();
+let splashGone=false;
+function splashOff(){
+  if(splashGone)return; splashGone=true;
+  const el=document.getElementById('splash'); if(!el)return;
+  const wait=Math.max(0,700-(Date.now()-SPLASH_T0));
+  setTimeout(()=>{el.classList.add('go');setTimeout(()=>{try{el.remove();}catch(e){}},600);},wait);
+}
+setTimeout(splashOff,8000);          /* 何があっても必ず消す */
+
+/* 端末（iPhone）の通知の許可ぐあい。native.js が window.NOTIF_PERM に入れてくれるので
+   （別ファイルから書き換えられるよう）var で置く。 */
+var NOTIF_PERM='';
+function koyomiNative(){
+  try{ const C=window.Capacitor;
+    return (C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.Koyomi)?C.Plugins.Koyomi:null;
+  }catch(e){ return null; }
+}
+async function askNotifPerm(){
+  const P=koyomiNative(); if(!P)return;
+  try{
+    if(NOTIF_PERM==='denied'){ if(P.openSettings)await P.openSettings(); return; }
+    const r=await P.requestPermission();
+    NOTIF_PERM=window.NOTIF_PERM=(r&&r.granted)?'granted':'denied';
+    try{localStorage.setItem('koyomi.notifAsked','1');}catch(e){}
+    softRender();
+    if(NOTIF_PERM==='granted'&&window.__koyomiSync)window.__koyomiSync(true);
+    else if(NOTIF_PERM==='denied')toast('iPhone の設定 → 通知 から、あとで変えられます');
+  }catch(e){ toast('通知の設定を開けませんでした'); }
+}
+
 /* ================= boot ================= */
 load();
 try{applyTheme(curTheme());}catch(e){}
 S.scope='all';
 render();
+/* 前に入ったときのログインが残っていれば、そのまま中へ。
+   それが分かるまでは起動ロゴを出したままにして、ログイン画面をちらつかせない。 */
 (async()=>{
   try{
     await Store.init(window.KOYOMI_SUPABASE_URL, window.KOYOMI_SUPABASE_ANON_KEY);
@@ -5179,7 +5256,7 @@ render();
       ? e.message
       : 'サーバに接続できませんでした。通信環境を確認して、開き直してください。';
     renderAuth();
-  }
+  }finally{ splashOff(); }
 })();
 setInterval(tick,1000);
 setInterval(()=>{try{endOfDayCheck();}catch(e){}

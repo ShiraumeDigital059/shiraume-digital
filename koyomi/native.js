@@ -51,7 +51,7 @@
       .filter(e => e.who.includes(u.id) && e.kind !== 'holiday' && e.start > now
                    && e.start < now + 7 * 86400000)
       .sort((a, b) => a.start - b.start)
-      .slice(0, 60)
+      .slice(0, 45)
       .map(e => {
         const lead = (e.rem == null ? 10 : e.rem);
         const at = e.start - lead * 60000;
@@ -105,12 +105,17 @@
           const j = JSON.stringify(w);
           if (force || j !== lastW) { lastW = j; await native().setWidgetData({ json: j }); }
         }
-        const r = reminderPayload().concat(endOfDayPayload());
+        /* 予定のリマインドと終業のお知らせをまとめ、早い順に並べる。
+           iOS の予約上限（64件）に当たっても、先の予定から順に残るようにする。 */
+        const r = reminderPayload().concat(endOfDayPayload())
+                    .sort((a, b) => a.at - b.at).slice(0, 55);
         const rj = JSON.stringify(r);
         if (force || rj !== lastR) { lastR = rj; await native().scheduleReminders({ items: r }); }
       } catch (e) { console.warn('[Koyomi] native sync', e); }
     }, 600);
   }
+
+  window.__koyomiSync = sync;      /* 画面側（設定など）から呼べるように */
 
   /* ---- save() に相乗りする ---- */
   const origSave = window.save;
@@ -123,17 +128,44 @@
   });
   setInterval(() => sync(false), 60000);
 
-  /* ---- 通知の許可を、最初のログイン後に一度だけ聞く ---- */
+  /* ---- 通知の許可 ----
+     ・いまの状態を画面（プロフィール）に映す
+     ・まだ一度も聞いていなければ、ログインしたあとに一度だけ聞く
+     ・iPhone の設定で変えられたときのために、戻ってくるたびに見直す */
+  async function refreshPerm() {
+    try {
+      const P = native();
+      if (!P || !P.checkPermission) return '';
+      const r = await P.checkPermission();
+      const st = (r && r.status) || '';
+      if (typeof window.NOTIF_PERM !== 'undefined' && window.NOTIF_PERM !== st) {
+        window.NOTIF_PERM = st;
+        try { if (window.DB && DB.authed && !document.querySelector('#layer').innerHTML) softRender(); } catch (e) {}
+      }
+      return st;
+    } catch (e) { return ''; }
+  }
+  window.__koyomiPerm = refreshPerm;
+
   (async () => {
     try {
-      if (localStorage.getItem('koyomi.notifAsked')) return;
+      const st = await refreshPerm();
+      if (st === 'granted') { sync(true); return; }
+      if (localStorage.getItem('koyomi.notifAsked')) return;   // 一度断られたら、こちらからは聞かない
       const wait = setInterval(async () => {
         if (!window.DB || !DB.authed) return;
         clearInterval(wait);
         localStorage.setItem('koyomi.notifAsked', '1');
-        await native().requestPermission();
+        try {
+          const r = await native().requestPermission();
+          window.NOTIF_PERM = (r && r.granted) ? 'granted' : 'denied';
+        } catch (e) {}
         sync(true);
       }, 1500);
     } catch (e) {}
   })();
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') refreshPerm();
+  });
 })();
