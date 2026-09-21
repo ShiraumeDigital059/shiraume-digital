@@ -2592,6 +2592,7 @@ Object.assign(TR,{
 '日付':'Date','入力するタイムゾーン':'Enter times in','終了':'End','種別':'Kind',
 '公開範囲':'Who can see it','公開（全員に表示）':'Open (everyone)','非公開（参加者のみ）':'Private (participants only)',
 'オンラインURL':'Meeting link','メモ':'Notes','作成':'Create','キャンセル':'Cancel','閉じる':'Close',
+'オンライン':'Online','この時間で作成':'Use this time','SNS担当':'Social media',
 '休暇はその日':'A day off takes','まる1日':'the whole day','になります。その日は予定を追加できなくなります。':'. No other events can be added that day.',
 '保存すると各メンバーの現地時間に自動変換されます':'Saved times are shown in each person’s local time',
 'クライアント打ち合わせ':'Client meeting','先方オフィス / Google Meet':'Their office / Google Meet',
@@ -2709,15 +2710,20 @@ const TRP=[
  [/^(\d+)分$/,                 (m,a)=>a+' min'],
  [/^(\d+)時間$/,               (m,a)=>a+(a==='1'?' hour':' hours')],
  [/^(\d+)時間(\d+)分$/,        (m,a,b)=>a+'h '+b+'m'],
+ [/^(\d+)分 \/ (.+)$/,           (m,a,b)=>a+' min / '+b.replace(/時間$/,' time')],
+ [/^(\d+)時間 \/ (.+)$/,         (m,a,b)=>a+(a==='1'?' hour / ':' hours / ')+b.replace(/時間$/,' time')],
+ [/^(\d+)時間(\d+)分 \/ (.+)$/,  (m,a,b,c)=>a+'h '+b+'m / '+c.replace(/時間$/,' time')],
+ [/^メッセージ (\d+)$/,           (m,a)=>a+(a==='1'?' message':' messages')],
+ [/^(.*) · メッセージ (\d+)$/,  (m,a,b)=>a+' · '+b+(b==='1'?' message':' messages')],
  [/^(\d+)時間 空き$/,          (m,a)=>a+'h free'],
  [/^(\d+)分 空き$/,            (m,a)=>a+' min free'],
  [/^次 (\d{1,2}:\d{2})$/,      (m,a)=>'Next '+a],
  [/^(\d{1,2}:\d{2}) 開始$/,    (m,a)=>'Starts '+a],
  [/^(\d+)都市 · (\d+)カ国 · (\d+)タイムゾーン$/,
                                (m,a,b,c)=>a+' cities · '+b+' countries · '+c+' time zones'],
- [/^残り席数 (\d+)$/,          (m,a)=>a+' seats left'],
+ [/^残り席数 ([\d∞]+)$/,        (m,a)=>a+' seats left'],
  [/^招待状況 (\d+)$/,          (m,a)=>'Invitations '+a],
- [/^(\d+) \/ (\d+) 席を使用中（(.+)）$/,(m,a,b,c)=>a+' of '+b+' seats used ('+c+')'],
+ [/^([\d∞]+) \/ ([\d∞]+) 席を使用中（(.+)）$/,(m,a,b,c)=>a+' of '+b+' seats used ('+c+')'],
  [/^(.+)時間で表示$/,          (m,a)=>'Shown in '+a+' time'],
  [/^(.+)時間$/,                (m,a)=>a+' time'],
  [/^(.+) のみ表示中$/,         (m,a)=>'Showing '+a+' only'],
@@ -5508,7 +5514,7 @@ function openEvent(id){
       ${tzRows(e)}
     </div>
     <div>
-      <div class="sec"><h2>メッセージ</h2>${msgs.length?`<span class="note">${msgs.length}件</span>`:''}</div>
+      <div class="sec"><h2>メッセージ</h2>${msgs.length?`<span class="note">メッセージ ${msgs.length}</span>`:''}</div>
       <div style="max-height:200px;overflow:auto">
       ${msgs.length?msgs.map(m=>`<div class="msg">${avatar(person(m.by),'m')}
         <div style="min-width:0"><div class="who">${esc(person(m.by).name)}<span class="when">${hhmm(m.at,tz)}</span></div>
