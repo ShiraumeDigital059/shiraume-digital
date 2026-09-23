@@ -2593,6 +2593,20 @@ Object.assign(TR,{
 '公開範囲':'Who can see it','公開（全員に表示）':'Open (everyone)','非公開（参加者のみ）':'Private (participants only)',
 'オンラインURL':'Meeting link','メモ':'Notes','作成':'Create','キャンセル':'Cancel','閉じる':'Close',
 'オンライン':'Online','この時間で作成':'Use this time','SNS担当':'Social media',
+/* --- お知らせ（通知） --- */
+'ブラウザのお知らせ':'Notifications in this browser',
+'ブラウザの設定を開いてください':'Change it in your browser settings',
+'予定のリマインド、終業のお知らせ、メッセージが、iPhone の通知として届きます。':'Event reminders, the end-of-day notice and new messages arrive as iPhone notifications.',
+'予定のリマインド、終業のお知らせ、メッセージが、パソコンの通知として届きます。このタブを開いている間だけ届きます。':'Event reminders, the end-of-day notice and new messages arrive as desktop notifications, while this tab is open.',
+'メッセージの通知':'New messages',
+'予定のスレッド・ダイレクトメッセージ・グループチャットに新しい投稿があったとき、お知らせします。':'Get notified when someone posts in an event thread, a direct message or a group chat.',
+'Koyomi の通知をオンにしました':'Koyomi notifications are on',
+'このタブを開いている間、お知らせが届きます':'You will get alerts while this tab is open',
+'ブラウザの設定から、あとで変えられます':'You can change this later in your browser settings',
+'このブラウザは通知に対応していません':'This browser does not support notifications',
+'ブラウザの設定（サイトの権限）から通知を許可してください':'Allow notifications for this site in your browser settings',
+'通知を有効にできませんでした':'Could not turn on notifications',
+'今日のダイジェスト':'Today’s digest','新しいメッセージ':'New messages','写真を送りました':'Sent a photo',
 '休暇はその日':'A day off takes','まる1日':'the whole day','になります。その日は予定を追加できなくなります。':'. No other events can be added that day.',
 '保存すると各メンバーの現地時間に自動変換されます':'Saved times are shown in each person’s local time',
 'クライアント打ち合わせ':'Client meeting','先方オフィス / Google Meet':'Their office / Google Meet',
@@ -2717,6 +2731,7 @@ const TRP=[
  [/^(.*) · メッセージ (\d+)$/,  (m,a,b)=>a+' · '+b+(b==='1'?' message':' messages')],
  [/^(\d+)時間 空き$/,          (m,a)=>a+'h free'],
  [/^(\d+)分 空き$/,            (m,a)=>a+' min free'],
+ [/^(\d+)時間(\d+)分 空き$/,   (m,a,b)=>a+'h '+b+'m free'],
  [/^次 (\d{1,2}:\d{2})$/,      (m,a)=>'Next '+a],
  [/^(\d{1,2}:\d{2}) 開始$/,    (m,a)=>'Starts '+a],
  [/^(\d+)都市 · (\d+)カ国 · (\d+)タイムゾーン$/,
@@ -5376,6 +5391,8 @@ function admSettings(){
             <span><b>毎朝のダイジェスト</b><small>その日はじめて開いたとき、今日の件数と最初の予定を通知します。</small></span></label>
           <label class="sw"><input type="checkbox" data-set="company.notify.done" ${c.notify.done!==false?'checked':''}>
             <span><b>終業のお知らせ</b><small>その日の終業時刻を過ぎたら「今日はここまで。おつかれさまでした」とお知らせします。休みの日は鳴りません。</small></span></label>
+          <label class="sw"><input type="checkbox" data-set="company.notify.msg" ${c.notify.msg!==false?'checked':''}>
+            <span><b>メッセージの通知</b><small>予定のスレッド・ダイレクトメッセージ・グループチャットに新しい投稿があったとき、お知らせします。</small></span></label>
           <label class="sw"><input type="checkbox" data-set="company.notify.change" ${c.notify.change?'checked':''}>
             <span><b>予定変更の通知</b><small>既存の予定が編集されたとき、参加者に通知します。新規作成は常に通知します。</small></span></label>
         </div>
@@ -5415,13 +5432,15 @@ function viewProfile(){
           <div class="row" style="margin-top:10px"><button class="btn sm pri" data-act="save-dow-me">この内容で保存</button></div>
           <span class="muted" style="font-size:12.5px">曜日のボタンを押すと「休み」になります。休みの日は「今日」の画面に大きく <b>休み</b> と出て、終業のお知らせも鳴りません。</span>
         </div>
-        ${IS_APP?`<div class="field"><label>端末のお知らせ</label>
+        ${(IS_APP||WEB_NOTIF)?(()=>{const st=notifState();return `<div class="field"><label>${IS_APP?'端末のお知らせ':'ブラウザのお知らせ'}</label>
           <div class="row" style="align-items:center;gap:10px">
-            <span class="perm ${NOTIF_PERM==='granted'?'ok':NOTIF_PERM==='denied'?'no':''}">${
-              NOTIF_PERM==='granted'?'許可されています':NOTIF_PERM==='denied'?'いまは切られています':'まだ確認していません'}</span>
-            ${NOTIF_PERM==='granted'?'':`<button class="btn sm" data-act="notif-perm">${NOTIF_PERM==='denied'?'iPhone の設定を開く':'通知を許可する'}</button>`}
+            <span class="perm ${st==='granted'?'ok':st==='denied'?'no':''}">${
+              st==='granted'?'許可されています':st==='denied'?'いまは切られています':'まだ確認していません'}</span>
+            ${st==='granted'?'':`<button class="btn sm" data-act="notif-perm">${st==='denied'?(IS_APP?'iPhone の設定を開く':'ブラウザの設定を開いてください'):'通知を許可する'}</button>`}
           </div>
-          <span class="muted" style="font-size:12.5px">予定のリマインドと終業のお知らせは、iPhone の通知として届きます。</span></div>`:''}
+          <span class="muted" style="font-size:12.5px">${IS_APP
+            ?'予定のリマインド、終業のお知らせ、メッセージが、iPhone の通知として届きます。'
+            :'予定のリマインド、終業のお知らせ、メッセージが、パソコンの通知として届きます。このタブを開いている間だけ届きます。'}</span></div>`;})():''}
         <div class="field"><label>勤務場所</label><select data-set="me.location">${Object.entries(LOCS).map(([k,v])=>`<option value="${k}" ${u.location===k?'selected':''}>${v}</option>`).join('')}</select></div>
         <div class="field"><label>位置情報の公開範囲</label><select data-set="me.privacy">
           ${['exact','city','hidden'].map(k=>`<option value="${k}" ${u.privacy===k?'selected':''} ${PRIV_RANK[k]<PRIV_RANK[DB.company.locPolicy]?'disabled':''}>${PRIV_JA[k]}${PRIV_RANK[k]<PRIV_RANK[DB.company.locPolicy]?'（会社設定により選べません）':''}</option>`).join('')}
@@ -5750,7 +5769,7 @@ document.addEventListener('click',ev=>{
       case 'edit-group':groupModal(d.id);return;
       case 'save-group':saveGroup(d.id||null);return;
       case 'del-group':delGroup(d.id);return;
-      case 'notif-perm':askNotifPerm();return;
+      case 'notif-perm':askAnyNotifPerm();return;
       case 'demo-login':demoLogin();return;
       case 'notifs':notifCenter();return;
       case 'read-all':{markRead();closeLayer();render();return;}
@@ -6148,6 +6167,7 @@ function dailyDigest(){
     :'今日の予定はありません。';
   DB.notifs.unshift({id:uid(),to:u.id,by:u.id,type:'daily',day:k,text:'今日のダイジェスト ・ '+txt,ref:'',at:now,read:false});
   save();
+  try{ osNotify('今日のダイジェスト',txt,'daily'); }catch(e){}
 }
 
 /* 終業したら「おつかれさま」を1日1回 */
@@ -6164,6 +6184,7 @@ function endOfDayCheck(){
   DB.notifs.unshift({id:uid(),to:u.id,by:u.id,type:'done',day:k,
     text:`今日はここまで。おつかれさまでした。${cnt?'（今日の予定 '+cnt+'件）':''}`,ref:'',at:now,read:false});
   save();
+  try{ if(!IS_APP)osNotify('今日はここまで','おつかれさまでした。'+(cnt?'（今日の予定 '+cnt+'件）':''),'eod'); }catch(e){}
   if(!$('#layer').innerHTML)softRender();
 }
 
@@ -6199,6 +6220,122 @@ async function askNotifPerm(){
   }catch(e){ toast('通知の設定を開けませんでした'); }
 }
 
+
+/* ============================================================
+   お知らせ（通知）のしくみ
+   ・アプリ（iPhone）… iOS の通知。予定のリマインドと終業は native.js が予約する。
+   ・ブラウザ … このタブを開いている間だけ、OS の通知として出す。
+   どちらでも、ベル（アプリ内のお知らせ）には必ず残る。
+   ============================================================ */
+const WEB_NOTIF=(()=>{ try{ return !IS_APP && typeof Notification!=='undefined'; }catch(e){ return false; } })();
+function webPerm(){ try{ return WEB_NOTIF?Notification.permission:'unsupported'; }catch(e){ return 'unsupported'; } }
+/* 表示用：いまの許可ぐあい（granted / denied / '' ＝まだ聞いていない） */
+function notifState(){
+  if(IS_APP)return NOTIF_PERM;
+  const p=webPerm();
+  return p==='granted'?'granted':p==='denied'?'denied':'';
+}
+async function askWebNotifPerm(){
+  if(!WEB_NOTIF)return toast('このブラウザは通知に対応していません');
+  if(Notification.permission==='denied')
+    return toast('ブラウザの設定（サイトの権限）から通知を許可してください');
+  try{
+    const r=await Notification.requestPermission();
+    try{localStorage.setItem('koyomi.notifAsked','1');}catch(e){}
+    softRender();
+    if(r==='granted')osNotify('Koyomi の通知をオンにしました','このタブを開いている間、お知らせが届きます','welcome');
+    else toast('ブラウザの設定から、あとで変えられます');
+  }catch(e){ toast('通知を有効にできませんでした'); }
+}
+function askAnyNotifPerm(){ return IS_APP?askNotifPerm():askWebNotifPerm(); }
+
+/* 端末のお知らせを1件出す。出せないときは、静かに何もしない。 */
+function osNotify(title,body,tag){
+  try{
+    if(IS_APP){ if(window.__koyomiNotifyNow)window.__koyomiNotifyNow(String(title||''),String(body||''),String(tag||'')); return; }
+    if(!WEB_NOTIF||Notification.permission!=='granted')return;
+    const n=new Notification(String(title||'Koyomi'),{body:String(body||''),tag:String(tag||'koyomi'),renotify:false});
+    n.onclick=()=>{ try{window.focus();n.close();}catch(e){} };
+  }catch(e){}
+}
+
+/* 自分あてのお知らせを1件たす。key を渡すと同じものは二度出さない。 */
+function selfNotif(type,text,ref,key){
+  if(!DB.authed||!person(DB.userId))return false;
+  if(key&&(DB.notifs||[]).some(n=>n.to===DB.userId&&n.type===type&&n.day===key))return false;
+  DB.notifs=DB.notifs||[];
+  DB.notifs.unshift({id:uid(),at:Date.now(),to:DB.userId,by:DB.userId,
+                     type,text,ref:ref||'',day:key||null,read:false});
+  DB.notifs=DB.notifs.slice(0,200);
+  return true;
+}
+
+/* ---- 予定のリマインド（ブラウザ用。アプリは iOS 側で予約ずみ） ---- */
+function reminderCheck(){
+  if(IS_APP||!DB.authed||!person(DB.userId))return;
+  const u=me(),tz=effTz(u),now=Date.now();
+  let hit=false;
+  DB.events.filter(e=>e.who.includes(u.id)&&e.kind!=='holiday'&&e.start>now&&e.start<now+90*60000)
+    .forEach(e=>{
+      const lead=(e.rem==null?10:e.rem);
+      if(lead<=0)return;
+      const at=e.start-lead*60000;
+      if(at>now||now-at>10*60000)return;          /* まだ先／だいぶ過ぎた */
+      const body=hhmm(e.start,tz)+(e.place?'　'+e.place:'');
+      if(selfNotif('remind',`${e.title||'予定'} ・ ${body}`,e.id,'rm:'+e.id)){
+        hit=true; osNotify(e.title||'予定',body,'ev-'+e.id);
+      }
+    });
+  if(hit){ save(); if(!$('#layer').innerHTML)softRender(); }
+}
+
+/* ---- メッセージのお知らせ ---- */
+var MSG_SEEN=0;
+function msgSeenLoad(){
+  try{ MSG_SEEN=Number(localStorage.getItem('koyomi.msgSeen')||0)||0; }catch(e){ MSG_SEEN=0; }
+  if(!MSG_SEEN){ MSG_SEEN=Date.now(); msgSeenSave(); }
+}
+function msgSeenSave(){ try{localStorage.setItem('koyomi.msgSeen',String(MSG_SEEN));}catch(e){} }
+/* 自分に関係する未読の新着メッセージを拾う */
+function newMessagesForMe(){
+  if(!DB.authed||!person(DB.userId))return [];
+  const uid0=DB.userId,out=[];
+  const add=(m,from,ref)=>{ if(m&&m.by&&m.by!==uid0&&(m.at||0)>MSG_SEEN)out.push({m,from,ref}); };
+  Object.entries(DB.threads||{}).forEach(([eid,list])=>{
+    const e=DB.events.find(x=>x.id===eid); if(!e||!e.who.includes(uid0))return;
+    (list||[]).forEach(m=>add(m,e.title||'予定','ev:'+eid));
+  });
+  Object.entries(DB.dms||{}).forEach(([k,list])=>{
+    if(k.slice(0,2)==='g:'){
+      const g=(DB.groups||[]).find(x=>'g:'+x.id===k);
+      if(!g||!(g.who||[]).includes(uid0))return;
+      (list||[]).forEach(m=>add(m,g.name||'グループ',k));
+    }else{
+      if(k.split('|').indexOf(uid0)<0)return;
+      (list||[]).forEach(m=>add(m,'',k));
+    }
+  });
+  return out.sort((a,b)=>(a.m.at||0)-(b.m.at||0));
+}
+function messageCheck(){
+  if(!DB.authed||!person(DB.userId))return;
+  if(!MSG_SEEN)msgSeenLoad();                    /* 初回は「ここから先」を決めるだけ */
+  if(DB.company&&DB.company.notify&&DB.company.notify.msg===false)return;
+  const fresh=newMessagesForMe();
+  if(!fresh.length)return;
+  MSG_SEEN=Math.max(MSG_SEEN,...fresh.map(x=>x.m.at||0)); msgSeenSave();
+  const last=fresh[fresh.length-1],who=person(last.m.by),name=who?who.name:'';
+  const head=fresh.length>1?`新しいメッセージ ${fresh.length}件`
+                           :`${name}${last.from?'（'+last.from+'）':''}`;
+  const raw=String(last.m.text||last.m.body||'');
+  const body=last.m.img&&!raw?'写真を送りました':raw.slice(0,90);
+  selfNotif('msg',`${head} ・ ${body}`,last.ref,'');
+  save();
+  const quiet=(S.view==='messages')&&(!document.hidden)&&(!document.hasFocus||document.hasFocus());
+  if(!quiet)osNotify(head,body,'msg-'+(last.m.at||Date.now()));
+  if(!$('#layer').innerHTML)softRender();
+}
+
 /* 認証画面・初期設定の画面も、出したあとに英語へ置き換える */
 (function(){
   if(typeof renderAuth==='function'){const f=renderAuth;renderAuth=function(){const r=f.apply(this,arguments);try{translateDOM(document.body);}catch(e){}return r;};}
@@ -6231,6 +6368,8 @@ render();
   }finally{ splashOff(); }
 })();
 setInterval(tick,1000);
+setInterval(()=>{try{messageCheck();}catch(e){}},5000);
+setInterval(()=>{try{reminderCheck();}catch(e){}},30000);
 setInterval(()=>{try{endOfDayCheck();}catch(e){}
   if(!$('#layer').innerHTML&&['today','people','map','admin'].includes(S.view))softRender();},60000);
 </script>

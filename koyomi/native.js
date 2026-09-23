@@ -147,6 +147,16 @@
   }
   window.__koyomiPerm = refreshPerm;
 
+  /* ---- いますぐ1件だけ知らせる（メッセージが届いたときなど）----
+     プラグインに notifyNow があれば使う。無い古いビルドでは何もしない。 */
+  window.__koyomiNotifyNow = function (title, body, tag) {
+    try {
+      const P = native();
+      if (!P || !P.notifyNow) return;
+      P.notifyNow({ title: String(title || 'Koyomi'), body: String(body || ''), tag: String(tag || '') });
+    } catch (e) {}
+  };
+
   (async () => {
     try {
       const st = await refreshPerm();
