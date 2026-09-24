@@ -55,6 +55,36 @@
   .pl-table th,.pl-table td{display:block;width:auto;}
   .pl-table th{border-bottom:0;padding-bottom:4px;}
 }
+
+/* ===== v43 : SNSプラン 用語・早見表・追加料金 ===== */
+.sns-term__lead{font-size:13.4px;line-height:1.95;color:#6B6467;margin:0 0 18px;}
+.sns-term__note{font-size:12.4px;line-height:1.9;color:#8A8285;margin:14px 0 0;}
+.sns-sub{display:inline-block;font-size:12.2px;line-height:1.75;color:#8A8285;font-weight:400;}
+.sns-terms{margin:0;padding:0;display:grid;gap:12px;}
+.sns-term{background:#FBF8F1;border:1px solid #EDE7DA;border-radius:7px;padding:16px 18px;}
+.sns-term dt{font-size:13.8px;font-weight:700;color:#8A6E1E;margin:0 0 6px;line-height:1.6;}
+.sns-term dd{margin:0;font-size:13.2px;line-height:1.95;color:#4A4548;}
+.sns-term dd strong{color:#2B2A2E;}
+.sns-table__scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.sns-table{width:100%;min-width:560px;border-collapse:collapse;}
+.sns-table--2col{min-width:0;}
+.sns-table th,.sns-table td{padding:12px 14px;border-bottom:1px solid #EDE7DA;font-size:13px;line-height:1.8;text-align:left;vertical-align:top;}
+.sns-table thead th{background:#FBF8F1;color:#2B2A2E;font-weight:700;font-size:13.4px;border-bottom:2px solid #EDE7DA;text-align:center;white-space:nowrap;}
+.sns-table thead th:first-child{background:transparent;border-bottom:2px solid #EDE7DA;}
+.sns-table__price{display:block;font-size:12px;font-weight:500;color:#8A8285;margin-top:3px;}
+.sns-table tbody th{color:#4A4548;font-weight:600;width:34%;}
+.sns-table tbody td{color:#4A4548;text-align:center;}
+.sns-table--2col tbody td{text-align:right;white-space:nowrap;color:#2B2A2E;font-weight:600;}
+.sns-table--2col tbody th{width:auto;font-weight:500;}
+.sns-table__indent{padding-left:28px!important;font-weight:400!important;color:#8A8285!important;font-size:12.6px!important;}
+.sns-table__hl td,.sns-table__hl th{background:#F4FAF6;}
+.sns-table__hl th{color:#16653D!important;}
+.sns-no{color:#C4BDBF!important;}
+@media(max-width:720px){
+  .sns-term{padding:14px 15px;}
+  .sns-table th,.sns-table td{padding:10px 11px;font-size:12.4px;}
+  .sns-table--2col th,.sns-table--2col td{padding:11px 4px;}
+}
 </style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
 </head>
@@ -102,32 +132,67 @@
   <nav class="price-crumb"><a href="Pricing.html">料金プラン</a><span>/</span><span>SNS運用サポート</span></nav>
 
   <section class="price-detail price-cat--sns fade-section">
+
+    <article class="plan-full" style="margin-bottom:22px;">
+      <div class="plan-full__body" style="grid-template-columns:1fr;">
+        <div class="plan-full__block">
+          <h3 class="plan-full__subtitle">先に、言葉の意味をそろえます</h3>
+          <p class="sns-term__lead">プランの中身を読む前に、ここだけ目を通してください。「何をどこまでやるのか」が、ここで決まります。</p>
+          <dl class="sns-terms">
+            <div class="sns-term">
+              <dt>投稿企画（台本づくり）</dt>
+              <dd>何を、どんな流れで出すかを考える作業です。リールなら<strong>台本</strong>（最初の3秒・展開・セリフ・テロップ案）、画像投稿なら<strong>構成</strong>（1枚目から最後までの流れ）をお渡しします。本数は、この企画の数で数えます。</dd>
+            </div>
+            <div class="sns-term">
+              <dt>画像制作</dt>
+              <dd>お預かりした写真に、文字入れ・レイアウト・色の調整をして、投稿に使える形に仕上げます。<strong>写真そのものは、お客様にご用意いただきます。</strong></dd>
+            </div>
+            <div class="sns-term">
+              <dt>動画編集</dt>
+              <dd>お預かりした動画を、カット・テロップ・BGMまで入れて仕上げます。<strong>撮影は含みません。BUSINESSプランのみです。</strong></dd>
+            </div>
+            <div class="sns-term">
+              <dt>投稿代行</dt>
+              <dd>何月何日の何時に出すかをこちらで決めて、その時間に投稿します。お客様の作業はありません。</dd>
+            </div>
+            <div class="sns-term">
+              <dt>ストーリーズ制作</dt>
+              <dd>お預かりした画像を、24時間で消えるストーリーズ用に仕上げます。<strong>画像はお客様にご用意いただきます。</strong></dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </article>
+
     <div class="plan-fulls">
       <article class="plan-full">
         <div class="plan-full__aside">
           <span class="plan-full__name">LIGHT</span>
           <span class="plan-full__price">¥19,800 / 月</span>
-          <span class="plan-full__for">考えるところを、任せる</span>
-          <p class="plan-full__lead">何を投稿するかを決めて、文章までお渡しします。<strong>画像はお客様ご自身で作っていただくプランです。</strong></p>
+          <span class="plan-full__for">考えるところだけ、任せる</span>
+          <p class="plan-full__lead">投稿の中身を考えて、文章までお渡しします。<strong>作るのと、出すのは、お客様です。</strong></p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
         </div>
         <div class="plan-full__body">
           <div class="plan-full__block">
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
-              <li>投稿企画 月8本（何を・いつ出すか）</li>
+              <li><strong>投稿企画 月8本</strong><br><span class="sns-sub">内訳：リール台本 4本／画像投稿の構成 4本</span></li>
               <li>本文（キャプション）の作成</li>
-              <li>ハッシュタグの選定</li>
-              <li>画像の指示書（何を撮るか・どう並べるか）</li>
+              <li>ハッシュタグの選定（今は5個までしか付けられません）</li>
+              <li>写真の指示書（何を撮るか・どう並べるか）</li>
+              <li><strong>月1回の振り返り</strong><br><span class="sns-sub">前の月に出した投稿を見て、効いたもの・効かなかったものをチャットでお伝えします</span></li>
               <li>チャットでのご相談</li>
             </ul>
           </div>
           <div class="plan-full__block">
             <h3 class="plan-full__subtitle">含まないもの</h3>
             <ul class="plan-full__list">
-              <li>画像・動画の制作</li>
-              <li>投稿の代行（ご自身で投稿していただきます）</li>
-              <li>月次レポート</li>
+              <li>画像制作（文字入れ・レイアウト）</li>
+              <li>動画編集</li>
+              <li>投稿代行（ご自身で投稿していただきます）</li>
+              <li>ストーリーズ制作</li>
+              <li>数字のレポート</li>
             </ul>
           </div>
         </div>
@@ -137,8 +202,8 @@
           <span class="plan-full__badge">おすすめ</span>
           <span class="plan-full__name">STANDARD</span>
           <span class="plan-full__price">¥39,800 / 月</span>
-          <span class="plan-full__for">作るところまで、任せる</span>
-          <p class="plan-full__lead"><strong>画像の制作と投稿の代行まで含みます。</strong>お客様は写真を送るだけです。</p>
+          <span class="plan-full__for">作って、出すところまで</span>
+          <p class="plan-full__lead"><strong>画像制作と投稿代行まで含みます。</strong>お客様は、写真を送るだけです。</p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
         </div>
         <div class="plan-full__body">
@@ -146,20 +211,25 @@
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
               <li>LIGHTの内容すべて</li>
-              <li>投稿企画 月12本</li>
-              <li><strong>画像の制作 月12枚</strong>（お預かりした写真から作成）</li>
-              <li><strong>投稿の代行</strong>（こちらで投稿します）</li>
-              <li>ストーリーズ 月8本</li>
+              <li><strong>投稿企画 月12本</strong><br><span class="sns-sub">内訳：リール台本 6本／画像投稿の構成 6本</span></li>
+              <li><strong>画像制作 月6枚</strong></li>
+              <li><strong>投稿代行</strong>（日時を決めて、こちらで出します）</li>
+              <li>ストーリーズ制作 月8本</li>
               <li>プロフィールの改善提案</li>
               <li>月次レポート（保存数・リーチ・プロフィール閲覧数）</li>
+              <li><strong>月1回のオンライン打ち合わせ（30分）</strong></li>
             </ul>
           </div>
           <div class="plan-full__block">
             <h3 class="plan-full__subtitle">LIGHTとの違い</h3>
             <ul class="plan-full__list">
-              <li><strong>画像をこちらで作ります</strong></li>
-              <li><strong>投稿もこちらで行います</strong></li>
-              <li>数字を見て、毎月やり方を変えます</li>
+              <li><strong>画像を、こちらで作ります</strong></li>
+              <li><strong>投稿も、こちらで出します</strong></li>
+              <li>毎月30分、直接お話しします</li>
+            </ul>
+            <h3 class="plan-full__subtitle" style="margin-top:18px;">含まないもの</h3>
+            <ul class="plan-full__list">
+              <li><strong>動画編集</strong>（リールは台本までです）</li>
             </ul>
           </div>
         </div>
@@ -168,8 +238,8 @@
         <div class="plan-full__aside">
           <span class="plan-full__name">BUSINESS</span>
           <span class="plan-full__price">¥69,800 / 月</span>
-          <span class="plan-full__for">売上につなげるところまで</span>
-          <p class="plan-full__lead">動画と導線まで含めて、SNSを売上の入口として組み立てます。</p>
+          <span class="plan-full__for">動画まで、こちらで作る</span>
+          <p class="plan-full__lead"><strong>このプランから、動画編集が入ります。</strong>撮っていただいた動画を、こちらで仕上げます。</p>
           <a href="Contact.html" class="btn-pill btn-pill--brand plan-full__cta">無料相談はこちら<span class="btn-pill__arrow">&rarr;</span></a>
         </div>
         <div class="plan-full__body">
@@ -177,26 +247,88 @@
             <h3 class="plan-full__subtitle">内容</h3>
             <ul class="plan-full__list">
               <li>STANDARDの内容すべて</li>
-              <li>投稿企画・画像制作 月20本</li>
-              <li>リールの台本作成 月4本（撮るだけの状態でお渡し）</li>
-              <li>ストーリーズ 月20本</li>
+              <li><strong>投稿企画 月16本</strong><br><span class="sns-sub">内訳：リール台本 8本／画像投稿の構成 8本</span></li>
+              <li><strong>画像制作 月8枚</strong></li>
+              <li><strong>動画編集 月3本</strong><br><span class="sns-sub">カット・テロップ・BGM・尺の調整まで。4本目以降は1本 ¥8,000 です</span></li>
+              <li>ストーリーズ制作 月12本</li>
+              <li><strong>月2回のオンライン打ち合わせ（各30分）</strong></li>
               <li>プロフィールの設計（文章・ハイライト構成）</li>
               <li>導線設計（LINE・ホームページ・予約への流れ）</li>
               <li>DM対応の型づくり（返信テンプレート）</li>
-              <li>月1回のオンライン打ち合わせ（30分）</li>
             </ul>
           </div>
           <div class="plan-full__block">
             <h3 class="plan-full__subtitle">STANDARDとの違い</h3>
             <ul class="plan-full__list">
-              <li><strong>動画（リール）まで扱います</strong></li>
+              <li><strong>動画を、こちらで編集します</strong><br><span class="sns-sub">STANDARDまでは台本をお渡しするところまでです</span></li>
               <li><strong>SNSの外まで導線を作ります</strong></li>
-              <li>毎月、直接お話ししながら進めます</li>
+              <li>月2回、直接お話しします</li>
+            </ul>
+            <h3 class="plan-full__subtitle" style="margin-top:18px;">含まないもの</h3>
+            <ul class="plan-full__list">
+              <li>撮影（動画・写真の素材はお客様にご用意いただきます）</li>
             </ul>
           </div>
         </div>
       </article>
     </div>
+
+    <article class="plan-full" style="margin-top:8px;">
+      <div class="plan-full__body" style="grid-template-columns:1fr;">
+        <div class="plan-full__block">
+          <h3 class="plan-full__subtitle">3つのプランの違い（早見表）</h3>
+          <p class="sns-term__lead">迷われたときは、ここだけ見てください。</p>
+          <div class="sns-table__scroll">
+            <table class="sns-table">
+              <thead>
+                <tr>
+                  <th scope="col">　</th>
+                  <th scope="col">LIGHT<br><span class="sns-table__price">¥19,800</span></th>
+                  <th scope="col">STANDARD<br><span class="sns-table__price">¥39,800</span></th>
+                  <th scope="col">BUSINESS<br><span class="sns-table__price">¥69,800</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">投稿企画（台本）</th><td>月8本</td><td>月12本</td><td>月16本</td></tr>
+                <tr><th scope="row" class="sns-table__indent">うち リール台本</th><td>4本</td><td>6本</td><td>8本</td></tr>
+                <tr><th scope="row" class="sns-table__indent">うち 画像投稿の構成</th><td>4本</td><td>6本</td><td>8本</td></tr>
+                <tr><th scope="row">画像制作</th><td class="sns-no">—</td><td>月6枚</td><td>月8枚</td></tr>
+                <tr class="sns-table__hl"><th scope="row">動画編集</th><td class="sns-no">—</td><td class="sns-no">—</td><td><strong>月3本</strong></td></tr>
+                <tr><th scope="row">投稿代行</th><td class="sns-no">—</td><td>あり</td><td>あり</td></tr>
+                <tr><th scope="row">ストーリーズ制作</th><td class="sns-no">—</td><td>月8本</td><td>月12本</td></tr>
+                <tr><th scope="row">振り返り</th><td>月1回<br><span class="sns-sub">チャット</span></td><td>月1回<br><span class="sns-sub">オンライン30分</span></td><td>月2回<br><span class="sns-sub">オンライン各30分</span></td></tr>
+                <tr><th scope="row">数字のレポート</th><td class="sns-no">—</td><td>あり</td><td>あり</td></tr>
+                <tr><th scope="row">プロフィール</th><td class="sns-no">—</td><td>改善の提案</td><td>設計まで</td></tr>
+                <tr><th scope="row">導線設計・DM対応</th><td class="sns-no">—</td><td class="sns-no">—</td><td>あり</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sns-term__note">※ 撮影は、どのプランにも含まれません。写真・動画の素材はお客様にご用意いただきます（撮影者の手配はオプションで承ります）。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="plan-full" style="margin-top:8px;">
+      <div class="plan-full__body" style="grid-template-columns:1fr;">
+        <div class="plan-full__block">
+          <h3 class="plan-full__subtitle">プランの本数を超えたときの追加料金</h3>
+          <p class="sns-term__lead">先に出しておきます。あとから「そんな話は聞いていない」が起きないように。</p>
+          <div class="sns-table__scroll">
+            <table class="sns-table sns-table--2col">
+              <tbody>
+                <tr><th scope="row">投稿企画の追加（企画・本文・ハッシュタグ）</th><td>¥3,000 / 本</td></tr>
+                <tr><th scope="row">リール台本の追加</th><td>¥5,000 / 本</td></tr>
+                <tr><th scope="row">画像制作の追加</th><td>¥2,000 / 枚</td></tr>
+                <tr class="sns-table__hl"><th scope="row">動画編集の追加</th><td><strong>¥8,000 / 本</strong></td></tr>
+                <tr><th scope="row">ストーリーズ制作の追加</th><td>¥1,000 / 本</td></tr>
+                <tr><th scope="row">オンライン打ち合わせの追加</th><td>¥3,000 / 30分</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sns-term__note">※ 追加は、必ず事前にご相談してから進めます。勝手に本数を増やして請求することはありません。</p>
+        </div>
+      </div>
+    </article>
 
     <article class="plan-full" style="margin-top:8px;">
       <div class="plan-full__body" style="grid-template-columns:1fr;">
@@ -207,6 +339,7 @@
             <li><strong>最低契約期間は3ヶ月です。</strong>SNSは、変化が出るまでに時間がかかるためです。</li>
             <li>4ヶ月目以降は<strong>1ヶ月ごとの更新</strong>になります。ご解約は1ヶ月前までにお申し出ください。</li>
             <li>撮影は含まれません。<strong>写真・動画の素材はお客様にご用意いただきます。</strong>撮影が必要な場合はオプションで手配します。</li>
+            <li><strong>動画編集は、BUSINESSプランのみです。</strong>LIGHT・STANDARDでは、リールは台本をお渡しするところまでになります。</li>
             <li>フォロワー数や売上をお約束するものではありません。できること・できないことは、事前に正直にお伝えします。</li>
           </ul>
         </div>
@@ -360,7 +493,21 @@
               <li>展開・セリフ案</li>
               <li>テロップ案・BGMの方向性</li>
             </ul>
-            <p class="opt-card__tip">撮影・編集までご希望の場合はご相談ください</p>
+            <p class="opt-card__tip">編集までご希望の場合は、下の「動画編集」をご覧ください</p>
+          </article>
+          <article class="opt-card">
+            <div class="opt-card__top">
+              <h3 class="opt-card__name">動画編集</h3>
+              <span class="opt-card__price">¥8,000 / 本</span>
+            </div>
+            <p class="opt-card__lead">お預かりした動画を、そのまま投稿できる形に仕上げます。撮影は含みません。</p>
+            <ul class="opt-card__list">
+              <li>カット・つなぎ</li>
+              <li>テロップ入れ</li>
+              <li>BGM・効果音</li>
+              <li>尺の調整（リール・ショート向け）</li>
+            </ul>
+            <p class="opt-card__tip">BUSINESSプランには月3本が含まれます。4本目以降がこの料金です</p>
           </article>
         </div>
       </div>
@@ -423,6 +570,7 @@
         <p class="pledge__box-t">お約束できること</p>
         <ul class="pledge__list">
           <li><b>決めた本数を、毎月きちんと出します。</b>企画・本文・ハッシュタグまで用意します</li>
+          <li><b>本数を超えるときは、必ず先にご相談します。</b>黙って増やして請求することはありません</li>
           <li><b>毎月、数字を見て次の手を決めます。</b>見た数・保存された数・プロフィールが見られた数</li>
           <li><b>3ヶ月かけて「このお店にとっての成果は何か」を一緒に決めます。</b>フォロワーなのか、問い合わせなのか、来店なのか</li>
           <li><b>うまくいかなかったときは、正直にそう言います。</b>やり方を変える提案をします</li>
@@ -434,7 +582,8 @@
           <li><b>フォロワー数、売上、来店数の保証はできません。</b>できると言う会社があれば、根拠を確かめてください</li>
           <li><b>「バズらせる」ことはお約束できません</b></li>
           <li><b>フォロワーやいいねを買うことはしません</b></li>
-          <li><b>撮影・編集は含まれません。</b>写真や動画はお客様にご用意いただきます（手配はオプションで承ります）</li>
+          <li><b>撮影は含まれません。</b>写真や動画はお客様にご用意いただきます（撮影者の手配はオプションで承ります）</li>
+          <li><b>動画編集が含まれるのは、BUSINESSプランだけです。</b>LIGHT・STANDARDでは、リールは台本をお渡しするところまでになります</li>
         </ul>
       </div>
     </div>
@@ -449,8 +598,10 @@
       <tr>
         <th>毎月の進め方</th>
         <td><b>月のはじめ</b>に、その月に出す内容をお送りします。<br>
-        <b>月の終わり</b>に、数字と「次はこうします」をお送りします。<br>
-        BUSINESSプランは、これに<b>月1回のオンライン打ち合わせ（30分）</b>が付きます。</td>
+        <b>月の終わり</b>に、振り返りをお送りします。効いた投稿・効かなかった投稿と、次にどうするかです。<br>
+        <b>LIGHTは、この振り返りをチャットでお送りします（月1回）。</b><br>
+        <b>STANDARDは、数字のレポートが付き、月1回のオンライン打ち合わせ（30分）でお話しします。</b><br>
+        <b>BUSINESSは、月2回のオンライン打ち合わせ（各30分）になります。</b></td>
       </tr>
       <tr>
         <th>アカウントの扱い</th>
