@@ -80,10 +80,28 @@
 .sns-table__hl td,.sns-table__hl th{background:#F4FAF6;}
 .sns-table__hl th{color:#16653D!important;}
 .sns-no{color:#C4BDBF!important;}
+/* 1カラムのブロックは見出しを一段大きく、区切りを分かりやすく */
+.price-detail > .plan-full{border-top:3px solid #EDE7DA;}
+.price-detail > .plan-full > .plan-full__body > .plan-full__block > .plan-full__subtitle{
+  font-size:16.5px;line-height:1.6;margin-bottom:10px;
+}
+/* 用語は2列に畳んで、縦の長さを半分に */
+@media(min-width:721px){
+  .sns-terms{grid-template-columns:1fr 1fr;gap:12px 14px;}
+}
+/* 3ヶ月の流れ */
+.sns-flow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px;}
+.sns-flow__step{background:#FBF8F1;border:1px solid #EDE7DA;border-radius:7px;padding:16px 18px;position:relative;}
+.sns-flow__no{display:block;font-size:11px;letter-spacing:.14em;color:#B8912F;font-weight:700;margin-bottom:6px;}
+.sns-flow__t{display:block;font-size:14.5px;font-weight:700;color:#2B2A2E;margin-bottom:7px;line-height:1.5;}
+.sns-flow__d{font-size:12.6px;line-height:1.9;color:#4A4548;margin:0;}
 @media(max-width:720px){
   .sns-term{padding:14px 15px;}
   .sns-table th,.sns-table td{padding:10px 11px;font-size:12.4px;}
   .sns-table--2col th,.sns-table--2col td{padding:11px 4px;}
+  .sns-flow{grid-template-columns:1fr;gap:10px;}
+  .sns-flow__step{padding:14px 15px;}
+  .price-detail > .plan-full > .plan-full__body > .plan-full__block > .plan-full__subtitle{font-size:15.5px;}
 }
 </style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
@@ -164,6 +182,41 @@
       </div>
     </article>
 
+    <article class="plan-full" style="margin-top:20px;grid-template-columns:1fr;">
+      <div class="plan-full__body" style="grid-template-columns:1fr;">
+        <div class="plan-full__block">
+          <h3 class="plan-full__subtitle">3つのプランの違い（早見表）</h3>
+          <p class="sns-term__lead">迷われたときは、ここだけ見てください。</p>
+          <div class="sns-table__scroll">
+            <table class="sns-table">
+              <thead>
+                <tr>
+                  <th scope="col">　</th>
+                  <th scope="col">LIGHT<br><span class="sns-table__price">¥19,800</span></th>
+                  <th scope="col">STANDARD<br><span class="sns-table__price">¥39,800</span></th>
+                  <th scope="col">BUSINESS<br><span class="sns-table__price">¥69,800</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">投稿企画（台本）</th><td>月8本</td><td>月12本</td><td>月16本</td></tr>
+                <tr><th scope="row" class="sns-table__indent">うち リール台本</th><td>4本</td><td>6本</td><td>8本</td></tr>
+                <tr><th scope="row" class="sns-table__indent">うち 画像投稿の構成</th><td>4本</td><td>6本</td><td>8本</td></tr>
+                <tr><th scope="row">画像制作</th><td class="sns-no">—</td><td>月6枚</td><td>月8枚</td></tr>
+                <tr class="sns-table__hl"><th scope="row">動画編集</th><td class="sns-no">—</td><td class="sns-no">—</td><td><strong>月4本</strong></td></tr>
+                <tr><th scope="row">投稿代行</th><td class="sns-no">—</td><td>あり</td><td>あり</td></tr>
+                <tr><th scope="row">ストーリーズ制作</th><td class="sns-no">—</td><td>月8本</td><td>月12本</td></tr>
+                <tr><th scope="row">振り返り</th><td>月1回<br><span class="sns-sub">チャット</span></td><td>月1回<br><span class="sns-sub">オンライン30分</span></td><td>月2回<br><span class="sns-sub">オンライン各30分</span></td></tr>
+                <tr><th scope="row">数字のレポート</th><td class="sns-no">—</td><td>あり</td><td>あり</td></tr>
+                <tr><th scope="row">プロフィール</th><td class="sns-no">—</td><td>改善の提案</td><td>設計まで</td></tr>
+                <tr><th scope="row">導線設計・DM対応</th><td class="sns-no">—</td><td class="sns-no">—</td><td>あり</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="sns-term__note">※ 撮影は、どのプランにも含まれません。写真・動画の素材はお客様にご用意いただきます（撮影者の手配はオプションで承ります）。</p>
+        </div>
+      </div>
+    </article>
+
     <div class="plan-fulls">
       <article class="plan-full">
         <div class="plan-full__aside">
@@ -179,7 +232,7 @@
             <ul class="plan-full__list">
               <li><strong>投稿企画 月8本</strong><br><span class="sns-sub">内訳：リール台本 4本／画像投稿の構成 4本</span></li>
               <li>本文（キャプション）の作成</li>
-              <li>ハッシュタグの選定（今は5個までしか付けられません）</li>
+              <li>ハッシュタグの選定<br><span class="sns-sub">今は5個までしか付けられません。毎月ちがう組み合わせを試して、反応の出るものを探します</span></li>
               <li>写真の指示書（何を撮るか・どう並べるか）</li>
               <li><strong>月1回の振り返り</strong><br><span class="sns-sub">前の月に出した投稿を見て、効いたもの・効かなかったものをチャットでお伝えします</span></li>
               <li>チャットでのご相談</li>
@@ -249,7 +302,7 @@
               <li>STANDARDの内容すべて</li>
               <li><strong>投稿企画 月16本</strong><br><span class="sns-sub">内訳：リール台本 8本／画像投稿の構成 8本</span></li>
               <li><strong>画像制作 月8枚</strong></li>
-              <li><strong>動画編集 月3本</strong><br><span class="sns-sub">カット・テロップ・BGM・尺の調整まで。4本目以降は1本 ¥8,000 です</span></li>
+              <li><strong>動画編集 月4本</strong><br><span class="sns-sub">カット・テロップ・BGM・尺の調整まで。5本目以降は1本 ¥8,000 です</span></li>
               <li>ストーリーズ制作 月12本</li>
               <li><strong>月2回のオンライン打ち合わせ（各30分）</strong></li>
               <li>プロフィールの設計（文章・ハイライト構成）</li>
@@ -273,42 +326,8 @@
       </article>
     </div>
 
-    <article class="plan-full" style="margin-top:8px;grid-template-columns:1fr;">
-      <div class="plan-full__body" style="grid-template-columns:1fr;">
-        <div class="plan-full__block">
-          <h3 class="plan-full__subtitle">3つのプランの違い（早見表）</h3>
-          <p class="sns-term__lead">迷われたときは、ここだけ見てください。</p>
-          <div class="sns-table__scroll">
-            <table class="sns-table">
-              <thead>
-                <tr>
-                  <th scope="col">　</th>
-                  <th scope="col">LIGHT<br><span class="sns-table__price">¥19,800</span></th>
-                  <th scope="col">STANDARD<br><span class="sns-table__price">¥39,800</span></th>
-                  <th scope="col">BUSINESS<br><span class="sns-table__price">¥69,800</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><th scope="row">投稿企画（台本）</th><td>月8本</td><td>月12本</td><td>月16本</td></tr>
-                <tr><th scope="row" class="sns-table__indent">うち リール台本</th><td>4本</td><td>6本</td><td>8本</td></tr>
-                <tr><th scope="row" class="sns-table__indent">うち 画像投稿の構成</th><td>4本</td><td>6本</td><td>8本</td></tr>
-                <tr><th scope="row">画像制作</th><td class="sns-no">—</td><td>月6枚</td><td>月8枚</td></tr>
-                <tr class="sns-table__hl"><th scope="row">動画編集</th><td class="sns-no">—</td><td class="sns-no">—</td><td><strong>月3本</strong></td></tr>
-                <tr><th scope="row">投稿代行</th><td class="sns-no">—</td><td>あり</td><td>あり</td></tr>
-                <tr><th scope="row">ストーリーズ制作</th><td class="sns-no">—</td><td>月8本</td><td>月12本</td></tr>
-                <tr><th scope="row">振り返り</th><td>月1回<br><span class="sns-sub">チャット</span></td><td>月1回<br><span class="sns-sub">オンライン30分</span></td><td>月2回<br><span class="sns-sub">オンライン各30分</span></td></tr>
-                <tr><th scope="row">数字のレポート</th><td class="sns-no">—</td><td>あり</td><td>あり</td></tr>
-                <tr><th scope="row">プロフィール</th><td class="sns-no">—</td><td>改善の提案</td><td>設計まで</td></tr>
-                <tr><th scope="row">導線設計・DM対応</th><td class="sns-no">—</td><td class="sns-no">—</td><td>あり</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="sns-term__note">※ 撮影は、どのプランにも含まれません。写真・動画の素材はお客様にご用意いただきます（撮影者の手配はオプションで承ります）。</p>
-        </div>
-      </div>
-    </article>
 
-    <article class="plan-full" style="margin-top:8px;grid-template-columns:1fr;">
+    <article class="plan-full" style="margin-top:20px;grid-template-columns:1fr;">
       <div class="plan-full__body" style="grid-template-columns:1fr;">
         <div class="plan-full__block">
           <h3 class="plan-full__subtitle">プランの本数を超えたときの追加料金</h3>
@@ -330,7 +349,34 @@
       </div>
     </article>
 
-    <article class="plan-full" style="margin-top:8px;grid-template-columns:1fr;">
+    <article class="plan-full" style="margin-top:20px;grid-template-columns:1fr;">
+      <div class="plan-full__body" style="grid-template-columns:1fr;">
+        <div class="plan-full__block">
+          <h3 class="plan-full__subtitle">なぜ、最低3ヶ月なのか</h3>
+          <p class="sns-term__lead">SNSに、決まった正解はありません。<strong>試して、探すしかありません。</strong>だから、3ヶ月という時間をいただいています。</p>
+          <div class="sns-flow">
+            <div class="sns-flow__step">
+              <span class="sns-flow__no">1ヶ月目</span>
+              <span class="sns-flow__t">土台をつくる</span>
+              <p class="sns-flow__d">アカウントの見え方、投稿の型、言葉の使い方を決めます。まず一度、形にします。</p>
+            </div>
+            <div class="sns-flow__step">
+              <span class="sns-flow__no">2ヶ月目</span>
+              <span class="sns-flow__t">探しはじめる</span>
+              <p class="sns-flow__d">ちがう切り口、ちがう見せ方、ちがうハッシュタグを試します。数字を見ながら、反応のあるものを探します。</p>
+            </div>
+            <div class="sns-flow__step">
+              <span class="sns-flow__no">3ヶ月目</span>
+              <span class="sns-flow__t">ハマる形を見つける</span>
+              <p class="sns-flow__d">反応のあったものを、毎月くり返せる形にします。「このお店には、これが効く」が見えてきます。</p>
+            </div>
+          </div>
+          <p class="sns-term__note">※ 1ヶ月では、良かったのか悪かったのかの判断がつきません。3ヶ月やって、ようやく「続けるかどうか」を決められます。4ヶ月目以降は1ヶ月ごとの更新です。</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="plan-full" style="margin-top:20px;grid-template-columns:1fr;">
       <div class="plan-full__body" style="grid-template-columns:1fr;">
         <div class="plan-full__block">
           <h3 class="plan-full__subtitle">ご契約について</h3>
@@ -507,7 +553,7 @@
               <li>BGM・効果音</li>
               <li>尺の調整（リール・ショート向け）</li>
             </ul>
-            <p class="opt-card__tip">BUSINESSプランには月3本が含まれます。4本目以降がこの料金です</p>
+            <p class="opt-card__tip">BUSINESSプランには月4本が含まれます。5本目以降がこの料金です</p>
           </article>
         </div>
       </div>
@@ -592,7 +638,7 @@
       <tr>
         <th>最低契約期間</th>
         <td><b>3ヶ月です。</b>1ヶ月では、良かったのか悪かったのかの判断がつきません。<br>
-        <b>1ヶ月目は形を作る、2ヶ月目で数字を見る、3ヶ月目で変える。</b>ここまでやって、ようやく「続けるかどうか」を決められます。<br>
+        <b>1ヶ月目で土台をつくり、2ヶ月目で探しはじめ、3ヶ月目でハマる形を見つける。</b>ここまでやって、ようやく「続けるかどうか」を決められます。<br>
         4ヶ月目以降は1ヶ月ごとの更新です。ご解約は1ヶ月前までにお申し出ください。</td>
       </tr>
       <tr>
@@ -687,7 +733,7 @@
 
 </div>
 
-<script src="assets/js/i18n.js?v=20260924"></script>
+<script src="assets/js/i18n.js?v=20260925"></script>
 <script src="assets/js/main.js"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://shiraumedigital.com/#organization","name":"白梅デジタル","alternateName":"Shiraume Digital","url":"https://shiraumedigital.com","logo":"https://shiraumedigital.com/assets/images/shiraume-symbol-mark.png","image":"https://shiraumedigital.com/assets/images/og-image.png","description":"中小企業・飲食店・個人事業主向けに、ホームページ制作、SNS運用サポート、Googleマップ（MEO）対策、LINE公式アカウント構築を提供。料金をすべて公開し、公開後の運用まで伴走します。","email":"contact.shiraumedigital@gmail.com","priceRange":"¥2,980〜¥169,800","founder":{"@type":"Person","name":"大西 一輝","jobTitle":"代表","alumniOf":"名古屋商科大学 経営学部"},"areaServed":{"@type":"Country","name":"日本"},"availableLanguage":["ja","en"],"openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"10:00","closes":"19:00"},"sameAs":["https://www.instagram.com/shiraume.digital_","https://www.facebook.com/share/17ojcaXPAJ/"],"knowsAbout":["ホームページ制作","Webデザイン","LINE公式アカウント構築","Instagram運用代行","Googleマップ対策","MEO対策","AI導入支援","Webサイト保守運用"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"サービス一覧","itemListElement":[{"@type":"Offer","name":"ホームページ制作（買い切り）","priceCurrency":"JPY","price":"49800","url":"https://shiraumedigital.com/Pricing-Web.html"},{"@type":"Offer","name":"ホームページ制作（月額）","priceCurrency":"JPY","price":"6980","url":"https://shiraumedigital.com/Pricing-Web.html"},{"@type":"Offer","name":"保守・運用プラン","priceCurrency":"JPY","price":"2980","url":"https://shiraumedigital.com/Pricing-Web.html"},{"@type":"Offer","name":"SNS運用サポート","priceCurrency":"JPY","price":"19800","url":"https://shiraumedigital.com/Pricing-SNS.html"},{"@type":"Offer","name":"SNS運用サポート 初期アカウント設計（初回のみ・一律）","priceCurrency":"JPY","price":"20000","url":"https://shiraumedigital.com/Pricing-SNS.html"},{"@type":"Offer","name":"LINE公式アカウント構築","priceCurrency":"JPY","price":"19800","url":"https://shiraumedigital.com/Pricing-LINE.html"},{"@type":"Offer","name":"Googleマップ対策","priceCurrency":"JPY","price":"9800","url":"https://shiraumedigital.com/Pricing-MEO.html"},{"@type":"Offer","name":"ネットショップ開設サポート","priceCurrency":"JPY","price":"19800","url":"https://shiraumedigital.com/Pricing.html"}]}}
