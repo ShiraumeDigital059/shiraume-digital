@@ -1395,7 +1395,14 @@
     "投稿の代行のみ": "Publishing only",
     "中身はご自身で作り、投稿作業だけをお任せいただけます。": "You make the content; we handle the posting.",
     "投稿作業の代行（月12本まで）": "Publishing on your behalf (up to 12 a month)",
-    "LIGHTプランと組み合わせる方が多いです": "Most people pair this with the LIGHT plan"
+    "LIGHTプランと組み合わせる方が多いです": "Most people pair this with the LIGHT plan",
+
+    /* --- 2026-09-25 英語版の取りこぼし補完 --- */
+    "¥2,000 / 枚": "¥2,000 / image",
+    "¥3,000 / 30分": "¥3,000 / 30 min",
+    "実費 ＋ ¥10,000〜": "Cost + ¥10,000+",
+    "広告費の20%（最低 ¥10,000 / 月）": "20% of ad spend (minimum ¥10,000 / month)",
+    "をお渡しします。撮影そのものが必要な場合は、提携している撮影者を手配します（実費＋¥10,000〜）。": ". If you need the shoot itself, we arrange one of our partner photographers (cost + ¥10,000+)."
   };
 
   /* Attribute-only translations (alt / aria-label / placeholder / title).
