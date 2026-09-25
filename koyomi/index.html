@@ -2606,6 +2606,7 @@ Object.assign(TR,{
 'このブラウザは通知に対応していません':'This browser does not support notifications',
 'ブラウザの設定（サイトの権限）から通知を許可してください':'Allow notifications for this site in your browser settings',
 '通知を有効にできませんでした':'Could not turn on notifications',
+'この端末では通知を設定できませんでした':'Notifications could not be set up on this device',
 '今日のダイジェスト':'Today’s digest','新しいメッセージ':'New messages','写真を送りました':'Sent a photo',
 '休暇はその日':'A day off takes','まる1日':'the whole day','になります。その日は予定を追加できなくなります。':'. No other events can be added that day.',
 '保存すると各メンバーの現地時間に自動変換されます':'Saved times are shown in each person’s local time',
@@ -6208,7 +6209,8 @@ function koyomiNative(){
   }catch(e){ return null; }
 }
 async function askNotifPerm(){
-  const P=koyomiNative(); if(!P)return;
+  const P=koyomiNative();
+  if(!P)return toast('この端末では通知を設定できませんでした');
   try{
     if(NOTIF_PERM==='denied'){ if(P.openSettings)await P.openSettings(); return; }
     const r=await P.requestPermission();

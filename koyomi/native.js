@@ -161,13 +161,17 @@
     try {
       const st = await refreshPerm();
       if (st === 'granted') { sync(true); return; }
-      if (localStorage.getItem('koyomi.notifAsked')) return;   // 一度断られたら、こちらからは聞かない
+      /* iOS 側がまだ一度も聞かれていない（prompt）なら、前回の「聞いた」印は当てにしない。
+         プラグインが読み込めていなかった場合など、印だけ残って永久に聞かなくなるのを防ぐ。 */
+      if (st !== 'prompt' && localStorage.getItem('koyomi.notifAsked')) return;
       const wait = setInterval(async () => {
         if (!window.DB || !DB.authed) return;
         clearInterval(wait);
-        localStorage.setItem('koyomi.notifAsked', '1');
         try {
-          const r = await native().requestPermission();
+          const P = native();
+          if (!P || !P.requestPermission) return;      /* プラグインが無いなら印も付けない */
+          localStorage.setItem('koyomi.notifAsked', '1');
+          const r = await P.requestPermission();
           window.NOTIF_PERM = (r && r.granted) ? 'granted' : 'denied';
         } catch (e) {}
         sync(true);
