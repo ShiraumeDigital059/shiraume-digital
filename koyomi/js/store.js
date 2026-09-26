@@ -25,11 +25,7 @@
   let remoteCb = null;
 
   /* iOS アプリの中で動いているか */
-  function nativePlugin() {
-    const C = window.Capacitor;
-    return (C && C.isNativePlatform && C.isNativePlatform() && C.Plugins && C.Plugins.Koyomi)
-      ? C.Plugins.Koyomi : null;
-  }
+  function nativePlugin() { return koyomiPlugin(); }
   /* Apple サインインのボタンを出してよいか
      iOS アプリ = 常に出す / ブラウザ = config.js で有効にしたときだけ */
   function appleAvailable() {
@@ -54,12 +50,23 @@
      WKWebView の localStorage は、空き容量が減ったときなどに iOS が消してしまうことがあり、
      それだけに頼ると「たまに勝手にログアウトされる」ことがあるため。
      ブラウザではこの仕組みは使わず、今までどおり localStorage に保存する。 */
-  function nativeKV() {
+  /* Capacitor は registerPlugin('Koyomi') を呼んで初めて Plugins に入れてくれる。
+     呼ばないと Plugins は空のままなので、ここで一度だけ登録する。 */
+  function koyomiPlugin() {
     try {
       const C = global.Capacitor;
-      const P = (C && C.isNativePlatform && C.isNativePlatform() && C.Plugins) ? C.Plugins.Koyomi : null;
-      return (P && P.storeGet) ? P : null;
+      if (!(C && C.isNativePlatform && C.isNativePlatform())) return null;
+      if (C.Plugins && C.Plugins.Koyomi) return C.Plugins.Koyomi;
+      if (typeof C.registerPlugin === 'function') {
+        if (!global.__KoyomiPlugin) global.__KoyomiPlugin = C.registerPlugin('Koyomi');
+        return global.__KoyomiPlugin;
+      }
+      return null;
     } catch (e) { return null; }
+  }
+  function nativeKV() {
+    const P = koyomiPlugin();
+    return (P && P.storeGet) ? P : null;
   }
   function authStorage() {
     const P = nativeKV();
