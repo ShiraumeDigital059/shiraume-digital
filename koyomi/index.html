@@ -6203,9 +6203,19 @@ setTimeout(splashOff,8000);          /* 何があっても必ず消す */
 /* 端末（iPhone）の通知の許可ぐあい。native.js が window.NOTIF_PERM に入れてくれるので
    （別ファイルから書き換えられるよう）var で置く。 */
 var NOTIF_PERM='';
+/* iOS のネイティブ機能への入口。
+   Capacitor は registerPlugin('Koyomi') を呼んで初めて Plugins に入れてくれる。
+   呼ばないと Plugins は空のままなので、必ずここで登録する。 */
 function koyomiNative(){
-  try{ const C=window.Capacitor;
-    return (C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.Koyomi)?C.Plugins.Koyomi:null;
+  try{
+    const C=window.Capacitor;
+    if(!(C&&C.isNativePlatform&&C.isNativePlatform()))return null;
+    if(C.Plugins&&C.Plugins.Koyomi)return C.Plugins.Koyomi;
+    if(typeof C.registerPlugin==='function'){
+      if(!window.__KoyomiPlugin)window.__KoyomiPlugin=C.registerPlugin('Koyomi');
+      return window.__KoyomiPlugin;
+    }
+    return null;
   }catch(e){ return null; }
 }
 async function askNotifPerm(){

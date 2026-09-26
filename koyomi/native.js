@@ -10,9 +10,20 @@
 (function () {
   'use strict';
 
-  const native = () =>
-    window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()
-      ? window.Capacitor.Plugins.Koyomi : null;
+  /* Capacitor は registerPlugin('Koyomi') を呼んで初めて Plugins に入れてくれる。
+     呼ばないと Plugins は空のままなので、ここで一度だけ登録する。 */
+  const native = () => {
+    try {
+      const C = window.Capacitor;
+      if (!(C && C.isNativePlatform && C.isNativePlatform())) return null;
+      if (C.Plugins && C.Plugins.Koyomi) return C.Plugins.Koyomi;
+      if (typeof C.registerPlugin === 'function') {
+        if (!window.__KoyomiPlugin) window.__KoyomiPlugin = C.registerPlugin('Koyomi');
+        return window.__KoyomiPlugin;
+      }
+      return null;
+    } catch (e) { return null; }
+  };
 
   if (!native()) return;                     // ブラウザなら何もしない
   document.documentElement.classList.add('native');
