@@ -92,11 +92,35 @@
     return;
   }
 
+  /* 再設定メールのリンクは、アプリ（別のアドレス）から送られてくる。
+     PKCE を強制すると、この端末に控えが無いぶん失敗するので、既定のまま使う。 */
   var sb=window.supabase.createClient(
     window.KOYOMI_SUPABASE_URL, window.KOYOMI_SUPABASE_ANON_KEY,
-    { auth:{ detectSessionInUrl:true, persistSession:true, flowType:'pkce' } });
+    { auth:{ detectSessionInUrl:true, persistSession:true } });
 
-  sb.auth.getSession().then(function(r){
+  /* リンクの形がどれでも受け取れるようにしておく。
+     ① #access_token=…（いちばん多い）② ?token_hash=…&type=recovery ③ ?code=… */
+  async function pickUpSession(){
+    try{
+      var q=new URLSearchParams(location.search);
+      var h=new URLSearchParams((location.hash||'').replace(/^#/,''));
+      if(h.get('access_token')&&h.get('refresh_token')){
+        await sb.auth.setSession({access_token:h.get('access_token'),
+                                  refresh_token:h.get('refresh_token')});
+        return;
+      }
+      if(q.get('token_hash')){
+        await sb.auth.verifyOtp({token_hash:q.get('token_hash'),
+                                 type:q.get('type')||'recovery'});
+        return;
+      }
+      if(q.get('code')&&sb.auth.exchangeCodeForSession){
+        await sb.auth.exchangeCodeForSession(q.get('code'));
+      }
+    }catch(e){ /* 失敗したら下の案内を出す */ }
+  }
+
+  pickUpSession().then(function(){ return sb.auth.getSession(); }).then(function(r){
     if(r.data && r.data.session){
       form.hidden=false;
     }else{
