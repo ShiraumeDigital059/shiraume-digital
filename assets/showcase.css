@@ -1,0 +1,147 @@
+/* =========================================================
+   Shiraume Digital — showcase.css  (v1 / 2026-09-28)
+   Device mockups with real screens + motion.
+   Depends on nothing. Loaded after style.css.
+   ========================================================= */
+:root{
+  --mk-frame:#1f1e22; --mk-frame2:#3a393f; --mk-edge:#5c5b62;
+  --mk-plate:#F6F2E8; --mk-plate2:#EFE9DB;
+  --mk-ease:cubic-bezier(.16,1,.3,1);
+}
+
+/* ---------- base device ---------- */
+.mock{position:relative;display:block;width:100%;
+  transform:perspective(1400px) rotateX(8deg) rotateY(-16deg) translateY(28px);
+  opacity:0;transition:transform 1.25s var(--mk-ease),opacity .9s var(--mk-ease);
+  transform-style:preserve-3d;will-change:transform,opacity;}
+.mock.is-inview{transform:perspective(1400px) rotateX(0) rotateY(0) translateY(0);opacity:1;}
+.mock.is-inview.is-hover{transition:transform .35s var(--mk-ease);
+  transform:perspective(1400px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-4px);}
+.mock__screen{position:relative;overflow:hidden;background:#fff;}
+.mock__shot{display:block;width:100%;height:auto;will-change:transform;
+  transform:translateY(0);}
+/* auto-scroll: JS sets --scroll (px) and --dur */
+.mock.is-inview .mock__shot.is-scroll{animation:mockScroll var(--dur,14s) ease-in-out 1.2s infinite alternate;}
+@keyframes mockScroll{0%,10%{transform:translateY(0)}90%,100%{transform:translateY(calc(var(--scroll,0px) * -1))}}
+
+/* ---------- laptop ---------- */
+.mock--laptop .mock__frame{background:var(--mk-frame);border-radius:14px 14px 4px 4px;padding:2.6% 2.6% 2.2%;
+  box-shadow:0 30px 60px -28px rgba(20,20,10,.45),0 8px 18px -10px rgba(20,20,10,.25);}
+.mock--laptop .mock__frame::before{content:"";position:absolute;left:50%;top:1.15%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#0c0c0e;box-shadow:inset 0 0 0 1.5px #2a2a2e;}
+.mock--laptop .mock__screen{aspect-ratio:16/10;border-radius:6px;}
+.mock--laptop .mock__base{height:13px;margin:0 -3.5%;border-radius:0 0 12px 12px;
+  background:linear-gradient(#d9d8d6,#b8b6b3 60%,#9a9895);position:relative;}
+.mock--laptop .mock__base::after{content:"";position:absolute;left:50%;top:0;width:12%;height:4px;margin-left:-6%;border-radius:0 0 6px 6px;background:#8e8c89;}
+.mock--laptop .mock__base::before{content:"";position:absolute;left:4%;right:4%;bottom:-10px;height:10px;border-radius:50%;background:rgba(20,20,10,.28);filter:blur(8px);}
+
+/* ---------- phone ---------- */
+.mock--phone{max-width:290px;margin:0 auto;}
+.mock--phone .mock__frame{background:var(--mk-frame);border-radius:13% / 6%;padding:3.8%;
+  box-shadow:0 30px 60px -28px rgba(20,20,10,.5),0 8px 18px -10px rgba(20,20,10,.3),inset 0 0 0 1px var(--mk-edge);position:relative;}
+.mock--phone .mock__frame::before{content:"";position:absolute;top:6.2%;left:50%;width:32%;height:3.4%;margin-left:-16%;border-radius:999px;background:#0c0c0e;z-index:3;}
+.mock--phone .mock__screen{aspect-ratio:9/19.5;border-radius:10% / 4.6%;}
+.mock--phone .mock__screen::after{content:"";position:absolute;left:50%;bottom:1.6%;width:36%;height:.7%;margin-left:-18%;border-radius:999px;background:rgba(0,0,0,.35);z-index:3;}
+
+/* ---------- LINE screen (real rich menu inside a live UI) ---------- */
+.mock__screen{container-type:inline-size;}
+.line-ui{position:absolute;inset:0;display:flex;flex-direction:column;background:#8caac6;font-family:"Noto Sans JP",sans-serif;font-size:4.2cqw;}
+.line-ui__bar{background:#fff;padding:17cqw 5cqw 3.5cqw;font-weight:700;color:#111;display:flex;align-items:center;gap:2.5cqw;border-bottom:1px solid #e5e5e5;white-space:nowrap;}
+.line-ui__bar i{width:7cqw;height:7cqw;border-radius:50%;background:#1E7A4A;display:inline-block;flex:none;}
+.line-ui__chat{flex:1;padding:4cqw 3.5cqw 2cqw;display:flex;flex-direction:column;gap:2.5cqw;overflow:hidden;}
+.line-ui__bubble{max-width:84%;background:#fff;border-radius:4cqw;padding:2.8cqw 3.5cqw;line-height:1.55;color:#222;box-shadow:0 1px 1px rgba(0,0,0,.06);}
+.line-ui__bubble--me{align-self:flex-end;background:#8de07f;}
+.line-ui__menu{display:block;width:100%;height:auto;margin-top:auto;border-radius:2cqw;}
+.line-ui__foot{background:#fff;font-size:3.6cqw;color:#555;text-align:center;padding:2cqw 0 6cqw;}
+
+/* ---------- AI screen (illustrative) ---------- */
+.ai-ui{position:absolute;inset:0;background:#FBF8F1;font-family:"Noto Sans JP",sans-serif;display:flex;flex-direction:column;font-size:2.6cqw;}
+.ai-ui__bar{flex:none;height:9cqw;background:#fff;border-bottom:1px solid #E8E2D4;display:flex;align-items:center;gap:2cqw;padding:0 3cqw;color:#4A4548;}
+.ai-ui__bar b{width:2.2cqw;height:2.2cqw;border-radius:50%;background:#B8912F;display:inline-block;}
+.ai-ui__body{flex:1;padding:3cqw 4cqw;display:flex;flex-direction:column;gap:2.2cqw;line-height:1.6;overflow:hidden;}
+.ai-ui__msg{max-width:72%;padding:2cqw 3cqw;border-radius:3cqw;background:#fff;border:1px solid #EDE7DA;color:#2B2A2E;}
+.ai-ui__msg--me{align-self:flex-end;background:#1E7A4A;color:#fff;border-color:#1E7A4A;}
+.ai-ui__typing{display:inline-flex;gap:1.2cqw;padding:2.4cqw 3cqw;}
+.ai-ui__typing i{width:1.6cqw;height:1.6cqw;border-radius:50%;background:#B8912F;animation:aiDot 1.2s infinite;}
+.ai-ui__typing i:nth-child(2){animation-delay:.2s}.ai-ui__typing i:nth-child(3){animation-delay:.4s}
+@keyframes aiDot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+
+/* ---------- plate (device sits on a soft cream slab) ---------- */
+.plate{position:relative;background:radial-gradient(120% 90% at 50% 0%,var(--mk-plate) 0%,var(--mk-plate2) 100%);
+  border-radius:14px;padding:9% 8% 8%;overflow:hidden;}
+.plate::before{content:"";position:absolute;inset:0;background:url(images/plum-branch.webp) no-repeat;background-size:auto 92%;
+  background-position:-14% 110%;opacity:.55;pointer-events:none;}
+.plate--phone{padding:6% 22% 6%;}
+.plate--phone .mock--phone{max-width:100%;}
+.show-card__media .plate--phone .mock--phone,.svc-card__media--mock .plate--phone .mock--phone,.works-grid-card__image--mock .plate--phone .mock--phone{align-self:flex-start;margin-top:6%;}
+.plate--phone::before{background-position:112% -10%;background-size:auto 70%;}
+
+/* ---------- showcase (index: 制作できるサイト) ---------- */
+.showcase{max-width:1180px;margin:0 auto;padding:0 24px;}
+.showcase__stage{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;margin:10px 0 56px;}
+.showcase__devices{position:relative;padding:20px 0 30px 0;}
+.showcase__devices .mock--laptop{width:92%;}
+.showcase__devices .mock--phone{position:absolute;right:-2%;bottom:-6%;width:31%;max-width:250px;transition-delay:.25s;}
+.showcase__devices.is-inview .mock--laptop{animation:mockFloat 7s ease-in-out 1.6s infinite;}
+.showcase__devices.is-inview .mock--phone{animation:mockFloat 7s ease-in-out 2.4s infinite reverse;}
+@keyframes mockFloat{0%,100%{translate:0 0}50%{translate:0 -8px}}
+.showcase__copy{padding:8px 0;}
+.showcase__eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.22em;color:#B8912F;font-weight:700;margin-bottom:14px;}
+.showcase__eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:#1E7A4A;box-shadow:0 0 0 0 rgba(30,122,74,.5);animation:livePulse 2s infinite;}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(30,122,74,.5)}70%{box-shadow:0 0 0 10px rgba(30,122,74,0)}100%{box-shadow:0 0 0 0 rgba(30,122,74,0)}}
+.showcase__title{font-family:"Shippori Mincho",serif;font-size:28px;line-height:1.55;color:#2B2A2E;margin:0 0 14px;}
+.showcase__text{font-size:14.5px;line-height:2;color:#4A4548;margin:0 0 22px;}
+.showcase__pts{list-style:none;margin:0 0 26px;padding:0;display:grid;gap:8px;}
+.showcase__pts li{font-size:13.5px;color:#4A4548;padding-left:18px;position:relative;}
+.showcase__pts li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:2px;background:#B8912F;}
+.showcase__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.show-card{background:#fff;border:1px solid #EDE7DA;border-radius:12px;overflow:hidden;
+  opacity:0;transform:translateY(26px);transition:opacity .8s var(--mk-ease),transform .8s var(--mk-ease),box-shadow .35s ease;}
+.show-card.is-inview{opacity:1;transform:none;}
+.show-card:hover{box-shadow:0 22px 44px -26px rgba(43,42,46,.35);}
+.show-card__media{aspect-ratio:4/3;background:var(--mk-plate);position:relative;overflow:hidden;}
+.show-card__media>img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s var(--mk-ease);}
+.show-card:hover .show-card__media>img{transform:scale(1.04);}
+.show-card__media .plate{position:absolute;inset:0;border-radius:0;display:flex;align-items:center;justify-content:center;}
+.show-card__media .plate--phone{padding:4% 0;}
+.show-card__media .plate--phone .mock--phone{width:38%;flex:0 0 38%;}
+.show-card__media .plate--laptop{padding:7% 10% 6%;}
+.show-card__body{padding:16px 18px 18px;}
+.show-card__cat{display:block;font-size:10.5px;letter-spacing:.18em;color:#8A6E1E;font-weight:700;margin-bottom:6px;}
+.show-card__title{font-family:"Shippori Mincho",serif;font-size:16px;color:#2B2A2E;margin:0 0 4px;}
+.show-card__desc{font-size:12.5px;line-height:1.8;color:#6B6467;margin:0;}
+.show-card__tag{display:inline-block;font-size:10px;letter-spacing:.08em;color:#1E7A4A;border:1px solid #BEDFC9;background:#F4FAF6;border-radius:20px;padding:2px 9px;margin-left:8px;vertical-align:middle;}
+
+/* ---------- service cards (index サービス概要) ---------- */
+.svc-card__media--mock{aspect-ratio:4/3;background:var(--mk-plate);position:relative;overflow:hidden;}
+.svc-card__media--mock .plate{position:absolute;inset:0;border-radius:0;display:flex;align-items:center;justify-content:center;}
+.svc-card__media--mock .plate--laptop{padding:8% 10% 5%;}
+.svc-card__media--mock .plate--phone{padding:4% 0;}
+.svc-card__media--mock .plate--phone .mock--phone{width:38%;flex:0 0 38%;}
+.svc-card__media--mock .mock{transform:perspective(1400px) rotateX(6deg) rotateY(-12deg) translateY(18px);}
+.svc-card__media--mock .mock.is-inview{transform:perspective(1400px) rotateX(0) rotateY(0) translateY(0);}
+.svc-card:hover .svc-card__media--mock .mock.is-inview{transform:perspective(1400px) rotateX(-2deg) rotateY(6deg) translateY(-3px) scale(1.02);}
+
+/* ---------- Works.html cards ---------- */
+.works-grid-card__image--mock{position:relative;overflow:hidden;aspect-ratio:4/3;background:var(--mk-plate);}
+.works-grid-card__image--mock .plate{position:absolute;inset:0;border-radius:0;display:flex;align-items:center;justify-content:center;}
+.works-grid-card__image--mock .plate--laptop{padding:8% 10% 5%;}
+.works-grid-card__image--mock .plate--phone{padding:4% 0;}
+.works-grid-card__image--mock .plate--phone .mock--phone{width:38%;flex:0 0 38%;}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .showcase__stage{grid-template-columns:1fr;gap:28px;}
+  .showcase__grid{grid-template-columns:repeat(2,1fr);gap:14px;}
+  .showcase__title{font-size:23px;}
+}
+@media (max-width:600px){
+  .showcase{padding:0 16px;}
+  .showcase__devices .mock--laptop{width:96%;}
+  .showcase__devices .mock--phone{width:34%;right:-4%;}
+  .showcase__grid{grid-template-columns:1fr;}
+  .show-card__media .plate--phone .mock--phone,.svc-card__media--mock .plate--phone .mock--phone,.works-grid-card__image--mock .plate--phone .mock--phone{width:40%;flex-basis:40%;}
+}
+@media (prefers-reduced-motion:reduce){
+  .mock,.show-card{transition:none;opacity:1;transform:none;}
+  .mock.is-inview .mock__shot.is-scroll,.showcase__devices.is-inview .mock,.showcase__eyebrow::before,.ai-ui__typing i{animation:none;}
+}
