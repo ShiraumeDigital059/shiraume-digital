@@ -25,7 +25,7 @@
 <link rel="canonical" href="https://shiraumedigital.com/">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/showcase.css?v=20260928">
-<link rel="stylesheet" href="assets/home-mobile.css?v=20260928c">
+<link rel="stylesheet" href="assets/home-mobile.css?v=20260928d">
 <style>.price-more__link{color:inherit;text-decoration:none;border-bottom:1px solid #EDE4D2;}.price-more__link:hover{color:#8A6E1E;border-bottom-color:#C9A02F;}</style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
 </head>
@@ -124,7 +124,10 @@
   <!-- MOBILE ONLY: photo intro that replaces the desktop "hero" on phones (see assets/home-mobile.css) -->
   <section class="m-intro m-only fade-section" id="mIntro" aria-label="白梅デジタルについて">
     <img decoding="async" loading="lazy" class="m-intro__bg" src="assets/images/m-intro-shop.webp" alt="">
+    <video class="m-intro__video" autoplay muted loop playsinline preload="metadata" poster="assets/images/m-intro-shop.webp" aria-hidden="true"><source src="assets/video/m-intro-shop.mp4" type="video/mp4"></video>
+    <div class="m-intro__shade"></div>
     <div class="m-intro__body">
+      <span class="m-intro__shop">喫茶 このは ｜ 開店前の朝</span>
       <span class="m-intro__eyebrow">SHIRAUME DIGITAL</span>
       <h2 class="m-intro__title">お店の魅力を、<br>ちゃんと届く形に。</h2>
       <p class="m-intro__text">見た目だけで終わらせない。予約や問い合わせにつながるホームページを、公開したあとまで一緒に育てます。</p>
@@ -598,7 +601,7 @@
 
 </div>
 
-<script src="assets/js/i18n.js?v=20260928b"></script>
+<script src="assets/js/i18n.js?v=20260928c"></script>
 <script>
 (function(){var c=document.querySelector('.stage-intro__scroll');if(!c)return;c.addEventListener('click',function(){var t=document.getElementById('mIntro');if(!t||getComputedStyle(t).display==='none')t=document.getElementById('heroSection');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});})();
 </script>
