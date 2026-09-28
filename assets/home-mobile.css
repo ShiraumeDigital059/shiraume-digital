@@ -1,0 +1,141 @@
+/* =========================================================
+   Shiraume Digital — home-mobile.css (v1 / 2026-09-28)
+   Mobile-only redesign of the HOME page (index.html).
+   Desktop untouched: everything below is inside max-width:768px,
+   except the m-only / pc-only helpers.
+   ========================================================= */
+.m-only{display:none;}
+
+@media (max-width:768px){
+  .m-only{display:block;}
+  .pc-only{display:none!important;}
+
+  /* ---------- section order on phone ---------- */
+  .page{display:flex;flex-direction:column;}
+  .page > .nav{order:0;}
+  .page > .stage-intro{order:1;}
+  .page > .m-intro{order:2;}
+  .page > .hero{display:none!important;}          /* old "ともに、未来を、作ろう。" */
+  .page > .works{order:3;}
+  .page > .services{order:4;}
+  .page > .price-brief{order:5;}
+  .page > .strengths{order:6;}
+  .page > .flow{order:7;}
+  .page > .cta-home{order:8;}
+  .page > .footer{order:9;}
+
+  /* ---------- global rhythm ---------- */
+  .section-heading__title{font-size:26px!important;line-height:1.35!important;}
+  .section-heading__desc{font-size:13.5px!important;line-height:1.85!important;}
+  .works,.services,.price-brief,.strengths,.flow{padding-top:56px!important;padding-bottom:56px!important;}
+  .services,.price-brief,.strengths,.flow{padding-left:24px!important;padding-right:24px!important;}
+
+  /* ---------- FV: make the scroll cue a real hook ---------- */
+  .stage-intro{height:calc(100dvh - 68px)!important;}
+  .stage-intro__scroll{cursor:pointer;}
+  .stage-intro__scroll span:first-child{letter-spacing:.3em;}
+
+  /* ---------- m-intro: photo + copy + facts (replaces old hero) ---------- */
+  .m-intro{position:relative;overflow:hidden;background:#1c1b19;color:#fff;min-height:80svh;display:flex;flex-direction:column;justify-content:flex-end;}
+  .m-intro__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 50%;transform:scale(1.08);transition:transform 2.4s cubic-bezier(.16,1,.3,1);}
+  .m-intro.is-visible .m-intro__bg,.m-intro.is-inview .m-intro__bg{transform:scale(1);}
+  .m-intro::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,16,.15) 0%,rgba(20,20,16,0) 30%,rgba(20,20,16,.55) 62%,rgba(20,20,16,.88) 100%);}
+  .m-intro__body{position:relative;padding:0 24px 26px;}
+  .m-intro__eyebrow{display:inline-block;font-size:10.5px;letter-spacing:.28em;color:#D7B85B;margin-bottom:12px;}
+  .m-intro__title{font-family:"Shippori Mincho",serif;font-size:27px;line-height:1.5;margin:0 0 12px;font-weight:600;letter-spacing:.02em;}
+  .m-intro__text{font-size:13.5px;line-height:1.9;color:rgba(255,255,255,.86);margin:0 0 20px;}
+  .m-intro__facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 20px;padding:0;list-style:none;}
+  .m-intro__facts li{background:rgba(255,255,255,.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:10px 6px;text-align:center;}
+  .m-intro__facts b{display:block;font-family:"Shippori Mincho",serif;font-size:16px;line-height:1.2;color:#fff;letter-spacing:.02em;}
+  .m-intro__facts small{display:block;font-size:9.5px;color:rgba(255,255,255,.75);margin-top:4px;letter-spacing:.06em;}
+  .m-intro__more{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.06em;}
+  .m-intro__more i{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.5);display:inline-flex;align-items:center;justify-content:center;font-style:normal;animation:mIntroArrow 2.2s ease-in-out infinite;}
+  @keyframes mIntroArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+  /* ---------- WORKS: keep hero pair, cards become a swipe row ---------- */
+  .showcase{padding:0;}
+  .showcase__stage{margin:0 0 30px;gap:22px;}
+  .showcase__devices{padding:10px 0 20px;}
+  .showcase__title{font-size:22px;}
+  .showcase__text{font-size:13.5px;line-height:1.9;}
+  .showcase__pts{gap:6px;margin-bottom:20px;}
+  .showcase__pts li{font-size:12.5px;}
+  .showcase__pts li:nth-child(n+3){display:none;}
+  .showcase__grid{display:flex!important;scroll-padding-left:20px;grid-template-columns:none!important;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 20px 14px!important;margin:0 -20px!important;justify-content:flex-start!important;width:calc(100% + 40px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
+  .showcase__grid::-webkit-scrollbar{display:none;}
+  .show-card{flex:0 0 74%;scroll-snap-align:start;}
+  .m-swipe{display:block;font-size:10.5px;letter-spacing:.22em;color:#8A6E1E;text-align:right;margin:0 0 6px;}
+
+  /* ---------- SERVICES: swipe row, text over photo ---------- */
+  .services__grid{display:flex!important;scroll-padding-left:24px;grid-template-columns:none!important;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 24px 14px!important;margin:0 -24px!important;justify-content:flex-start!important;width:calc(100% + 48px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
+  .services__grid::-webkit-scrollbar{display:none;}
+  .svc-card{flex:0 0 72%;scroll-snap-align:start;position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;border:0!important;background:#1c1b19;display:block;}
+  .svc-card__media{position:absolute!important;inset:0;aspect-ratio:auto!important;}
+  .svc-card__media img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.02);}
+  .svc-card__body{position:absolute;left:0;right:0;bottom:0;padding:70px 18px 18px!important;background:linear-gradient(180deg,rgba(20,20,16,0) 0%,rgba(20,20,16,.62) 45%,rgba(20,20,16,.9) 100%);color:#fff;}
+  .svc-card__meta{margin-bottom:8px!important;}
+  .svc-card__no{color:#D7B85B!important;}
+  .svc-card__eyebrow{color:rgba(255,255,255,.8)!important;}
+  .svc-card__rule{background:rgba(255,255,255,.45)!important;}
+  .svc-card__title{color:#fff!important;font-size:18px!important;margin:0 0 4px!important;}
+  .svc-card__desc{color:rgba(255,255,255,.85)!important;font-size:12.5px!important;line-height:1.7!important;margin:0!important;}
+  .svc-card__arrow{color:#fff!important;position:absolute;right:18px;bottom:18px;}
+
+  /* ---------- PRICING: photo banner + swipe cards ---------- */
+  .price-brief{background:#F8F5EE!important;padding-top:0!important;}
+  .price-brief > .section-heading{display:none!important;}
+  .m-price-hero{position:relative;margin:0 -24px 22px;height:250px;overflow:hidden;}
+  .m-price-hero img{width:100%;height:100%;object-fit:cover;object-position:60% 50%;display:block;}
+  .m-price-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(251,248,241,.96) 0%,rgba(251,248,241,.9) 42%,rgba(251,248,241,.2) 75%,rgba(251,248,241,0) 100%);}
+  .m-price-hero__txt{position:absolute;left:24px;right:24px;top:50%;transform:translateY(-50%);z-index:2;}
+  .m-price-hero__txt .eyebrow{display:block;font-size:10.5px;letter-spacing:.28em;color:#8A6E1E;font-weight:700;margin-bottom:8px;}
+  .m-price-hero__txt h2{font-family:"Shippori Mincho",serif;font-size:27px;line-height:1.3;color:#2B2A2E;margin:0 0 10px;}
+  .m-price-hero__txt p{font-size:12.5px;line-height:1.8;color:#4A4548;margin:0;max-width:62%;}
+  .price-brief__scope{margin-top:0!important;}
+  .plan-tabs__desc{font-size:12.5px!important;line-height:1.8!important;}
+  .price-brief__grid{display:flex!important;scroll-padding-left:24px;grid-template-columns:none!important;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:12px 24px 14px!important;margin:0 -24px!important;justify-content:flex-start!important;width:calc(100% + 48px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
+  .price-brief__grid::-webkit-scrollbar{display:none;}
+  .price-brief__card{flex:0 0 64%;scroll-snap-align:start;box-sizing:border-box;margin:0!important;padding:22px 16px 20px!important;}
+  .price-brief__price{font-size:26px!important;}
+  .price-brief__for{font-size:11.5px!important;}
+  .plan-tabs__note{font-size:11px!important;line-height:1.7!important;}
+  .price-more{margin-top:26px!important;}
+  .price-more__lead{font-size:12.5px!important;}
+  .price-more__list{display:grid!important;grid-template-columns:1fr 1fr;gap:8px;}
+  .price-more__item{display:flex!important;flex-direction:column;gap:2px;background:#fff;border:1px solid #EDE7DA;border-radius:10px;padding:10px 12px!important;margin:0!important;}
+  .price-more__name{font-size:12px!important;}
+  .price-more__price{font-size:11.5px!important;color:#8A6E1E!important;}
+
+  /* ---------- STRENGTHS: 2x2 photo tiles, text over photo ---------- */
+  .strengths__heading .section-heading__title{font-size:22px!important;}
+  .strengths__list{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;}
+  .strength-item{position:relative;display:block!important;aspect-ratio:4/5;border-radius:12px;overflow:hidden;background:#1c1b19;box-shadow:none!important;transform:none!important;opacity:1!important;margin:0!important;padding:0!important;}
+  .strength-item__photo{position:absolute!important;inset:0;flex:none!important;min-width:0!important;}
+  .strength-item__photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:none!important;}
+  .strength-item__content{position:absolute;left:0;right:0;bottom:0;padding:44px 12px 12px!important;background:linear-gradient(180deg,rgba(20,20,16,0),rgba(20,20,16,.55) 40%,rgba(20,20,16,.9));color:#fff;z-index:2;}
+  .strength-item__num{color:#D7B85B!important;font-size:11px!important;letter-spacing:.2em;display:block;margin-bottom:4px;}
+  .strength-item__icon-wrap{display:none!important;}
+  .strength-item__row{display:block!important;}
+  .strength-item__title{color:#fff!important;font-size:14.5px!important;line-height:1.4;margin-bottom:3px;}
+  .strength-item__desc{color:rgba(255,255,255,.82)!important;font-size:11px!important;line-height:1.6!important;}
+
+  /* ---------- FLOW: compact 2-col steps ---------- */
+  .flow .flow__grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;}
+  .flow-step{background:#fff;border:1px solid #EDE7DA!important;border-radius:12px;padding:14px 14px 14px!important;margin:0!important;}
+  .flow-step__num{font-size:22px!important;line-height:1!important;margin-bottom:8px!important;display:block;}
+  .flow-step__title{font-size:14px!important;margin-bottom:4px!important;}
+  .flow-step__desc{font-size:11.5px!important;line-height:1.65!important;}
+
+  /* ---------- CONTACT: photo on top, copy on a calm green panel ---------- */
+  .cta-home{display:flex!important;flex-direction:column;min-height:0!important;padding:0!important;background:#163626;}
+  .cta-home__bg{position:relative!important;inset:auto!important;width:100%!important;height:240px!important;object-fit:cover;object-position:center 32%!important;display:block;}
+  .cta-home__overlay{display:none!important;}
+  .cta-home__content{position:relative;z-index:1;padding:26px 22px 40px!important;max-width:none!important;}
+  .cta-home__content::before{content:"";position:absolute;left:0;right:0;top:-60px;height:60px;background:linear-gradient(180deg,rgba(22,54,38,0),#163626);pointer-events:none;}
+  .cta-home__eyebrow{font-size:10.5px!important;letter-spacing:.28em!important;color:#D7B85B!important;}
+  .cta-home__title{font-size:22px!important;line-height:1.5!important;margin:8px 0 8px!important;color:#fff!important;}
+  .cta-home__desc{font-size:13px!important;line-height:1.8!important;margin-bottom:20px!important;color:rgba(255,255,255,.85)!important;}
+  .cta-home__actions{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;}
+  .cta-home__actions .btn-pill{width:100%;margin:0!important;justify-content:center;font-size:13.5px!important;padding:14px 10px!important;min-height:0!important;}
+  .cta-home__actions .btn-pill:first-child{grid-column:1 / -1;}
+}
