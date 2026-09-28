@@ -1549,7 +1549,18 @@
     "AIアシスタント": "AI Assistant",
     "今日の予約一覧をまとめて": "Summarize today's bookings",
     "本日のご予約は3件です。18時 2名様、19時 4名様、20時 2名様。": "You have 3 bookings today: 18:00 for 2, 19:00 for 4, 20:00 for 2.",
-    "明日の仕込みリストも": "And tomorrow's prep list"
+    "明日の仕込みリストも": "And tomorrow's prep list",
+    // 2026-09-28 スマホ版ホーム再設計
+    "お店の魅力を、": "Your shop's appeal,",
+    "ちゃんと届く形に。": "in a form that truly reaches people.",
+    "見た目だけで終わらせない。予約や問い合わせにつながるホームページを、公開したあとまで一緒に育てます。": "Not just good looks. We build websites that lead to bookings and inquiries, and keep growing them with you after launch.",
+    "初期費用（月額）": "Setup fee (monthly plan)",
+    "買い切り制作": "One-time build",
+    "修正まで無償": "rounds of free revisions",
+    "作れるものを見る": "See what we can build",
+    "買い切り・月額制・保守運用。ご都合に合う選び方を。": "One-time, monthly, or maintenance. Pick what suits you.",
+    "← SWIPE →": "← SWIPE →",
+    "3回": "3"
   };
 
   var STORAGE_KEY = 'shiraume-lang';
