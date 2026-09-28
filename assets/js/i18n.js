@@ -1518,7 +1518,38 @@
     'LINE関連のオプション | Shiraume Digital': 'LINE Options | Shiraume Digital',
     'お問い合わせフォーム | Shiraume Digital': 'Inquiry Form | Shiraume Digital',
     '飲食店ホームページ制作 ヒアリングシート | Shiraume Digital': 'Restaurant Website Hearing Sheet | Shiraume Digital',
-    '送信完了 | Shiraume Digital': 'Thank You | Shiraume Digital'
+    '送信完了 | Shiraume Digital': 'Thank You | Shiraume Digital',
+
+    // 2026-09-28 端末モックアップ（制作できるサイト・サービス・LINE/AI画面）
+    "実際に動いている画面です": "These are live, working screens",
+    "このサイトと予約システムも、": "This website and the booking system",
+    "白梅デジタルが作りました。": "were both built by Shiraume Digital.",
+    "今ご覧いただいているホームページと、店舗向けの予約システム「Koyomi」。どちらも自社で設計から公開まで行っています。作れるものの水準は、ここでそのままご確認いただけます。": "The website you are looking at right now and our booking system for shops, \"Koyomi\", were both designed and launched in-house. You can judge the level of our work right here.",
+    "スマートフォンでもPCでも、崩れずに見やすい設計": "Clean, readable layouts on both smartphone and PC",
+    "予約・問い合わせまでの導線を、最初から組み込む": "Paths to booking and inquiries built in from the start",
+    "公開後の更新・保守まで、同じ担当が続けて対応": "The same person handles updates and maintenance after launch",
+    "予約システムを実際に触ってみる": "Try the booking system yourself",
+    "居酒屋・飲食店": "Izakaya / Restaurant",
+    "メニューと予約を、スマホ1画面で。": "Menu and booking on a single phone screen.",
+    "ケーキ店・菓子店": "Cake / Confectionery Shop",
+    "商品写真が主役の、やわらかい構成。": "A soft layout that lets product photos shine.",
+    "アパレル・ブランド": "Apparel / Brand",
+    "世界観を崩さず、余白で魅せる。": "White space that keeps the brand's world intact.",
+    "店舗サイト": "Store Website",
+    "場所・営業時間・予約を迷わせない。": "Location, hours and booking, with no confusion.",
+    "スマートフォン最適化": "Smartphone Optimization",
+    "スマホで見たときに、いちばんきれいに。": "Designed to look best on a smartphone.",
+    "Instagram運用": "Instagram Management",
+    "サイトとSNSを、同じ導線でつなぐ。": "Connecting your website and social media on one path.",
+    "白梅デジタル": "Shiraume Digital",
+    "友だち追加ありがとうございます。": "Thank you for adding us as a friend.",
+    "下のメニューから、ご相談・ご予約ができます。": "You can consult or book from the menu below.",
+    "相談したいです": "I'd like to consult",
+    "メッセージを入力": "Type a message",
+    "AIアシスタント": "AI Assistant",
+    "今日の予約一覧をまとめて": "Summarize today's bookings",
+    "本日のご予約は3件です。18時 2名様、19時 4名様、20時 2名様。": "You have 3 bookings today: 18:00 for 2, 19:00 for 4, 20:00 for 2.",
+    "明日の仕込みリストも": "And tomorrow's prep list"
   };
 
   var STORAGE_KEY = 'shiraume-lang';
