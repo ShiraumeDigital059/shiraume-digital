@@ -30,29 +30,28 @@
   .works,.services,.price-brief,.strengths,.flow{padding-top:56px!important;padding-bottom:56px!important;}
   .services,.price-brief,.strengths,.flow{padding-left:24px!important;padding-right:24px!important;}
 
-  /* ---------- FV: no dead space, no price lines on phone ---------- */
-  .stage-intro{height:auto!important;min-height:0!important;padding:26px 0 26px!important;display:flex;align-items:center;justify-content:center;}
-  .stage-intro__content{gap:16px!important;}
+  /* ---------- FV: exactly one screen, scroll cue pinned at the bottom ---------- */
+  .stage-intro{height:calc(100dvh - 68px)!important;min-height:0!important;padding:0!important;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .stage-intro__content{gap:16px!important;flex:1;justify-content:center;padding-bottom:64px!important;}
   .sd-intro__price{display:none!important;}
-  .stage-intro__scroll{cursor:pointer;margin-top:6px!important;}
+  .stage-intro__scroll{cursor:pointer;position:absolute;left:0;right:0;bottom:70px;margin:0!important;}
   .stage-intro__scroll span:first-child{letter-spacing:.3em;}
 
-  /* ---------- m-intro: editorial block — photo, then copy on cream ---------- */
-  .m-intro{position:relative;background:#FBF8F1;color:#2B2A2E;padding:8px 16px 44px;display:block;min-height:0;overflow:visible;}
+  /* ---------- m-intro: one full-bleed photo/video, copy bottom-left ---------- */
+  .m-intro{position:relative;overflow:hidden;background:#1c1b19;color:#fff;height:100svh;min-height:560px;display:flex;flex-direction:column;justify-content:flex-end;padding:0;}
   .m-intro::before,.m-intro::after{display:none;}
-  .m-intro__bg{position:relative;display:block;width:100%;aspect-ratio:4/4.6;height:auto;object-fit:cover;object-position:50% 88%;border-radius:18px;transform:none;transition:none;box-shadow:0 24px 40px -30px rgba(43,42,46,.45);}
-  .m-intro__body{position:relative;margin:0;padding:26px 6px 0;background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:0;}
-  .m-intro__eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.28em;color:#8A6E1E;font-weight:700;margin-bottom:12px;}
-  .m-intro__eyebrow::before{content:"";width:22px;height:1px;background:#B8912F;}
-  .m-intro__title{font-family:"Shippori Mincho",serif;font-size:26px;line-height:1.5;margin:0 0 12px;font-weight:600;letter-spacing:.02em;color:#2B2A2E;}
-  .m-intro__text{font-size:13.5px;line-height:1.95;color:#4A4548;margin:0 0 22px;}
-  .m-intro__facts{display:grid;grid-template-columns:repeat(3,1fr);margin:0 0 22px;padding:16px 0;list-style:none;border-top:1px solid #E6DFCF;border-bottom:1px solid #E6DFCF;}
-  .m-intro__facts li{background:none;border:0;border-radius:0;padding:2px 4px;text-align:center;border-left:1px solid #E6DFCF;}
-  .m-intro__facts li:first-child{border-left:0;}
-  .m-intro__facts b{display:block;font-family:"Shippori Mincho",serif;font-size:19px;line-height:1.2;color:#1E7A4A;letter-spacing:.02em;}
-  .m-intro__facts small{display:block;font-size:9.5px;color:#6B6467;margin-top:5px;letter-spacing:.06em;}
-  .m-intro__more{display:inline-flex;align-items:center;gap:10px;color:#2B2A2E;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.06em;}
-  .m-intro__more i{width:34px;height:34px;border-radius:50%;background:#1E7A4A;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-style:normal;animation:mIntroArrow 2.2s ease-in-out infinite;}
+  .m-intro__bg,.m-intro__video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 70%;border-radius:0;box-shadow:none;transform:none;transition:none;}
+  .m-intro__video{z-index:1;}
+  .m-intro__shade{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(20,20,16,0) 40%,rgba(20,20,16,.35) 70%,rgba(20,20,16,.82) 100%);pointer-events:none;}
+  .m-intro__body{position:relative;z-index:3;margin:0;padding:0 24px 92px;background:none;border:0;box-shadow:none;border-radius:0;}
+  .m-intro__shop{display:inline-block;font-size:11px;letter-spacing:.08em;color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:999px;padding:5px 12px;margin-bottom:14px;background:rgba(0,0,0,.18);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+  .m-intro__eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.28em;color:#D7B85B;font-weight:700;margin-bottom:10px;}
+  .m-intro__eyebrow::before{content:"";width:22px;height:1px;background:#D7B85B;}
+  .m-intro__title{font-family:"Shippori Mincho",serif;font-size:27px;line-height:1.5;margin:0 0 12px;font-weight:600;letter-spacing:.02em;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.35);}
+  .m-intro__text{font-size:13.5px;line-height:1.9;color:rgba(255,255,255,.9);margin:0 0 22px;text-shadow:0 1px 8px rgba(0,0,0,.35);}
+  .m-intro__facts{display:none!important;}
+  .m-intro__more{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.06em;}
+  .m-intro__more i{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.7);display:inline-flex;align-items:center;justify-content:center;font-style:normal;animation:mIntroArrow 2.2s ease-in-out infinite;}
   @keyframes mIntroArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 
   /* ---------- WORKS: keep hero pair, cards become a swipe row ---------- */
