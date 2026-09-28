@@ -25,6 +25,7 @@
 <link rel="canonical" href="https://shiraumedigital.com/">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/showcase.css?v=20260928">
+<link rel="stylesheet" href="assets/home-mobile.css?v=20260928">
 <style>.price-more__link{color:inherit;text-decoration:none;border-bottom:1px solid #EDE4D2;}.price-more__link:hover{color:#8A6E1E;border-bottom-color:#C9A02F;}</style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
 </head>
@@ -120,6 +121,22 @@
       </div>
     </div>
   </header>
+  <!-- MOBILE ONLY: photo intro that replaces the desktop "hero" on phones (see assets/home-mobile.css) -->
+  <section class="m-intro m-only fade-section" id="mIntro" aria-label="白梅デジタルについて">
+    <img decoding="async" loading="lazy" class="m-intro__bg" src="assets/images/m-intro-shop.webp" alt="">
+    <div class="m-intro__body">
+      <span class="m-intro__eyebrow">SHIRAUME DIGITAL</span>
+      <h2 class="m-intro__title">お店の魅力を、<br>ちゃんと届く形に。</h2>
+      <p class="m-intro__text">見た目だけで終わらせない。予約や問い合わせにつながるホームページを、公開したあとまで一緒に育てます。</p>
+      <ul class="m-intro__facts">
+        <li><b>¥0</b><small>初期費用（月額）</small></li>
+        <li><b>¥49,800〜</b><small>買い切り制作</small></li>
+        <li><b>3回</b><small>修正まで無償</small></li>
+      </ul>
+      <a class="m-intro__more" href="#works"><i>↓</i>作れるものを見る</a>
+    </div>
+  </section>
+
 
   <!-- STAGE 2: the Japanese photo hero. A normal section directly below
        Stage 1, revealed with the exact same fade-section pattern used by
@@ -150,6 +167,7 @@
       <h2 class="section-heading__title">サービス概要</h2>
       <p class="section-heading__desc">ホームページ制作からLINE構築、AI活用まで、<br class="br-desktop">お客様の課題や目的に合わせて、必要な支援を必要な形でご提供します。</p>
     </div>
+    <p class="m-swipe m-only">← SWIPE →</p>
     <div class="services__grid">
       <a class="svc-card" href="Pricing-Web.html">
         <div class="svc-card__media">
@@ -256,6 +274,14 @@
        plans are priced separately and live on Pricing.html; when that page
        is rebuilt, only the three cards + the note here need revisiting. -->
   <section class="price-brief fade-section" id="pricing-brief">
+    <div class="m-price-hero m-only">
+      <img decoding="async" loading="lazy" src="assets/images/m-price-desk.webp" alt="">
+      <div class="m-price-hero__txt">
+        <span class="eyebrow">PRICING</span>
+        <h2>料金の目安</h2>
+        <p>買い切り・月額制・保守運用。ご都合に合う選び方を。</p>
+      </div>
+    </div>
     <div class="section-heading">
       <span class="section-heading__eyebrow">PRICING</span>
       <h2 class="section-heading__title">料金の目安</h2>
@@ -454,6 +480,7 @@
           <a href="https://yoyaku.shiraumedigital.com/?shop=sodan" target="_blank" rel="noopener" class="btn-more"><span>予約システムを実際に触ってみる</span><span class="btn-more__arrow">→</span></a>
         </div>
       </div>
+      <p class="m-swipe m-only">← SWIPE →</p>
       <div class="showcase__grid">
         <a class="show-card" href="Works.html#case-izakaya"><div class="show-card__media"><img decoding="async" loading="lazy" src="assets/images/works-izakaya-m.webp" alt="居酒屋向けサイトのデザイン例"></div><div class="show-card__body"><span class="show-card__cat">RESTAURANT</span><h3 class="show-card__title">居酒屋・飲食店</h3><p class="show-card__desc">メニューと予約を、スマホ1画面で。</p></div></a>
         <a class="show-card" href="Works.html#case-cake"><div class="show-card__media"><img decoding="async" loading="lazy" src="assets/images/works-cake-shop.webp" alt="ケーキ店向けサイトのデザイン例"></div><div class="show-card__body"><span class="show-card__cat">SWEETS / SHOP</span><h3 class="show-card__title">ケーキ店・菓子店</h3><p class="show-card__desc">商品写真が主役の、やわらかい構成。</p></div></a>
@@ -570,7 +597,10 @@
 
 </div>
 
-<script src="assets/js/i18n.js?v=20260928"></script>
+<script src="assets/js/i18n.js?v=20260928b"></script>
+<script>
+(function(){var c=document.querySelector('.stage-intro__scroll');if(!c)return;c.addEventListener('click',function(){var t=document.getElementById('mIntro');if(!t||getComputedStyle(t).display==='none')t=document.getElementById('heroSection');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});})();
+</script>
 <script src="assets/js/showcase.js?v=20260928" defer></script>
 <script src="assets/js/main.js"></script>
 <script type="application/ld+json">
