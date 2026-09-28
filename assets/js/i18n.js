@@ -1560,7 +1560,8 @@
     "作れるものを見る": "See what we can build",
     "買い切り・月額制・保守運用。ご都合に合う選び方を。": "One-time, monthly, or maintenance. Pick what suits you.",
     "← SWIPE →": "← SWIPE →",
-    "3回": "3"
+    "3回": "3",
+    "喫茶 このは ｜ 開店前の朝": "Kissa Konoha — the morning before opening"
   };
 
   var STORAGE_KEY = 'shiraume-lang';
