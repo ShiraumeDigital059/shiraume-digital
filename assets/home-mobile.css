@@ -30,26 +30,28 @@
   .works,.services,.price-brief,.strengths,.flow{padding-top:56px!important;padding-bottom:56px!important;}
   .services,.price-brief,.strengths,.flow{padding-left:24px!important;padding-right:24px!important;}
 
-  /* ---------- FV: make the scroll cue a real hook ---------- */
-  .stage-intro{height:calc(100dvh - 68px)!important;}
-  .stage-intro__scroll{cursor:pointer;}
+  /* ---------- FV: no dead space; the photo below peeks in ---------- */
+  .stage-intro{height:auto!important;min-height:0!important;padding:26px 0 30px!important;display:flex;align-items:center;justify-content:center;}
+  .stage-intro__content{gap:16px!important;}
+  .stage-intro__scroll{cursor:pointer;margin-top:6px!important;}
   .stage-intro__scroll span:first-child{letter-spacing:.3em;}
 
-  /* ---------- m-intro: photo + copy + facts (replaces old hero) ---------- */
-  .m-intro{position:relative;overflow:hidden;background:#1c1b19;color:#fff;min-height:80svh;display:flex;flex-direction:column;justify-content:flex-end;}
-  .m-intro__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:60% 50%;transform:scale(1.08);transition:transform 2.4s cubic-bezier(.16,1,.3,1);}
+  /* ---------- m-intro: photo, then a frosted card with the copy ---------- */
+  .m-intro{position:relative;overflow:hidden;background:#1c1b19;color:#fff;min-height:0;display:block;padding:0 14px 14px;}
+  .m-intro::before{display:none;}
+  .m-intro__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:55% 62%;transform:scale(1.06);transition:transform 2.4s cubic-bezier(.16,1,.3,1);}
   .m-intro.is-visible .m-intro__bg,.m-intro.is-inview .m-intro__bg{transform:scale(1);}
-  .m-intro::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,16,.15) 0%,rgba(20,20,16,0) 30%,rgba(20,20,16,.55) 62%,rgba(20,20,16,.88) 100%);}
-  .m-intro__body{position:relative;padding:0 24px 26px;}
-  .m-intro__eyebrow{display:inline-block;font-size:10.5px;letter-spacing:.28em;color:#D7B85B;margin-bottom:12px;}
-  .m-intro__title{font-family:"Shippori Mincho",serif;font-size:27px;line-height:1.5;margin:0 0 12px;font-weight:600;letter-spacing:.02em;}
-  .m-intro__text{font-size:13.5px;line-height:1.9;color:rgba(255,255,255,.86);margin:0 0 20px;}
-  .m-intro__facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 20px;padding:0;list-style:none;}
-  .m-intro__facts li{background:rgba(255,255,255,.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:10px 6px;text-align:center;}
+  .m-intro::after{content:"";position:absolute;left:0;right:0;top:0;height:90px;background:linear-gradient(180deg,#FBF8F1 0%,rgba(251,248,241,0) 100%);pointer-events:none;}
+  .m-intro__body{position:relative;margin-top:58vh;padding:22px 20px 20px;background:rgba(18,20,16,.58);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);border:1px solid rgba(255,255,255,.16);border-radius:20px;box-shadow:0 18px 40px -24px rgba(0,0,0,.6);}
+  .m-intro__eyebrow{display:inline-block;font-size:10px;letter-spacing:.28em;color:#D7B85B;margin-bottom:10px;}
+  .m-intro__title{font-family:"Shippori Mincho",serif;font-size:24px;line-height:1.5;margin:0 0 10px;font-weight:600;letter-spacing:.02em;}
+  .m-intro__text{font-size:13px;line-height:1.85;color:rgba(255,255,255,.86);margin:0 0 16px;}
+  .m-intro__facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 16px;padding:0;list-style:none;}
+  .m-intro__facts li{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:10px 6px;text-align:center;}
   .m-intro__facts b{display:block;font-family:"Shippori Mincho",serif;font-size:16px;line-height:1.2;color:#fff;letter-spacing:.02em;}
-  .m-intro__facts small{display:block;font-size:9.5px;color:rgba(255,255,255,.75);margin-top:4px;letter-spacing:.06em;}
+  .m-intro__facts small{display:block;font-size:9.5px;color:rgba(255,255,255,.72);margin-top:4px;letter-spacing:.06em;}
   .m-intro__more{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.06em;}
-  .m-intro__more i{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.5);display:inline-flex;align-items:center;justify-content:center;font-style:normal;animation:mIntroArrow 2.2s ease-in-out infinite;}
+  .m-intro__more i{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.5);display:inline-flex;align-items:center;justify-content:center;font-style:normal;animation:mIntroArrow 2.2s ease-in-out infinite;}
   @keyframes mIntroArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 
   /* ---------- WORKS: keep hero pair, cards become a swipe row ---------- */
@@ -58,9 +60,10 @@
   .showcase__devices{padding:10px 0 20px;}
   .showcase__title{font-size:22px;}
   .showcase__text{font-size:13.5px;line-height:1.9;}
-  .showcase__pts{gap:6px;margin-bottom:20px;}
-  .showcase__pts li{font-size:12.5px;}
-  .showcase__pts li:nth-child(n+3){display:none;}
+  .showcase__pts{display:none!important;}
+  .works .section-heading__desc{display:none!important;}
+  .showcase__text.pc-only{display:none!important;}
+  .showcase__text.m-only{display:block;}
   .showcase__grid{display:flex!important;scroll-padding-left:20px;grid-template-columns:none!important;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 20px 14px!important;margin:0 -20px!important;justify-content:flex-start!important;width:calc(100% + 40px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
   .showcase__grid::-webkit-scrollbar{display:none;}
   .show-card{flex:0 0 74%;scroll-snap-align:start;}
