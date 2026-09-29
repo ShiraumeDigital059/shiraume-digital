@@ -25,7 +25,8 @@
 <link rel="canonical" href="https://shiraumedigital.com/">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/showcase.css?v=20260928">
-<link rel="stylesheet" href="assets/flow.css?v=20260929">
+<link rel="stylesheet" href="assets/flow.css?v=20260929b">
+<link rel="stylesheet" href="assets/strengths-lb.css?v=20260929">
 <link rel="stylesheet" href="assets/home-mobile.css?v=20260929b">
 <style>.price-more__link{color:inherit;text-decoration:none;border-bottom:1px solid #EDE4D2;}.price-more__link:hover{color:#8A6E1E;border-bottom-color:#C9A02F;}</style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
@@ -398,7 +399,7 @@
       <div class="strengths__list">
         <div class="strength-item">
           <div class="strength-item__content">
-            <span class="strength-item__num">01</span>
+            <span class="strength-item__num">01</span><span class="strength-item__more" data-i18n-skip>くわしく見る</span>
             <div class="strength-item__row">
               <span class="strength-item__icon-wrap"><img decoding="async" loading="lazy" class="strength-item__icon" src="assets/images/plum-blossom-outline.png" alt=""></span>
               <div>
@@ -413,7 +414,7 @@
         </div>
         <div class="strength-item">
           <div class="strength-item__content">
-            <span class="strength-item__num">02</span>
+            <span class="strength-item__num">02</span><span class="strength-item__more" data-i18n-skip>くわしく見る</span>
             <div class="strength-item__row">
               <span class="strength-item__icon-wrap"><img decoding="async" loading="lazy" class="strength-item__icon" src="assets/images/handshake-partnership.png" alt=""></span>
               <div>
@@ -428,7 +429,7 @@
         </div>
         <div class="strength-item">
           <div class="strength-item__content">
-            <span class="strength-item__num">03</span>
+            <span class="strength-item__num">03</span><span class="strength-item__more" data-i18n-skip>くわしく見る</span>
             <div class="strength-item__row">
               <span class="strength-item__icon-wrap"><img decoding="async" loading="lazy" class="strength-item__icon" src="assets/images/growth-chart.png" alt=""></span>
               <div>
@@ -443,7 +444,7 @@
         </div>
         <div class="strength-item">
           <div class="strength-item__content">
-            <span class="strength-item__num">04</span>
+            <span class="strength-item__num">04</span><span class="strength-item__more" data-i18n-skip>くわしく見る</span>
             <div class="strength-item__row">
               <span class="strength-item__icon-wrap"><img decoding="async" loading="lazy" class="strength-item__icon" src="assets/images/heart-in-hands.png" alt=""></span>
               <div>
@@ -461,6 +462,9 @@
         <a href="Works.html" class="btn-more"><span>制作実績を見る</span><span class="btn-more__arrow">→</span></a>
       </div>
     </div>
+  
+    <template id="strengthDetails"><div data-n="01"><h3>日本らしい上品さ</h3><p class="lead">余白を活かした、静かで洗練された佇まい。</p><p>詰め込まず、余白で見せます。写真は大きく、言葉は少なく。和の落ち着きを、色数を絞ったクリームと墨、少しの金で表します。開いた瞬間に「ちゃんとしたお店だ」と伝わる佇まいを、業種に合わせて作ります。</p></div><div data-n="02"><h3>伴走型のパートナーシップ</h3><p class="lead">公開後も、事業の成長にあわせて共に歩む。</p><p>作って終わりにしません。公開後の更新、季節のお知らせ、メニューの差し替え、数字の確認まで、同じ担当が続けて対応します。「毎回これ面倒だな」と感じている作業があれば、そこも一緒に減らしていきます。</p></div><div data-n="03"><h3>成果につながる設計</h3><p class="lead">見た目だけでなく、事業成果から逆算する。</p><p>増やしたいのは、予約か、問い合わせか、来店か。先にゴールを決めて、そこへ最短で届く導線を引きます。Instagramから、Googleマップから、検索から。どこから来た人を、どこへ運ぶかを設計してから作ります。</p></div><div data-n="04"><h3>誠実な対応</h3><p class="lead">一社一社と丁寧に向き合う姿勢。</p><p>できること・できないことは、先に正直にお伝えします。料金はオプションまで全部公開し、追加費用は事前にご相談します。フォロワー数や売上をお約束することはしません。その代わり、うまくいかないときは、そう言います。</p></div></template>
+    <div class="str-lb" id="strLightbox" hidden aria-modal="true" role="dialog"><div class="str-lb__bg"></div><div class="str-lb__card"><button type="button" class="str-lb__close" aria-label="閉じる">×</button><div class="str-lb__media"><img alt=""></div><div class="str-lb__body"><span class="str-lb__num"></span><h3 class="str-lb__title"></h3><p class="str-lb__lead"></p><p class="str-lb__text"></p></div></div></div>
   </section>
 
   <!-- WORKS -->
@@ -480,13 +484,13 @@
           <span class="showcase__eyebrow">実際に動いている画面です</span>
           <h3 class="showcase__title">このサイトと予約システムも、<br>白梅デジタルが作りました。</h3>
           <p class="showcase__text pc-only">今ご覧いただいているホームページと、店舗向けの予約システム「Koyomi」。どちらも自社で設計から公開まで行っています。作れるものの水準は、ここでそのままご確認いただけます。</p>
-          <p class="showcase__text m-only">このホームページも、店舗向け予約システム「Koyomi」も、自社で作っています。触って確かめてみてください。</p>
+          <p class="showcase__text m-only">このホームページも、店舗向け予約システム「Koyomi」も、自社で作っています。下のボタンから、実際に予約システムを使って無料相談をご予約いただけます。</p>
           <ul class="showcase__pts">
             <li>スマートフォンでもPCでも、崩れずに見やすい設計</li>
             <li>予約・問い合わせまでの導線を、最初から組み込む</li>
             <li>公開後の更新・保守まで、同じ担当が続けて対応</li>
           </ul>
-          <a href="https://yoyaku.shiraumedigital.com/?shop=sodan" target="_blank" rel="noopener" class="btn-more"><span>予約システムを実際に触ってみる</span><span class="btn-more__arrow">→</span></a>
+          <a href="https://yoyaku.shiraumedigital.com/?shop=sodan" target="_blank" rel="noopener" class="btn-more"><span>予約システムで、無料相談を予約してみる</span><span class="btn-more__arrow">→</span></a>
         </div>
       </div>
       <p class="m-swipe m-only">← SWIPE →</p>
@@ -494,9 +498,9 @@
         <a class="show-card" href="Works.html#case-izakaya"><div class="show-card__media"><img decoding="async" loading="lazy" src="assets/images/works-izakaya-m.webp" alt="居酒屋向けサイトのデザイン例"></div><div class="show-card__body"><span class="show-card__cat">RESTAURANT</span><h3 class="show-card__title">居酒屋・飲食店</h3><p class="show-card__desc">メニューと予約を、スマホ1画面で。</p></div></a>
         <a class="show-card" href="Works.html#case-cake"><div class="show-card__media"><img decoding="async" loading="lazy" src="assets/images/works-cake-shop.webp" alt="ケーキ店向けサイトのデザイン例"></div><div class="show-card__body"><span class="show-card__cat">SWEETS / SHOP</span><h3 class="show-card__title">ケーキ店・菓子店</h3><p class="show-card__desc">商品写真が主役の、やわらかい構成。</p></div></a>
         <a class="show-card" href="Works.html#case-apparel"><div class="show-card__media"><img decoding="async" loading="lazy" src="assets/images/works-apparel.webp" alt="アパレルショップ向けサイトのデザイン例"></div><div class="show-card__body"><span class="show-card__cat">APPAREL / BRAND</span><h3 class="show-card__title">アパレル・ブランド</h3><p class="show-card__desc">世界観を崩さず、余白で魅せる。</p></div></a>
-        <a class="show-card" href="Works.html"><div class="show-card__media"><img decoding="async" loading="lazy" src="assets/images/D8B079B0-1908-4C4A-99CB-B3D148D0D3A4.webp" alt="飲食店・店舗サイトのデザイン例"></div><div class="show-card__body"><span class="show-card__cat">STORE SITE</span><h3 class="show-card__title">店舗サイト</h3><p class="show-card__desc">場所・営業時間・予約を迷わせない。</p></div></a>
-        <a class="show-card" href="Works.html"><div class="show-card__media"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/home-mobile.webp" alt="自社サイトのスマートフォン表示"></div></div></div></div></div><div class="show-card__body"><span class="show-card__cat">MOBILE</span><h3 class="show-card__title">スマートフォン最適化</h3><p class="show-card__desc">スマホで見たときに、いちばんきれいに。</p></div></a>
-        <a class="show-card" href="Pricing-SNS.html"><div class="show-card__media"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/instagram.webp" alt="InstagramアカウントSNS運用の画面"></div></div></div></div></div><div class="show-card__body"><span class="show-card__cat">SNS</span><h3 class="show-card__title">Instagram運用</h3><p class="show-card__desc">サイトとSNSを、同じ導線でつなぐ。</p></div></a>
+        <a class="show-card" href="Works.html#work-store"><div class="show-card__media"><img decoding="async" loading="lazy" src="assets/images/D8B079B0-1908-4C4A-99CB-B3D148D0D3A4.webp" alt="飲食店・店舗サイトのデザイン例"></div><div class="show-card__body"><span class="show-card__cat">STORE SITE</span><h3 class="show-card__title">店舗サイト</h3><p class="show-card__desc">場所・営業時間・予約を迷わせない。</p></div></a>
+        <a class="show-card" href="Works.html#work-mobile"><div class="show-card__media"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/home-mobile.webp" alt="自社サイトのスマートフォン表示"></div></div></div></div></div><div class="show-card__body"><span class="show-card__cat">MOBILE</span><h3 class="show-card__title">スマートフォン最適化</h3><p class="show-card__desc">スマホで見たときに、いちばんきれいに。</p></div></a>
+        <a class="show-card" href="Works.html#work-sns"><div class="show-card__media"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/instagram.webp" alt="InstagramアカウントSNS運用の画面"></div></div></div></div></div><div class="show-card__body"><span class="show-card__cat">SNS</span><h3 class="show-card__title">Instagram運用</h3><p class="show-card__desc">サイトとSNSを、同じ導線でつなぐ。</p></div></a>
       </div>
     </div>
   </section>
@@ -511,55 +515,55 @@
     <div class="flw">
       <div class="flw__line" aria-hidden="true"><span class="flw__line-fill"></span></div>
       <ol class="flw__list">
-      <li class="flw-step" data-step="01">
+      <li class="flw-step" data-step="01"><span class="flw-step__dot" aria-hidden="true"></span>
         <div class="flw-step__media"><img decoding="async" loading="lazy" src="assets/images/flow-01-contact.webp" alt="お問い合わせ"><span class="flw-step__dur">当日〜翌営業日</span></div>
         <div class="flw-step__body">
-          <div class="flw-step__head"><span class="flw-step__num">01</span><span class="flw-step__dot" aria-hidden="true"></span></div>
+          <div class="flw-step__head"><span class="flw-step__num">01</span></div>
           <h3 class="flw-step__title">お問い合わせ</h3>
           <p class="flw-step__desc">フォーム・LINE・メールからお気軽にご相談ください。</p>
           <p class="flw-step__note">「これって作ったほうがいいのかな」の段階で大丈夫です。</p>
         </div>
       </li>
-      <li class="flw-step" data-step="02">
+      <li class="flw-step" data-step="02"><span class="flw-step__dot" aria-hidden="true"></span>
         <div class="flw-step__media"><img decoding="async" loading="lazy" src="assets/images/flow-02-hearing.webp" alt="ヒアリング"><span class="flw-step__dur">30〜60分</span></div>
         <div class="flw-step__body">
-          <div class="flw-step__head"><span class="flw-step__num">02</span><span class="flw-step__dot" aria-hidden="true"></span></div>
+          <div class="flw-step__head"><span class="flw-step__num">02</span></div>
           <h3 class="flw-step__title">ヒアリング</h3>
           <p class="flw-step__desc">目的や課題、ご希望のデザインについて詳しくお伺いします。</p>
           <p class="flw-step__note">電話かオンラインで。お店のこと、お客様のことを教えてください。</p>
         </div>
       </li>
-      <li class="flw-step" data-step="03">
+      <li class="flw-step" data-step="03"><span class="flw-step__dot" aria-hidden="true"></span>
         <div class="flw-step__media"><img decoding="async" loading="lazy" src="assets/images/flow-03-proposal.webp" alt="ご提案・お見積り"><span class="flw-step__dur">2〜3日</span></div>
         <div class="flw-step__body">
-          <div class="flw-step__head"><span class="flw-step__num">03</span><span class="flw-step__dot" aria-hidden="true"></span></div>
+          <div class="flw-step__head"><span class="flw-step__num">03</span></div>
           <h3 class="flw-step__title">ご提案・お見積り</h3>
           <p class="flw-step__desc">最適なプランと制作内容、お見積りをご提案します。</p>
           <p class="flw-step__note">ページ構成と金額を書面でお渡しします。追加費用は先に全部出します。</p>
         </div>
       </li>
-      <li class="flw-step" data-step="04">
+      <li class="flw-step" data-step="04"><span class="flw-step__dot" aria-hidden="true"></span>
         <div class="flw-step__media"><img decoding="async" loading="lazy" src="assets/images/flow-04-build.webp" alt="デザイン・制作"><span class="flw-step__dur">1〜4週間</span></div>
         <div class="flw-step__body">
-          <div class="flw-step__head"><span class="flw-step__num">04</span><span class="flw-step__dot" aria-hidden="true"></span></div>
+          <div class="flw-step__head"><span class="flw-step__num">04</span></div>
           <h3 class="flw-step__title">デザイン・制作</h3>
           <p class="flw-step__desc">ブランドの魅力を引き出すデザインと、高品質なWebサイトを制作します。</p>
           <p class="flw-step__note">写真と文章をお預かりして、こちらで形にします。途中経過も共有します。</p>
         </div>
       </li>
-      <li class="flw-step" data-step="05">
+      <li class="flw-step" data-step="05"><span class="flw-step__dot" aria-hidden="true"></span>
         <div class="flw-step__media"><img decoding="async" loading="lazy" src="assets/images/flow-05-review.webp" alt="ご確認・修正"><span class="flw-step__dur">初稿後3回まで無償</span></div>
         <div class="flw-step__body">
-          <div class="flw-step__head"><span class="flw-step__num">05</span><span class="flw-step__dot" aria-hidden="true"></span></div>
+          <div class="flw-step__head"><span class="flw-step__num">05</span></div>
           <h3 class="flw-step__title">ご確認・修正</h3>
           <p class="flw-step__desc">内容をご確認いただき、細かな調整・修正を行います。</p>
           <p class="flw-step__note">スマホで実際に見ていただき、気になる点を直します。</p>
         </div>
       </li>
-      <li class="flw-step" data-step="06">
+      <li class="flw-step" data-step="06"><span class="flw-step__dot" aria-hidden="true"></span>
         <div class="flw-step__media"><img decoding="async" loading="lazy" src="assets/images/flow-06-launch.webp" alt="公開・運用サポート"><span class="flw-step__dur">公開後もずっと</span></div>
         <div class="flw-step__body">
-          <div class="flw-step__head"><span class="flw-step__num">06</span><span class="flw-step__dot" aria-hidden="true"></span></div>
+          <div class="flw-step__head"><span class="flw-step__num">06</span></div>
           <h3 class="flw-step__title">公開・運用サポート</h3>
           <p class="flw-step__desc">サイト公開後も、保守・更新・改善まで継続してサポートします。</p>
           <p class="flw-step__note">公開して終わりではなく、更新や改善を同じ担当が続けます。</p>
@@ -633,7 +637,7 @@
 
 </div>
 
-<script src="assets/js/i18n.js?v=20260929"></script>
+<script src="assets/js/i18n.js?v=20260929b"></script>
 <script>
 (function(){var c=document.querySelector('.stage-intro__scroll');if(!c)return;c.addEventListener('click',function(){var t=document.getElementById('mIntro');if(!t||getComputedStyle(t).display==='none')t=document.getElementById('heroSection');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});})();
 </script>
@@ -644,7 +648,7 @@ function u(){t=false;var vh=innerHeight,r=fv.getBoundingClientRect(),p=Math.min(
 if(mi&&getComputedStyle(mi).display!=='none'){var m=mi.getBoundingClientRect(),q=Math.min(1,Math.max(0,(m.top-vh*.15)/(vh*.75)));mi.style.setProperty('--mip',q.toFixed(3));}}
 addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(u);}},{passive:true});addEventListener('resize',u);u();})();
 </script>
-<script src="assets/js/showcase.js?v=20260929b" defer></script>
+<script src="assets/js/showcase.js?v=20260929c" defer></script>
 <script src="assets/js/main.js"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"ProfessionalService","@id":"https://shiraumedigital.com/#organization","name":"白梅デジタル","alternateName":"Shiraume Digital","url":"https://shiraumedigital.com","logo":"https://shiraumedigital.com/assets/images/shiraume-symbol-mark.png","image":"https://shiraumedigital.com/assets/images/og-image.png","description":"中小企業・飲食店・個人事業主向けに、ホームページ制作、SNS運用サポート、Googleマップ（MEO）対策、LINE公式アカウント構築を提供。料金をすべて公開し、公開後の運用まで伴走します。","email":"contact.shiraumedigital@gmail.com","priceRange":"¥2,980〜¥169,800","founder":{"@type":"Person","name":"大西 一輝","jobTitle":"代表","alumniOf":"名古屋商科大学 経営学部"},"areaServed":{"@type":"Country","name":"日本"},"availableLanguage":["ja","en"],"openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"10:00","closes":"19:00"},"sameAs":["https://www.instagram.com/shiraume.digital_","https://www.facebook.com/share/17ojcaXPAJ/"],"knowsAbout":["ホームページ制作","Webデザイン","LINE公式アカウント構築","Instagram運用代行","Googleマップ対策","MEO対策","AI導入支援","Webサイト保守運用"],"hasOfferCatalog":{"@type":"OfferCatalog","name":"サービス一覧","itemListElement":[{"@type":"Offer","name":"ホームページ制作（買い切り）","priceCurrency":"JPY","price":"49800","url":"https://shiraumedigital.com/Pricing-Web.html"},{"@type":"Offer","name":"ホームページ制作（月額）","priceCurrency":"JPY","price":"6980","url":"https://shiraumedigital.com/Pricing-Web.html"},{"@type":"Offer","name":"保守・運用プラン","priceCurrency":"JPY","price":"2980","url":"https://shiraumedigital.com/Pricing-Web.html"},{"@type":"Offer","name":"SNS運用サポート","priceCurrency":"JPY","price":"19800","url":"https://shiraumedigital.com/Pricing-SNS.html"},{"@type":"Offer","name":"SNS運用サポート 初期アカウント設計（初回のみ・一律）","priceCurrency":"JPY","price":"20000","url":"https://shiraumedigital.com/Pricing-SNS.html"},{"@type":"Offer","name":"LINE公式アカウント構築","priceCurrency":"JPY","price":"19800","url":"https://shiraumedigital.com/Pricing-LINE.html"},{"@type":"Offer","name":"Googleマップ対策","priceCurrency":"JPY","price":"9800","url":"https://shiraumedigital.com/Pricing-MEO.html"},{"@type":"Offer","name":"ネットショップ開設サポート","priceCurrency":"JPY","price":"19800","url":"https://shiraumedigital.com/Pricing.html"},{"@type":"Offer","name":"ネットショップ制作（サイト内・決済まで完結）","priceCurrency":"JPY","price":"39800","url":"https://shiraumedigital.com/Pricing.html#shop"}]}}

@@ -25,6 +25,7 @@
 <link rel="canonical" href="https://shiraumedigital.com/Works.html">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/showcase.css?v=20260928">
+<style>.works-grid-card.is-target{box-shadow:0 0 0 3px #B8912F,0 24px 50px -30px rgba(43,42,46,.4);scroll-margin-top:100px;}</style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
 </head>
 <body>
@@ -83,7 +84,7 @@
     <div class="grid-3" style="gap:32px;">
 
       <!-- 01 コーポレート -->
-      <div class="works-grid-card hover-lift-work">
+      <div class="works-grid-card hover-lift-work" id="work-corporate">
         <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--laptop"><div class="mock mock--laptop "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/home-desktop.webp" alt="コーポレートサイト制作（白梅デジタル自社サイト）"></div></div><div class="mock__base"></div></div></div></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 01</span>
@@ -118,7 +119,7 @@
       </div>
 
       <!-- 02 ブランド -->
-      <div class="works-grid-card hover-lift-work">
+      <div class="works-grid-card hover-lift-work" id="work-brand">
         <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--laptop"><div class="mock mock--laptop "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/about-desktop.webp" alt="ブランドサイト制作"></div></div><div class="mock__base"></div></div></div></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 02</span>
@@ -153,7 +154,7 @@
       </div>
 
       <!-- 03 スマホ最適化 -->
-      <div class="works-grid-card hover-lift-work">
+      <div class="works-grid-card hover-lift-work" id="work-mobile">
         <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/home-mobile.webp" alt="スマートフォン最適化"></div></div></div></div></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 03</span>
@@ -170,7 +171,7 @@
       </div>
 
       <!-- 04 飲食店・店舗 -->
-      <div class="works-grid-card hover-lift-work">
+      <div class="works-grid-card hover-lift-work" id="work-store">
         <div class="works-grid-card__image">
           <img decoding="async" loading="lazy" src="assets/images/D8B079B0-1908-4C4A-99CB-B3D148D0D3A4.webp" alt="飲食店・店舗サイト制作">
         </div>
@@ -222,7 +223,7 @@
       </div>
 
       <!-- 05 SNS運用 -->
-      <div class="works-grid-card hover-lift-work">
+      <div class="works-grid-card hover-lift-work" id="work-sns">
         <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/instagram.webp" alt="SNS運用・マーケティング"></div></div></div></div></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 05</span>
@@ -314,7 +315,7 @@
 
 <script src="assets/js/i18n.js?v=20260928"></script>
 <script>
-(function(){var h=location.hash.replace('#','');if(!h)return;var c=document.getElementById(h);if(!c||!c.classList.contains('works-case'))return;
+(function(){var h=location.hash.replace('#','');if(!h)return;var c=document.getElementById(h);if(!c)return;if(!c.classList.contains('works-case')){setTimeout(function(){c.scrollIntoView({behavior:'smooth',block:'start'});c.classList.add('is-target');},250);return;}
 var b=document.querySelector('[aria-controls="'+h+'"]');if(b){b.click();}else{c.hidden=false;}
 setTimeout(function(){c.scrollIntoView({behavior:'smooth',block:'center'});},250);})();
 </script>
