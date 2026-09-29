@@ -1561,7 +1561,20 @@
     "買い切り・月額制・保守運用。ご都合に合う選び方を。": "One-time, monthly, or maintenance. Pick what suits you.",
     "← SWIPE →": "← SWIPE →",
     "3回": "3",
-    "喫茶 このは ｜ 開店前の朝": "Kissa Konoha — the morning before opening"
+    "喫茶 このは ｜ 開店前の朝": "Kissa Konoha — the morning before opening",
+    // 2026-09-29 制作の流れ刷新
+    "当日〜翌営業日": "Same or next business day",
+    "30〜60分": "30–60 min",
+    "2〜3日": "2–3 days",
+    "1〜4週間": "1–4 weeks",
+    "初稿後3回まで無償": "3 free revisions after first draft",
+    "公開後もずっと": "Ongoing after launch",
+    "「これって作ったほうがいいのかな」の段階で大丈夫です。": "It's fine even at the \"should I make one?\" stage.",
+    "電話かオンラインで。お店のこと、お客様のことを教えてください。": "By phone or online. Tell us about your shop and your customers.",
+    "ページ構成と金額を書面でお渡しします。追加費用は先に全部出します。": "We hand over the page structure and price in writing, with all extra costs listed up front.",
+    "写真と文章をお預かりして、こちらで形にします。途中経過も共有します。": "Send us your photos and text; we build it and share progress along the way.",
+    "スマホで実際に見ていただき、気になる点を直します。": "Check it on your phone and we fix anything that bothers you.",
+    "公開して終わりではなく、更新や改善を同じ担当が続けます。": "Launch isn't the end: the same person keeps updating and improving."
   };
 
   var STORAGE_KEY = 'shiraume-lang';

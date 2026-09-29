@@ -37,7 +37,7 @@
     });
   }
 
-  var targets = document.querySelectorAll('.mock, .show-card, .showcase__devices, .m-intro');
+  var targets = document.querySelectorAll('.mock, .show-card, .showcase__devices, .m-intro, .flw-step');
   if(!targets.length) return;
   document.querySelectorAll('.mock').forEach(function(m){ setupScroll(m); if(m.hasAttribute('data-tilt')) setupTilt(m); });
 
@@ -49,6 +49,7 @@
       if(!en.isIntersecting) return;
       var el = en.target;
       var group = el.closest('.showcase__grid, .services__grid, .grid-3');
+      if(el.classList.contains('flw-step')) delay = 0;
       var delay = 0;
       if(group){ var kids = Array.prototype.slice.call(group.children); delay = Math.max(0, kids.indexOf(el.closest('.show-card, .svc-card, .works-grid-card') || el)) * 110; }
       setTimeout(function(){ el.classList.add('is-inview'); }, delay);
@@ -56,4 +57,14 @@
     });
   }, {threshold: .18, rootMargin: '0px 0px -8% 0px'});
   targets.forEach(function(t){ io.observe(t); });
+})();
+
+/* 制作の流れ：縦線の進み具合をスクロールで更新 */
+(function(){
+  var wrap=document.querySelector('.flw'); if(!wrap) return;
+  var t=false;
+  function u(){ t=false; var r=wrap.getBoundingClientRect(); var vh=window.innerHeight;
+    var p=(vh*0.6 - r.top)/r.height; p=Math.max(0,Math.min(1,p)); wrap.style.setProperty('--flwp',p.toFixed(3)); }
+  window.addEventListener('scroll',function(){ if(!t){t=true;requestAnimationFrame(u);} },{passive:true});
+  window.addEventListener('resize',u); u();
 })();
