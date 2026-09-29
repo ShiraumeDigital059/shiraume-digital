@@ -1574,7 +1574,10 @@
     "ページ構成と金額を書面でお渡しします。追加費用は先に全部出します。": "We hand over the page structure and price in writing, with all extra costs listed up front.",
     "写真と文章をお預かりして、こちらで形にします。途中経過も共有します。": "Send us your photos and text; we build it and share progress along the way.",
     "スマホで実際に見ていただき、気になる点を直します。": "Check it on your phone and we fix anything that bothers you.",
-    "公開して終わりではなく、更新や改善を同じ担当が続けます。": "Launch isn't the end: the same person keeps updating and improving."
+    "公開して終わりではなく、更新や改善を同じ担当が続けます。": "Launch isn't the end: the same person keeps updating and improving.",
+    "予約システムで、無料相談を予約してみる": "Book a free consultation with our booking system",
+    "このホームページも、店舗向け予約システム「Koyomi」も、自社で作っています。下のボタンから、実際に予約システムを使って無料相談をご予約いただけます。": "This website and our booking system for shops, \"Koyomi\", were both built in-house. Use the button below to book a free consultation through the actual system.",
+    "くわしく見る": "See details"
   };
 
   var STORAGE_KEY = 'shiraume-lang';

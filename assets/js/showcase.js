@@ -68,3 +68,20 @@
   window.addEventListener('scroll',function(){ if(!t){t=true;requestAnimationFrame(u);} },{passive:true});
   window.addEventListener('resize',u); u();
 })();
+
+/* 強み：写真/カードを押すと詳細が浮き上がる */
+(function(){
+  var lb=document.getElementById('strLightbox'), tpl=document.getElementById('strengthDetails'); if(!lb||!tpl) return;
+  var img=lb.querySelector('.str-lb__media img'), num=lb.querySelector('.str-lb__num'), ttl=lb.querySelector('.str-lb__title'), lead=lb.querySelector('.str-lb__lead'), txt=lb.querySelector('.str-lb__text');
+  function open(item){
+    var n=(item.querySelector('.strength-item__num')||{}).textContent||''; n=n.trim().slice(0,2);
+    var d=tpl.content.querySelector('[data-n="'+n+'"]'); if(!d) return;
+    var src=(item.querySelector('.strength-item__photo img')||{}).src||'';
+    img.src=src; num.textContent=n; ttl.textContent=d.querySelector('h3').textContent; lead.textContent=d.querySelector('.lead').textContent; txt.textContent=d.querySelectorAll('p')[1].textContent;
+    lb.hidden=false; document.body.classList.add('str-lb-open'); requestAnimationFrame(function(){ requestAnimationFrame(function(){ lb.classList.add('is-open'); }); });
+  }
+  function close(){ lb.classList.remove('is-open'); document.body.classList.remove('str-lb-open'); setTimeout(function(){ lb.hidden=true; },450); }
+  document.querySelectorAll('.strength-item').forEach(function(it){ it.addEventListener('click',function(){ open(it); }); });
+  lb.querySelector('.str-lb__bg').addEventListener('click',close); lb.querySelector('.str-lb__close').addEventListener('click',close);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&!lb.hidden) close(); });
+})();
