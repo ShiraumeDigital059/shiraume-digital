@@ -269,3 +269,9 @@
   .stage-intro__title--ja .c-ink,.stage-intro__title--ja .c-brand,.sd-intro__en,.stage-intro__rule,.stage-intro__services,.sd-intro__price,.sd-intro__cta,.sd-intro__note{animation:none!important;opacity:1!important;transform:none!important}
   .m-intro .m-intro__shop,.m-intro .m-intro__eyebrow,.m-intro .m-intro__title,.m-intro .m-intro__text,.m-intro .m-intro__more{opacity:1;transform:none;transition:none}
 }
+
+/* 動画：再生ボタンを出さない。自動再生が止められた端末では写真だけ見せる */
+.m-intro__video::-webkit-media-controls,.m-intro__video::-webkit-media-controls-start-playback-button,.m-intro__video::-webkit-media-controls-panel{display:none!important;-webkit-appearance:none;opacity:0;}
+.m-intro__video{pointer-events:none;opacity:0;transition:opacity .8s;}
+.m-intro__video.is-playing{opacity:1;}
+.m-intro__video.is-blocked{display:none!important;}
