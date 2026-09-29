@@ -5,6 +5,7 @@
    except the m-only / pc-only helpers.
    ========================================================= */
 .m-only{display:none;}
+.m-fv-top,.m-fv-bottom{display:contents;}
 
 @media (max-width:768px){
   .m-only{display:block;}
@@ -30,12 +31,38 @@
   .works,.services,.price-brief,.strengths,.flow{padding-top:56px!important;padding-bottom:56px!important;}
   .services,.price-brief,.strengths,.flow{padding-left:24px!important;padding-right:24px!important;}
 
-  /* ---------- FV: exactly one screen, scroll cue pinned at the bottom ---------- */
-  .stage-intro{height:calc(100dvh - 68px)!important;min-height:0!important;padding:0!important;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  .stage-intro__content{gap:16px!important;flex:1;justify-content:center;padding-bottom:64px!important;}
+  /* ---------- FV: 写真全面・中央揃え。見出し(上)→ボタン(下)→Scroll(最下部)の3段 ---------- */
+  .stage-intro{height:calc(100svh - 68px)!important;min-height:600px!important;padding:0!important;display:block!important;
+    background:#141612 url(images/m-hero-moon.webp) 40% 40%/cover no-repeat!important;overflow:hidden;}
+  .stage-intro::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:linear-gradient(180deg,rgba(12,13,11,.30) 0%,rgba(12,13,11,.42) 30%,rgba(12,13,11,.18) 50%,rgba(12,13,11,.45) 72%,rgba(12,13,11,.85) 100%);}
+  .stage-intro .plum-branch{display:none!important;}
+  .stage-intro .petal-layer{z-index:1!important;}
+  .stage-intro__content{position:absolute!important;inset:0;z-index:2!important;display:flex!important;flex-direction:column!important;
+    align-items:center!important;justify-content:flex-start!important;text-align:center!important;gap:0!important;padding:13vh 22px 0!important;max-width:none!important;
+    transform:translateY(calc(var(--fvp,0) * -40px));opacity:calc(1 - var(--fvp,0) * 1.1);}
+  .m-fv-top{display:flex;flex-direction:column;align-items:center;gap:14px;}
+  .m-fv-bottom{display:flex;flex-direction:column;align-items:center;width:100%;max-width:330px;margin-top:auto;margin-bottom:150px;}
+  .stage-intro__title{color:#F4F1EA!important;text-shadow:0 1px 2px rgba(0,0,0,.35),0 8px 30px rgba(0,0,0,.4);text-align:center!important;}
+  .stage-intro__title--ja{font-size:clamp(20px,6.1vw,26px)!important;line-height:1.7!important;letter-spacing:.04em!important;white-space:nowrap;}
+  .stage-intro__title .c-ink{color:#F4F1EA!important;}
+  .stage-intro__title .c-brand{color:#BFE3CC!important;}
+  .sd-intro__en{color:rgba(244,241,234,.85)!important;font-size:13px!important;letter-spacing:.16em!important;margin:0!important;}
+  .stage-intro__rule{background:rgba(215,184,91,.9)!important;margin:2px auto 0!important;width:36px!important;}
   .sd-intro__price{display:none!important;}
-  .stage-intro__scroll{cursor:pointer;position:absolute;left:0;right:0;bottom:70px;margin:0!important;}
-  .stage-intro__scroll span:first-child{letter-spacing:.3em;}
+  .stage-intro__services{color:rgba(244,241,234,.82)!important;font-size:12px!important;text-align:center!important;line-height:2!important;margin:0!important;}
+  .sd-intro__cta{width:100%;margin:0!important;gap:10px!important;}
+  .sd-btn{min-height:50px!important;width:100%;}
+  .sd-btn--line{background:#1C7A4B!important;color:#fff!important;border:0!important;box-shadow:0 8px 24px -10px rgba(0,0,0,.6)!important;}
+  .sd-btn--line::after{content:"→";margin-left:14px;font-weight:400;}
+  .sd-btn--ghost{background:rgba(244,241,234,.08)!important;color:#F4F1EA!important;border:1px solid rgba(244,241,234,.55)!important;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .sd-intro__note{color:rgba(244,241,234,.75)!important;font-size:11.5px!important;text-align:center;margin:12px 0 0!important;}
+  /* スクロールを促す：最下部に「Scroll」と、上から下へ流れる線 */
+  .stage-intro__scroll{display:flex!important;position:absolute!important;left:0;right:0;bottom:66px;margin:0!important;z-index:3;flex-direction:column;align-items:center;gap:8px;
+    color:rgba(244,241,234,.9)!important;cursor:pointer;opacity:1!important;animation:none!important;font-size:11px;letter-spacing:.3em;}
+  .stage-intro__scroll-line{position:relative;width:1px!important;height:40px!important;background:rgba(244,241,234,.25)!important;overflow:hidden;}
+  .stage-intro__scroll-line::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:#F4F1EA;animation:fvScrollLine 2s cubic-bezier(.6,0,.3,1) infinite;}
+  @keyframes fvScrollLine{0%{top:-40%}100%{top:100%}}
 
   /* ---------- m-intro: one full-bleed photo/video, copy bottom-left ---------- */
   .m-intro{position:relative;overflow:hidden;background:#1c1b19;color:#fff;height:100svh;min-height:560px;display:flex;flex-direction:column;justify-content:flex-end;padding:0;}
@@ -50,8 +77,12 @@
   .m-intro__title{font-family:"Shippori Mincho",serif;font-size:27px;line-height:1.5;margin:0 0 12px;font-weight:600;letter-spacing:.02em;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.35);}
   .m-intro__text{font-size:13.5px;line-height:1.9;color:rgba(255,255,255,.9);margin:0 0 22px;text-shadow:0 1px 8px rgba(0,0,0,.35);}
   .m-intro__facts{display:none!important;}
-  .m-intro__more{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-size:13px;font-weight:700;letter-spacing:.06em;}
-  .m-intro__more i{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.7);display:inline-flex;align-items:center;justify-content:center;font-style:normal;animation:mIntroArrow 2.2s ease-in-out infinite;}
+  .m-intro__more{display:inline-flex;align-items:center;gap:12px;color:#F4F1EA;text-decoration:none;font-size:13px;letter-spacing:.12em;padding-bottom:6px;border-bottom:1px solid rgba(244,241,234,.5);}
+  .m-intro__more i{display:none;}
+  .m-intro__more::after{content:"";width:28px;height:1px;background:#D7B85B;}
+  .page > .m-intro.fade-section{opacity:1!important;transform:none!important;}
+  .m-intro__body{transform:translateY(calc(var(--mip,0) * 60px));opacity:calc(1 - var(--mip,0) * 1.2);}
+  .m-intro__video,.m-intro__bg{transform:scale(calc(1 + var(--mip,0) * .12))!important;}
   @keyframes mIntroArrow{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 
   /* ---------- WORKS: keep hero pair, cards become a swipe row ---------- */
@@ -141,4 +172,100 @@
   .cta-home__actions{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;}
   .cta-home__actions .btn-pill{width:100%;margin:0!important;justify-content:center;font-size:13.5px!important;padding:14px 10px!important;min-height:0!important;}
   .cta-home__actions .btn-pill:first-child{grid-column:1 / -1;}
+}
+
+
+/* =========================================================
+   PC（769px〜）: ファーストビューを写真の全面背景に。
+   「ともに、未来を、作ろう。」は外し、動画の紹介ブロック（m-intro）を左右2分割で見せる。
+   ========================================================= */
+@media (min-width:769px){
+  /* ---------- FV ---------- */
+  .stage-intro{height:calc(100vh - 84px)!important;min-height:640px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;
+    background:#15171A!important;overflow:hidden;}
+  /* 写真は右 58% に。左は暗い面にして文字を置く */
+  .stage-intro::before{content:"";position:absolute;top:0;bottom:0;right:0;width:58%;z-index:0;pointer-events:none;
+    background:url(images/m-hero-moon.webp) center 42%/cover no-repeat;}
+  .stage-intro::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+    background:linear-gradient(90deg,#15171A 0%,#15171A 40%,rgba(21,23,26,.72) 50%,rgba(21,23,26,.15) 64%,rgba(21,23,26,0) 76%),
+               linear-gradient(180deg,rgba(21,23,26,.25) 0%,rgba(21,23,26,0) 25%,rgba(21,23,26,0) 72%,rgba(21,23,26,.5) 100%);}
+  .stage-intro .plum-branch{display:none!important;}
+  .stage-intro .petal-layer{z-index:1!important;}
+  .stage-intro__content{position:relative;z-index:2!important;align-items:flex-start!important;text-align:left!important;max-width:680px!important;margin-left:max(64px,7vw)!important;padding:0!important;gap:18px!important;}
+  .stage-intro__title{color:#fff!important;text-shadow:0 2px 20px rgba(0,0,0,.45);}
+  .stage-intro__title--ja{font-size:44px!important;line-height:1.55!important;}
+  .stage-intro__title .c-ink{color:#fff!important;}
+  .stage-intro__title .c-brand{color:#A8E0BE!important;}
+  .sd-intro__en{color:rgba(255,255,255,.88)!important;letter-spacing:.16em!important;}
+  .stage-intro__rule{background:rgba(255,255,255,.75)!important;margin-left:0!important;}
+  .sd-intro__price{color:rgba(255,255,255,.92)!important;text-shadow:0 1px 10px rgba(0,0,0,.5);}
+  .stage-intro__services{color:rgba(255,255,255,.85)!important;text-align:left!important;}
+  .sd-intro__cta{justify-content:flex-start!important;}
+  .sd-btn{min-width:250px;}
+  .sd-btn--line{background:linear-gradient(180deg,#1E8A55 0%,#15673F 100%)!important;color:#fff!important;border:1px solid rgba(168,224,190,.55)!important;
+    box-shadow:0 12px 30px -12px rgba(21,103,63,.9),inset 0 1px 0 rgba(255,255,255,.18)!important;}
+  .sd-btn--line::after{content:"→";margin-left:14px;font-weight:400;}
+  .sd-btn--ghost{background:rgba(255,255,255,.06)!important;color:#fff!important;border:1px solid rgba(255,255,255,.75)!important;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+  .sd-intro__note{color:rgba(255,255,255,.78)!important;}
+  .stage-intro__scroll{position:absolute!important;left:50%;bottom:34px;transform:translateX(-50%);margin:0!important;z-index:2;color:rgba(255,255,255,.85)!important;}
+  .stage-intro__scroll{opacity:1!important;animation:none!important;cursor:pointer;}
+  .stage-intro__scroll-line{position:relative;width:1px!important;height:60px!important;background:rgba(255,255,255,.25)!important;overflow:hidden;}
+  .stage-intro__scroll-line::after{content:"";position:absolute;left:0;top:-40%;width:1px;height:40%;background:#fff;animation:fvScrollLine 2s cubic-bezier(.6,0,.3,1) infinite;}
+  @keyframes fvScrollLine{0%{top:-40%}100%{top:100%}}
+  .page > .m-intro.fade-section{opacity:1!important;transform:none!important;}
+
+  /* ---------- 旧ヒーロー → 動画ブロック（左右2分割） ---------- */
+  .page > .hero{display:none!important;}
+  .page > .m-intro{display:block!important;position:relative;min-height:78vh;background:#141612;color:#fff;overflow:hidden;}
+  .m-intro .m-intro__bg,.m-intro .m-intro__video{position:absolute;top:0;bottom:0;left:0;width:54%;height:100%;object-fit:cover;object-position:50% 65%;}
+  .m-intro .m-intro__video{z-index:1;}
+  .m-intro .m-intro__shade{position:absolute;top:0;bottom:0;left:0;width:54%;z-index:2;background:linear-gradient(90deg,rgba(20,22,18,0) 70%,#141612 100%);}
+  .m-intro .m-intro__body{position:relative;z-index:3;margin-left:54%;min-height:78vh;display:flex;flex-direction:column;justify-content:center;padding:80px max(64px,7vw) 80px 64px;}
+  .m-intro__shop{display:inline-block;align-self:flex-start;font-size:13px;letter-spacing:.08em;color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:6px 14px;margin-bottom:22px;}
+  .m-intro__eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.3em;color:#D7B85B;font-weight:700;margin-bottom:14px;}
+  .m-intro__eyebrow::before{content:"";width:28px;height:1px;background:#D7B85B;}
+  .m-intro__title{font-family:"Shippori Mincho",serif;font-size:40px;line-height:1.5;margin:0 0 18px;font-weight:600;color:#fff;}
+  .m-intro__text{font-size:16px;line-height:2;color:rgba(255,255,255,.85);margin:0 0 30px;max-width:460px;}
+  .m-intro__facts{display:none!important;}
+  .m-intro__more{display:inline-flex;align-items:center;gap:14px;align-self:flex-start;color:#F4F1EA;text-decoration:none;font-size:14px;letter-spacing:.14em;padding-bottom:8px;border-bottom:1px solid rgba(244,241,234,.5);}
+  .m-intro__more i{display:none;}
+  .m-intro__more::after{content:"";width:36px;height:1px;background:#D7B85B;}
+  .stage-intro__content{position:static!important;transform:none!important;}
+  .stage-intro__title,.sd-intro__en,.stage-intro__rule,.sd-intro__price,.stage-intro__services,.sd-intro__cta,.sd-intro__note{position:relative;z-index:2;transform:translateY(calc(var(--fvp,0) * -50px));opacity:calc(1 - var(--fvp,0) * 1.1)!important;}
+  .stage-intro__scroll{display:flex!important;flex-direction:column;align-items:center;gap:10px;opacity:calc(1 - var(--fvp,0) * 2)!important;font-size:12px;letter-spacing:.3em;}
+  .m-intro .m-intro__video,.m-intro .m-intro__bg{transform:scale(calc(1 + var(--mip,0) * .08));}
+  .m-intro .m-intro__body{transform:translateY(calc(var(--mip,0) * 40px));opacity:calc(1 - var(--mip,0) * .9);}
+}
+
+/* =========================================================
+   文字のアニメーション（PC・スマホ共通）
+   FV：見出しは行ごとに下から「立ち上がる」。英字・罫線・項目・ボタンは順に薄く浮かぶ。
+   m-intro：スクロールで見えたら、店名タグ→見出し→本文→リンクの順に。
+   ========================================================= */
+@keyframes fvLineUp{0%{transform:translateY(110%);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes fvSoftIn{0%{opacity:0;transform:translateY(14px);filter:blur(6px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes fvRule{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+.stage-intro__title--ja{animation:none!important;opacity:1!important;}
+.stage-intro__title--ja .c-ink,.stage-intro__title--ja .c-brand{display:inline-block;animation:fvLineUp 1.1s cubic-bezier(.16,1,.3,1) both;}
+.stage-intro__title--ja .c-ink:first-child{animation-delay:.15s}
+.stage-intro__title--ja br + .c-brand,.stage-intro__title--ja br + .c-brand ~ .c-ink,.stage-intro__title--ja br + .c-brand ~ .c-brand{animation-delay:.38s}
+.sd-intro__en{animation:fvSoftIn 1.1s cubic-bezier(.16,1,.3,1) .75s both!important;}
+.stage-intro__rule{transform-origin:center;animation:fvRule .9s cubic-bezier(.16,1,.3,1) .95s both!important;opacity:1!important;}
+.stage-intro__services{animation:fvSoftIn 1.1s cubic-bezier(.16,1,.3,1) 1.05s both!important;}
+.sd-intro__price{animation:fvSoftIn 1.1s cubic-bezier(.16,1,.3,1) 1.0s both!important;}
+.sd-intro__cta{animation:fvSoftIn 1.1s cubic-bezier(.16,1,.3,1) 1.25s both!important;}
+.sd-intro__note{animation:fvSoftIn 1.1s cubic-bezier(.16,1,.3,1) 1.45s both!important;}
+.stage-intro__scroll{animation-delay:1.8s!important;}
+@media (min-width:769px){.stage-intro__rule{transform-origin:left;}}
+
+/* m-intro：.is-inview（showcase.js が付ける）で順に出す */
+.m-intro .m-intro__shop,.m-intro .m-intro__eyebrow,.m-intro .m-intro__title,.m-intro .m-intro__text,.m-intro .m-intro__more{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1);}
+.m-intro.is-inview .m-intro__shop{opacity:1;transform:none;transition-delay:.05s}
+.m-intro.is-inview .m-intro__eyebrow{opacity:1;transform:none;transition-delay:.2s}
+.m-intro.is-inview .m-intro__title{opacity:1;transform:none;transition-delay:.35s}
+.m-intro.is-inview .m-intro__text{opacity:1;transform:none;transition-delay:.5s}
+.m-intro.is-inview .m-intro__more{opacity:1;transform:none;transition-delay:.65s}
+@media (prefers-reduced-motion:reduce){
+  .stage-intro__title--ja .c-ink,.stage-intro__title--ja .c-brand,.sd-intro__en,.stage-intro__rule,.stage-intro__services,.sd-intro__price,.sd-intro__cta,.sd-intro__note{animation:none!important;opacity:1!important;transform:none!important}
+  .m-intro .m-intro__shop,.m-intro .m-intro__eyebrow,.m-intro .m-intro__title,.m-intro .m-intro__text,.m-intro .m-intro__more{opacity:1;transform:none;transition:none}
 }
