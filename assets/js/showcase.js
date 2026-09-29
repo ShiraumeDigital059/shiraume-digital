@@ -37,7 +37,7 @@
     });
   }
 
-  var targets = document.querySelectorAll('.mock, .show-card, .showcase__devices');
+  var targets = document.querySelectorAll('.mock, .show-card, .showcase__devices, .m-intro');
   if(!targets.length) return;
   document.querySelectorAll('.mock').forEach(function(m){ setupScroll(m); if(m.hasAttribute('data-tilt')) setupTilt(m); });
 
