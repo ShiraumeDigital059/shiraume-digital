@@ -1,0 +1,49 @@
+/* =========================================================
+   制作の流れ — 写真つきタイムライン（スクロール連動）
+   showcase.js が .flw-step に .is-inview を付ける。線の進みは flow用の小スクリプトで --flwp を更新。
+   ========================================================= */
+.flow{background:#F8F5EE!important;}
+.flw{position:relative;max-width:1080px;margin:0 auto;padding:10px 0 0;}
+.flw__line{position:absolute;left:50%;top:0;bottom:0;width:2px;margin-left:-1px;background:#E3DCCB;border-radius:2px;overflow:hidden;}
+.flw__line-fill{position:absolute;left:0;top:0;width:100%;height:calc(var(--flwp,0) * 100%);background:linear-gradient(180deg,#B8912F,#1E7A4A);transition:height .15s linear;}
+.flw__list{list-style:none;margin:0;padding:0;}
+.flw-step{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:34px 0;}
+.flw-step:nth-child(even) .flw-step__media{order:2;}
+.flw-step:nth-child(even) .flw-step__body{order:1;text-align:right;align-items:flex-end;}
+.flw-step__media{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:3/2;background:#EDE7DA;box-shadow:0 30px 60px -36px rgba(43,42,46,.45);
+  opacity:0;transform:translateY(34px) scale(.97);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);}
+.flw-step__media img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.12);transition:transform 2.4s cubic-bezier(.16,1,.3,1);}
+.flw-step__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,22,18,0) 60%,rgba(20,22,18,.45) 100%);}
+.flw-step__dur{position:absolute;left:16px;bottom:14px;z-index:2;font-size:12px;letter-spacing:.08em;color:#fff;background:rgba(20,22,18,.45);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 12px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);}
+.flw-step__body{display:flex;flex-direction:column;align-items:flex-start;opacity:0;transform:translateY(24px);transition:opacity .9s cubic-bezier(.16,1,.3,1) .15s,transform .9s cubic-bezier(.16,1,.3,1) .15s;}
+.flw-step__head{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.flw-step:nth-child(even) .flw-step__head{flex-direction:row-reverse;}
+.flw-step__num{font-family:"Cormorant Garamond","Shippori Mincho",serif;font-size:34px;font-weight:600;color:#B8912F;line-height:1;letter-spacing:.04em;}
+.flw-step__dot{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#F8F5EE;border:2px solid #E3DCCB;z-index:2;transition:background .4s,border-color .4s,box-shadow .4s;}
+.flw-step.is-inview .flw-step__dot{background:#1E7A4A;border-color:#1E7A4A;box-shadow:0 0 0 6px rgba(30,122,74,.15);}
+.flw-step__title{font-family:"Shippori Mincho",serif;font-size:26px;line-height:1.4;margin:0 0 10px;color:#2B2A2E;font-weight:700;}
+.flw-step__desc{font-size:15px;line-height:1.9;color:#4A4548;margin:0 0 10px;max-width:420px;}
+.flw-step__note{font-size:13px;line-height:1.8;color:#8A6E1E;margin:0;max-width:420px;padding-left:14px;border-left:2px solid #E3CE93;}
+.flw-step:nth-child(even) .flw-step__note{padding-left:0;padding-right:14px;border-left:0;border-right:2px solid #E3CE93;}
+.flw-step.is-inview .flw-step__media{opacity:1;transform:none;}
+.flw-step.is-inview .flw-step__media img{transform:scale(1);}
+.flw-step.is-inview .flw-step__body{opacity:1;transform:none;}
+@media (max-width:768px){
+  .flow{padding-left:20px!important;padding-right:20px!important;}
+  .flw__line{left:14px;margin-left:0;}
+  .flw-step,.flw-step:nth-child(even) .flw-step__media,.flw-step:nth-child(even) .flw-step__body{display:block;order:0;text-align:left;}
+  .flw-step{padding:8px 0 30px 40px;}
+  .flw-step__dot{left:14px;top:22px;margin:0 0 0 -7px;}
+  .flw-step__head{margin-bottom:8px;}
+  .flw-step:nth-child(even) .flw-step__head{flex-direction:row;}
+  .flw-step__num{font-size:28px;}
+  .flw-step__media{aspect-ratio:16/10;border-radius:14px;margin-bottom:14px;}
+  .flw-step__title{font-size:20px;margin-bottom:6px;}
+  .flw-step__desc{font-size:13.5px;line-height:1.85;margin-bottom:8px;}
+  .flw-step__note{font-size:12px;}
+  .flw-step:nth-child(even) .flw-step__note{padding-left:14px;padding-right:0;border-left:2px solid #E3CE93;border-right:0;}
+  .flw-step__body{display:flex!important;flex-direction:column;align-items:flex-start!important;text-align:left!important;}
+  .flw-step:nth-child(even) .flw-step__body{align-items:flex-start!important;text-align:left!important;}
+  .flw-step__head{justify-content:flex-start;}
+}
+@media (prefers-reduced-motion:reduce){.flw-step__media,.flw-step__body{opacity:1;transform:none;transition:none}.flw-step__media img{transform:none}}
