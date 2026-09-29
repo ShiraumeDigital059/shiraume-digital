@@ -95,13 +95,13 @@
   .works .section-heading__desc{display:none!important;}
   .showcase__text.pc-only{display:none!important;}
   .showcase__text.m-only{display:block;}
-  .showcase__grid{display:flex!important;scroll-padding-left:20px;grid-template-columns:none!important;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 20px 14px!important;margin:0 -20px!important;justify-content:flex-start!important;width:calc(100% + 40px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
+  .showcase__grid{display:flex!important;touch-action:pan-x;overscroll-behavior-x:contain;scroll-padding-left:20px;grid-template-columns:none!important;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 20px 14px!important;margin:0 -20px!important;justify-content:flex-start!important;width:calc(100% + 40px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
   .showcase__grid::-webkit-scrollbar{display:none;}
   .show-card{flex:0 0 74%;scroll-snap-align:start;}
   .m-swipe{display:block;font-size:10.5px;letter-spacing:.22em;color:#8A6E1E;text-align:right;margin:0 0 6px;}
 
   /* ---------- SERVICES: swipe row, text over photo ---------- */
-  .services__grid{display:flex!important;scroll-padding-left:24px;grid-template-columns:none!important;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 24px 14px!important;margin:0 -24px!important;justify-content:flex-start!important;width:calc(100% + 48px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
+  .services__grid{display:flex!important;touch-action:pan-x;overscroll-behavior-x:contain;scroll-padding-left:24px;grid-template-columns:none!important;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 24px 14px!important;margin:0 -24px!important;justify-content:flex-start!important;width:calc(100% + 48px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
   .services__grid::-webkit-scrollbar{display:none;}
   .svc-card{flex:0 0 72%;scroll-snap-align:start;position:relative;aspect-ratio:3/4;border-radius:14px;overflow:hidden;border:0!important;background:#1c1b19;display:block;}
   .svc-card__media{position:absolute!important;inset:0;aspect-ratio:auto!important;}
@@ -127,7 +127,7 @@
   .m-price-hero__txt p{font-size:12.5px;line-height:1.8;color:#4A4548;margin:0;max-width:62%;}
   .price-brief__scope{margin-top:0!important;}
   .plan-tabs__desc{font-size:12.5px!important;line-height:1.8!important;}
-  .price-brief__grid{display:flex!important;scroll-padding-left:24px;grid-template-columns:none!important;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:12px 24px 14px!important;margin:0 -24px!important;justify-content:flex-start!important;width:calc(100% + 48px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
+  .price-brief__grid{display:flex!important;touch-action:pan-x;overscroll-behavior-x:contain;scroll-padding-left:24px;grid-template-columns:none!important;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:12px 24px 14px!important;margin:0 -24px!important;justify-content:flex-start!important;width:calc(100% + 48px);max-width:none!important;box-sizing:border-box;scrollbar-width:none;}
   .price-brief__grid::-webkit-scrollbar{display:none;}
   .price-brief__card{flex:0 0 64%;scroll-snap-align:start;box-sizing:border-box;margin:0!important;padding:22px 16px 20px!important;}
   .price-brief__price{font-size:26px!important;}

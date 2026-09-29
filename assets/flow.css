@@ -19,8 +19,8 @@
 .flw-step__head{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
 .flw-step:nth-child(even) .flw-step__head{flex-direction:row-reverse;}
 .flw-step__num{font-family:"Cormorant Garamond","Shippori Mincho",serif;font-size:34px;font-weight:600;color:#B8912F;line-height:1;letter-spacing:.04em;}
-.flw-step__dot{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#F8F5EE;border:2px solid #E3DCCB;z-index:2;transition:background .4s,border-color .4s,box-shadow .4s;}
-.flw-step.is-inview .flw-step__dot{background:#1E7A4A;border-color:#1E7A4A;box-shadow:0 0 0 6px rgba(30,122,74,.15);}
+.flw-step>.flw-step__dot{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#F8F5EE;border:2px solid #E3DCCB;z-index:2;transition:background .4s,border-color .4s,box-shadow .4s;}
+.flw-step.is-inview>.flw-step__dot{background:#1E7A4A;border-color:#1E7A4A;box-shadow:0 0 0 6px rgba(30,122,74,.15);}
 .flw-step__title{font-family:"Shippori Mincho",serif;font-size:26px;line-height:1.4;margin:0 0 10px;color:#2B2A2E;font-weight:700;}
 .flw-step__desc{font-size:15px;line-height:1.9;color:#4A4548;margin:0 0 10px;max-width:420px;}
 .flw-step__note{font-size:13px;line-height:1.8;color:#8A6E1E;margin:0;max-width:420px;padding-left:14px;border-left:2px solid #E3CE93;}
@@ -33,7 +33,7 @@
   .flw__line{left:14px;margin-left:0;}
   .flw-step,.flw-step:nth-child(even) .flw-step__media,.flw-step:nth-child(even) .flw-step__body{display:block;order:0;text-align:left;}
   .flw-step{padding:8px 0 30px 40px;}
-  .flw-step__dot{left:14px;top:22px;margin:0 0 0 -7px;}
+  .flw-step>.flw-step__dot{left:14px;top:22px;margin:0 0 0 -7px;}
   .flw-step__head{margin-bottom:8px;}
   .flw-step:nth-child(even) .flw-step__head{flex-direction:row;}
   .flw-step__num{font-size:28px;}
