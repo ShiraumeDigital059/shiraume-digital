@@ -25,7 +25,7 @@
 <link rel="canonical" href="https://shiraumedigital.com/">
 <link rel="stylesheet" href="assets/style.css">
 <link rel="stylesheet" href="assets/showcase.css?v=20260928">
-<link rel="stylesheet" href="assets/home-mobile.css?v=20260928d">
+<link rel="stylesheet" href="assets/home-mobile.css?v=20260929b">
 <style>.price-more__link{color:inherit;text-decoration:none;border-bottom:1px solid #EDE4D2;}.price-more__link:hover{color:#8A6E1E;border-bottom-color:#C9A02F;}</style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
 </head>
@@ -102,6 +102,7 @@
     <div class="petal-layer" id="petalLayer" aria-hidden="true"></div>
 
     <div class="stage-intro__content">
+      <div class="m-fv-top">
       <h1 class="stage-intro__title stage-intro__title--ja">
         <span class="c-ink">中小企業と店舗のための、</span><br>
         <span class="c-brand">ホームページ制作</span><span class="c-ink">と</span><span class="c-brand">Web集客</span>
@@ -110,12 +111,15 @@
       <span class="stage-intro__rule" aria-hidden="true"></span>
       <p class="sd-intro__price"><span class="sd-nw">買い切り 49,800円〜</span>／<span class="sd-nw">月額 6,980円〜</span><span class="sd-nw">（初期費用0円）</span><br>料金はオプションまで、すべて公開しています。</p>
       <p class="stage-intro__services">ホームページ制作　｜　LP制作　｜　LINE構築<br>SNS運用　｜　SEO　｜　AI導入支援</p>
+    </div>
+    <div class="m-fv-bottom">
       <div class="sd-intro__cta">
         <a class="sd-btn sd-btn--line" href="https://lin.ee/zZOLYKc" target="_blank" rel="noopener">LINEで無料相談する</a>
         <a class="sd-btn sd-btn--ghost" href="Pricing.html">料金を見る</a>
       </div>
       <p class="sd-intro__note">ご相談だけでも大丈夫です。無理な営業はいたしません。</p>
-      <div class="stage-intro__scroll">
+    </div>
+    <div class="stage-intro__scroll">
         <span>Scroll</span>
         <span class="stage-intro__scroll-line"></span>
       </div>
@@ -604,6 +608,13 @@
 <script src="assets/js/i18n.js?v=20260928c"></script>
 <script>
 (function(){var c=document.querySelector('.stage-intro__scroll');if(!c)return;c.addEventListener('click',function(){var t=document.getElementById('mIntro');if(!t||getComputedStyle(t).display==='none')t=document.getElementById('heroSection');if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});})();
+</script>
+<script>
+(function(){var fv=document.getElementById('stageIntro'),mi=document.getElementById('mIntro');if(!fv)return;
+if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;var t=false;
+function u(){t=false;var vh=innerHeight,r=fv.getBoundingClientRect(),p=Math.min(1,Math.max(0,-r.top/(r.height*.8)));fv.style.setProperty('--fvp',p.toFixed(3));
+if(mi&&getComputedStyle(mi).display!=='none'){var m=mi.getBoundingClientRect(),q=Math.min(1,Math.max(0,(m.top-vh*.15)/(vh*.75)));mi.style.setProperty('--mip',q.toFixed(3));}}
+addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(u);}},{passive:true});addEventListener('resize',u);u();})();
 </script>
 <script src="assets/js/showcase.js?v=20260928" defer></script>
 <script src="assets/js/main.js"></script>
