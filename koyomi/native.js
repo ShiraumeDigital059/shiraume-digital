@@ -10,21 +10,31 @@
 (function () {
   'use strict';
 
-  /* Capacitor は registerPlugin('Koyomi') を呼んで初めて Plugins に入れてくれる。
-     呼ばないと Plugins は空のままなので、ここで一度だけ登録する。 */
+  /* iOS のネイティブ機能への入口。
+     Capacitor のネイティブ橋渡し（nativePromise）を直接使う。
+     registerPlugin はアプリの中では存在しないことがある。 */
+  const KOYOMI_METHODS = ['requestPermission','checkPermission','openSettings',
+    'scheduleReminders','clearReminders','setWidgetData','notifyNow',
+    'storeGet','storeSet','storeDel','signInWithApple'];
   const native = () => {
     try {
       const C = window.Capacitor;
       if (!(C && C.isNativePlatform && C.isNativePlatform())) return null;
-      if (C.Plugins && C.Plugins.Koyomi) return C.Plugins.Koyomi;
+      if (window.__KoyomiPlugin) return window.__KoyomiPlugin;
+      if (C.Plugins && C.Plugins.Koyomi) return (window.__KoyomiPlugin = C.Plugins.Koyomi);
+      if (typeof C.nativePromise === 'function') {
+        const P = {};
+        KOYOMI_METHODS.forEach(m => { P[m] = o => C.nativePromise('Koyomi', m, o || {}); });
+        try { if (C.Plugins) C.Plugins.Koyomi = P; } catch (e) {}
+        return (window.__KoyomiPlugin = P);
+      }
       if (typeof C.registerPlugin === 'function') {
-        if (!window.__KoyomiPlugin) window.__KoyomiPlugin = C.registerPlugin('Koyomi');
-        return window.__KoyomiPlugin;
+        const p = C.registerPlugin('Koyomi');
+        if (p) return (window.__KoyomiPlugin = p);
       }
       return null;
     } catch (e) { return null; }
   };
-
   if (!native()) return;                     // ブラウザなら何もしない
   document.documentElement.classList.add('native');
 

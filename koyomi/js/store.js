@@ -50,16 +50,25 @@
      WKWebView の localStorage は、空き容量が減ったときなどに iOS が消してしまうことがあり、
      それだけに頼ると「たまに勝手にログアウトされる」ことがあるため。
      ブラウザではこの仕組みは使わず、今までどおり localStorage に保存する。 */
-  /* Capacitor は registerPlugin('Koyomi') を呼んで初めて Plugins に入れてくれる。
-     呼ばないと Plugins は空のままなので、ここで一度だけ登録する。 */
+  /* iOS のネイティブ機能への入口。Capacitor のネイティブ橋渡しを直接使う。 */
+  const KOYOMI_METHODS = ['requestPermission','checkPermission','openSettings',
+    'scheduleReminders','clearReminders','setWidgetData','notifyNow',
+    'storeGet','storeSet','storeDel','signInWithApple'];
   function koyomiPlugin() {
     try {
       const C = global.Capacitor;
       if (!(C && C.isNativePlatform && C.isNativePlatform())) return null;
-      if (C.Plugins && C.Plugins.Koyomi) return C.Plugins.Koyomi;
+      if (global.__KoyomiPlugin) return global.__KoyomiPlugin;
+      if (C.Plugins && C.Plugins.Koyomi) return (global.__KoyomiPlugin = C.Plugins.Koyomi);
+      if (typeof C.nativePromise === 'function') {
+        const P = {};
+        KOYOMI_METHODS.forEach(m => { P[m] = o => C.nativePromise('Koyomi', m, o || {}); });
+        try { if (C.Plugins) C.Plugins.Koyomi = P; } catch (e) {}
+        return (global.__KoyomiPlugin = P);
+      }
       if (typeof C.registerPlugin === 'function') {
-        if (!global.__KoyomiPlugin) global.__KoyomiPlugin = C.registerPlugin('Koyomi');
-        return global.__KoyomiPlugin;
+        const p = C.registerPlugin('Koyomi');
+        if (p) return (global.__KoyomiPlugin = p);
       }
       return null;
     } catch (e) { return null; }
