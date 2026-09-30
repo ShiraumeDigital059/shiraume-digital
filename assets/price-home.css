@@ -1,0 +1,56 @@
+/* Home: 料金の目安（写真つき） */
+.price-brief .ph-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;max-width:1080px!important;margin:0 auto!important;align-items:stretch;}
+.price-brief .ph-card,.price-brief .ph-mcard{position:relative;display:flex;flex-direction:column;padding:0!important;background:#fff;border:1px solid #EDE7DA;border-radius:16px;overflow:visible;text-decoration:none;color:inherit;text-align:left;box-shadow:0 10px 30px rgba(43,42,46,.06);transition:transform .35s ease,box-shadow .35s ease;}
+.price-brief .ph-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(43,42,46,.12);}
+.price-brief .ph-card.price-brief__card--featured,.price-brief .ph-mcard.price-brief__card--featured{border:2px solid #1E3A2B;}
+.price-brief .ph-card .price-brief__badge,.price-brief .ph-mcard .price-brief__badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);z-index:2;}
+.ph-card__img{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:15px 15px 0 0;background:#EDE7DA;}
+.ph-card__img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease;}
+.ph-card:hover .ph-card__img img{transform:scale(1.04);}
+.ph-card__body{display:flex;flex-direction:column;flex:1;padding:22px 24px 22px;}
+.price-brief .ph-card .price-brief__name,.price-brief .ph-mcard .price-brief__name{font-size:12px;letter-spacing:.22em;color:#8A6E1E;font-weight:700;}
+.ph-card__tag{display:block;margin:6px 0 10px;font-family:'Shippori Mincho',serif;font-size:17px;font-weight:700;color:#2B2A2E;}
+.price-brief .ph-card .price-brief__price,.price-brief .ph-mcard .price-brief__price{display:block;font-family:'Shippori Mincho',serif;font-size:30px;font-weight:700;color:#1E3A2B;line-height:1.2;}
+.price-brief .ph-card .price-brief__for{display:block;margin-top:4px;font-size:12.5px;color:#6B6467;}
+.ph-card__list{list-style:none;margin:16px 0 0;padding:14px 0 0;border-top:1px solid #EDE7DA;display:grid;gap:8px;flex:1;}
+.ph-card__list li{position:relative;padding-left:20px;font-size:13px;line-height:1.6;color:#4A4548;}
+.ph-card__list li::before{content:"";position:absolute;left:2px;top:.45em;width:10px;height:6px;border-left:2px solid #1E7A4A;border-bottom:2px solid #1E7A4A;transform:rotate(-45deg);}
+.ph-card__more{display:block;margin-top:18px;font-size:12.5px;font-weight:600;color:#1E3A2B;letter-spacing:.06em;}
+.price-brief .ph-mcard{padding:28px 24px 24px!important;}
+.price-brief .ph-mcard .price-brief__half{display:block;margin:10px 0 6px;padding:8px 12px;background:#FBF6EA;border-radius:8px;font-size:12px;color:#8A6E1E;}
+.price-brief .ph-mcard .price-brief__half b{font-size:16px;}
+.price-brief .ph-mcard .price-brief__for{display:block;font-size:13px;font-weight:700;color:#2B2A2E;}
+.ph-mbanner{position:relative;max-width:1080px;margin:0 auto 26px;height:180px;border-radius:16px;overflow:hidden;}
+.ph-mbanner img{width:100%;height:100%;object-fit:cover;display:block;}
+.ph-mbanner::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,24,22,.72),rgba(20,24,22,.1) 70%);}
+.ph-mbanner__txt{position:absolute;left:32px;top:50%;transform:translateY(-50%);z-index:1;color:#fff;text-align:left;}
+.ph-mbanner__txt span{display:block;font-size:11px;letter-spacing:.28em;color:#E3CD8F;margin-bottom:6px;}
+.ph-mbanner__txt b{font-family:'Shippori Mincho',serif;font-size:22px;}
+/* 他サービス：写真タイル */
+.price-more .ph-tiles{list-style:none;display:grid!important;grid-template-columns:repeat(6,1fr);gap:14px;max-width:1080px;margin:18px auto 0;padding:0;}
+.price-more .ph-tile{margin:0!important;padding:0!important;border:0!important;background:none!important;display:block!important;}
+.ph-tile a{display:flex;flex-direction:column;height:100%;background:#fff;border:1px solid #EDE7DA;border-radius:12px;overflow:hidden;text-decoration:none;transition:transform .3s ease,box-shadow .3s ease;}
+.ph-tile a:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(43,42,46,.1);}
+.ph-tile__img{display:block;aspect-ratio:4/3;overflow:hidden;background:#EDE7DA;}
+.ph-tile__img img{width:100%;height:100%;object-fit:cover;display:block;}
+.ph-tile .price-more__name{display:block;padding:10px 12px 0;font-size:12.5px!important;font-weight:700;color:#2B2A2E;line-height:1.5;}
+.ph-tile .price-more__price{display:block;padding:2px 12px 12px;font-size:12px!important;color:#8A6E1E!important;margin-top:auto;}
+@media (max-width:1024px){.price-more .ph-tiles{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:767px){
+  .price-brief .ph-grid{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding:14px 24px 8px!important;margin:0 -24px!important;max-width:none!important;scrollbar-width:none;touch-action:pan-x pan-y;}
+  .price-brief .ph-grid::-webkit-scrollbar{display:none;}
+  .price-brief .ph-card,.price-brief .ph-mcard{flex:0 0 78%!important;scroll-snap-align:center;}
+  .ph-card__body{padding:18px 18px 18px;}
+  .price-brief .ph-card .price-brief__price,.price-brief .ph-mcard .price-brief__price{font-size:26px!important;}
+  .ph-card__tag{font-size:15.5px;}
+  .ph-mbanner{height:130px;margin-bottom:10px;}
+  .ph-mbanner__txt{left:20px;}.ph-mbanner__txt b{font-size:17px;}
+  .price-more .ph-tiles{grid-template-columns:1fr 1fr;gap:10px;}
+}
+.price-brief .ph-card{align-items:stretch!important;}
+.price-brief .ph-card .ph-card__body{align-self:stretch;width:auto;box-sizing:border-box;}
+.price-brief .ph-mcard{align-items:stretch!important;}
+.price-brief .price-more{max-width:1080px!important;width:auto!important;box-sizing:border-box;}
+.price-brief .price-more ul.ph-tiles{display:grid!important;flex-wrap:nowrap;}
+.price-brief .price-more li.ph-tile{flex:none!important;width:auto!important;min-width:0;max-width:none!important;}
+.ph-tile .price-more__price{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.5;}
