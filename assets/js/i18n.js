@@ -1979,7 +1979,26 @@
     "文章の書き換えと、写真の差し替えを指します。ページの追加、レイアウトの変更、新しい機能の追加は別途お見積りとなります。ページの追加は1ページ¥6,500〜です。": "Rewriting text and replacing photos. Adding pages, changing layouts or adding new features are quoted separately. Additional pages are ¥6,500+ each.",
     "撮影そのものが必要な場合は、提携している撮影者を手配します（実費＋¥10,000〜）。": "If you need a shoot, we'll arrange a partner photographer (cost + ¥10,000+).",
     "保守・運用プラン（月額 ¥3,490〜）": "a maintenance plan (from ¥3,490 / month)",
-    "買い切り ¥49,800〜": "One-time ¥49,800+"
+    "買い切り ¥49,800〜": "One-time ¥49,800+",
+    "スマホ対応・SSL設定": "Mobile-ready + SSL",
+    "くわしく見る →": "Learn more →",
+    "ページごとのSEO内部対策": "On-page SEO for every page",
+    "Googleアナリティクス設置": "Google Analytics setup",
+    "公開したあとも、同じ担当が。": "The same person, even after launch.",
+    "軽微な修正 月1回": "1 minor edit a month",
+    "軽微な修正 月2回": "2 minor edits a month",
+    "軽微な修正 月4回": "4 minor edits a month",
+    "ブランドサイト・ネットショップ制作": "Brand website & online shop",
+    "東京発、モノクロームのストリートブランド。夜の写真と黒で統一した画面で、ブランドの空気をそのまま伝えるサイトにしました。商品一覧からカートまで、新作の発売カウントダウン、メール登録、英語と日本語の切り替えまで、ひとつにまとめています。": "A monochrome streetwear label from Tokyo. Night photography and an all-black interface carry the brand's mood straight to the screen. Product listings and cart, a countdown to each new drop, newsletter sign-up and English/Japanese switching — all in one site.",
+    "日英対応": "Japanese / English",
+    "実際のサイトを見る": "Visit the live site",
+    "実際のサイトを見る →": "Visit the live site →",
+    "N1INJA（東京発・モノクロームのストリートブランド）": "N1INJA (monochrome streetwear label from Tokyo)",
+    "ブランドサイトとネットショップを一体で制作しました。夜の街で撮った写真と、黒で統一した画面で、ブランドの空気をそのまま伝えます。新作の発売日に向けて、カウントダウンとメール登録で期待を高める作りです。": "We built the brand site and online shop as one. Night-street photography and an all-black interface convey the brand's mood, while a countdown and newsletter sign-up build anticipation for each new release.",
+    "商品一覧・カートまでのネットショップ機能": "Online shop with product listings and cart",
+    "新作発売までのカウントダウンとメール登録": "Countdown to new releases + newsletter sign-up",
+    "英語／日本語の切り替え、スマホに合わせた表示": "English/Japanese switching, mobile-optimized display",
+    "※一部の実績は、お客様のご要望により社名・店名を非公開にしております。": "* Some client names are withheld at their request."
   };
 
   /* Attribute-only translations (alt / aria-label / placeholder / title).
