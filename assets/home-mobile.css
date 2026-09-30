@@ -275,3 +275,9 @@
 .m-intro__video{pointer-events:none;opacity:0;transition:opacity .8s;}
 .m-intro__video.is-playing{opacity:1;}
 .m-intro__video.is-blocked{display:none!important;}
+
+/* 料金の目安：PCでも常に中央 */
+.price-brief__grid{margin-left:auto!important;margin-right:auto!important;justify-content:center;}
+.price-brief .plan-tabs__nav{max-width:340px;}
+.price-brief__half{display:block;font-size:12px;color:#8A6E1E;margin:4px 0 2px;}
+.price-brief__half b{font-size:15px;}
