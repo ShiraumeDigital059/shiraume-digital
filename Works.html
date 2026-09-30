@@ -27,6 +27,26 @@
 <link rel="stylesheet" href="assets/showcase.css?v=20260928">
 <style>.works-grid-card.is-target{box-shadow:0 0 0 3px #B8912F,0 24px 50px -30px rgba(43,42,46,.4);scroll-margin-top:100px;}</style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
+<style>
+.works-feature{padding:72px 56px 8px;}
+.works-feature__inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center;background:#111;border-radius:20px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.18);}
+.works-feature__img{display:block;height:100%;min-height:360px;overflow:hidden;}
+.works-feature__img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s ease;}
+.works-feature__img:hover img{transform:scale(1.03);}
+.works-feature__body{padding:40px 44px 40px 0;color:#EDEDED;}
+.works-feature__eyebrow{font-size:11px;letter-spacing:.3em;color:#C9A24A;font-weight:600;}
+.works-feature__title{margin:10px 0 4px;font-family:'Cormorant Garamond','Shippori Mincho',serif;font-size:40px;letter-spacing:.18em;color:#fff;font-weight:500;}
+.works-feature__sub{margin:0 0 16px;font-size:13px;color:#BDBDBD;letter-spacing:.08em;}
+.works-feature__text{margin:0 0 18px;font-size:14px;line-height:2;color:#D6D6D6;}
+.works-feature__tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.works-feature__tags .tag-pill{background:transparent;border-color:#444;color:#DDD;}
+.works-feature__btn{display:inline-flex;gap:10px;align-items:center;padding:13px 26px;border:1px solid #fff;color:#fff;text-decoration:none;font-size:13px;letter-spacing:.12em;border-radius:999px;transition:background .3s,color .3s;}
+.works-feature__btn:hover{background:#fff;color:#111;}
+.works-case__live{display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:#1E3A2B;}
+.works-grid-card__image{height:auto!important;aspect-ratio:16/10;}
+.works-grid-card__image img{object-fit:cover;}
+@media (max-width:900px){.works-feature{padding:40px 20px 0;}.works-feature__inner{grid-template-columns:1fr;gap:0;}.works-feature__img{min-height:0;aspect-ratio:16/10;}.works-feature__body{padding:26px 22px 30px;}.works-feature__title{font-size:32px;}}
+</style>
 </head>
 <body>
 
@@ -69,6 +89,20 @@
     </div>
   </header>
 
+  <section class="fade-section works-feature" id="work-n1inja">
+    <div class="works-feature__inner">
+      <a class="works-feature__img" href="https://n1injajapan.vercel.app/" target="_blank" rel="noopener"><img decoding="async" loading="lazy" src="assets/images/works-n1inja.webp" alt="N1INJA ブランドサイト・ネットショップ"></a>
+      <div class="works-feature__body">
+        <span class="works-feature__eyebrow">LATEST WORK</span>
+        <h2 class="works-feature__title">N1INJA</h2>
+        <p class="works-feature__sub">ブランドサイト・ネットショップ制作</p>
+        <p class="works-feature__text">東京発、モノクロームのストリートブランド。夜の写真と黒で統一した画面で、ブランドの空気をそのまま伝えるサイトにしました。商品一覧からカートまで、新作の発売カウントダウン、メール登録、英語と日本語の切り替えまで、ひとつにまとめています。</p>
+        <div class="works-feature__tags"><span class="tag-pill tag-pill--sm">ブランドサイト</span><span class="tag-pill tag-pill--sm">ネットショップ</span><span class="tag-pill tag-pill--sm">日英対応</span><span class="tag-pill tag-pill--sm">スマホ対応</span></div>
+        <a class="works-feature__btn" href="https://n1injajapan.vercel.app/" target="_blank" rel="noopener">実際のサイトを見る <span>→</span></a>
+      </div>
+    </div>
+  </section>
+
   <!-- CATEGORY FILTER -->
   <section class="fade-section" style="padding:48px 56px 8px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
     <span class="filter-pill filter-pill--active">すべて</span>
@@ -85,7 +119,7 @@
 
       <!-- 01 コーポレート -->
       <div class="works-grid-card hover-lift-work" id="work-corporate">
-        <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--laptop"><div class="mock mock--laptop "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/home-desktop.webp" alt="コーポレートサイト制作（白梅デジタル自社サイト）"></div></div><div class="mock__base"></div></div></div></div>
+        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-corp.webp" alt="コーポレートサイト制作"></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 01</span>
           <h3 class="works-grid-card__title">コーポレートサイト制作</h3>
@@ -120,7 +154,7 @@
 
       <!-- 02 ブランド -->
       <div class="works-grid-card hover-lift-work" id="work-brand">
-        <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--laptop"><div class="mock mock--laptop "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/about-desktop.webp" alt="ブランドサイト制作"></div></div><div class="mock__base"></div></div></div></div>
+        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-brand-new.webp" alt="ブランドサイト制作"></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 02</span>
           <h3 class="works-grid-card__title">ブランドサイト制作</h3>
@@ -140,22 +174,23 @@
           </div>
           <div class="works-case" id="case-apparel" hidden>
           <div class="works-case__photo">
-            <img decoding="async" src="assets/images/works-apparel.webp" alt="アパレルショップA様 実績" loading="lazy">
+            <img decoding="async" src="assets/images/works-n1inja-full.webp" alt="N1INJA ブランドサイト 実績" loading="lazy">
           </div>
-          <span class="works-case__client">アパレルショップ A様</span>
-          <p class="works-case__text">モノトーンで統一したブランドサイトです。実店舗の張りつめた空気感を崩さないよう、余白と大判ビジュアルだけで構成し、ルックブックから商品一覧まで一貫したトーンでつなぎました。</p>
+          <span class="works-case__client">N1INJA（東京発・モノクロームのストリートブランド）</span>
+          <p class="works-case__text">ブランドサイトとネットショップを一体で制作しました。夜の街で撮った写真と、黒で統一した画面で、ブランドの空気をそのまま伝えます。新作の発売日に向けて、カウントダウンとメール登録で期待を高める作りです。</p>
           <ul class="works-case__points">
-            <li>大判ビジュアル中心のミニマルな構成</li>
-            <li>ルックブックページで世界観を訴求</li>
-            <li>スマートフォンファーストの導線設計</li>
+            <li>商品一覧・カートまでのネットショップ機能</li>
+            <li>新作発売までのカウントダウンとメール登録</li>
+            <li>英語／日本語の切り替え、スマホに合わせた表示</li>
           </ul>
+          <a class="works-case__live" href="https://n1injajapan.vercel.app/" target="_blank" rel="noopener">実際のサイトを見る →</a>
         </div>
         </div>
       </div>
 
       <!-- 03 スマホ最適化 -->
       <div class="works-grid-card hover-lift-work" id="work-mobile">
-        <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/home-mobile.webp" alt="スマートフォン最適化"></div></div></div></div></div>
+        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-mobile.webp" alt="スマートフォン最適化"></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 03</span>
           <h3 class="works-grid-card__title">スマートフォン最適化</h3>
@@ -224,7 +259,7 @@
 
       <!-- 05 SNS運用 -->
       <div class="works-grid-card hover-lift-work" id="work-sns">
-        <div class="works-grid-card__image works-grid-card__image--mock"><div class="plate plate--phone"><div class="mock mock--phone "><div class="mock__frame"><div class="mock__screen"><img decoding="async" loading="lazy" class="mock__shot" src="assets/images/shots/instagram.webp" alt="SNS運用・マーケティング"></div></div></div></div></div>
+        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-sns.webp" alt="SNS運用・マーケティング"></div>
         <div class="works-grid-card__body">
           <span class="works-grid-card__category">CATEGORY 05</span>
           <h3 class="works-grid-card__title">SNS運用・マーケティング</h3>
@@ -246,7 +281,7 @@
       </div>
 
     </div>
-    <p class="works-privacy-note">※お客様のご要望により、社名・店名は非公開にしております。</p>
+    <p class="works-privacy-note">※一部の実績は、お客様のご要望により社名・店名を非公開にしております。</p>
   </section>
 
     <!-- CTA -->
@@ -313,7 +348,7 @@
 
 </div>
 
-<script src="assets/js/i18n.js?v=20260930a"></script>
+<script src="assets/js/i18n.js?v=20260930b"></script>
 <script>
 (function(){var h=location.hash.replace('#','');if(!h)return;var c=document.getElementById(h);if(!c)return;if(!c.classList.contains('works-case')){setTimeout(function(){c.scrollIntoView({behavior:'smooth',block:'start'});c.classList.add('is-target');},250);return;}
 var b=document.querySelector('[aria-controls="'+h+'"]');if(b){b.click();}else{c.hidden=false;}
