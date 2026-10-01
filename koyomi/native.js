@@ -64,55 +64,24 @@
     return { updated: now, homeTz, members, overlap };
   }
 
-  /* ---- 通知を予約する（自分が参加する、これからの予定） ---- */
-  function reminderPayload() {
-    if (!window.DB || !DB.authed) return [];
-    const now = Date.now(), u = me(), tz = effTz(u);
-    return DB.events
-      .filter(e => e.who.includes(u.id) && e.kind !== 'holiday' && e.start > now
-                   && e.start < now + 7 * 86400000)
-      .sort((a, b) => a.start - b.start)
-      .slice(0, 45)
-      .map(e => {
-        const lead = (e.rem == null ? 10 : e.rem);
-        const at = e.start - lead * 60000;
-        if (at <= now + 30000) return null;
-        const others = e.who.map(person).filter(p => p && effTz(p) !== tz)
-          .map(p => (CITIES[effCity(p)] || {}).flag + ' ' + hhmm(e.start, effTz(p)));
-        return {
-          id: e.id,
-          at: Math.round(at / 1000),
-          title: e.title || '予定',
-          body: hhmm(e.start, tz) + (e.place ? '　' + e.place : '')
-                + (others.length ? '\n' + others.join('　') : '')
-        };
-      })
-      .filter(Boolean);
-  }
-
-  /* ---- 終業のお知らせを予約する（これから7日ぶん・休みの日は入れない） ---- */
-  function endOfDayPayload() {
-    if (!window.DB || !DB.authed) return [];
-    if (DB.company && DB.company.notify && DB.company.notify.done === false) return [];
-    if (typeof dayWork !== 'function') return [];
-    const now = Date.now(), u = me(), tz = effTz(u), out = [];
-    for (let i = 0; i < 7; i++) {
-      const c = addDays(civil(now, tz), i);
-      const ms = zToUTC(c.y, c.m, c.d, 12, 0, tz);          /* その日の正午で判定 */
-      if (typeof isDayOff === 'function' && isDayOff(u, ms)) continue;
-      const w = dayWork(u, cdow(c));
-      if (w.off) continue;
-      const [h, mi] = w.e.split(':').map(Number);
-      const at = zToUTC(c.y, c.m, c.d, h, mi, tz);
-      if (at <= now + 60000) continue;
-      out.push({
-        id: 'eod-' + c.y + '-' + c.m + '-' + c.d,
-        at: Math.round(at / 1000),
-        title: '今日はここまで',
-        body: 'おつかれさまでした。'
-      });
-    }
-    return out;
+  /* ---- 鳴らすものの一覧を、本体（notifPlan）からもらう ----
+     「いつ・何を鳴らすか」は index.html の notifPlan() が1か所で決めている。
+     ここはそれを iOS に預けるだけ。文面がずれないし、英語にも自動で付いていく。
+     iOS の予約は64件までなので、早い順に55件だけ渡す。 */
+  function planPayload() {
+    if (typeof notifPlan !== 'function') return [];
+    let p = [];
+    try { p = notifPlan() || []; } catch (e) { return []; }
+    return p
+      .filter(it => it && it.at > Date.now() + 30000)
+      .sort((a, b) => a.at - b.at)
+      .slice(0, 55)
+      .map(it => ({
+        id: String(it.id),
+        at: Math.round(it.at / 1000),
+        title: String(it.title || 'Koyomi'),
+        body: String(it.body || '')
+      }));
   }
 
   /* ---- まとめて送る（連続で呼ばれても最後の1回だけ） ---- */
@@ -128,8 +97,7 @@
         }
         /* 予定のリマインドと終業のお知らせをまとめ、早い順に並べる。
            iOS の予約上限（64件）に当たっても、先の予定から順に残るようにする。 */
-        const r = reminderPayload().concat(endOfDayPayload())
-                    .sort((a, b) => a.at - b.at).slice(0, 55);
+        const r = planPayload();
         const rj = JSON.stringify(r);
         if (force || rj !== lastR) { lastR = rj; await native().scheduleReminders({ items: r }); }
       } catch (e) { console.warn('[Koyomi] native sync', e); }

@@ -482,7 +482,7 @@
         const fresh = await pull();
         if (fresh && remoteCb) remoteCb(fresh);
       } catch (e) { console.error('[Koyomi] 再読み込みに失敗', e); }
-    }, 600);
+    }, 150);          /* 相手の送信から、できるだけ早く手元に出す */
   }
 
   /* ---------- 認証 ---------- */

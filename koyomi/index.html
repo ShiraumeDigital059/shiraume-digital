@@ -57,7 +57,8 @@
   --k-holiday:#2F82BD; --k-holiday-bg:#E8F2F9; --k-holiday-ln:#BBD9EE;
   --k-personal:#5D6672;--k-personal-bg:#EFF0F2;--k-personal-ln:#D2D5DA;
   --c-off:#8C929B;
-  --sun:#B8453C; --sun-bg:#FCF4F3; --sat:#2E6FD4; --sat-bg:#F2F6FD;
+  --sun:#B8453C; --sun-bg:#FCF4F3; --sat:#B8453C; --sat-bg:#FCF4F3;
+  --wkend-bg:#FBF2F1;
   /* 文字 */
   --jp:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic Medium","Meiryo","Segoe UI",system-ui,sans-serif;
   --lat:"IBM Plex Mono","IBM Plex Sans JP",ui-monospace,monospace;
@@ -79,7 +80,8 @@
   --k-holiday:#74BAE8; --k-holiday-bg:#142434; --k-holiday-ln:#234057;
   --k-personal:#9AA3AF;--k-personal-bg:#1D2026;--k-personal-ln:#32363E;
   --c-off:#767C85;
-  --sun:#E88B83; --sun-bg:#251A19; --sat:#7FB0FF; --sat-bg:#151D2B;
+  --sun:#E88B83; --sun-bg:#251A19; --sat:#E88B83; --sat-bg:#251A19;
+  --wkend-bg:#241A19;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -622,6 +624,8 @@ table.t tbody tr:hover{background:var(--side)}
   .msgwrap.on-thread .thl{display:none}
   .msgwrap:not(.on-thread) .thread{display:none}
   .thread{height:min(64vh,520px);border:1px solid var(--line);border-radius:10px}
+  .content.fill .msgwrap .thread{height:100%;border-radius:12px}
+  .content.fill .msgwrap .composer{border-radius:0 0 11px 11px}
   .thl{max-height:min(64vh,520px);border-right:0;border:1px solid var(--line);border-radius:10px;background:var(--paper)}
   .mgrid .cell{min-height:80px;padding:4px}
   .grid2{grid-template-columns:1fr}
@@ -651,12 +655,30 @@ table.t tbody tr:hover{background:var(--side)}
   box-shadow:0 8px 28px -12px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06)}
 @media (max-width:660px){
   .mgrid .cell .ev{display:none}
-  .mgrid .cell .evdots{display:flex}
-  .mgrid .cell>.n{font-size:13.5px}
+  .mgrid .cell .evdots{display:flex;flex-direction:column;align-items:stretch;
+    gap:2.5px;flex-wrap:nowrap;margin-top:4px;width:100%}
+  .mgrid .cell .evdots i{width:100%;height:5px;border-radius:3px}
+  .mgrid .cell .evdots i.more{height:auto;font-size:10.5px;line-height:1.2;text-align:left;
+    font-weight:700;color:var(--ink-3);font-style:normal;font-family:var(--lat)}
+  .mgrid .cell .evdots .kimg,.mgrid .cell .evdots .kicon{display:none}
+  .mgrid .cell>.n{font-size:15px;font-weight:800}
+  .mgrid .cell{padding:5px 4px}
+  .mgrid .cell .natday{font-size:10px}
+  .mgrid .hd>div{font-size:12px}
   .colnext{display:none}
   .dmpick .lb{display:none}
   .dmpick .who .st{display:none}
 }
+
+/* メッセージ：送信欄を下に貼りつけ、本文だけスクロールさせる */
+.content.fill .msgwrap{flex:1;min-height:0;height:auto}
+.content.fill .msgwrap .thread{height:100%;min-height:0}
+.content.fill .msgwrap .thl{max-height:100%}
+.thread .body{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.composer{position:sticky;bottom:0;z-index:2;flex:none;
+  padding-bottom:calc(11px + env(safe-area-inset-bottom,0px))}
+.composer #msgin{flex:1;min-width:0}
+.composer .btn.pri{flex:none;white-space:nowrap}
 
 /* カレンダーを1画面に収める */
 .content.fill{overflow:hidden}
@@ -1388,6 +1410,19 @@ table.t td{font-size:14.5px;font-weight:600;color:var(--ink-2)}
 .mgrid .cell .ev{border-radius:5px;font-weight:700}
 .mgrid .cell .ev .n{font-size:12.5px;font-weight:700;color:var(--ink-2)}
 .mgrid .cell .more-ev .n{color:var(--ink-3);font-weight:600;font-size:12px}
+
+/* 土日と、日本の祝日 —— 日付を赤く、マスを薄い赤に */
+.mgrid .cell:first-child,.mgrid .cell:last-child,.mgrid .cell.jphol{background:var(--wkend-bg)}
+.mgrid .cell.jphol>.n,
+.mgrid .cell:first-child>.n,.mgrid .cell:last-child>.n{color:var(--sun)}
+.mgrid .cell.jphol.out>.n,.mgrid .cell.out:first-child>.n,.mgrid .cell.out:last-child>.n{opacity:.45}
+.mgrid .cell.today{background:var(--accent-2)}
+.mgrid .cell.today>.n{background:var(--accent);color:#fff}
+.mgrid .cell.hol{background:#141618}
+
+/* 予定のしるし —— 細い色の帯。何が何件あるか、ひと目で分かるように */
+.evdots i{display:block;background:var(--c-off)}
+.evdots i.more{background:none;width:auto;height:auto}
 
 /* 休暇の日は黒く塗る */
 .mgrid .cell.hol{background:#141618;border-right-color:#2B2E33;border-bottom-color:#2B2E33}
@@ -2175,6 +2210,8 @@ function setLang(v){
   LANG=(v==='en')?'en':'ja';
   try{localStorage.setItem('koyomi.lang',LANG);}catch(e){}
   try{document.documentElement.lang=LANG;}catch(e){}
+  /* 端末に預けてある通知の文面も、新しい言語で入れ直す */
+  try{ if(window.__koyomiSync)window.__koyomiSync(true); }catch(e){}
   render();
 }
 const DOWEN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -2367,6 +2404,10 @@ function holidaysForDate(c){
   });
   return out;
 }
+/* その日が日本の祝日か（カレンダーを赤くするのに使う） */
+function isJpHoliday(c){
+  try{ return holidaysOf('JP',c.y,c.m,c.d).length>0; }catch(e){ return false; }
+}
 /* その人の国の祝日か */
 function isHolidayFor(p,ms){
   const C=CITIES[effCity(p)]; if(!C||!C.cc)return null;
@@ -2427,8 +2468,93 @@ const PROVERBS=[
  {cc:'HK',o:'一理通，百理明',r:'yat lei tung, baak lei ming',ja:'ひとつの道理が通れば、百の道理が見える。',en:'Understand one principle and a hundred become clear.'},
  {cc:'CA',o:'Slow and steady wins the race',r:'',ja:'ゆっくり着実な者が、競争に勝つ。',en:'Slow and steady wins the race.'},
  {cc:'KH',o:'ដើរយឺតៗ ទៅដល់ជាមិនខាន',r:'daeu yeut yeut, tow dol chea min khan',ja:'ゆっくり歩いても、必ず着く。',en:'Walk slowly and you will still arrive.'},
- {cc:'JP',o:'石の上にも三年',r:'ishi no ue nimo san-nen',ja:'冷たい石の上でも、三年すわれば温まる。',en:'Even a cold stone warms if you sit on it three years.'}
+ {cc:'JP',o:'石の上にも三年',r:'ishi no ue nimo san-nen',ja:'冷たい石の上でも、三年すわれば温まる。',en:'Even a cold stone warms if you sit on it three years.'},
+ {cc:'JP',o:'急がば回れ',r:'isogaba maware',ja:'急ぐときほど、遠回りが近道になる。',en:'When in a hurry, take the long way round.'},
+ {cc:'JP',o:'塵も積もれば山となる',r:'chiri mo tsumoreba yama to naru',ja:'ほこりも積もれば山になる。',en:'Even dust, piled up, becomes a mountain.'},
+ {cc:'JP',o:'善は急げ',r:'zen wa isoge',ja:'よいと思ったことは、すぐに。',en:'If it is good, do it now.'},
+ {cc:'JP',o:'聞くは一時の恥、聞かぬは一生の恥',r:'kiku wa ittoki no haji',ja:'聞く恥は一瞬、聞かない恥は一生。',en:'Asking is a moment’s shame; not asking is a lifetime’s.'},
+ {cc:'JP',o:'一期一会',r:'ichi-go ichi-e',ja:'この出会いは、一生に一度きり。',en:'This meeting happens only once in a lifetime.'},
+ {cc:'VN',o:'Đi một ngày đàng, học một sàng khôn',r:'',ja:'一日歩けば、ひとざるぶんの知恵が手に入る。',en:'Travel for a day and you gather a basketful of wisdom.'},
+ {cc:'VN',o:'Một cây làm chẳng nên non, ba cây chụm lại nên hòn núi cao',r:'',ja:'一本では山にならない。三本寄れば高い山になる。',en:'One tree is no mountain; three together make a peak.'},
+ {cc:'VN',o:'Ăn quả nhớ kẻ trồng cây',r:'',ja:'実を食べるときは、木を植えた人を思い出す。',en:'Eating the fruit, remember who planted the tree.'},
+ {cc:'VN',o:'Lửa thử vàng, gian nan thử sức',r:'',ja:'火は金を試し、苦労は力を試す。',en:'Fire tests gold; hardship tests strength.'},
+ {cc:'HU',o:'Aki mer, az nyer',r:'',ja:'思いきった者が、手に入れる。',en:'Who dares, wins.'},
+ {cc:'HU',o:'Többet ésszel, mint erővel',r:'',ja:'力より、頭を使ったほうが多くを得る。',en:'More with wit than with force.'},
+ {cc:'HU',o:'Nem esik messze az alma a fájától',r:'',ja:'りんごは木から遠くへ落ちない。',en:'The apple does not fall far from its tree.'},
+ {cc:'KR',o:'가는 말이 고와야 오는 말이 곱다',r:'ganeun mari gowaya oneun mari gopda',ja:'やさしい言葉を出せば、やさしい言葉が返る。',en:'Kind words going out bring kind words back.'},
+ {cc:'KR',o:'티끌 모아 태산',r:'tikkeul moa taesan',ja:'ちりを集めれば大きな山になる。',en:'Gather specks and you get a great mountain.'},
+ {cc:'KR',o:'백지장도 맞들면 낫다',r:'baekjijangdo matdeulmyeon natda',ja:'紙一枚でも、二人で持てば軽い。',en:'Even a sheet of paper is lighter carried by two.'},
+ {cc:'CN',o:'熟能生巧',r:'shú néng shēng qiǎo',ja:'慣れれば、巧くなる。',en:'Practice makes skill.'},
+ {cc:'CN',o:'一分耕耘，一分收穫',r:'yì fēn gēngyún, yì fēn shōuhuò',ja:'耕したぶんだけ、実りがある。',en:'As much as you till, that much you harvest.'},
+ {cc:'CN',o:'三人行，必有我師',r:'sān rén xíng, bì yǒu wǒ shī',ja:'三人いれば、必ず師がいる。',en:'Among any three people, one has something to teach me.'},
+ {cc:'TH',o:'น้ำขึ้นให้รีบตัก',r:'nám khûn hâi rîip tàk',ja:'水が満ちたら、すぐ汲め。',en:'When the water rises, hurry and draw it.'},
+ {cc:'TH',o:'ตนเป็นที่พึ่งแห่งตน',r:'ton pen thîi phʉ̂ng hɛ̀ng ton',ja:'自分こそが、自分の寄りどころ。',en:'You are your own refuge.'},
+ {cc:'SG',o:'Sedikit-sedikit, lama-lama menjadi bukit',r:'',ja:'少しずつでも、やがて丘になる。',en:'Little by little, in time it becomes a hill.'},
+ {cc:'SG',o:'Di mana ada kemahuan, di situ ada jalan',r:'',ja:'意志のあるところに道がある。',en:'Where there is a will, there is a way.'},
+ {cc:'GB',o:'Don’t judge a book by its cover',r:'',ja:'表紙で本を決めない。',en:'Don’t judge a book by its cover.'},
+ {cc:'GB',o:'A stitch in time saves nine',r:'',ja:'ひと針を今縫えば、九針ぶんの手間が省ける。',en:'A stitch in time saves nine.'},
+ {cc:'GB',o:'Rome wasn’t built in a day',r:'',ja:'ローマは一日にして成らず。',en:'Rome wasn’t built in a day.'},
+ {cc:'US',o:'The early bird catches the worm',r:'',ja:'早い鳥が虫をつかまえる。',en:'The early bird catches the worm.'},
+ {cc:'US',o:'Measure twice, cut once',r:'',ja:'二度測って、一度切る。',en:'Measure twice, cut once.'},
+ {cc:'FR',o:'Petit à petit, l’oiseau fait son nid',r:'',ja:'少しずつ、鳥は巣をつくる。',en:'Little by little, the bird builds its nest.'},
+ {cc:'FR',o:'Vouloir, c’est pouvoir',r:'',ja:'望むことは、できること。',en:'To want is to be able.'},
+ {cc:'FR',o:'Il n’y a que le premier pas qui coûte',r:'',ja:'いちばん大変なのは、最初の一歩だけ。',en:'Only the first step is hard.'},
+ {cc:'DE',o:'Übung macht den Meister',r:'',ja:'練習が名人をつくる。',en:'Practice makes the master.'},
+ {cc:'DE',o:'Morgenstund hat Gold im Mund',r:'',ja:'朝の時間は金を含んでいる。',en:'The morning hour has gold in its mouth.'},
+ {cc:'DE',o:'Wer rastet, der rostet',r:'',ja:'休みすぎると、錆びる。',en:'Who rests, rusts.'},
+ {cc:'IT',o:'Chi va piano, va sano e va lontano',r:'',ja:'ゆっくり行く者は、健やかに遠くまで行く。',en:'Who goes slowly goes safely and goes far.'},
+ {cc:'IT',o:'Il buongiorno si vede dal mattino',r:'',ja:'よい一日かどうかは、朝で分かる。',en:'A good day shows itself in the morning.'},
+ {cc:'ES',o:'A quien madruga, Dios le ayuda',r:'',ja:'早起きする者を、天が助ける。',en:'Heaven helps those who rise early.'},
+ {cc:'ES',o:'Más vale tarde que nunca',r:'',ja:'遅くても、やらないよりいい。',en:'Better late than never.'},
+ {cc:'NL',o:'Wie het kleine niet eert, is het grote niet weerd',r:'',ja:'小さなことを大事にできない人に、大きなことは来ない。',en:'Who does not honour small things does not deserve great ones.'},
+ {cc:'SE',o:'Borta bra men hemma bäst',r:'',ja:'よそもいいが、家がいちばん。',en:'Away is good, but home is best.'},
+ {cc:'FI',o:'Ei kukaan ole seppä syntyessään',r:'',ja:'生まれながらの鍛冶屋はいない。',en:'No one is born a blacksmith.'},
+ {cc:'NO',o:'Det finnes ikke dårlig vær, bare dårlige klær',r:'',ja:'悪い天気はない。あるのは、合わない服だけ。',en:'There is no bad weather, only bad clothing.'},
+ {cc:'DK',o:'Man skal kravle før man kan gå',r:'',ja:'歩く前に、まず這う。',en:'You must crawl before you can walk.'},
+ {cc:'PL',o:'Co nagle, to po diable',r:'',ja:'急いでやったものは、だいたい台無しになる。',en:'What is done in haste goes to the devil.'},
+ {cc:'RU',o:'Тише едешь — дальше будешь',r:'tishe yedesh — dalshe budesh',ja:'静かに進めば、遠くまで行ける。',en:'Go quietly and you will go far.'},
+ {cc:'TR',o:'Damlaya damlaya göl olur',r:'',ja:'一滴ずつたまって、湖になる。',en:'Drop by drop, a lake is formed.'},
+ {cc:'GR',o:'Η αρχή είναι το ήμισυ του παντός',r:'i archí íne to ímisi tou pantós',ja:'始めることが、全体の半分。',en:'The beginning is half of everything.'},
+ {cc:'PT',o:'Devagar se vai ao longe',r:'',ja:'ゆっくり行けば、遠くまで行ける。',en:'Slowly one goes far.'},
+ {cc:'BR',o:'Quem não arrisca, não petisca',r:'',ja:'賭けない者は、ごちそうにありつけない。',en:'Who risks nothing, nibbles nothing.'},
+ {cc:'MX',o:'Poco a poco se anda lejos',r:'',ja:'少しずつ歩けば、遠くへ行ける。',en:'Little by little, one walks far.'},
+ {cc:'AR',o:'El que no llora, no mama',r:'',ja:'泣かない子は、乳をもらえない。',en:'The one who doesn’t cry doesn’t get fed.'},
+ {cc:'IN',o:'अब पछताए होत क्या, जब चिड़िया चुग गई खेत',r:'ab pachhtaae hot kya',ja:'鳥が畑をついばんだあとで悔やんでも遅い。',en:'No use regretting after the birds have eaten the field.'},
+ {cc:'ID',o:'Berakit-rakit ke hulu, berenang-renang ke tepian',r:'',ja:'はじめに苦労して、あとで楽をする。',en:'Raft upstream first, swim to shore later.'},
+ {cc:'PH',o:'Kung may tiyaga, may nilaga',r:'',ja:'辛抱すれば、煮込みにありつける。',en:'With patience comes the stew.'},
+ {cc:'MY',o:'Bulat air kerana pembetung, bulat manusia kerana muafakat',r:'',ja:'水は樋でまとまり、人は話し合いでまとまる。',en:'Water is shaped by the channel; people by agreement.'},
+ {cc:'EG',o:'الصبر مفتاح الفرج',r:'as-sabru miftahu al-faraj',ja:'忍耐は、出口のかぎ。',en:'Patience is the key to relief.'},
+ {cc:'ZA',o:'Umuntu ngumuntu ngabantu',r:'',ja:'人は、人によって人になる。',en:'A person is a person through other people.'},
+ {cc:'KE',o:'Haraka haraka haina baraka',r:'',ja:'急ぎすぎに、恵みはない。',en:'Hurry hurry has no blessing.'},
+ {cc:'NG',o:'Eni tó ń sùn kò lè mọ bí ilẹ̀ ṣe ń mọ́',r:'',ja:'眠っている者は、夜が明けたことを知らない。',en:'The one asleep does not know the day has broken.'},
+ {cc:'ET',o:'ድር ቢያብር አንበሳ ያስር',r:'dir biyabir anbessa yasir',ja:'蜘蛛の糸も、束ねれば獅子を縛る。',en:'Spider webs united can tie up a lion.'},
+ {cc:'IL',o:'כל התחלות קשות',r:'kol hat-chalot kashot',ja:'はじまりは、どれも難しい。',en:'All beginnings are hard.'},
+ {cc:'IR',o:'قطره قطره جمع گردد وانگهی دریا شود',r:'ghatre ghatre jam gardad',ja:'しずくが集まって、やがて海になる。',en:'Drop by drop gathers, and in time becomes a sea.'},
+ {cc:'CA',o:'Many hands make light work',r:'',ja:'手が多ければ、仕事は軽い。',en:'Many hands make light work.'},
+ {cc:'AU',o:'Many a mickle makes a muckle',r:'',ja:'小さなものも、集まれば大きい。',en:'Many a little makes a lot.'},
+ {cc:'NZ',o:'Nāu te rourou, nāku te rourou, ka ora ai te iwi',r:'',ja:'あなたの籠と私の籠で、みんなが食べていける。',en:'With your basket and my basket, the people will thrive.'},
+ {cc:'CH',o:'Wer A sagt, muss auch B sagen',r:'',ja:'Aと言ったなら、Bも言わなければ。',en:'Who says A must also say B.'},
+ {cc:'AT',o:'Ohne Fleiß kein Preis',r:'',ja:'努力なしに、ごほうびはない。',en:'No reward without effort.'},
+ {cc:'BE',o:'Al doende leert men',r:'',ja:'やりながら、人は学ぶ。',en:'By doing, one learns.'},
+ {cc:'IE',o:'Tús maith, leath na hoibre',r:'',ja:'よい出だしは、仕事の半分。',en:'A good start is half the work.'},
+ {cc:'CZ',o:'Bez práce nejsou koláče',r:'',ja:'働かざれば、菓子はなし。',en:'No cakes without work.'},
+ {cc:'RO',o:'Picătura mică găurește piatra tare',r:'',ja:'小さなしずくが、硬い石に穴をあける。',en:'A small drop bores the hard stone.'},
+ {cc:'UA',o:'Крапля камінь точить',r:'kraplia kamin tochyt',ja:'しずくが石を削る。',en:'A drop wears away the stone.'}
 ];
+/* ことわざの国名と旗（拠点にない国のぶん） */
+const PROV_LAND={
+  NO:['🇳🇴','ノルウェー','Norway'], RU:['🇷🇺','ロシア','Russia'], IL:['🇮🇱','イスラエル','Israel'],
+  IR:['🇮🇷','イラン','Iran'], NG:['🇳🇬','ナイジェリア','Nigeria'], ET:['🇪🇹','エチオピア','Ethiopia'],
+  UA:['🇺🇦','ウクライナ','Ukraine'], RO:['🇷🇴','ルーマニア','Romania']
+};
+/* その国の旗と名前。CITIES にない国は PROV_LAND から。 */
+function provLand(cc){
+  const C=Object.values(CITIES).find(x=>x.cc===cc);
+  if(C)return {flag:FLAG[cc]||C.flag||'', name:LANG==='en'?(C.countryEn||cc):(C.country||cc)};
+  const E=PROV_LAND[cc];
+  if(E)return {flag:E[0], name:LANG==='en'?E[2]:E[1]};
+  return {flag:FLAG[cc]||'', name:cc};
+}
 /* 何年何月何日か（その人の暦）で決める。同じ日なら世界中の全員が同じことわざ。 */
 function proverbOf(ms,tz){
   const c=civil(ms,tz);
@@ -2437,11 +2563,10 @@ function proverbOf(ms,tz){
 }
 function proverbCard(ms,tz){
   const p=proverbOf(ms,tz);
-  const C=Object.values(CITIES).find(x=>x.cc===p.cc)||{};
-  const land=LANG==='en'?(C.countryEn||p.cc):(C.country||p.cc);
+  const PL=provLand(p.cc), land=PL.name, C={flag:PL.flag};
   return `<section class="block plain prov">
     <div class="sec"><h2>${L('世界のことわざ','A proverb from somewhere')}</h2>
-      <span class="note">${FLAG[p.cc]||C.flag||''} ${esc(land)}</span></div>
+      <span class="note">${PL.flag} ${esc(land)}</span></div>
     <blockquote class="pv">
       <p class="pv-o" lang="${(p.cc||'').toLowerCase()}">${esc(p.o)}</p>
       ${p.r?`<p class="pv-r">${esc(p.r)}</p>`:''}
@@ -3148,7 +3273,7 @@ const DEF={
              billTo:'',zip:'',addr:'',tel:'',
              status:'trial',interval:'month',trialEnds:null,cancelAtEnd:false,seats:null,ready:false},
     setupDone:true,
-    notify:{invite:true,daily:true,change:true,done:true}},
+    notify:{invite:true,daily:true,change:true,done:true,msg:true,remind:true,logback:true}},
   groups:[],
   plans:PLANS.map(p=>({...p})),
   images:JSON.parse(JSON.stringify(BUILTIN_IMG)), imgVer:3,
@@ -3606,7 +3731,7 @@ function render(){
   </header>
   ${roBar()}${setupBar()}
   <div class="clockbar">${clockBar()}</div>
-  <div class="content ${S.view==='calendar'&&S.cal==='month'?'fill':''}" id="content"><div class="pad">${viewHTML()}</div></div>
+  <div class="content ${(S.view==='calendar'&&S.cal==='month')||(S.view==='messages'&&S.thread)?'fill':''}" id="content"><div class="pad">${viewHTML()}</div></div>
   <nav class="tabbar">
     ${[['today','today','今日'],['calendar','cal','予定'],['people','people','メンバー'],['messages','msg','メッセージ'],['admin','settings','設定']]
       .map(t=>{const on=S.view===t[0]||(t[0]==='people'&&S.view==='map')||(t[0]==='admin'&&S.view==='profile');
@@ -3975,9 +4100,13 @@ async function afterAuth(){
   }
   DB=fresh; S.auth={tab:'login',err:'',ok:'',busy:false}; S.view='today';
   Store.onRemoteChange(db=>{ const v=S.view, sc=S.scope; DB=db; S.view=v; S.scope=sc;
-    if(!$('#layer').innerHTML) render(); });
+    if(!$('#layer').innerHTML) render();
+    /* 届いた瞬間に、メッセージとお知らせを鳴らす */
+    try{ messageCheck(); }catch(e){}
+    try{ inboxCheck(); }catch(e){}
+    try{ if(window.__koyomiSync)window.__koyomiSync(false); }catch(e){} });
   render(); toast(me().name+' としてログインしました');
-  try{ dailyDigest(); }catch(e){}
+  try{ msgSeenLoad(); inboxSeenLoad(); firedLoad(); notifTick(); }catch(e){}
 }
 /* Apple でサインイン */
 async function doApple(){
@@ -4360,10 +4489,11 @@ function monthGrid(c,tz){
       const tgt=(S.scope==='all'||S.scope==='mine'||!S.scope)?me().id:S.scope;
       const mine=hols.some(e=>e.who.includes(tgt));
       const nh=holidaysForDate(day);
-      html+=`<div class="cell ${day.m!==c.m?'out':''} ${k===today?'today':''} ${mine?'hol':''}" data-newday="${k}" title="${mine?'休暇':'クリックで予定を追加'}">
+      const jp=isJpHoliday(day);
+      html+=`<div class="cell ${day.m!==c.m?'out':''} ${k===today?'today':''} ${mine?'hol':''} ${jp?'jphol':''}" data-newday="${k}" title="${mine?'休暇':'クリックで予定を追加'}">
         <button class="n" data-jumpday="${k}" title="この日を開く">${day.d===1?day.m+'/':''}${day.d}</button>
         ${nh.length?`<span class="natday" title="${esc(nh.map(h=>h.land+'：'+h.names.join(' / ')).join('　'))}">${nh.map(h=>h.flag).join('')}</span>`:''}
-        <span class="evdots">${rest.slice(0,4).map(e=>kindMark(e.kind,'dotic')).join('')}${rest.length>4?`<i class="more">+${rest.length-4}</i>`:''}</span>
+        <span class="evdots">${rest.slice(0,3).map(e=>`<i class="k-${e.kind}" title="${esc(hhmm(e.start,tz)+' '+(e.title||''))}"></i>`).join('')}${rest.length>3?`<i class="more">+${rest.length-3}</i>`:''}</span>
         ${hols.map(e=>`<button class="ev holchip" data-ev="${e.id}" title="${esc(e.title)}">${kindMark(e.kind)}<span class="n">${esc(e.who.map(i=>(person(i)||{}).name||'').join('・'))} 休暇</span></button>`).join('')}
         ${rest.slice(0,hols.length?2:3).map(e=>`<button class="ev ${evClass(e)}" data-ev="${e.id}" title="${esc(hhmm(e.start,tz)+'–'+hhmm(e.end,tz)+' '+e.title)}">${kindMark(e.kind)}<span class="n">${esc(e.title)}</span></button>`).join('')}
         ${rest.length>(hols.length?2:3)?`<button class="ev more-ev" data-jumpday="${k}"><span class="n">ほか ${rest.length-(hols.length?2:3)} 件</span></button>`:''}
@@ -5388,10 +5518,14 @@ function admSettings(){
         <div class="swlist">
           <label class="sw"><input type="checkbox" data-set="company.notify.invite" ${c.notify.invite?'checked':''}>
             <span><b>参加の通知</b><small>新しいメンバーが招待コードで参加したとき、全員に通知します。</small></span></label>
-          <label class="sw"><input type="checkbox" data-set="company.notify.daily" ${c.notify.daily?'checked':''}>
-            <span><b>毎朝のダイジェスト</b><small>その日はじめて開いたとき、今日の件数と最初の予定を通知します。</small></span></label>
+          <label class="sw"><input type="checkbox" data-set="company.notify.daily" ${c.notify.daily!==false?'checked':''}>
+            <span><b>朝のお知らせ</b><small>始業の10分前に、その日の予定をまとめてお知らせします。予定がない日は、世界のことわざをひとつ。</small></span></label>
+          <label class="sw"><input type="checkbox" data-set="company.notify.remind" ${c.notify.remind!==false?'checked':''}>
+            <span><b>予定のリマインド</b><small>予定の30分前と10分前にお知らせします。予定ごとに別の時間を設定していれば、それも鳴ります。</small></span></label>
           <label class="sw"><input type="checkbox" data-set="company.notify.done" ${c.notify.done!==false?'checked':''}>
-            <span><b>終業のお知らせ</b><small>その日の終業時刻を過ぎたら「今日はここまで。おつかれさまでした」とお知らせします。休みの日は鳴りません。</small></span></label>
+            <span><b>終業のお知らせ</b><small>終業の30分前に「あと30分」、終業時刻に「今日はここまで」とお知らせします。休みの日は鳴りません。</small></span></label>
+          <label class="sw"><input type="checkbox" data-set="company.notify.logback" ${c.notify.logback!==false?'checked':''}>
+            <span><b>きのうの記録</b><small>その日の「今日の記録」を書いていたら、翌朝 9:15 に読み返せるようお知らせします。</small></span></label>
           <label class="sw"><input type="checkbox" data-set="company.notify.msg" ${c.notify.msg!==false?'checked':''}>
             <span><b>メッセージの通知</b><small>予定のスレッド・ダイレクトメッセージ・グループチャットに新しい投稿があったとき、お知らせします。</small></span></label>
           <label class="sw"><input type="checkbox" data-set="company.notify.change" ${c.notify.change?'checked':''}>
@@ -5629,7 +5763,7 @@ function statusPicker(){
 }
 function notifCenter(){
   const tz=effTz(me()),list=myNotifs().slice(0,60);
-  const ico={msg:'msg',event:'cal',member:'people',daily:'today',done:'clock'};
+  const ico={msg:'msg',event:'cal',member:'people',daily:'today',done:'clock',remind:'clock',log:'pencil'};
   layer(modal('通知',`
     <div class="row" style="justify-content:space-between">
       <span class="muted" style="font-size:13px">${unread()?`未読 ${unread()}件`:'未読はありません'}</span>
@@ -6154,41 +6288,6 @@ document.addEventListener('submit',ev=>{
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLayer();});
 window.addEventListener('resize',()=>{if(S.view==='map'||S.view==='people')drawMap();});
 
-/* 毎朝のダイジェスト（設定で切り替え） */
-function dailyDigest(){
-  if(!DB.authed||!person(DB.userId))return;
-  if(!DB.company.notify||!DB.company.notify.daily)return;
-  const u=me(),tz=effTz(u),now=Date.now(),k=dkey(now,tz);
-  if(DB.notifs.some(n=>n.type==='daily'&&n.to===u.id&&n.day===k))return;
-  const[ds,de]=dayBounds(civil(now,tz),tz);
-  const mine=DB.events.filter(e=>e.who.includes(u.id)&&e.end>ds&&e.start<de).sort((a,b)=>a.start-b.start);
-  const hol=mine.find(e=>e.kind==='holiday');
-  const txt=hol?`今日は休暇です（${hol.title}）。ゆっくり。`
-    :mine.length?`今日は ${mine.length}件。最初は ${hhmm(mine[0].start,tz)} 「${mine[0].title}」です。`
-    :'今日の予定はありません。';
-  DB.notifs.unshift({id:uid(),to:u.id,by:u.id,type:'daily',day:k,text:'今日のダイジェスト ・ '+txt,ref:'',at:now,read:false});
-  save();
-  try{ osNotify('今日のダイジェスト',txt,'daily'); }catch(e){}
-}
-
-/* 終業したら「おつかれさま」を1日1回 */
-function endOfDayCheck(){
-  if(!DB.authed||!person(DB.userId))return;
-  if(DB.company.notify&&DB.company.notify.done===false)return;
-  const u=me(),tz=effTz(u),now=Date.now(),k=dkey(now,tz);
-  if(isDayOff(u,now))return;
-  const w=workOn(u,now),pt=P(now,tz);
-  if(pt.h*60+pt.mi<T(w.e))return;                 /* まだ終業前 */
-  if(DB.notifs.some(n=>n.type==='done'&&n.to===u.id&&n.day===k))return;
-  const[ds,de]=dayBounds(civil(now,tz),tz);
-  const cnt=DB.events.filter(e=>e.who.includes(u.id)&&e.kind!=='holiday'&&e.end>ds&&e.start<de).length;
-  DB.notifs.unshift({id:uid(),to:u.id,by:u.id,type:'done',day:k,
-    text:`今日はここまで。おつかれさまでした。${cnt?'（今日の予定 '+cnt+'件）':''}`,ref:'',at:now,read:false});
-  save();
-  try{ if(!IS_APP)osNotify('今日はここまで','おつかれさまでした。'+(cnt?'（今日の予定 '+cnt+'件）':''),'eod'); }catch(e){}
-  if(!$('#layer').innerHTML)softRender();
-}
-
 /* 起動ロゴ：ひと呼吸だけ見せて、そっと消す */
 const SPLASH_T0=Date.now();
 let splashGone=false;
@@ -6293,25 +6392,146 @@ function selfNotif(type,text,ref,key){
   return true;
 }
 
-/* ---- 予定のリマインド（ブラウザ用。アプリは iOS 側で予約ずみ） ---- */
-function reminderCheck(){
-  if(IS_APP||!DB.authed||!person(DB.userId))return;
-  const u=me(),tz=effTz(u),now=Date.now();
-  let hit=false;
-  DB.events.filter(e=>e.who.includes(u.id)&&e.kind!=='holiday'&&e.start>now&&e.start<now+90*60000)
-    .forEach(e=>{
-      const lead=(e.rem==null?10:e.rem);
-      if(lead<=0)return;
-      const at=e.start-lead*60000;
-      if(at>now||now-at>10*60000)return;          /* まだ先／だいぶ過ぎた */
-      const body=hhmm(e.start,tz)+(e.place?'　'+e.place:'');
-      if(selfNotif('remind',`${e.title||'予定'} ・ ${body}`,e.id,'rm:'+e.id)){
-        hit=true; osNotify(e.title||'予定',body,'ev-'+e.id);
-      }
-    });
-  if(hit){ save(); if(!$('#layer').innerHTML)softRender(); }
+/* ============================================================
+   お知らせの予定表（これから7日ぶん）
+   ------------------------------------------------------------
+   「いつ・何を鳴らすか」を、ここ1か所で作る。
+   ・iPhone  … native.js がこの表を iOS に先に預ける（閉じていても鳴る）
+   ・ブラウザ … 開いている間、notifTick() がこの表を見て鳴らす
+   同じ表を使うので、文面がずれることがない。
+   ============================================================ */
+const NOTIF_LEADS=[30,10];                    /* 予定の何分前に鳴らすか */
+const MORNING_LEAD=10;                        /* 始業の何分前に「今日の予定」 */
+const EOD_LEAD=30;                            /* 終業の何分前に「あと30分」 */
+const LOGBACK_AT='09:15';                     /* 翌朝、昨日の記録を見せる時刻 */
+
+function notifOn(key){                        /* 会社の設定（既定はオン） */
+  const n=(DB.company&&DB.company.notify)||{};
+  return n[key]!==false;
+}
+/* 「9:00」のような文字列をその日の時刻（ミリ秒）に */
+function atOn(c,hm,tz){ const[h,mi]=String(hm).split(':').map(Number); return zToUTC(c.y,c.m,c.d,h||0,mi||0,tz); }
+
+/* その日ぶんの「今日の予定」の文 */
+function dayBriefText(c,tz,u){
+  const ds=zToUTC(c.y,c.m,c.d,0,0,tz),de=ds+86400000;
+  const mine=(DB.events||[]).filter(e=>e.who.includes(u.id)&&e.end>ds&&e.start<de)
+                            .sort((a,b)=>a.start-b.start);
+  const hol=mine.find(e=>e.kind==='holiday');
+  if(hol)return {title:L('今日はお休みです','Today is a day off'),
+                 body:L(`${hol.title}。ゆっくり休んでください。`,`${hol.title}. Enjoy the rest.`)};
+  const rest=mine.filter(e=>e.kind!=='holiday');
+  if(!rest.length){
+    const p=proverbOf(ds+12*3600000,tz), PL=provLand(p.cc);
+    const q=LANG==='en'?'“'+p.en+'”':'「'+p.ja+'」';
+    return {title:L('今日は予定がありません','No events today'),
+            body:q+'\n'+PL.flag+' '+L(PL.name+'のことわざ','a proverb from '+PL.name)+'\n'
+                 +L('今日もいい一日を。','Have a good day.')};
+  }
+  const lines=rest.slice(0,5).map(e=>hhmm(e.start,tz)+'　'+(e.title||L('予定','Event'))
+                                     +(e.place?'（'+e.place+'）':''));
+  if(rest.length>5)lines.push(L(`ほか ${rest.length-5}件`,`and ${rest.length-5} more`));
+  return {title:L(`今日の予定 ${rest.length}件`,`${rest.length} event${rest.length>1?'s':''} today`),
+          body:lines.join('\n')};
 }
 
+/* 鳴らすものの一覧。floor を渡すと、その時刻より後のものだけ返す。
+   （何も渡さなければ「これから」のぶんだけ） */
+function notifPlan(floor){
+  if(!DB.authed||!person(DB.userId))return [];
+  const u=me(),tz=effTz(u),now=Date.now(),out=[];
+  const lim=(floor==null?now+20000:floor);
+  const add=(id,at,title,body,kind,ref)=>{ if(at>lim)out.push({id,at,title,body,kind:kind||'remind',ref:ref||''}); };
+
+  /* --- 予定ごと：30分前と10分前 --- */
+  if(notifOn('remind')){
+    (DB.events||[]).filter(e=>e.who.includes(u.id)&&e.kind!=='holiday'
+                              &&e.start>now&&e.start<now+8*86400000)
+      .sort((a,b)=>a.start-b.start).slice(0,40)
+      .forEach(e=>{
+        const name=e.title||L('予定','Event');
+        const where=e.place?'　'+e.place:'';
+        const others=e.who.map(person).filter(p=>p&&effTz(p)!==tz)
+          .map(p=>((CITIES[effCity(p)]||{}).flag||'')+' '+hhmm(e.start,effTz(p)));
+        const tail=(others.length?'\n'+others.join('　'):'');
+        /* 予定ごとの設定（e.rem）が 30/10 以外なら、その分前も足す */
+        const leads=NOTIF_LEADS.slice();
+        const own=(e.rem==null?null:Number(e.rem));
+        if(own&&own>0&&leads.indexOf(own)<0)leads.push(own);
+        leads.forEach(mn=>{
+          add('ev:'+e.id+':'+mn, e.start-mn*60000,
+              mn>=60?L(`あと${Math.round(mn/60)}時間で ${name}`,`${name} in ${Math.round(mn/60)}h`)
+                    :L(`あと${mn}分で ${name}`,`${name} in ${mn} min`),
+              hhmm(e.start,tz)+'–'+hhmm(e.end,tz)+where+tail,'remind',e.id);
+        });
+      });
+  }
+
+  /* --- 一日のはじまり・おわり・ふりかえり --- */
+  for(let i=0;i<8;i++){
+    const c=addDays(civil(now,tz),i);
+    const noon=zToUTC(c.y,c.m,c.d,12,0,tz);
+    const w=dayWork(u,cdow(c));
+    const off=w.off||(typeof isDayOff==='function'&&isDayOff(u,noon));
+
+    /* 昨日の記録を、翌朝に見せる（休みの日でも出す） */
+    if(notifOn('logback')){
+      const prev=addDays(c,-1), body=logOf(u.id,ckey(prev));
+      if(body)add('log:'+ckey(c), atOn(c,LOGBACK_AT,tz),
+                  L('きのうの記録','Yesterday’s note'),
+                  fmtMD(prev.m,prev.d)+'　'+String(body).slice(0,160),'log');
+    }
+    if(off)continue;
+
+    /* 始業10分前：今日の予定 */
+    if(notifOn('daily')){
+      const t=dayBriefText(c,tz,u);
+      add('am:'+ckey(c), atOn(c,w.s,tz)-MORNING_LEAD*60000, t.title, t.body,'daily');
+    }
+    /* 終業30分前 → 終業 */
+    if(notifOn('done')){
+      add('pre:'+ckey(c), atOn(c,w.e,tz)-EOD_LEAD*60000,
+          L(`あと${EOD_LEAD}分で終業です`,`${EOD_LEAD} minutes left today`),
+          L(`${w.e} に本日の作業が終わります。`,`Your day ends at ${w.e}.`),'done');
+      add('eod:'+ckey(c), atOn(c,w.e,tz),
+          L('今日はここまで','That’s the day'),
+          L('おつかれさまでした。今日の記録を残しておきませんか。',
+            'Nice work today. A quick note before you go?'),'done');
+    }
+  }
+  return out.sort((a,b)=>a.at-b.at);
+}
+
+/* 鳴らしたものを覚えておく（同じものを二度鳴らさない） */
+var NOTIF_FIRED={};
+function firedLoad(){
+  try{ NOTIF_FIRED=JSON.parse(localStorage.getItem('koyomi.fired')||'{}')||{}; }catch(e){ NOTIF_FIRED={}; }
+}
+function firedSave(){
+  const cut=Date.now()-3*86400000, keep={};
+  Object.entries(NOTIF_FIRED).forEach(([k,v])=>{ if(v>cut)keep[k]=v; });
+  NOTIF_FIRED=keep;
+  try{ localStorage.setItem('koyomi.fired',JSON.stringify(keep)); }catch(e){}
+}
+/* ブラウザで開いている間、予定表を見て鳴らす。
+   （iPhone のアプリでは iOS が先に預かっているので、ここでは鳴らさない） */
+function notifTick(){
+  if(!DB.authed||!person(DB.userId))return;
+  const now=Date.now();
+  let hit=false;
+  notifPlanWindow(now-20*60000, now).forEach(it=>{
+    if(NOTIF_FIRED[it.id])return;
+    NOTIF_FIRED[it.id]=now;
+    if(selfNotif(it.kind||'remind', it.title+' ・ '+String(it.body).split('\n')[0], it.ref||'', it.id))hit=true;
+    if(!IS_APP)osNotify(it.title,it.body,it.id);
+  });
+  if(hit){ firedSave(); save(); if(!$('#layer').innerHTML)softRender(); }
+  else firedSave();
+}
+/* いまより少し前〜いまのあいだに鳴るはずだったもの */
+function notifPlanWindow(from,to){
+  try{ return notifPlan(from).filter(it=>it.at<=to); }catch(e){ return []; }
+}
 /* ---- メッセージのお知らせ ---- */
 var MSG_SEEN=0;
 function msgSeenLoad(){
@@ -6359,6 +6579,33 @@ function messageCheck(){
   if(!$('#layer').innerHTML)softRender();
 }
 
+/* ---- 他の人からのお知らせ（予定の追加・変更、メンバー参加）----
+   誰かがカレンダーに予定を入れると、その人の端末から DB.notifs に1件入る。
+   それが同期で届いた瞬間に、こちらの端末でも音を鳴らす。 */
+var INBOX_SEEN=0;
+function inboxSeenLoad(){
+  try{ INBOX_SEEN=Number(localStorage.getItem('koyomi.inboxSeen')||0)||0; }catch(e){ INBOX_SEEN=0; }
+  if(!INBOX_SEEN){ INBOX_SEEN=Date.now(); inboxSeenSave(); }
+}
+function inboxSeenSave(){ try{localStorage.setItem('koyomi.inboxSeen',String(INBOX_SEEN));}catch(e){} }
+function inboxCheck(){
+  if(!DB.authed||!person(DB.userId))return;
+  if(!INBOX_SEEN)inboxSeenLoad();
+  const fresh=(DB.notifs||[]).filter(n=>n.to===DB.userId&&n.by&&n.by!==DB.userId
+                                        &&(n.at||0)>INBOX_SEEN
+                                        &&n.type!=='msg')          /* msg は messageCheck が出す */
+                             .sort((a,b)=>(a.at||0)-(b.at||0));
+  if(!fresh.length)return;
+  INBOX_SEEN=Math.max(INBOX_SEEN,...fresh.map(x=>x.at||0)); inboxSeenSave();
+  const last=fresh[fresh.length-1];
+  const head=fresh.length>1?L(`お知らせ ${fresh.length}件`,`${fresh.length} updates`)
+            :last.type==='event'?L('予定が変わりました','Calendar updated')
+            :last.type==='member'?L('新しいメンバー','A new member')
+            :'Koyomi';
+  osNotify(head,String(last.text||'').slice(0,120),'inbox-'+(last.at||Date.now()));
+  if(!$('#layer').innerHTML)softRender();
+}
+
 /* 認証画面・初期設定の画面も、出したあとに英語へ置き換える */
 (function(){
   if(typeof renderAuth==='function'){const f=renderAuth;renderAuth=function(){const r=f.apply(this,arguments);try{translateDOM(document.body);}catch(e){}return r;};}
@@ -6391,10 +6638,17 @@ render();
   }finally{ splashOff(); }
 })();
 setInterval(tick,1000);
-setInterval(()=>{try{messageCheck();}catch(e){}},5000);
-setInterval(()=>{try{reminderCheck();}catch(e){}},30000);
-setInterval(()=>{try{endOfDayCheck();}catch(e){}
-  if(!$('#layer').innerHTML&&['today','people','map','admin'].includes(S.view))softRender();},60000);
+setInterval(()=>{try{messageCheck();}catch(e){}try{inboxCheck();}catch(e){}},2000);
+setInterval(()=>{try{notifTick();}catch(e){}},20000);
+setInterval(()=>{ if(!$('#layer').innerHTML&&['today','people','map','admin'].includes(S.view))softRender(); },60000);
+/* 画面に戻ってきたら、見逃したぶんをすぐ拾う */
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState!=='visible')return;
+  try{messageCheck();}catch(e){}
+  try{inboxCheck();}catch(e){}
+  try{notifTick();}catch(e){}
+});
+window.addEventListener('focus',()=>{ try{messageCheck();}catch(e){} });
 </script>
 
 <script src="native.js"></script>
