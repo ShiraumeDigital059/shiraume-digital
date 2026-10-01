@@ -68,20 +68,29 @@
      「いつ・何を鳴らすか」は index.html の notifPlan() が1か所で決めている。
      ここはそれを iOS に預けるだけ。文面がずれないし、英語にも自動で付いていく。
      iOS の予約は64件までなので、早い順に55件だけ渡す。 */
+  /* 中身が変わったかどうかの印。
+     文面や時刻が変わったら別の id になるので、iOS 側で入れ直される。 */
+  function stamp(s) {
+    let h = 5381;
+    for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+    return h.toString(36);
+  }
   function planPayload() {
     if (typeof notifPlan !== 'function') return [];
     let p = [];
     try { p = notifPlan() || []; } catch (e) { return []; }
     return p
-      .filter(it => it && it.at > Date.now() + 30000)
+      .filter(it => it && it.at > Date.now() + 3000)
       .sort((a, b) => a.at - b.at)
       .slice(0, 55)
-      .map(it => ({
-        id: String(it.id),
-        at: Math.round(it.at / 1000),
-        title: String(it.title || 'Koyomi'),
-        body: String(it.body || '')
-      }));
+      .map(it => {
+        const title = String(it.title || 'Koyomi'), body = String(it.body || '');
+        const at = Math.round(it.at / 1000);
+        return {
+          id: String(it.id) + '~' + stamp(at + '|' + title + '|' + body),
+          at: at, title: title, body: body
+        };
+      });
   }
 
   /* ---- まとめて送る（連続で呼ばれても最後の1回だけ） ---- */
