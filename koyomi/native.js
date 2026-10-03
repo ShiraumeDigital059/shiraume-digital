@@ -15,7 +15,7 @@
      registerPlugin はアプリの中では存在しないことがある。 */
   const KOYOMI_METHODS = ['requestPermission','checkPermission','openSettings',
     'scheduleReminders','clearReminders','setWidgetData','notifyNow',
-    'storeGet','storeSet','storeDel','signInWithApple'];
+    'storeGet','storeSet','storeDel','signInWithApple','getPushToken'];
   const native = () => {
     try {
       const C = window.Capacitor;

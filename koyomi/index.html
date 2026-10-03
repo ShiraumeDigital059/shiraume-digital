@@ -2212,6 +2212,8 @@ function setLang(v){
   try{document.documentElement.lang=LANG;}catch(e){}
   /* 端末に預けてある通知の文面も、新しい言語で入れ直す */
   try{ if(window.__koyomiSync)window.__koyomiSync(true); }catch(e){}
+  /* サーバーから届くお知らせの言語も合わせる */
+  try{ if(window.Store&&Store.registerPush)Store.registerPush(LANG); }catch(e){}
   render();
 }
 const DOWEN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -4107,6 +4109,11 @@ async function afterAuth(){
     try{ if(window.__koyomiSync)window.__koyomiSync(false); }catch(e){} });
   render(); toast(me().name+' としてログインしました');
   try{ msgSeenLoad(); inboxSeenLoad(); firedLoad(); notifTick(); }catch(e){}
+  /* アプリを閉じていてもお知らせが届くように、この端末の宛先を預ける */
+  try{
+    Store.registerPush(LANG).then(t=>{ PUSH_ON=!!t; })
+      .catch(()=>{ PUSH_ON=false; });
+  }catch(e){}
 }
 /* Apple でサインイン */
 async function doApple(){
@@ -6308,7 +6315,7 @@ var NOTIF_PERM='';
    アプリの中では存在しないか、何も返さないことがある。 */
 const KOYOMI_METHODS=['requestPermission','checkPermission','openSettings',
   'scheduleReminders','clearReminders','setWidgetData','notifyNow',
-  'storeGet','storeSet','storeDel','signInWithApple'];
+  'storeGet','storeSet','storeDel','signInWithApple','getPushToken'];
 function koyomiNative(){
   try{
     const C=window.Capacitor;
@@ -6370,6 +6377,12 @@ async function askWebNotifPerm(){
   }catch(e){ toast('通知を有効にできませんでした'); }
 }
 function askAnyNotifPerm(){ return IS_APP?askNotifPerm():askWebNotifPerm(); }
+
+/* プッシュ（サーバーから届くお知らせ）が使えているか。
+   使えているなら、メッセージと予定変更の「端末のお知らせ」は
+   サーバー側が出すので、こちらからは出さない（同じものが二度出ないように）。 */
+var PUSH_ON=false;
+function pushCovers(){ return IS_APP&&PUSH_ON; }
 
 /* 端末のお知らせを1件出す。出せないときは、静かに何もしない。 */
 function osNotify(title,body,tag){
@@ -6575,7 +6588,7 @@ function messageCheck(){
   selfNotif('msg',`${head} ・ ${body}`,last.ref,'');
   save();
   const quiet=(S.view==='messages')&&(!document.hidden)&&(!document.hasFocus||document.hasFocus());
-  if(!quiet)osNotify(head,body,'msg-'+(last.m.at||Date.now()));
+  if(!quiet&&!pushCovers())osNotify(head,body,'msg-'+(last.m.at||Date.now()));
   if(!$('#layer').innerHTML)softRender();
 }
 
@@ -6602,7 +6615,7 @@ function inboxCheck(){
             :last.type==='event'?L('予定が変わりました','Calendar updated')
             :last.type==='member'?L('新しいメンバー','A new member')
             :'Koyomi';
-  osNotify(head,String(last.text||'').slice(0,120),'inbox-'+(last.at||Date.now()));
+  if(!pushCovers())osNotify(head,String(last.text||'').slice(0,120),'inbox-'+(last.at||Date.now()));
   if(!$('#layer').innerHTML)softRender();
 }
 

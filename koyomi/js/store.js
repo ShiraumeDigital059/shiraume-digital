@@ -53,7 +53,7 @@
   /* iOS のネイティブ機能への入口。Capacitor のネイティブ橋渡しを直接使う。 */
   const KOYOMI_METHODS = ['requestPermission','checkPermission','openSettings',
     'scheduleReminders','clearReminders','setWidgetData','notifyNow',
-    'storeGet','storeSet','storeDel','signInWithApple'];
+    'storeGet','storeSet','storeDel','signInWithApple','getPushToken'];
   function koyomiPlugin() {
     try {
       const C = global.Capacitor;
@@ -499,6 +499,7 @@
     },
     async signOut() {
       if (!sb) return;
+      try { await unregisterPush(); } catch (e) {}
       if (chan) { sb.removeChannel(chan); chan = null; }
       snap = null; me = null; companyId = null;
       await sb.auth.signOut();
@@ -662,5 +663,43 @@
     return data.publicUrl;
   }
 
-  global.Store = { init, client, session, pull, push, flush, onRemoteChange, auth, billing, uploadImage, newId, appleAvailable };
+  /* ---------- プッシュ通知の宛先 ----------
+     アプリを閉じていてもお知らせが届くように、この iPhone の宛先を預ける。
+     ブラウザでは何もしない（宛先が無いので）。 */
+  async function registerPush(lang) {
+    const P = koyomiPlugin();
+    if (!P || !P.getPushToken || !me) return '';
+    let token = '';
+    try {
+      const r = await P.getPushToken();
+      token = (r && r.token) || '';
+    } catch (e) { return ''; }
+    if (!token) return '';
+    try {
+      const { error } = await sb.from('device_tokens').upsert({
+        token: token,
+        member_id: me.id,
+        company_id: companyId,
+        platform: 'ios',
+        lang: lang === 'en' ? 'en' : 'ja',
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'token' });
+      if (error) { console.warn('[Koyomi] 宛先の登録に失敗', error.message); return ''; }
+    } catch (e) { return ''; }
+    return token;
+  }
+
+  /* ログアウト・退会のとき、この端末あてを消す */
+  async function unregisterPush() {
+    const P = koyomiPlugin();
+    if (!P || !P.getPushToken) return;
+    try {
+      const r = await P.getPushToken();
+      const token = (r && r.token) || '';
+      if (token) await sb.from('device_tokens').delete().eq('token', token);
+    } catch (e) {}
+  }
+
+  global.Store = { init, client, session, pull, push, flush, onRemoteChange, auth, billing,
+                   uploadImage, newId, registerPush, unregisterPush, appleAvailable };
 })(window);
