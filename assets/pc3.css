@@ -253,3 +253,125 @@
 .adx .pc3-list li:nth-child(n){transition-delay:calc(.2s + var(--i,0) * .05s);}
 .adx-price a{color:#1E3A2B;text-decoration:none;border-bottom:1px solid #B8912F;}
 .ph-gal__item{margin:0;}
+
+/* =========================================================
+   pq — 1画面目で料金がすべて見える構成（2026-10-03）
+   ========================================================= */
+/* 改行：句読点・文節で自然に折り返す */
+.pq-hero__title,.pq-hero__desc,.pc3__title,.pc3__desc,.pc3-card__catch,.pc3-card__lead,.pq__note,.pmore__t b,.pmore__t small,.pq-banner__t,.pc-sec-head h2,.pc-sec-head p,.pc3t__title,.pc3t__lead,.tkt__title,.tkt__desc,.adp__step p,.rvw__item p,.pdca-step p{word-break:auto-phrase;text-wrap:pretty;line-break:strict;}
+.pq-hero__title,.pq-hero__desc,.pc3__title,.pq__note,.pc-sec-head h2,.pc-sec-head p,.tkt__title,.pq-banner__t{text-wrap:balance;}
+
+/* コンパクトなヒーロー */
+.pq-hero{position:relative;overflow:hidden;background:#1C2420;color:#fff;padding:64px 40px 54px;text-align:center;}
+.pq-hero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.38;transform:scale(1.06);animation:pqZoom 2.4s cubic-bezier(.2,.7,.2,1) forwards;}
+@keyframes pqZoom{to{transform:scale(1);}}
+.pq-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,26,23,.35),rgba(20,26,23,.75));}
+.pq-hero__in{position:relative;z-index:1;max-width:760px;margin:0 auto;}
+.pq-hero__eb{display:inline-block;font-size:11.5px;letter-spacing:.32em;color:#E3CD8F;padding-bottom:8px;border-bottom:1px solid rgba(227,205,143,.6);opacity:0;animation:pqUp .8s .1s ease forwards;}
+.pq-hero__title{margin:14px 0 10px;font-family:'Shippori Mincho',serif;font-size:clamp(26px,3.2vw,38px);font-weight:700;letter-spacing:.06em;opacity:0;animation:pqUp .9s .2s ease forwards;}
+.pq-hero__desc{margin:0;font-size:14px;line-height:1.95;color:#E7E3D9;opacity:0;animation:pqUp .9s .35s ease forwards;}
+.pq-hero--sub{padding:48px 40px 40px;}
+.pq-hero--sub .pq-hero__title{font-size:clamp(22px,2.6vw,30px);}
+@keyframes pqUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+/* 料金ストリップ */
+.pq{padding:26px 40px 8px;background:#FFFDF7;}
+.pq__grid{max-width:1080px;margin:0 auto;display:grid;gap:14px;}
+.pq__grid--1{grid-template-columns:minmax(0,420px);justify-content:center;}
+.pq__grid--2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:760px;}
+.pq__grid--3{grid-template-columns:repeat(3,minmax(0,1fr));}
+.pq__grid--4{grid-template-columns:repeat(4,minmax(0,1fr));}
+.pq-tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:20px 12px 16px;border-radius:14px;background:#fff;border:1px solid #EDE7DA;text-decoration:none;color:#2B2A2E;box-shadow:0 8px 22px rgba(43,42,46,.05);opacity:0;transform:translateY(16px);animation:pqUp .7s ease forwards;transition:transform .3s ease,box-shadow .3s ease,border-color .3s;}
+.pq-tile:nth-child(1){animation-delay:.35s}.pq-tile:nth-child(2){animation-delay:.47s}.pq-tile:nth-child(3){animation-delay:.59s}.pq-tile:nth-child(4){animation-delay:.71s}
+.pq-tile:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(43,42,46,.1);border-color:#B8912F;}
+.pq-tile--rec{border:2px solid #1E3A2B;background:linear-gradient(180deg,#fff,#F7FAF5);}
+.pq-tile__badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#1E3A2B;color:#fff;font-size:10.5px;letter-spacing:.1em;padding:3px 10px;border-radius:999px;white-space:nowrap;}
+.pq-tile__name{font-size:11.5px;letter-spacing:.18em;color:#8A6E1E;font-weight:700;text-align:center;}
+.pq-tile__price{font-family:'Shippori Mincho',serif;color:#1E3A2B;font-size:15px;white-space:nowrap;}
+.pq-tile__price b{font-size:28px;font-weight:700;letter-spacing:.01em;font-variant-numeric:tabular-nums;}
+.pq-tile__price small{font-size:12px;color:#6B6467;margin-left:2px;font-family:'Noto Sans JP',sans-serif;}
+.pq-tile__tag{font-size:12px;color:#5a5a56;text-align:center;line-height:1.5;}
+.pq__note{max-width:1080px;margin:12px auto 0;text-align:center;font-size:12px;color:#7A746C;line-height:1.8;}
+.pc3--tight{padding-top:30px;}
+.pc3--tight .pc3__head{margin-bottom:26px;}
+.pc3__grid--2{grid-template-columns:repeat(2,minmax(0,1fr));max-width:860px;}
+.pc3__grid--4{grid-template-columns:repeat(4,minmax(0,1fr));max-width:1320px;gap:18px;}
+.pc3__grid--4 .pc3-card__body{padding:22px 20px 22px;}
+.pc3__grid--4 .pc3-card__price b{font-size:30px;}
+.pq-foot{max-width:1080px;margin:0 auto;padding:0 40px 36px;text-align:center;font-size:12.5px;color:#6B6467;line-height:1.9;background:#FBF8F1;}
+.pq-wrap{padding-top:50px!important;}
+
+/* バナー */
+.pq-banner{display:flex;align-items:center;gap:18px;max-width:1080px;margin:0 auto 34px;padding:20px 26px;border-radius:16px;text-decoration:none;background:#FBF8F1;border:1px solid #EDE7DA;color:#2B2A2E;transition:transform .3s,box-shadow .3s;}
+.pq-banner:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(43,42,46,.1);}
+.pq-banner--dark{background:#1C2420;border-color:#1C2420;color:#fff;}
+.pq-banner__eb{flex:0 0 auto;font-size:10.5px;letter-spacing:.24em;color:#B8912F;font-weight:700;}
+.pq-banner--dark .pq-banner__eb{color:#D7BC73;}
+.pq-banner__t{flex:1;font-size:15px;font-weight:600;line-height:1.6;}
+.pq-banner__go{flex:0 0 auto;font-size:13px;font-weight:600;color:#1E3A2B;white-space:nowrap;}
+.pq-banner--dark .pq-banner__go{color:#E3CD8F;}
+.pc3 + .pq-banner{margin-top:-10px;}
+section.pc3 ~ .pq-banner{position:relative;}
+.pq-banner{width:calc(100% - 80px);}
+
+/* もっと詳しく */
+.pmore{padding:40px 40px 70px;background:#FBF8F1;}
+.pmore__in{max-width:860px;margin:0 auto;}
+.pmore__title{margin:0 0 16px;font-family:'Shippori Mincho',serif;font-size:20px;color:#2B2A2E;text-align:center;}
+.pmore__list{display:grid;gap:10px;}
+.pmore__item{display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:14px;background:#fff;border:1px solid #EDE7DA;text-decoration:none;color:#2B2A2E;transition:transform .3s,box-shadow .3s,border-color .3s;}
+.pmore__item:hover{transform:translateX(4px);box-shadow:0 12px 26px rgba(43,42,46,.08);border-color:#B8912F;}
+.pmore__no{flex:0 0 auto;font-family:'Cormorant Garamond','Shippori Mincho',serif;font-size:22px;color:#B8912F;}
+.pmore__t{flex:1;display:flex;flex-direction:column;gap:2px;}
+.pmore__t b{font-size:15px;}
+.pmore__t small{font-size:12.5px;color:#6B6467;line-height:1.6;}
+.pmore__go{flex:0 0 auto;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid #1E3A2B;color:#1E3A2B;transition:background .3s,color .3s;}
+.pmore__item:hover .pmore__go{background:#1E3A2B;color:#fff;}
+
+/* サブページのナビ */
+.pnav{padding:30px 40px 70px;background:#FBF8F1;border-top:1px solid #EDE7DA;}
+.pnav__in{max-width:860px;margin:0 auto;text-align:center;}
+.pnav__back{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:999px;background:#1E3A2B;color:#fff;text-decoration:none;font-size:14px;font-weight:600;}
+.pnav__list{margin-top:18px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;}
+.pnav__item{padding:8px 16px;border-radius:999px;border:1px solid #DCD3C1;background:#fff;color:#4A4548;text-decoration:none;font-size:12.5px;}
+.pnav__item.is-current{background:#F1ECE0;color:#8A6E1E;border-color:#B8912F;pointer-events:none;}
+
+@media (max-width:1200px){.pc3__grid--4{grid-template-columns:repeat(2,minmax(0,1fr));max-width:860px;}}
+@media (max-width:900px){
+  .pq-hero{padding:30px 20px 26px;}
+  .pq-hero__title{margin:10px 0 6px;font-size:25px;}
+  .pq-hero__desc{font-size:12.5px;line-height:1.85;}
+  .pq-hero--sub{padding:26px 20px 22px;}
+  .pq-hero--sub .pq-hero__title{font-size:21px;}
+  .pq{padding:18px 12px 4px;}
+  .pq__grid{gap:8px;}
+  .pq__grid--4{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .pq-tile{padding:16px 4px 12px;border-radius:12px;gap:2px;}
+  .pq-tile__name{font-size:10px;letter-spacing:.08em;}
+  .pq-tile__price{font-size:12px;}
+  .pq-tile__price b{font-size:19px;}
+  .pq-tile__price small{font-size:10px;}
+  .pq-tile__tag{font-size:10.5px;}
+  .pq-tile__badge{font-size:9.5px;padding:2px 8px;top:-9px;}
+  .pq__note{font-size:11px;padding:0 10px;margin-top:10px;}
+  .pc3--tight{padding-top:14px;}
+  .pc3__grid--2 .pc3-card,.pc3__grid--4 .pc3-card{flex:0 0 84%;}
+  .pc3__grid--2,.pc3__grid--4{max-width:none;}
+  .pq-banner{flex-wrap:wrap;gap:6px 12px;margin:0 16px 26px;width:auto;padding:16px 18px;}
+  .pq-banner__eb{width:100%;}
+  .pq-banner__t{font-size:14px;}
+  .pmore{padding:26px 16px 50px;}
+  .pmore__title{font-size:18px;}
+  .pmore__item{padding:15px 14px;gap:12px;}
+  .pmore__no{font-size:18px;}
+  .pmore__t b{font-size:14px;}
+  .pmore__t small{font-size:11.5px;}
+  .pmore__go{width:28px;height:28px;}
+  .pnav{padding:24px 16px 50px;}
+  .pq-foot{padding:0 18px 28px;font-size:11.5px;}
+}
+@media (prefers-reduced-motion:reduce){.pq-hero__eb,.pq-hero__title,.pq-hero__desc,.pq-tile{opacity:1;animation:none;transform:none;}.pq-hero__bg{animation:none;}}
+.pq-bwrap{background:#FBF8F1;padding:6px 0 4px;}
+.pq-bwrap .pq-banner{margin-bottom:22px;}
+.pc3-card.is-ping{animation:pcPing 1.2s ease;}@keyframes pcPing{0%{box-shadow:0 0 0 0 rgba(184,145,47,.55)}100%{box-shadow:0 0 0 18px rgba(184,145,47,0)}}
+.pc3--tight::before{display:none;}
