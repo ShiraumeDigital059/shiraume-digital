@@ -69,4 +69,23 @@
       setTimeout(function () { var c = cards[recIdx]; grid.scrollLeft = c.offsetLeft - (grid.clientWidth - c.clientWidth) / 2; }, 60);
     }
   });
+  // 料金タイル：押すとそのプランのカードへ
+  document.querySelectorAll('.pq-tile[data-idx]').forEach(function (t) {
+    t.addEventListener('click', function (e) {
+      var i = +t.getAttribute('data-idx'); var card = document.getElementById('plan-' + i);
+      var sec = document.querySelector('.pc3');
+      if (!card || !sec) { var pl = document.getElementById('plan'); if (pl) { e.preventDefault(); window.scrollTo({ top: pl.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' }); } return; }
+      e.preventDefault();
+      var grid = sec.querySelector('.pc3__grid');
+      if (window.innerWidth <= 900 && grid) {
+        grid.scrollTo({ left: card.offsetLeft - (grid.clientWidth - card.clientWidth) / 2, behavior: 'smooth' });
+        var y = sec.getBoundingClientRect().top + window.pageYOffset - 70;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      } else {
+        var y2 = card.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top: y2, behavior: 'smooth' });
+        card.classList.remove('is-ping'); void card.offsetWidth; card.classList.add('is-ping');
+      }
+    });
+  });
 })();
