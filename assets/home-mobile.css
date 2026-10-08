@@ -284,7 +284,7 @@
 
 /* PC：動画ブロックの右端が白く浮く問題（2026-10-09） */
 @media (min-width:769px){
-  .m-intro .m-intro__bg,.m-intro .m-intro__video{width:58%;-webkit-mask-image:linear-gradient(90deg,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(90deg,#000 0%,#000 62%,transparent 100%);}
-  .m-intro .m-intro__shade{width:58%;z-index:3;background:linear-gradient(90deg,rgba(20,22,18,0) 55%,rgba(20,22,18,.75) 82%,#141612 100%);}
+  .m-intro .m-intro__bg,.m-intro .m-intro__video{width:58%;-webkit-mask-image:linear-gradient(90deg,#000 0%,#000 50%,transparent 98%);mask-image:linear-gradient(90deg,#000 0%,#000 50%,transparent 98%);}
+  .m-intro .m-intro__shade{width:58%;z-index:3;background:linear-gradient(90deg,rgba(20,22,18,0) 45%,rgba(20,22,18,.8) 78%,#141612 100%);}
   .m-intro .m-intro__body{z-index:4;}
 }
