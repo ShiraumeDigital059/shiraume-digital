@@ -59,7 +59,7 @@
   <header class="simple-hero" style="padding:110px 56px 70px;">
     <span class="simple-hero__eyebrow">CONTACT</span>
     <h1 class="simple-hero__title simple-hero__title--36">まずはお気軽にご相談ください。</h1>
-    <p class="simple-hero__desc" style="max-width:560px;">ホームページ制作、LINE公式アカウント構築、AI導入、Webデザインなど、<br class="br-desktop">どんな小さなことでもお気軽にお問い合わせください。</p>
+    <p class="simple-hero__desc" style="max-width:560px;">どんな小さなことでも大丈夫です。<br>いちばん気軽な方法からどうぞ。</p>
   </header>
 
   <!-- METHODS -->
@@ -75,20 +75,36 @@
       .ct-sub{max-width:1240px;margin:0 auto;gap:18px;}
       .ct-sub .method-card{padding-top:26px;padding-bottom:26px;}
       @media (max-width:900px){.ct-main{grid-template-columns:1fr!important;gap:22px;}.ct-sub{grid-template-columns:1fr 1fr!important;gap:12px!important;}.ct-sub .method-card__desc{display:none;}}
+      @media (max-width:900px){
+        .simple-hero{padding:34px 20px 18px!important;}
+        .simple-hero__title--36{font-size:23px!important;margin:8px 0 6px!important;}
+        .simple-hero__desc{font-size:12.5px!important;line-height:1.8!important;margin:0!important;}
+        section.fade-section:has(.ct-main){padding:14px 14px 60px!important;}
+        .ct-main{gap:12px!important;}
+        .ct-main .method-card{display:grid!important;grid-template-columns:40px 1fr auto;grid-template-areas:"icon title btn" "icon desc btn";align-items:center;text-align:left;gap:2px 12px;padding:16px 14px!important;border-radius:14px;}
+        .ct-main .method-card__icon{grid-area:icon;width:34px!important;height:34px!important;margin:0!important;}
+        .ct-main .method-card__title{grid-area:title;font-size:15px!important;margin:0!important;}
+        .ct-main .method-card__desc{grid-area:desc;font-size:11.5px!important;line-height:1.6!important;margin:0!important;}
+        .ct-main .method-card__desc br{display:none;}
+        .ct-main .method-card__btn{grid-area:btn;margin:0!important;padding:10px 12px!important;font-size:12px!important;white-space:nowrap;min-width:0!important;}
+        .ct-no{display:none;}
+        .ct-rec{left:auto;right:12px;transform:none;top:-10px;font-size:10px;padding:3px 10px;}
+        .ct-sub-title{margin:30px auto 12px;}
+      }
     </style>
     <div class="grid-3 ct-main">
       <div class="method-card method-card--first hover-lift-sm">
         <span class="ct-rec">いちばん気軽です</span><span class="ct-no">01</span>
         <img decoding="async" loading="lazy" class="method-card__icon" src="assets/images/chat-bubbles.png" alt="">
         <div class="method-card__title">LINEで相談</div>
-        <div class="method-card__desc">友だち追加して、ひとことメッセージを送るだけ。<br class="br-desktop">お電話希望も、こちらからどうぞ。</div>
-        <a href="https://lin.ee/zZOLYKc" target="_blank" rel="noopener" class="method-card__btn method-card__btn--outline">LINEで友だち追加</a>
+        <div class="method-card__desc">友だち追加して、ひとこと送るだけ。<br class="br-desktop">お電話希望もこちらから。</div>
+        <a href="https://lin.ee/zZOLYKc" target="_blank" rel="noopener" class="method-card__btn method-card__btn--outline">友だち追加</a>
       </div>
       <div class="method-card hover-lift-sm">
         <span class="ct-no">02</span>
         <img decoding="async" loading="lazy" class="method-card__icon" src="assets/images/document-form.png" alt="">
         <div class="method-card__title">日程を決めて相談</div>
-        <div class="method-card__desc">空いている日時をその場で選べます。<br class="br-desktop">オンライン／お電話に対応。</div>
+        <div class="method-card__desc">空いている日時をその場で選べます。<br class="br-desktop">オンライン／お電話。</div>
         <a href="https://yoyaku.shiraumedigital.com/?shop=sodan" class="method-card__btn method-card__btn--outline">予約する</a>
       </div>
       <div class="method-card hover-lift-sm">
