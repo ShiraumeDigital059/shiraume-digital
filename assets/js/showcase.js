@@ -13,7 +13,7 @@
         var over = img.offsetHeight - screen.offsetHeight;
         if(over > 24){
           img.style.setProperty('--scroll', over + 'px');
-          img.style.setProperty('--dur', Math.max(8, Math.min(26, over / 60)) + 's');
+          img.style.setProperty('--dur', Math.max(8, Math.min(60, over / 60)) + 's');
           img.classList.add('is-scroll');
         }else{ img.classList.remove('is-scroll'); }
       }
