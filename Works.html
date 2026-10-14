@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>制作できるサイトの例｜飲食店・店舗・企業サイト｜白梅デジタル</title>
+<title>実績｜SNS運用・ブランドサイト・飲食店サイト｜白梅デジタル</title>
 <meta name="description" content="白梅デジタルで制作できるサイトの例です。コーポレートサイト、ブランドサイト、飲食店・店舗サイト、スマートフォン最適化、SNS運用まで。業種・目的別に、どんなサイトが作れるかをご覧いただけます。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shiraumedigital.com/Works.html">
@@ -47,6 +47,84 @@
 .works-grid-card__image img{object-fit:cover;}
 @media (max-width:900px){.works-feature{padding:40px 20px 0;}.works-feature__inner{grid-template-columns:1fr;gap:0;}.works-feature__img{min-height:0;aspect-ratio:16/10;}.works-feature__body{padding:26px 22px 30px;}.works-feature__title{font-size:32px;}}
 </style>
+<style>
+/* ===== Works (2026-10 rebuild) ===== */
+.wk-pick{padding:56px 56px 8px;max-width:1240px;margin:0 auto}
+.wk-pick__head{text-align:center;margin-bottom:28px}
+.wk-pick__eyebrow{font-size:11px;letter-spacing:.3em;color:#B8912F;font-weight:700}
+.wk-pick__title{margin:10px 0 6px;font-family:'Shippori Mincho',serif;font-size:30px;font-weight:600;color:#2B2A2E;letter-spacing:.06em}
+.wk-pick__lead{margin:0;font-size:14px;color:#6b6760}
+.wk-tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.wk-tile{position:relative;display:block;border-radius:16px;overflow:hidden;aspect-ratio:4/5;text-decoration:none;color:#fff;box-shadow:0 18px 40px -26px rgba(43,42,46,.6);transition:transform .35s ease,box-shadow .35s ease}
+.wk-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+.wk-tile:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,20,20,0) 35%,rgba(20,20,20,.82) 100%)}
+.wk-tile:hover{transform:translateY(-4px);box-shadow:0 26px 50px -26px rgba(43,42,46,.7)}
+.wk-tile:hover img{transform:scale(1.05)}
+.wk-tile__body{position:absolute;left:16px;right:16px;bottom:16px;z-index:1}
+.wk-tile__no{font-size:10px;letter-spacing:.25em;color:#E4C77A;font-weight:700}
+.wk-tile__name{word-break:auto-phrase;display:block;margin-top:4px;font-size:15px;font-weight:700;line-height:1.45}
+.wk-tile__badge{display:inline-block;margin-top:8px;font-size:11px;padding:3px 9px;border-radius:999px;background:rgba(255,255,255,.18);backdrop-filter:blur(4px)}
+.wk-nav{position:sticky;top:64px;z-index:20;background:rgba(251,248,241,.94);backdrop-filter:blur(8px);border-bottom:1px solid #ece5d6;margin-top:36px}
+.wk-nav__in{max-width:1240px;margin:0 auto;padding:10px 56px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.wk-nav__in::-webkit-scrollbar{display:none}
+.wk-nav a{flex-shrink:0;font-size:13px;font-weight:600;color:#6b6760;text-decoration:none;padding:8px 14px;border-radius:999px;border:1px solid #e3dccb;background:#fff;transition:all .25s}
+.wk-nav a.is-on,.wk-nav a:hover{background:#2B2A2E;color:#fff;border-color:#2B2A2E}
+.wk-sec{max-width:1240px;margin:0 auto;padding:80px 56px 24px;scroll-margin-top:120px}
+.wk-sec__head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px;border-bottom:1px solid #e7e0cf;padding-bottom:18px}
+.wk-sec__no{font-size:11px;letter-spacing:.3em;color:#B8912F;font-weight:700}
+.wk-sec__title{word-break:auto-phrase;margin:8px 0 6px;font-family:'Shippori Mincho',serif;font-size:30px;font-weight:600;color:#2B2A2E;letter-spacing:.04em}
+.wk-sec__lead{margin:0;font-size:14px;color:#6b6760;line-height:1.9}
+.wk-sec__price{flex-shrink:0;font-size:13px;font-weight:700;color:#2B2A2E;text-decoration:none;border-bottom:1px solid #B8912F;padding-bottom:2px;white-space:nowrap}
+.wk-case{display:grid;grid-template-columns:1.15fr 1fr;gap:44px;align-items:start;background:#fff;border:1px solid #ece5d6;border-radius:22px;padding:28px;box-shadow:0 30px 60px -48px rgba(43,42,46,.45)}
+.wk-case+.wk-case{margin-top:24px}
+.wk-case__media{border-radius:14px;overflow:hidden;background:#141414}
+.wk-case__media img{display:block;width:100%;height:auto}
+.wk-case__media--scroll{max-height:520px;overflow-y:auto}
+.wk-case__label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;color:#1E7A4A;background:#E9F3EC;padding:4px 10px;border-radius:999px}
+.wk-case__name{margin:12px 0 4px;font-size:22px;font-weight:700;color:#2B2A2E;line-height:1.5}
+.wk-case__sub{margin:0 0 14px;font-size:13px;color:#8a8580}
+.wk-case__text{margin:0 0 16px;font-size:14px;line-height:2;color:#3d3b40}
+.wk-case h4{margin:18px 0 8px;font-size:13px;letter-spacing:.08em;color:#B8912F}
+.wk-case ul{margin:0;padding:0;list-style:none}
+.wk-case li{position:relative;padding-left:20px;font-size:14px;line-height:1.9;color:#3d3b40}
+.wk-case li:before{content:"";position:absolute;left:2px;top:.75em;width:8px;height:8px;border-radius:50%;background:#B8912F}
+.wk-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:4px 0 6px}
+.wk-stat{background:#FBF8F1;border:1px solid #efe7d4;border-radius:14px;padding:14px 12px;text-align:center}
+.wk-stat b{display:block;font-family:'Shippori Mincho',serif;font-size:26px;color:#8A6E1E;line-height:1.2}
+.wk-stat span{display:block;margin-top:4px;font-size:11.5px;color:#6b6760}
+.wk-note{margin:6px 0 0;font-size:11.5px;color:#9a948b}
+.wk-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.wk-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;font-size:13px;font-weight:700;text-decoration:none;transition:all .25s}
+.wk-btn--dark{background:#2B2A2E;color:#fff}.wk-btn--dark:hover{background:#000}
+.wk-btn--ig{background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF);color:#fff}
+.wk-btn--line{border:1px solid #2B2A2E;color:#2B2A2E}.wk-btn--line:hover{background:#2B2A2E;color:#fff}
+.wk-accts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px}
+.wk-acct{border:1px solid #ece5d6;border-radius:16px;padding:16px 18px;background:#FDFBF6}
+.wk-acct__pf{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:#2B2A2E}
+.wk-acct__dot{width:10px;height:10px;border-radius:50%}
+.wk-acct__who{margin:2px 0 10px;font-size:12px;color:#8a8580}
+.wk-acct .wk-stats{grid-template-columns:1fr 1fr}
+.wk-acct .wk-stat{padding:12px 6px}.wk-acct .wk-stat b{font-size:20px;white-space:nowrap}.wk-acct .wk-stat span{white-space:nowrap}
+.wk-plain{background:#fff;border:1px dashed #d9cfb8;border-radius:22px;padding:28px 30px;display:grid;grid-template-columns:260px 1fr;gap:30px;align-items:center}
+.wk-plain ul{margin:0;padding:0;list-style:none}.wk-plain li{position:relative;padding-left:20px;font-size:14px;line-height:1.9;color:#3d3b40}.wk-plain li:before{content:"";position:absolute;left:2px;top:.75em;width:8px;height:8px;border-radius:50%;background:#B8912F}
+.wk-plain img{width:100%;border-radius:14px;display:block}
+.wk-more{max-width:1240px;margin:0 auto;padding:30px 56px 110px;text-align:center}
+.wk-more p{font-size:13px;color:#8a8580;margin:0 0 6px}
+@media (max-width:1000px){.wk-tiles{grid-template-columns:repeat(3,1fr)}.wk-case{grid-template-columns:1fr;gap:24px}.wk-accts{grid-template-columns:1fr}.wk-plain{grid-template-columns:1fr}}
+@media (max-width:768px){
+ .wk-pick{padding:36px 18px 0}.wk-pick__title{font-size:23px}
+ .wk-tiles{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;margin:0 -18px;padding:0 18px 6px;scrollbar-width:none}
+ .wk-tiles::-webkit-scrollbar{display:none}
+ .wk-tile{flex:0 0 42%;scroll-snap-align:start;aspect-ratio:3/4}
+ .wk-nav{top:56px;margin-top:22px}.wk-nav__in{padding:9px 18px}
+ .wk-sec{padding:52px 18px 8px;scroll-margin-top:110px}
+ .wk-sec__head{flex-direction:column;align-items:flex-start;gap:10px}
+ .wk-sec__title{font-size:23px}
+ .wk-case{padding:16px;border-radius:18px}
+ .wk-case__name{font-size:19px}
+ .wk-more{padding:24px 18px 80px}
+}
+</style>
 </head>
 <body>
 
@@ -84,205 +162,202 @@
     <div class="subhero__overlay"></div>
     <div class="subhero__content">
       <span class="subhero__eyebrow">WORKS</span>
-      <h1 class="subhero__title subhero__title--42">こんなサイトが、<br class="br-mobile">作れます。</h1>
-      <p class="subhero__desc">業種・目的に合わせたショーケースです。実績が増えるごとに、<br class="br-desktop">実際の制作事例へ更新していきます。</p>
+      <h1 class="subhero__title subhero__title--42">白梅デジタルの<br class="br-mobile">実績</h1>
+      <p class="subhero__desc">SNS運用からホームページ制作まで、<br class="br-mobile">これまでの実績をまとめています。</p>
     </div>
   </header>
 
-  <section class="fade-section works-feature" id="work-n1inja">
-    <div class="works-feature__inner">
-      <a class="works-feature__img" href="https://n1injajapan.vercel.app/" target="_blank" rel="noopener"><img decoding="async" loading="lazy" src="assets/images/works-n1inja.webp" alt="N1INJA ブランドサイト・ネットショップ"></a>
-      <div class="works-feature__body">
-        <span class="works-feature__eyebrow">LATEST WORK</span>
-        <h2 class="works-feature__title">N1INJA</h2>
-        <p class="works-feature__sub">ブランドサイト・ネットショップ制作</p>
-        <p class="works-feature__text">東京発、モノクロームのストリートブランド。夜の写真と黒で統一した画面で、ブランドの空気をそのまま伝えるサイトにしました。商品一覧からカートまで、新作の発売カウントダウン、メール登録、英語と日本語の切り替えまで、ひとつにまとめています。</p>
-        <div class="works-feature__tags"><span class="tag-pill tag-pill--sm">ブランドサイト</span><span class="tag-pill tag-pill--sm">ネットショップ</span><span class="tag-pill tag-pill--sm">日英対応</span><span class="tag-pill tag-pill--sm">スマホ対応</span></div>
-        <a class="works-feature__btn" href="https://n1injajapan.vercel.app/" target="_blank" rel="noopener">実際のサイトを見る <span>→</span></a>
+  <!-- WORKS: 見たい実績を選ぶ -->
+  <section class="wk-pick fade-section" id="works-top">
+    <div class="wk-pick__head">
+      <span class="wk-pick__eyebrow">CHOOSE</span>
+      <h2 class="wk-pick__title">見たい実績を選んでください</h2>
+      <p class="wk-pick__lead">気になるところを押すと、その実績まで移動します。</p>
+    </div>
+    <div class="wk-tiles">
+      <a class="wk-tile" href="#sns"><img decoding="async" src="assets/images/works-sns.webp" alt=""><span class="wk-tile__body"><span class="wk-tile__no">01</span><span class="wk-tile__name">SNS運用</span><span class="wk-tile__badge">フォロワー1.3万人</span></span></a>
+      <a class="wk-tile" href="#brand"><img decoding="async" src="assets/images/works-n1inja.webp" alt=""><span class="wk-tile__body"><span class="wk-tile__no">02</span><span class="wk-tile__name">ブランドサイト・<br>ネットショップ</span><span class="wk-tile__badge">N1INJA</span></span></a>
+      <a class="wk-tile" href="#store"><img decoding="async" src="assets/images/D8B079B0-1908-4C4A-99CB-B3D148D0D3A4.webp" alt=""><span class="wk-tile__body"><span class="wk-tile__no">03</span><span class="wk-tile__name">飲食店・店舗サイト</span><span class="wk-tile__badge">居酒屋 M様</span></span></a>
+      <a class="wk-tile" href="#corporate"><img decoding="async" src="assets/images/works-corp.webp" alt=""><span class="wk-tile__body"><span class="wk-tile__no">04</span><span class="wk-tile__name">コーポレートサイト</span><span class="wk-tile__badge">ケーキ店 C様</span></span></a>
+      <a class="wk-tile" href="#mobile"><img decoding="async" src="assets/images/works-mobile.webp" alt=""><span class="wk-tile__body"><span class="wk-tile__no">05</span><span class="wk-tile__name">スマートフォン最適化</span><span class="wk-tile__badge">すべての制作に対応</span></span></a>
+    </div>
+  </section>
+
+  <nav class="wk-nav" aria-label="実績のカテゴリ">
+    <div class="wk-nav__in">
+      <a href="#sns">SNS運用</a>
+      <a href="#brand">ブランドサイト・ネットショップ</a>
+      <a href="#store">飲食店・店舗サイト</a>
+      <a href="#corporate">コーポレートサイト</a>
+      <a href="#mobile">スマートフォン最適化</a>
+    </div>
+  </nav>
+
+  <!-- 01 SNS -->
+  <section class="wk-sec fade-section" id="sns">
+    <div class="wk-sec__head">
+      <div>
+        <span class="wk-sec__no">01 ／ SNS RESULTS</span>
+        <h2 class="wk-sec__title">SNS運用の実績</h2>
+        <p class="wk-sec__lead">自分たちのアカウントで、数字を出してきました。<br class="br-desktop">お客様のアカウントも、同じやり方で設計・運用します。</p>
+      </div>
+      <a class="wk-sec__price" href="Pricing-SNS.html">SNS運用の料金を見る →</a>
+    </div>
+    <div class="wk-case">
+      <div class="wk-case__media"><img decoding="async" loading="lazy" src="assets/images/works-sns-results.webp" alt="SNS運用の実績 Instagramフォロワー1.3万人・TikTok 3か月で192.7万回再生"></div>
+      <div>
+        <span class="wk-case__label">自社運用</span>
+        <h3 class="wk-case__name">Instagram ／ TikTok</h3>
+        <p class="wk-case__sub">2026年10月時点の数字です</p>
+        <div class="wk-accts">
+          <div class="wk-acct">
+            <div class="wk-acct__pf"><span class="wk-acct__dot" style="background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)"></span>Instagram</div>
+            <p class="wk-acct__who">白梅デジタル 公式アカウント</p>
+            <div class="wk-stats"><div class="wk-stat"><b>1.3万人</b><span>フォロワー</span></div><div class="wk-stat"><b>300万回</b><span>閲覧数</span></div></div>
+          </div>
+          <div class="wk-acct">
+            <div class="wk-acct__pf"><span class="wk-acct__dot" style="background:linear-gradient(45deg,#25F4EE,#FE2C55)"></span>TikTok</div>
+            <p class="wk-acct__who">スタッフで運営する旅行系アカウント</p>
+            <div class="wk-stats"><div class="wk-stat"><b>192.7万回</b><span>視聴（3か月）</span></div><div class="wk-stat"><b>5,000人</b><span>フォロワー獲得</span></div></div>
+          </div>
+        </div>
+        <h4>やっていること</h4>
+        <ul>
+          <li>だれに届けたいかを決めて、投稿の企画を立てる</li>
+          <li>最初の数秒で手が止まる、リール・ショート動画の撮影と編集</li>
+          <li>投稿ごとの数字を見て、次の企画に活かす</li>
+          <li>プロフィールから、問い合わせ・予約までの道すじを整える</li>
+        </ul>
+        <div class="wk-btns">
+          <a class="wk-btn wk-btn--ig" href="https://www.instagram.com/shiraume.digital_/" target="_blank" rel="noopener">Instagramを見る →</a>
+          <a class="wk-btn wk-btn--line" href="Pricing-SNS.html">SNS運用のプランを見る →</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- CATEGORY FILTER -->
-  <section class="fade-section" style="padding:48px 56px 8px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
-    <span class="filter-pill filter-pill--active">すべて</span>
-    <span class="filter-pill">コーポレートサイト制作</span>
-    <span class="filter-pill">ブランドサイト制作</span>
-    <span class="filter-pill">スマートフォン最適化</span>
-    <span class="filter-pill">飲食店・店舗サイト制作</span>
-    <span class="filter-pill">SNS運用・マーケティング</span>
-  </section>
-
-  <!-- WORKS GRID -->
-  <section class="fade-section" style="padding:48px 56px 140px;">
-    <div class="grid-3" style="gap:32px;">
-
-      <!-- 01 コーポレート -->
-      <div class="works-grid-card hover-lift-work" id="work-corporate">
-        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-corp.webp" alt="コーポレートサイト制作"></div>
-        <div class="works-grid-card__body">
-          <span class="works-grid-card__category">CATEGORY 01</span>
-          <h3 class="works-grid-card__title">コーポレートサイト制作</h3>
-          <p class="works-grid-card__desc">企業の信頼を伝えるホームページを制作します。</p>
-          <div class="works-grid-card__tags">
-            <span class="tag-pill tag-pill--sm">ブランドデザイン</span>
-            <span class="tag-pill tag-pill--sm">スマホ対応</span>
-            <span class="tag-pill tag-pill--sm">SEO設計</span>
-          </div>
-          <p class="works-grid-card__note">おすすめ：新規開業／リニューアルをお考えの企業</p>
-          <div class="works-grid-card__actions">
-            <button type="button" class="works-case__toggle" aria-expanded="false" aria-controls="case-cake">
-              <span class="works-case__toggle-label">実績</span>
-              <span class="works-case__toggle-mark" aria-hidden="true"></span>
-            </button>
-            <a href="Contact.html" class="works-grid-card__link">お問い合わせ →</a>
-          </div>
-          <div class="works-case" id="case-cake" hidden>
-          <div class="works-case__photo">
-            <img decoding="async" src="assets/images/works-cake-shop.webp" alt="ケーキ店C様 実績" loading="lazy">
-          </div>
-          <span class="works-case__client">ケーキ店 C様</span>
-          <p class="works-case__text">焼き菓子とケーキの世界観を、そのままWebに写したコーポレートサイトです。店構えの温かみを写真で伝えつつ、商品・店内・アクセスまでを一続きで巡れる構成にしました。</p>
-          <ul class="works-case__points">
-            <li>商品写真を主役にした余白の広いレイアウト</li>
-            <li>スマートフォンでの読みやすさを最優先に設計</li>
-            <li>営業時間とGoogleマップを常時表示</li>
-          </ul>
-        </div>
-        </div>
+  <!-- 02 ブランド -->
+  <section class="wk-sec fade-section" id="brand">
+    <div class="wk-sec__head">
+      <div>
+        <span class="wk-sec__no">02 ／ BRAND SITE & SHOP</span>
+        <h2 class="wk-sec__title">ブランドサイト・ネットショップ</h2>
+        <p class="wk-sec__lead">ブランドの世界観を、そのまま画面に。<br class="br-desktop">商品を見て、そのまま買えるところまで作ります。</p>
       </div>
-
-      <!-- 02 ブランド -->
-      <div class="works-grid-card hover-lift-work" id="work-brand">
-        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-brand-new.webp" alt="ブランドサイト制作"></div>
-        <div class="works-grid-card__body">
-          <span class="works-grid-card__category">CATEGORY 02</span>
-          <h3 class="works-grid-card__title">ブランドサイト制作</h3>
-          <p class="works-grid-card__desc">ブランドの世界観を最大限に伝えるWebサイト。</p>
-          <div class="works-grid-card__tags">
-            <span class="tag-pill tag-pill--sm">オリジナルデザイン</span>
-            <span class="tag-pill tag-pill--sm">高級感UI</span>
-            <span class="tag-pill tag-pill--sm">ブランディング設計</span>
-          </div>
-          <p class="works-grid-card__note">おすすめ：アパレル／カフェ／美容サロン／クリエイター</p>
-          <div class="works-grid-card__actions">
-            <button type="button" class="works-case__toggle" aria-expanded="false" aria-controls="case-apparel">
-              <span class="works-case__toggle-label">実績</span>
-              <span class="works-case__toggle-mark" aria-hidden="true"></span>
-            </button>
-            <a href="Contact.html" class="works-grid-card__link">お問い合わせ →</a>
-          </div>
-          <div class="works-case" id="case-apparel" hidden>
-          <div class="works-case__photo">
-            <img decoding="async" src="assets/images/works-n1inja-full.webp" alt="N1INJA ブランドサイト 実績" loading="lazy">
-          </div>
-          <span class="works-case__client">N1INJA（東京発・モノクロームのストリートブランド）</span>
-          <p class="works-case__text">ブランドサイトとネットショップを一体で制作しました。夜の街で撮った写真と、黒で統一した画面で、ブランドの空気をそのまま伝えます。新作の発売日に向けて、カウントダウンとメール登録で期待を高める作りです。</p>
-          <ul class="works-case__points">
-            <li>商品一覧・カートまでのネットショップ機能</li>
-            <li>新作発売までのカウントダウンとメール登録</li>
-            <li>英語／日本語の切り替え、スマホに合わせた表示</li>
-          </ul>
-          <a class="works-case__live" href="https://n1injajapan.vercel.app/" target="_blank" rel="noopener">実際のサイトを見る →</a>
-        </div>
-        </div>
-      </div>
-
-      <!-- 03 スマホ最適化 -->
-      <div class="works-grid-card hover-lift-work" id="work-mobile">
-        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-mobile.webp" alt="スマートフォン最適化"></div>
-        <div class="works-grid-card__body">
-          <span class="works-grid-card__category">CATEGORY 03</span>
-          <h3 class="works-grid-card__title">スマートフォン最適化</h3>
-          <p class="works-grid-card__desc">スマホで見やすく、使いやすいサイトへ。</p>
-          <div class="works-grid-card__tags">
-            <span class="tag-pill tag-pill--sm">レスポンシブ対応</span>
-            <span class="tag-pill tag-pill--sm">表示速度改善</span>
-            <span class="tag-pill tag-pill--sm">タッチ操作最適化</span>
-          </div>
-          <p class="works-grid-card__note">おすすめ：モバイル利用が多いすべてのサイト</p>
-          <a href="Contact.html" class="works-grid-card__link">お問い合わせ →</a>
-        </div>
-      </div>
-
-      <!-- 04 飲食店・店舗 -->
-      <div class="works-grid-card hover-lift-work" id="work-store">
-        <div class="works-grid-card__image">
-          <img decoding="async" loading="lazy" src="assets/images/D8B079B0-1908-4C4A-99CB-B3D148D0D3A4.webp" alt="飲食店・店舗サイト制作">
-        </div>
-        <div class="works-grid-card__body">
-          <span class="works-grid-card__category">CATEGORY 04</span>
-          <h3 class="works-grid-card__title">飲食店・店舗サイト制作</h3>
-          <p class="works-grid-card__desc">お店の魅力を伝え、来店につなげるホームページ。</p>
-          <div class="works-grid-card__tags">
-            <span class="tag-pill tag-pill--sm">メニュー掲載</span>
-            <span class="tag-pill tag-pill--sm">Googleマップ連携</span>
-            <span class="tag-pill tag-pill--sm">予約導線</span>
-          </div>
-          <p class="works-grid-card__note">おすすめ：カフェ／レストラン／居酒屋／美容室／整体院</p>
-          <div class="works-grid-card__actions">
-            <button type="button" class="works-case__toggle" aria-expanded="false" aria-controls="case-izakaya">
-              <span class="works-case__toggle-label">実績</span>
-              <span class="works-case__toggle-mark" aria-hidden="true"></span>
-            </button>
-            <a href="Contact.html" class="works-grid-card__link">お問い合わせ →</a>
-          </div>
-          <div class="works-case" id="case-izakaya" hidden>
-          <div class="works-case__photo">
-            <img decoding="async" src="assets/images/works-izakaya-m.webp" alt="居酒屋M様 実績" loading="lazy">
-          </div>
-          <span class="works-case__client">居酒屋 M様</span>
-          <p class="works-case__text">初めてでも入りやすい店の空気感を、和の温かみあるデザインで表現しました。予約への導線を最短距離で引き、スマートフォンからの来店を後押ししています。</p>
-          <ul class="works-case__points">
-            <li>初来店のハードルを下げるファーストビュー</li>
-            <li>どのページからでも1タップで予約へ</li>
-            <li>スマートフォン表示を全面最適化</li>
-          </ul>
-          <div class="works-case__stats">
-            <div class="works-case__stat">
-              <span class="works-case__stat-value">約150%UP</span>
-              <span class="works-case__stat-label">新規予約数</span>
-            </div>
-            <div class="works-case__stat">
-              <span class="works-case__stat-value">約200%UP</span>
-              <span class="works-case__stat-label">サイトアクセス数</span>
-            </div>
-            <div class="works-case__stat">
-              <span class="works-case__stat-value">約70%</span>
-              <span class="works-case__stat-label">スマホからの流入</span>
-            </div>
-          </div>
-          <p class="works-case__stats-note">（サイト公開後3ヶ月時点）</p>
-        </div>
-        </div>
-      </div>
-
-      <!-- 05 SNS運用 -->
-      <div class="works-grid-card hover-lift-work" id="work-sns">
-        <div class="works-grid-card__image"><img decoding="async" loading="lazy" src="assets/images/works-sns.webp" alt="SNS運用・マーケティング"></div>
-        <div class="works-grid-card__body">
-          <span class="works-grid-card__category">CATEGORY 05</span>
-          <h3 class="works-grid-card__title">SNS運用・マーケティング</h3>
-          <p class="works-grid-card__desc">SNSを活用し、認知拡大と集客をサポートします。</p>
-          <div class="works-grid-card__tags">
-            <span class="tag-pill tag-pill--sm">Instagram運用</span>
-            <span class="tag-pill tag-pill--sm">投稿デザイン</span>
-            <span class="tag-pill tag-pill--sm">LINE連携</span>
-          </div>
-          <p class="works-grid-card__note">おすすめ：集客導線を強化したい店舗・企業</p>
-          <a href="Contact.html" class="works-grid-card__link">お問い合わせ →</a>
-        </div>
-      </div>
-
-      <!-- 追加予定 -->
-      <div class="works-grid-card--placeholder">
-        <span>+</span>
-        <span>実績を追加予定</span>
-      </div>
-
+      <a class="wk-sec__price" href="Pricing-Web.html">ホームページの料金を見る →</a>
     </div>
-    <p class="works-privacy-note">※一部の実績は、お客様のご要望により社名・店名を非公開にしております。</p>
+    <div class="wk-case">
+      <div class="wk-case__media wk-case__media--scroll"><img decoding="async" loading="lazy" src="assets/images/works-n1inja-full.webp" alt="N1INJA ブランドサイト 実績"></div>
+      <div>
+        <span class="wk-case__label">制作実績</span>
+        <h3 class="wk-case__name">N1INJA</h3>
+        <p class="wk-case__sub">東京発・モノクロームのストリートブランド</p>
+        <p class="wk-case__text">ブランドサイトとネットショップを一体で制作しました。夜の街で撮った写真と、黒で統一した画面で、ブランドの空気をそのまま伝えます。新作の発売日に向けて、カウントダウンとメール登録で期待を高める作りです。</p>
+        <h4>やったこと</h4>
+        <ul>
+          <li>商品一覧・カートまでのネットショップ機能</li>
+          <li>新作発売までのカウントダウンとメール登録</li>
+          <li>英語／日本語の切り替え、スマホに合わせた表示</li>
+        </ul>
+        <div class="wk-btns">
+          <a class="wk-btn wk-btn--dark" href="https://n1injajapan.vercel.app/" target="_blank" rel="noopener">実際のサイトを見る →</a>
+        </div>
+      </div>
+    </div>
   </section>
+
+  <!-- 03 飲食店・店舗 -->
+  <section class="wk-sec fade-section" id="store">
+    <div class="wk-sec__head">
+      <div>
+        <span class="wk-sec__no">03 ／ RESTAURANT & STORE</span>
+        <h2 class="wk-sec__title">飲食店・店舗サイト</h2>
+        <p class="wk-sec__lead">お店の魅力を伝えて、来店・予約につなげるホームページ。</p>
+      </div>
+      <a class="wk-sec__price" href="Pricing-Web.html">ホームページの料金を見る →</a>
+    </div>
+    <div class="wk-case">
+      <div class="wk-case__media"><img decoding="async" loading="lazy" src="assets/images/works-izakaya-m.webp" alt="居酒屋M様 実績"></div>
+      <div>
+        <span class="wk-case__label">制作実績</span>
+        <h3 class="wk-case__name">居酒屋 M様</h3>
+        <p class="wk-case__text">初めてでも入りやすい店の空気感を、和の温かみあるデザインで表現しました。予約への導線を最短距離で引き、スマートフォンからの来店を後押ししています。</p>
+        <h4>やったこと</h4>
+        <ul>
+          <li>初来店のハードルを下げるファーストビュー</li>
+          <li>どのページからでも1タップで予約へ</li>
+          <li>スマートフォン表示を全面最適化</li>
+        </ul>
+        <h4>結果</h4>
+        <div class="wk-stats">
+          <div class="wk-stat"><b>約150%UP</b><span>新規予約数</span></div>
+          <div class="wk-stat"><b>約200%UP</b><span>サイトアクセス数</span></div>
+          <div class="wk-stat"><b>約70%</b><span>スマホからの流入</span></div>
+        </div>
+        <p class="wk-note">（サイト公開後3ヶ月時点）</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 コーポレート -->
+  <section class="wk-sec fade-section" id="corporate">
+    <div class="wk-sec__head">
+      <div>
+        <span class="wk-sec__no">04 ／ CORPORATE SITE</span>
+        <h2 class="wk-sec__title">コーポレートサイト</h2>
+        <p class="wk-sec__lead">会社やお店の信頼を、ひと目で伝えるホームページ。</p>
+      </div>
+      <a class="wk-sec__price" href="Pricing-Web.html">ホームページの料金を見る →</a>
+    </div>
+    <div class="wk-case">
+      <div class="wk-case__media"><img decoding="async" loading="lazy" src="assets/images/works-cake-shop.webp" alt="ケーキ店C様 実績"></div>
+      <div>
+        <span class="wk-case__label">制作実績</span>
+        <h3 class="wk-case__name">ケーキ店 C様</h3>
+        <p class="wk-case__text">焼き菓子とケーキの世界観を、そのままWebに写したコーポレートサイトです。店構えの温かみを写真で伝えつつ、商品・店内・アクセスまでを一続きで巡れる構成にしました。</p>
+        <h4>やったこと</h4>
+        <ul>
+          <li>商品写真を主役にした余白の広いレイアウト</li>
+          <li>スマートフォンでの読みやすさを最優先に設計</li>
+          <li>営業時間とGoogleマップを常時表示</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 スマホ最適化 -->
+  <section class="wk-sec fade-section" id="mobile">
+    <div class="wk-sec__head">
+      <div>
+        <span class="wk-sec__no">05 ／ MOBILE</span>
+        <h2 class="wk-sec__title">スマートフォン最適化</h2>
+        <p class="wk-sec__lead">いま見られているのは、ほとんどがスマホです。</p>
+      </div>
+      <a class="wk-sec__price" href="Pricing-Web-options.html">オプションの料金を見る →</a>
+    </div>
+    <div class="wk-plain">
+      <img decoding="async" loading="lazy" src="assets/images/works-mobile.webp" alt="スマートフォン最適化">
+      <div>
+        <p class="wk-case__text" style="margin-bottom:10px">上の実績はすべて、スマートフォンで見やすい作りにしています。今お持ちのホームページを、スマホで読みやすく・押しやすく整え直すこともできます。</p>
+        <ul>
+          <li>文字の大きさ・改行を、スマホの画面に合わせて調整</li>
+          <li>電話・予約・LINEのボタンを、親指で押しやすい位置に</li>
+          <li>画像を軽くして、表示を速く</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="wk-more">
+    <p>※一部の実績は、お客様のご要望により社名・店名を非公開にしております。</p>
+    <p>実績は、増えるごとにこのページへ追加していきます。</p>
+  </div>
+
+  <script>
+  (function(){var links=[].slice.call(document.querySelectorAll('.wk-nav a'));if(!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('is-on',a.getAttribute('href')==='#'+e.target.id)});var on=document.querySelector('.wk-nav a.is-on');if(on&&on.scrollIntoView&&window.innerWidth<769){var p=on.parentNode;p.scrollTo({left:on.offsetLeft-20,behavior:'smooth'})}}})},{rootMargin:'-45% 0px -50% 0px'});
+  ['sns','brand','store','corporate','mobile'].forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s)});})();
+  </script>
 
     <!-- CTA -->
   <section class="cta-home fade-section" id="contact-cta">
@@ -348,7 +423,7 @@
 
 </div>
 
-<script src="assets/js/i18n.js?v=20261003b"></script>
+<script src="assets/js/i18n.js?v=20261014"></script>
 <script>
 (function(){var h=location.hash.replace('#','');if(!h)return;var c=document.getElementById(h);if(!c)return;if(!c.classList.contains('works-case')){setTimeout(function(){c.scrollIntoView({behavior:'smooth',block:'start'});c.classList.add('is-target');},250);return;}
 var b=document.querySelector('[aria-controls="'+h+'"]');if(b){b.click();}else{c.hidden=false;}
