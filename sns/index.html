@@ -1333,7 +1333,7 @@ function clientsPage(){
       <dl class="contract"><div><dt>契約日</dt><dd>${fmtDate(c.contractDate)}</dd></div><div><dt>初回お支払い</dt><dd>${fmtDate(c.paidDate)}</dd></div><div><dt>運用スタート</dt><dd>${fmtDate(c.startDate)}</dd></div></dl>
       ${np?`<div class="pay-next">${ic("cal")}次のお支払い <b>${fmtFull(np.iso)}</b>${np.paid?'<span class="chip t-done">入金済み</span>':`<span class="chip t-you">あと${daysFrom(np.iso)}日</span>`}<span class="tiny muted">${esc(c.payMethod||"")}・毎月${esc(c.payDay)}日</span></div>`:""}
       <div class="rowbtns"><button class="btn btn-p btn-s" type="button" data-act="openClient" data-id="${c.id}">${ic("pen")}編集する</button><button class="btn btn-g btn-s" type="button" data-act="fclient" data-id="${c.id}">台本を見る</button><button class="btn btn-g btn-s" type="button" data-act="previewClient" data-id="${c.id}">お客様の見え方</button></div></section>`;};
-  return `<div class="staff-head"><div><h1>お客様</h1><p class="muted small">${db.clients.length}社と契約中</p></div><div class="spacer"></div><button class="btn btn-p" type="button" data-act="newClient">＋ お客様を追加</button></div>
+  return `<div class="staff-head"><div><h1>お客様</h1><p class="muted small">${db.clients.length}社と契約中</p></div><div class="spacer"></div><button class="btn btn-p" type="button" data-act="newClient">＋ お客様を追加</button></div>${LIVE&&!db.clients.some(c=>c.loginId==="mihon")?`<div class="consult-inline"><p>試し用に、見本のお客様（架空の「産直マルシェ うみかぜ」）と台本・振り返りを入れられます。入れたあと、お客様情報でパスワードを決めると、お客様の画面でもログインして試せます。いらなくなったら削除してください。</p><button class="btn btn-g" type="button" data-act="addSample">見本のお客様を入れる</button></div>`:""}
     <div class="clients" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))">${db.clients.map(card).join("")}</div>`;
 }
 let cdraft=null;
@@ -1527,6 +1527,12 @@ app.addEventListener("click",e=>{
     case "reset":set({confirm:"reset"});break;
     case "resetYes":db=seed();save();toast("サンプルの状態に戻しました");set({confirm:null});break;
     case "cancel":set({confirm:null});break;
+    case "addSample":{if(!LIVE||S.busy)break;S.busy=true;toast("見本を入れています…");(async()=>{try{
+      const sd=seed();const src=sd.clients[0];const rnd=Array.from(crypto.getRandomValues(new Uint8Array(24))).map(x=>x.toString(16).padStart(2,"0")).join("");
+      const data=JSON.parse(JSON.stringify(src));["id","loginId","password"].forEach(k=>delete data[k]);data.name="【見本】"+data.name;
+      const cid=await rpc("sns_staff_save_client",{p_token:getToken(),p_id:null,p_login:"mihon",p_pass:rnd,p_data:data});
+      for(const it of sd.items.filter(i=>i.clientId===src.id)){await rpc("sns_staff_save_item",{p_token:getToken(),p_id:null,p_client:cid,p_kind:it.kind,p_month:it.month,p_published:!!it.published,p_data:itemData(it)});}
+      await loadAll();S.busy=false;toast("見本のお客様を入れました");render();}catch(e){S.busy=false;toast(e.message);}})();break;}
   }
 });
 document.addEventListener("keydown",e=>{
