@@ -724,6 +724,59 @@ body{font-size:15px;line-height:1.7}
 .purpose{background:var(--sunk);color:var(--ink)}
 .purpose .lab{color:var(--ink-3)}
 .purpose .row{border-top-color:var(--line)}
+
+/* 振り返り */
+.rv{gap:14px}
+.rv-hero{position:relative;overflow:hidden;border-radius:18px;border:1px solid #E7DCC2;background:linear-gradient(135deg,#FBF8F1 0%,#FFFFFF 60%);padding:18px 18px 16px;display:flex;gap:10px;align-items:flex-end}
+.rv-hero::before{content:"";position:absolute;right:-40px;top:-50px;width:200px;height:250px;background:var(--branch-img) center/contain no-repeat;opacity:.35;transform:scaleX(-1);pointer-events:none}
+.rv-hero-in{position:relative;flex:1;min-width:0;display:grid;gap:6px}
+.rv-eyebrow{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.06em}
+.rv-hero h1{font-size:24px;letter-spacing:.04em}
+.rv-meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--ink-2)}
+.rv-meta span{display:inline-flex;align-items:center;gap:4px}
+.rv-big{display:flex;align-items:baseline;gap:6px;margin-top:6px;flex-wrap:wrap}
+.rv-big span{font-size:12.5px;color:var(--ink-3);font-weight:700}
+.rv-big b{font-size:34px;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.rv-big small{font-size:13px;color:var(--ink-2)}
+.rv-big em{font-style:normal;font-size:13px;font-weight:700;color:var(--ok);background:var(--ok-bg);padding:2px 8px;border-radius:999px}
+.rv-big em.down{color:var(--danger);background:#FCE9E7}
+.rv-hero-ill{position:relative;width:84px;height:84px;object-fit:contain;flex:none}
+.rv-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;gap:10px}
+.rv-h{display:flex;align-items:center;gap:8px}
+.rv-h h2{font-size:15px}
+.rv-ic{width:26px;height:26px;border-radius:8px;background:var(--sunk);color:var(--ink-2);display:grid;place-items:center;flex:none}
+.rv-ic .ico{width:15px;height:15px}
+.rv-summary{position:relative;border-color:#E7DCC2;padding:18px 18px 14px}
+.rv-q{position:absolute;left:12px;top:-6px;font-size:56px;line-height:1;color:var(--gold);opacity:.55;font-family:Georgia,serif}
+.rv-summary p{font-size:14.5px;line-height:1.9;padding-top:10px}
+.rv-summary footer{display:flex;align-items:center;gap:8px;justify-content:flex-end;font-size:12.5px;color:var(--ink-2);font-weight:700}
+.rv-summary footer .mark{width:20px;height:20px}
+.rv-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:0}
+@media (min-width:760px){.rv-kpis{grid-template-columns:repeat(4,1fr)}.rv-four{grid-template-columns:repeat(2,1fr)!important}}
+.rv-kpi{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:4px;min-width:0}
+.rv-kpi dt{font-size:12px;color:var(--ink-3);font-weight:700;line-height:1.35}
+.rv-kpi dd{margin:0;display:flex;align-items:baseline;gap:3px}
+.rv-kpi dd b{font-size:21px;font-variant-numeric:tabular-nums;line-height:1.2}
+.rv-kpi dd small{font-size:11.5px;color:var(--ink-3)}
+.rv-delta{font-size:12px;font-weight:700;display:flex;gap:4px;align-items:baseline}
+.rv-delta small{font-weight:400;color:var(--ink-3);font-size:11px}
+.rv-delta.up{color:var(--ok)}.rv-delta.down{color:var(--danger)}.rv-delta.flat{color:var(--ink-3);font-weight:400}
+.rv-spark{width:100%;height:28px;display:block}
+.rv-top{grid-template-columns:52px 1fr;align-items:center;border-color:#E7DCC2}
+.rv-top img{width:52px;height:52px;object-fit:contain;transform:rotate(-10deg)}
+.rv-label{font-size:12px;color:var(--gold);font-weight:700}
+.rv-top b{font-size:15px;line-height:1.5;display:block}
+.rv-sub{font-size:12.5px;color:var(--ink-2)}
+.rv-four{display:grid;grid-template-columns:1fr;gap:8px}
+.rv-four .rv-card{gap:6px}
+.rv-card .chart svg{display:block;width:100%;max-width:440px;max-height:240px;margin:0 auto}
+.rv-four .ul{gap:4px;font-size:14px}
+.rv-g .rv-ic{background:var(--ok-bg);color:var(--ok)}
+.rv-a .rv-ic{background:var(--you-bg);color:var(--you)}
+.rv-bubble{background:var(--sunk);border-radius:14px 14px 14px 4px;padding:12px 14px;display:grid;gap:4px}
+.rv-bubble p{font-size:14.5px;line-height:1.8}
+.rv-bubble footer{font-size:12px;color:var(--ink-3)}
+.rv-cmt textarea{min-height:84px}
 </style>
 
 </head>
@@ -1386,33 +1439,47 @@ function liveBody(it){
 /* --- 振り返り --- */
 const n0=v=>Number(String(v||"").replace(/[^\d.-]/g,""))||0;
 const fmtN=v=>n0(v).toLocaleString("ja-JP");
+function spark(vals,on){
+  const W=120,H=34,p=4; if(vals.length<2) return "";
+  const mx=Math.max(...vals),mn=Math.min(...vals); const y=v=>H-p-(mx===mn?.5:(v-mn)/(mx-mn))*(H-p*2); const x=i=>p+i*(W-p*2)/(vals.length-1);
+  const pts=vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  return `<svg class="rv-spark" viewBox="0 0 ${W} ${H}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="var(--line-2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(on).toFixed(1)}" cy="${y(vals[on]).toFixed(1)}" r="3.5" fill="var(--green-2)"/></svg>`;
+}
 function reviewPage(c){
   const all=db.items.filter(i=>i.clientId===c.id&&i.kind==="review"&&i.published).sort((a,b)=>a.month.localeCompare(b.month));
-  const head=pageHead("review","白梅デジタルからの総括と、数字・試したこと・来月試すことのまとめです。");
+  const head=pageHead("review","");
   if(!all.length) return `<div class="stack">${head}<div class="empty"><div class="ei"><img src="${IMG.growth}" alt=""></div><b>振り返りはまだありません</b><span class="small">月末に白梅デジタルから入れます。</span></div></div>`;
   const months=all.map(r=>r.month); const cur=pickMonth(months); const idx=months.indexOf(cur); const r=all[idx]; const prev=all[idx-1];
-  const chg=(k)=>{if(!prev)return"";const a=n0(r[k]),b=n0(prev[k]);if(!b)return"";const p=Math.round((a-b)/b*100);return `<div class="chg ${p<0?"down":""}">先月より ${p>=0?"+":""}${p}%</div>`;};
-  const stat=(l,k,unit,plus)=>`<div class="stat"><dt>${l}</dt><dd>${plus&&n0(r[k])>0?"+":""}${fmtN(r[k])}<span class="tiny muted" style="font-weight:500;margin-left:2px">${unit}</span></dd>${chg(k)}</div>`;
+  const pct=k=>{if(!prev)return null;const a=n0(r[k]),b=n0(prev[k]);if(!b)return null;return Math.round((a-b)/b*100);};
+  const delta=k=>{const p=pct(k);if(p===null)return `<span class="rv-delta flat">はじめての月</span>`;return `<span class="rv-delta ${p<0?"down":"up"}">${p<0?"▼":"▲"} ${Math.abs(p)}%<small>先月より</small></span>`;};
+  const upto=all.slice(0,idx+1);
+  const kpi=(l,k,unit,plus)=>`<div class="rv-kpi"><dt>${l}</dt><dd><b>${plus&&n0(r[k])>0?"+":""}${fmtN(r[k])}</b><small>${unit}</small></dd>${delta(k)}${spark(upto.map(x=>n0(x[k])),upto.length-1)}</div>`;
+  const pv=pct("views");
   const editing=S.cmtEdit===r.id||!r.clientComment;
-  const cmt=`<section class="box cmt-box"><h2><span class="hi">${ic("chat")}</span>${esc(c.name)} 様からのひとこと</h2>
-    ${(()=>{const d=sched(c,r.month).due;return r.clientComment?"":`<div class="due ${todayISO()>d?"late":""}">${ic("clock")}${fmtFull(d)}までに書いてください${todayISO()>d?"（締切を過ぎていますが、今からでも大丈夫です）":""}</div>`;})()}
-    ${editing?`<p class="small muted">今月の感想や、来月やってみたいこと、気になったことをひとこと書いてください。白梅デジタルが読んで、来月の企画に活かします。</p>
-      <div class="field"><label for="cmt_${r.id}" class="sr">ひとこと</label><textarea id="cmt_${r.id}" data-cmt="${r.id}" placeholder="例：市場の動画、お客様からも「見たよ」と言われました。11月はお鍋セットをもっと推したいです。">${esc(S.cmtDraft!=null&&S.cmtEdit===r.id?S.cmtDraft:(r.clientComment||""))}</textarea></div>
-      <div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p" type="button" data-act="saveCmt" data-id="${r.id}">${ic("check")}送る</button>${r.clientComment?`<button class="btn btn-g" type="button" data-act="cancelCmt">やめる</button>`:""}</div>`
-    :`<blockquote class="quote you"><p>${esc(r.clientComment).replace(/\n/g,"<br>")}</p><footer>${esc(c.contact)}　${esc(r.clientCommentAt||"")}</footer></blockquote><button class="link-btn" type="button" data-act="editCmt" data-id="${r.id}">書き直す</button>`}
+  const due=sched(c,r.month).due;
+  const cmt=`<section class="rv-card rv-cmt"><div class="rv-h"><span class="rv-ic">${ic("chat")}</span><h2>${esc(c.name)} 様からのひとこと</h2></div>
+    ${editing?`${r.clientComment?"":`<div class="due ${todayISO()>due?"late":""}">${ic("clock")}${fmtDate(due)}までに書いてください</div>`}
+      <div class="field"><label for="cmt_${r.id}" class="sr">ひとこと</label><textarea id="cmt_${r.id}" data-cmt="${r.id}" placeholder="今月の感想や、来月やってみたいことをひとこと">${esc(S.cmtDraft!=null&&S.cmtEdit===r.id?S.cmtDraft:(r.clientComment||""))}</textarea></div>
+      <div class="row" style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-p btn-s" type="button" data-act="saveCmt" data-id="${r.id}">${ic("check",16)}送る</button>${r.clientComment?`<button class="btn btn-g btn-s" type="button" data-act="cancelCmt">やめる</button>`:""}</div>`
+    :`<div class="rv-bubble"><p>${esc(r.clientComment).replace(/\n/g,"<br>")}</p><footer>${esc(c.contact)}　${esc(r.clientCommentAt||"")}</footer></div><button class="link-btn" type="button" data-act="editCmt" data-id="${r.id}">書き直す</button>`}
   </section>`;
-  return `<div class="stack">${head}${monthTabs(months,cur)}
-    <div class="review-date">${ic("cal")}<span>振り返りをした日</span><b>${fmtFull(r.reviewDate)}</b>${r.reviewer?`<span class="muted">担当：${esc(r.reviewer)}</span>`:""}</div>
-    ${r.summary?`<section class="summary-box"><div class="sb-h"><span class="mark" aria-hidden="true"></span><div><b>白梅デジタルからのひとこと</b><div class="tiny">${monthLabel(r.month)}の総括</div></div></div><p>${esc(r.summary).replace(/\n/g,"<br>")}</p></section>`:""}
-    <dl class="stats">${stat("再生数","views","回")}${stat("フォロワーの増加","followers","人",true)}${stat("保存数","saves","件")}${stat("プロフィールへのアクセス","profile","回")}</dl>
-    ${box("review","再生数の移り変わり",viewsChart(all,cur))}
-    ${r.topTitle?box("star","いちばん見られた投稿",`<div class="top-post"><div class="crown">1</div><div><b>${esc(r.topTitle)}</b><div class="small muted">${fmtN(r.topViews)}回 再生</div></div></div>`):""}
-    ${box("pen","今月試したこと",lines(r.tried))}
-    ${box("check","よかったこと",lines(r.good))}
-    ${box("target","見えてきた課題",lines(r.issue))}
-    ${box("compass","来月試すこと",lines(r.next))}
+  const four=[["tried","今月試したこと","pen","n"],["good","よかったこと","check","g"],["issue","見えてきた課題","target","a"],["next","来月試すこと","compass","n"]].filter(x=>has(r[x[0]]));
+  return `<div class="stack rv">${monthTabs(months,cur)}
+    <section class="rv-hero">
+      <div class="rv-hero-in">
+        <div class="rv-eyebrow">${esc(c.name)} 様</div>
+        <h1>${monthShort(r.month)}の振り返り</h1>
+        <div class="rv-meta">${r.reviewDate?`<span>${ic("cal",14)}${fmtDate(r.reviewDate)}</span>`:""}${r.reviewer?`<span>${ic("user",14)}担当 ${esc(r.reviewer)}</span>`:""}${r.posts?`<span>${ic("video",14)}投稿 ${fmtN(r.posts)}本</span>`:""}</div>
+        <div class="rv-big"><span>再生数</span><b>${fmtN(r.views)}</b><small>回</small>${pv!==null?`<em class="${pv<0?"down":""}">${pv<0?"▼":"▲"}${Math.abs(pv)}%</em>`:""}</div>
+      </div>
+      <img class="rv-hero-ill" src="${IMG.growth}" alt="">
+    </section>
+    ${r.summary?`<section class="rv-card rv-summary"><div class="rv-q" aria-hidden="true">“</div><p>${esc(r.summary).replace(/\n/g,"<br>")}</p><footer><span class="mark" aria-hidden="true"></span>白梅デジタル${r.reviewer?`　${esc(r.reviewer)}`:""}</footer></section>`:""}
+    <dl class="rv-kpis">${kpi("再生数","views","回")}${kpi("フォロワーの増加","followers","人",true)}${kpi("保存数","saves","件")}${kpi("プロフィール閲覧","profile","回")}</dl>
+    ${r.topTitle?`<section class="rv-card rv-top"><img src="${IMG.stamp}" alt=""><div><div class="rv-label">いちばん見られた投稿</div><b>${esc(r.topTitle)}</b><div class="rv-sub">${fmtN(r.topViews)}回 再生</div></div></section>`:""}
+    <section class="rv-card"><div class="rv-h"><span class="rv-ic">${ic("review")}</span><h2>再生数の移り変わり</h2></div>${viewsChart(all,cur)}</section>
+    ${four.length?`<div class="rv-four">${four.map(([k,t,i,tone])=>`<section class="rv-card rv-${tone}"><div class="rv-h"><span class="rv-ic">${ic(i)}</span><h2>${t}</h2></div>${lines(r[k])}</section>`).join("")}</div>`:""}
     ${cmt}
-    <p class="tiny muted">この月の投稿数：${fmtN(r.posts)}本</p>
   </div>`;
 }
 function viewsChart(all,cur){
