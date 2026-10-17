@@ -610,53 +610,99 @@ b.over{color:var(--danger)}
 .st .dt{font-size:12px}
 .mini i.c{background:var(--you)}
 .rank-s{color:var(--gold)}
+/* ===== コンパクト表示 ===== */
+body{font-size:15px;line-height:1.7}
+.wrap{padding-block:14px 72px}
+.stack{gap:12px}
+.page-head{gap:10px}
+.page-head .illus{width:46px;height:46px}
+.page-head h1{font-size:19px}
+.title-area{gap:4px}
+.title-area h1{font-size:19px;line-height:1.45}
+.meta-line{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:13px;color:var(--ink-2);margin:0}
+.meta-line b{color:var(--ink);font-weight:700}
+.lead-one{font-size:14px;color:var(--ink-2);line-height:1.65;margin:2px 0 0}
+.print-link{display:inline-flex;align-items:center;gap:4px;font-size:13px;margin-top:2px;color:var(--ink-2)}
+.card{padding:12px 14px;gap:12px;box-shadow:none}
+.card-t{font-size:15px;line-height:1.5}
+.card-m{font-size:12.5px}
+.no{width:36px;height:36px;font-size:16px;border-radius:10px}
+.list{gap:8px}
+.chip{font-size:12px;padding:2px 8px}
+.mtab{min-height:36px;padding:4px 14px;font-size:13px}
+.todo{padding:12px 14px;gap:6px}
+.todo h2{font-size:14px}
+.todo li button{padding:9px 12px;font-size:14px}
+.flow{padding:14px;gap:10px}
+.st .b{width:24px;height:24px;font-size:11px}
+.st::before{top:11px}
+.st .l{font-size:11.5px}
+.st .dt{font-size:10.5px}
+.action{padding-top:10px;gap:6px}
+.btn-big{min-height:48px;font-size:15.5px}
+.acc{padding:0!important;gap:0!important;overflow:hidden}
+.acc > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px;min-height:52px}
+.acc > summary::-webkit-details-marker{display:none}
+.acc > summary .hi{width:28px!important;height:28px!important;border-radius:8px;display:grid;place-items:center;background:var(--sunk);color:var(--ink-2);flex:none}
+.acc > summary .hi .ico{width:16px;height:16px}
+.acc-t{flex:1;min-width:0;font-weight:700;font-size:14.5px;line-height:1.4;display:grid}
+.acc-t small{font-weight:400;font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{width:9px;height:9px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(45deg);margin:0 4px 4px 0;transition:transform .15s;flex:none}
+.acc[open] > summary .chev{transform:rotate(225deg);margin:4px 4px 0 0}
+.acc[open] > summary{border-bottom:1px solid var(--line)}
+.acc-b{padding:12px 14px 14px;display:grid;gap:10px;font-size:14.5px}
+.acc.ask > summary .hi{background:var(--you-bg);color:var(--you)}
+.box::after,.fsec::after,.cbig::after,.oneline::after{display:none}
+.rhythm ol{padding:4px 14px 0}
+.rhythm li{font-size:13.5px;padding:8px 0}
+.rhythm li.you{margin:2px -8px;padding:8px}
+.rhythm > p{padding:0 14px 12px;margin:0}
+.kv dt,.kv dd{padding:7px 0}
+.kv dt{font-size:12.5px}
+.kv dd{font-size:14.5px}
+.ul{gap:4px}
+.scene-row{padding:8px 0}
+.consult-inline{padding:10px 14px;gap:10px}
+.consult-inline p{font-size:13px;min-width:0}
+.consult-inline .btn-line{min-height:38px;font-size:13.5px;padding:0 14px}
+.stats{gap:8px}
+.stat{padding:10px 12px}
+.stat dd{font-size:20px}
+.stat dt{font-size:12px}
+.summary-box{padding:14px 16px;gap:8px}
+.summary-box p{font-size:14.5px;line-height:1.8}
+.review-date{font-size:13px;padding:8px 12px}
+.hello{padding:12px 16px;gap:12px}
+.hello .illus{width:56px;height:56px}
+.hello h1{font-size:17px}
+.hello p{font-size:13px}
+.tiles{gap:8px}
+.tile{padding:10px 12px}
+.tile dd{font-size:22px}
+.tile dt{font-size:12px}
+.ag{padding:8px 12px}
+.ag .d b{font-size:17px}
+.ag .w .t{font-size:14px}
+.cl,.cbig{padding:12px 14px;gap:8px}
+.fsec{padding:16px}
+.fsec.acc{padding:0}
+.staff-head h1{font-size:20px}
+.sec-h h2{font-size:16px}
+.deco .df{opacity:calc(var(--o) * .6)}
 @media (max-width:600px){
-  body{font-size:16.5px;line-height:1.9}
-  .wrap{padding-block:18px 96px}
-  .stack{gap:24px}
-  .tiny{font-size:13.5px}
-  .small{font-size:15px}
-  h1,.page-head h1{letter-spacing:.03em}
-  .page-head{gap:12px}
-  .page-head .illus{width:60px;height:60px}
-  .page-head p{font-size:15px}
-  .card-k,.card-m,.dates dt,.summary dt,.stat dt,.kv dt,.oneline .lab,.purpose .lab,.st .l{font-size:13.5px}
-  .card{padding:20px 18px;gap:14px}
-  .card-t{font-size:17.5px;line-height:1.6}
-  .list{gap:14px}
-  .box,.purpose,.oneline,.flow,.rhythm,.consult-inline,.todo{padding:22px 18px}
-  .box{gap:16px}
-  .box > h2,.purpose h2{font-size:18px}
-  .oneline p{font-size:18.5px;line-height:1.8}
-  .purpose .val{font-size:17px;line-height:1.75}
-  .purpose{gap:18px}
-  .dates{grid-template-columns:1fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
-  .dates div{border:0;border-bottom:1px solid var(--line);border-radius:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px}
-  .dates div:last-child{border-bottom:0}
-  .dates div.hl{border-color:var(--line)}
-  .dates dd{font-size:16.5px;text-align:right}
-  .summary{gap:10px}
-  .summary div{padding:12px 14px}
-  .summary dd{font-size:22px}
-  .rhythm li{grid-template-columns:1fr auto;grid-template-areas:"d c" "l l";row-gap:4px;padding:14px 0}
-  .rhythm .rd{grid-area:d}.rhythm li > .chip{grid-area:c}.rhythm .rl{grid-area:l;font-size:15.5px}
-  .rhythm li.you{margin:4px -8px;padding:14px 12px}
-  .todo li button{padding:14px;font-size:15.5px}
-  .scene-row{grid-template-columns:1fr;gap:6px;padding:16px 0}
-  .scene-row b{width:max-content;padding:3px 12px}
-  .kv dt{font-size:13.5px}
-  .kv dd{font-size:16px;padding-bottom:14px}
-  .stats{gap:10px}
-  .stat{padding:16px}
+  .tiny{font-size:12.5px}
+  .gallery{gap:10px}
   .title-area::before{display:none}
-  .deco .df{opacity:calc(var(--o) * .5)}
   .deco .dp{opacity:.3}
   .deco .db1,.deco .db2{opacity:.1}
-  .gallery{gap:14px}
-  .shot figcaption{font-size:14px;line-height:1.6}
-  .flow{gap:18px}
-  .action p{font-size:15px}
-  .navbtn{padding:14px 12px}
+  .hello .illus{display:none}
+  .scene-row{grid-template-columns:3.6em 1fr}
+  .today{display:none}
+  .savebar{gap:6px}
+  .savebar .btn{min-height:40px;padding:6px 12px;font-size:13.5px}
+  .fsec .field label,.fsec .field > span{font-size:13px}
+  input[type=text],input[type=password],input[type=date],input[type=time],input[type=month],input[type=number],input[type=url],select,textarea{min-height:44px;padding:9px 12px;font-size:16px}
+  .grid2{gap:10px}
 }
 </style>
 
@@ -1127,11 +1173,11 @@ function rhythmBox(c,month){
   const s=sched(c,month); const r=reviewOf(c.id,month); const t=todayISO();
   const st=(iso,done)=>done?'<span class="chip t-done">済み</span>':iso<t?'<span class="chip t-plan">過ぎました</span>':iso===t?'<span class="chip t-you">今日</span>':`<span class="chip t-plan">あと${daysFrom(iso)}日</span>`;
   const sent=visible(c.id,"video").some(i=>i.month===month)||visible(c.id,"image").some(i=>i.month===month);
-  return `<section class="rhythm"><h2>${ic("cal")}${monthLabel(month)}の予定</h2><ol>
+  const k="rhythm"; return `<details class="rhythm acc" data-acc="${k}" ${S.open&&S.open[k]?"open":""}><summary><span class="hi">${ic("cal")}</span><span class="acc-t">${monthShort(month)}の予定<small>台本 ${fmtDate(s.scripts)}・振り返り ${fmtDate(s.review)}・ひとこと ${fmtDate(s.due)}まで</small></span><span class="chev" aria-hidden="true"></span></summary><ol>
     <li><span class="rd">${fmtDate(s.scripts)}</span><span class="rl">白梅デジタルが、今月の台本をまとめてお渡しします</span>${st(s.scripts,sent&&s.scripts<=t)}</li>
     <li><span class="rd">${fmtDate(s.review)}</span><span class="rl">白梅デジタルが、今月の振り返りをお渡しします</span>${st(s.review,!!(r&&r.published&&r.summary))}</li>
     <li class="you"><span class="rd">${fmtDate(s.due)}</span><span class="rl"><b>振り返りに、ひとことを書いてください</b>（その週の日曜日まで）</span>${st(s.due,!!(r&&r.clientComment))}</li>
-  </ol><p class="tiny muted">台本は月に1回、まとめてお渡しします。それ以外の日に、急なお願いをすることはありません。</p></section>`;
+  </ol><p class="tiny muted">台本は月に1回、まとめてお渡しします。</p></details>`;
 }
 function viewClient(){
   const cid=S.preview?S.previewClient:S.clientId; const c=client(cid); if(!c) return viewLogin();
@@ -1163,7 +1209,7 @@ function drawer(c){
     ${S.preview?"":`<button class="logout" type="button" data-act="logout">ログアウト</button>`}
   </nav>`;
 }
-function pageHead(kind,sub){const d=parseISO(todayISO());return `<div class="page-head">${HEAD_ILL[kind]?`<div class="illus"><img src="${HEAD_ILL[kind]}" alt=""></div>`:""}<div><div class="tiny muted" style="font-weight:700">今日は ${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</div><h1>${KINDS[kind]}</h1><p>${sub}</p></div></div><div class="twig" aria-hidden="true"></div>`;}
+function pageHead(kind,sub){const d=parseISO(todayISO());return `<div class="page-head">${HEAD_ILL[kind]?`<div class="illus"><img src="${HEAD_ILL[kind]}" alt=""></div>`:""}<div><div class="tiny muted" style="font-weight:700">今日は ${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</div><h1>${KINDS[kind]}</h1></div></div>`;}
 function monthTabs(months,cur){return `<div class="tabs-m" role="tablist" aria-label="月を選ぶ">${months.map(m=>`<button class="mtab ${m===cur?"on":""}" type="button" role="tab" aria-selected="${m===cur}" data-act="month" data-m="${m}">${monthLabel(m)}</button>`).join("")}</div>`;}
 function pickMonth(months){const tm=thisMonth();return months.includes(S.month)?S.month:months.includes(tm)?tm:months[0];}
 function listPage(c,kind){
@@ -1178,24 +1224,23 @@ function listPage(c,kind){
   const cm=[rv2,rv].filter(r=>r&&r.published&&r.summary&&!r.clientComment&&todayISO()<=sched(c,r.month).due);
   const todoBox=(todo.length||cm.length)?`<section class="todo"><h2>${ic("bell")}お客様にお願いしたいこと（${todo.length+cm.length}件）</h2><ul>${cm.map(r=>`<li><button type="button" data-act="nav" data-k="review" data-m="${r.month}">${monthShort(r.month)}の振り返りに、ひとことを書く<span>${fmtDate(sched(c,r.month).due)}まで</span></button></li>`).join("")}${todo.map(i=>`<li><button type="button" data-act="open" data-id="${i.id}">${circ(i.no)} ${esc(stateOf(i).st.chip)}<span>${i.step===1&&i.shoot?fmtDate(i.shoot)+" 撮影":"開く"}</span></button></li>`).join("")}</ul></section>`:"";
   return `<div class="stack">${pageHead(kind,subs[kind])}${monthTabs(months,cur)}
-    ${rhythmBox(c,cur)}
-    <dl class="summary"><div><dt>届いた台本</dt><dd>${list.length}<small>本</small></dd></div><div><dt>お願い中</dt><dd>${todo.length}<small>件</small></dd></div><div><dt>${kind==="live"?"配信済み":"投稿済み"}</dt><dd>${done}<small>本</small></dd></div></dl>
     ${todoBox}
+    ${rhythmBox(c,cur)}
     <div class="list">${list.map(i=>`<button class="card" type="button" data-act="open" data-id="${i.id}">${stateOf(i).done?'<span class="stamp" aria-hidden="true"></span>':""}<div class="no">${i.no}</div><div class="card-b">
-      <div class="card-k">${label(i)}</div><div class="card-t">${esc(i.title)}</div>
-      <div class="card-m">${chip(i)}${i.shoot&&kind!=="live"?`<span>撮影 ${fmtDate(i.shoot)}</span>`:""}${kind==="live"?`<span>配信 ${fmtDate(i.liveDate)}</span>`:`<span>投稿 ${fmtDate(i.post)}</span>`}</div>
+      <div class="card-t">${esc(i.title)}</div>
+      <div class="card-m">${chip(i)}${(()=>{const x=stateOf(i);const d=x.done?["投稿",i.post]:i.step<=1&&i.shoot&&kind!=="live"?["撮影",i.shoot]:kind==="live"?["配信",i.liveDate]:["投稿",i.post];return d[1]?`<span>${d[0]} ${fmtDate(d[1])}</span>`:"";})()}</div>
       ${miniBar(i)}</div></button>`).join("")}</div></div>`;
 }
 /* --- 詳細の部品 --- */
-const box=(icon,title,inner,cls)=>inner?`<section class="box ${cls||""}"><h2><span class="hi">${ic(icon)}</span>${title}</h2>${inner}</section>`:"";
+const box=(icon,title,inner,cls,hint)=>inner?`<details class="box acc ${cls||""}" data-acc="${esc(title)}" ${S.open&&S.open[title]?"open":""}><summary><span class="hi">${ic(icon)}</span><span class="acc-t">${title}${hint?`<small>${esc(hint)}</small>`:""}</span><span class="chev" aria-hidden="true"></span></summary><div class="acc-b">${inner}</div></details>`:"";
 function gallery(imgs,ar,cols,group){
   if(!imgs||!imgs.length) return "";
   return `<div class="gallery" style="--cols:${cols};--ar:${ar}">${imgs.map((im,i)=>`<figure class="shot"><button type="button" data-act="lb" data-g="${group}" data-i="${i}" aria-label="画像${i+1}を大きく見る"><img ${imgAttr(im.src)} alt="${esc(im.cap||"イメージ"+(i+1))}"><span class="zoom">${ic("zoom",16)}</span></button>${im.cap?`<figcaption><span class="idx">${i+1}.</span> ${esc(im.cap)}</figcaption>`:""}</figure>`).join("")}</div>`;
 }
 function purpose(it,title){
   if(!has(it.purposeWho,it.purposeWhat,it.purposeFeel)) return "";
-  const r=(l,v)=>v?`<div class="row"><div class="lab">${l}</div><div class="val">${esc(v)}</div></div>`:"";
-  return `<section class="purpose"><h2>${ic("target")}${title||"動画の目的"}</h2>${r("どんな状態の、誰に",it.purposeWho)}${r("いちばん伝えたいこと",it.purposeWhat)}${r("見た人に、どう思ってほしいか",it.purposeFeel)}</section>`;
+  const r=[["誰に",it.purposeWho],["伝えたいこと",it.purposeWhat],["どう思ってほしいか",it.purposeFeel]].filter(x=>x[1]);
+  return box("target",title||"動画の目的",`<dl class="kv">${r.map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`,"",it.purposeWhat);
 }
 function ref(it,w){
   if(!has(it.refTitle,it.refUrl,it.refUse,it.refDiff)) return "";
@@ -1214,12 +1259,12 @@ function flowBox(it,isClient){
   if(x.done){act=`<div class="action"><div class="done-row"><div class="done-note">${ic("check")}${DONE_CHIP[it.kind]}（${(it.stamps||{})[f.length-1]||""}）</div><span class="stamp" aria-hidden="true"></span></div>${confirm}${backLink}</div>`;}
   else{
     const st=x.st; const mine=isClient?(st.who==="you"||st.who==="both"):true;
-    if(mine){act=`<div class="action">${st.hint&&isClient?`<p>${st.hint}</p>`:""}<button class="btn btn-p btn-big" type="button" data-act="adv" data-id="${it.id}" data-by="${isClient?"you":"us"}">${ic("check")}${st.act}</button>${confirm}${backLink}</div>`;}
+    if(mine){act=`<div class="action">${st.hint&&isClient?`<p class="tiny muted">${st.hint}</p>`:""}<button class="btn btn-p btn-big" type="button" data-act="adv" data-id="${it.id}" data-by="${isClient?"you":"us"}">${ic("check")}${st.act}</button>${confirm}${backLink}</div>`;}
     else{act=`<div class="action"><p>いまは白梅デジタルが「${st.l}」を進めています。終わったらここに表示されます。</p>${confirm}${backLink}</div>`;}
   }
-  return `<section class="flow" aria-label="進み具合">${steps}${s>0?`<p class="tiny muted" style="margin-top:-6px">終わった段階（緑の丸）を押すと、その段階に戻せます。</p>`:""}${it.redo&&it.redo.step>s?`<div class="confirm" style="background:var(--green-soft)"><span>「${f[Math.min(it.redo.step,f.length-1)].l}」${it.redo.step>=f.length?"の完了":""}から戻しました。</span><button class="btn btn-g btn-s" type="button" data-act="redo" data-id="${it.id}">戻す前の状態にする</button></div>`:""}${act}</section>`;
+  return `<section class="flow" aria-label="進み具合">${steps}${it.redo&&it.redo.step>s?`<div class="confirm" style="background:var(--green-soft)"><span>「${f[Math.min(it.redo.step,f.length-1)].l}」${it.redo.step>=f.length?"の完了":""}から戻しました。</span><button class="btn btn-g btn-s" type="button" data-act="redo" data-id="${it.id}">戻す前の状態にする</button></div>`:""}${act}</section>`;
 }
-function consultInline(it){return `<div class="consult-inline"><p>この台本について気になることがあれば、公式LINEで「${esc(label(it))}」と送ってください。</p><a class="btn-line" href="${LINE_URL}" target="_blank" rel="noopener">${lineLogo}LINEで相談</a></div>`;}
+function consultInline(it){return `<div class="consult-inline"><p>気になることは公式LINEへ</p><a class="btn-line" href="${LINE_URL}" target="_blank" rel="noopener">${lineLogo}LINEで相談</a></div>`;}
 /* ============ 印刷用（PDFで保存・紙に印刷） ============ */
 function pLines(t){const a=String(t||"").split("\n").map(s=>s.trim()).filter(Boolean);return a.map(l=>`<div class="pl">${esc(l)}</div>`).join("");}
 function pBlock(title,inner,cls){return inner?`<section class="pb ${cls||""}"><h3>${title}</h3>${inner}</section>`:"";}
@@ -1275,12 +1320,13 @@ function printItem(id){
 function detail(it,c){
   const isClient=true;
   const head=`<button class="back" type="button" data-act="back">${ic("back",18)}${KINDS[it.kind]}の一覧へ</button>
-    <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(it.title)}</h1></div>
-    <button class="btn btn-g print-btn" type="button" data-act="print" data-id="${it.id}">${ic("layout",18)}台本をPDFで保存・印刷する</button>`;
-  const one=it.oneLine?`<div class="oneline"><div class="lab">ひとことで言うと</div><p>${esc(it.oneLine)}</p></div>`:"";
+    <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(it.title)}</h1>
+    <p class="meta-line">${(it.kind==="live"?[["配信",it.liveDate]]:it.kind==="image"?[["撮影",it.shoot],["投稿",it.post]]:[["撮影",it.shoot],["初稿",it.firstDraft],["投稿",it.post]]).filter(x=>x[1]).map(([k,v])=>`<span>${k} <b>${fmtDate(v)}</b></span>`).join("")}</p>
+    ${it.oneLine?`<p class="lead-one">${esc(it.oneLine)}</p>`:""}
+    <button class="link-btn print-link" type="button" data-act="print" data-id="${it.id}">${ic("layout",16)} PDFで保存・印刷</button></div>`;
+  const one="";
   if(it.kind==="live") return `<div class="stack">${head}${flowBox(it,isClient)}${one}${liveBody(it)}${consultInline(it)}</div>`;
   if(it.kind==="image") return `<div class="stack">${head}${flowBox(it,isClient)}${one}
-    <dl class="dates"><div class="${it.step===1?"hl":""}"><dt>写真撮影</dt><dd>${fmtDate(it.shoot)}</dd></div><div><dt>投稿予定日</dt><dd>${fmtDate(it.post)}</dd></div></dl>
     ${it.prep?box("hand","お客様にお願いすること",`<dl class="kv"><dt>準備するもの</dt><dd>${esc(it.prep)}</dd></dl>`,"ask"):""}
     ${purpose(it,"投稿の目的")}
     ${box("image","仕上がりのイメージ",gallery(it.finishImages,"4/5",2,"finishImages"))}
@@ -1288,19 +1334,19 @@ function detail(it,c){
     ${box("pen","キャプション（投稿の文章）",has(it.caption,it.hashtags)?`<p style="white-space:pre-wrap">${esc(it.caption)}</p>${it.hashtags?`<p class="muted small">${esc(it.hashtags)}</p>`:""}`:"")}
     ${box("link","参考にする投稿",ref(it))}
     ${consultInline(it)}</div>`;
-  const ask=has(it.cast,it.place,it.prep,it.survey,it.caution)?box("hand","お客様にお願いすること",`<dl class="kv">${[["演者",it.cast],["撮影場所",it.place],["準備するもの",it.prep],["事前アンケート",it.survey],["注意点",it.caution]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`,"ask"):"";
+  const ask=has(it.cast,it.place,it.prep,it.survey,it.caution)?box("hand","お客様にお願いすること",`<dl class="kv">${[["演者",it.cast],["撮影場所",it.place],["準備するもの",it.prep],["事前アンケート",it.survey],["注意点",it.caution]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`,"ask",[it.place,it.prep].filter(Boolean).join("・")):"";
   const benefit=has(it.benefitClient,it.benefitViewer)?`<div class="two"><div class="sub"><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)||"—"}</div><div class="sub"><h3>見る人にとって</h3>${lines(it.benefitViewer)||"—"}</div></div>`:"";
   const sc=[["冒頭",it.opening],["本編",it.body],["締め",it.ending]].filter(x=>x[1]);
   const struct=(has(it.angleImages)||sc.length)?`${has(it.angleImages)?`<div class="angle">${gallery(it.angleImages.slice(0,1),"9/16",1,"angleImages")}<div class="scene">${sc.map(([k,v])=>`<div class="scene-row"><b>${k}</b><div>${lines(v)}</div></div>`).join("")}</div></div>`:`<div class="scene">${sc.map(([k,v])=>`<div class="scene-row"><b>${k}</b><div>${lines(v)}</div></div>`).join("")}</div>`}`:"";
   return `<div class="stack">${head}${flowBox(it,isClient)}${one}
-    <dl class="dates"><div class="${it.step===1?"hl":""}"><dt>撮影日</dt><dd>${fmtDate(it.shoot)}</dd></div><div class="${it.step===3?"hl":""}"><dt>初稿の共有</dt><dd>${fmtDate(it.firstDraft)}</dd></div><div><dt>投稿予定日</dt><dd>${fmtDate(it.post)}</dd></div>${it.deliveryUrl?`<div><dt>初稿・納品</dt><dd><a href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">動画を開く</a></dd></div>`:""}</dl>
+    ${it.deliveryUrl?`<a class="btn btn-g btn-s" style="width:max-content" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext",16)}初稿・納品の動画を開く</a>`:""}
     ${ask}
     ${purpose(it)}
-    ${box("pen","編集のイメージと指示",has(it.editImages,it.editRequest)?`${gallery(it.editImages,"9/16",Math.min(4,Math.max(2,(it.editImages||[]).length)),"editImages")}${lines(it.editRequest)}`:"")}
+    ${box("pen","編集のイメージと指示",has(it.editImages,it.editRequest)?`${gallery(it.editImages,"9/16",Math.min(4,Math.max(2,(it.editImages||[]).length)),"editImages")}${lines(it.editRequest)}`:"","",(it.editImages||[]).length?`画像${it.editImages.length}枚`:"")}
     ${box("gift","この動画で得られること",benefit)}
     ${box("compass","今月の中での、この動画の狙い",lines(it.aim))}
     ${box("link","参考にする動画",ref(it))}
-    ${box("layout","大まかな構成と画角",struct)}
+    ${box("layout","大まかな構成と画角",struct,"",sc.map(x=>x[0]).join("→"))}
     ${consultInline(it)}</div>`;
 }
 function slidesHtml(t){
@@ -1457,7 +1503,7 @@ function staffHome(){
     const np=nextPay(c);if(np&&!np.paid){const dd=daysFrom(np.iso);if(dd>=0&&dd<=21)ev.push({d:np.iso,l:"お支払い予定 "+fmtYen(c.fee),c,k:"pay"});}});
   ev.sort((a,b)=>a.d.localeCompare(b.d));
   const kindIc={script:"pen",review:"review",due:"chat",pay:"cal"};
-  const agenda=ev.length?`<div class="agenda">${ev.slice(0,12).map(e=>{const d=parseISO(e.d);return `<button class="ag ag-${e.k}" type="button" data-act="openClient" data-id="${e.c.id}"><div class="d ${e.d===t?"is-today":""}"><b>${d.getDate()}</b><span>${d.getMonth()+1}月・${WD[d.getDay()]}</span></div><div class="w"><div class="t">${ic(kindIc[e.k],16)} ${esc(e.l)}</div><div class="c">${esc(e.c.name)}${e.m?"　"+monthLabel(e.m)+"分":""}</div></div><span class="chip ${e.ok?"t-done":e.d===t?"t-you":e.k==="pay"?"t-you":"t-plan"}">${e.ok?"済み":e.d===t?"今日":daysFrom(e.d)===1?"明日":daysFrom(e.d)+"日後"}</span></button>`;}).join("")}</div>`:`<div class="empty"><b>これから3週間の予定はありません</b></div>`;
+  const agenda=ev.length?`<div class="agenda">${ev.slice(0,S.agAll?12:5).map(e=>{const d=parseISO(e.d);return `<button class="ag ag-${e.k}" type="button" data-act="openClient" data-id="${e.c.id}"><div class="d ${e.d===t?"is-today":""}"><b>${d.getDate()}</b><span>${d.getMonth()+1}月・${WD[d.getDay()]}</span></div><div class="w"><div class="t">${ic(kindIc[e.k],16)} ${esc(e.l)}</div><div class="c">${esc(e.c.name)}${e.m?"　"+monthLabel(e.m)+"分":""}</div></div><span class="chip ${e.ok?"t-done":e.d===t?"t-you":e.k==="pay"?"t-you":"t-plan"}">${e.ok?"済み":e.d===t?"今日":daysFrom(e.d)===1?"明日":daysFrom(e.d)+"日後"}</span></button>`;}).join("")}</div>`:`<div class="empty"><b>これから3週間の予定はありません</b></div>`;
   const cards=`<div class="clients">${db.clients.map(c=>{const p=PLANS[c.plan]||PLANS.LIGHT;const uu=usage(c.id,tm);const rv=uu.reel;const im=uu.image;
     const meter=(l,a,b)=>`<div class="meter"><div class="meter-l"><span>${l}</span><span class="num"><b>${a}</b> / ${b}本</span></div><div class="meter-b"><i style="width:${Math.min(100,b?a/b*100:0)}%"></i></div></div>`;
     return `<section class="cl"><div class="cl-h">${avatar(c)}<div style="min-width:0;flex:1"><b>${esc(c.name)}</b><div class="tiny muted">${esc(c.contact)}　<span class="rank-s">${esc(c.plan)}</span></div></div></div><div class="mini-r"><span>${ic("pen",14)}台本 毎月${esc(c.scriptDay||1)}日</span><span>${ic("review",14)}振り返り 毎月${esc(c.reviewDay||28)}日</span></div>${meter(monthShort(tm)+"のリール台本",rv,p.reel)}${meter(monthShort(tm)+"の画像投稿",im,p.image)}
@@ -1465,7 +1511,7 @@ function staffHome(){
   const hour=new Date().getHours(); const greet=hour<11?"おはようございます":hour<18?"おつかれさまです":"今日もおつかれさまです";
   return `<section class="hello"><div class="branch" aria-hidden="true"></div><div class="illus"><img src="${IMG.hero}" alt=""></div><div><h1>${greet}</h1><p>今日は ${fmtFull(t)}。お客様の番が ${cnt(i=>isAt(i,"you"))}件、白梅の番が ${cnt(i=>{const x=stateOf(i);return x&&!x.done&&(x.st.who==="us"||x.s===0);})}件あります。</p></div></section>
     ${tiles}
-    <div class="sec-h"><h2>これから3週間の予定</h2><span class="tiny muted">台本のお渡し・振り返り・お客様のひとことの締切・お支払い</span></div>${agenda}
+    <div class="sec-h"><h2>これから3週間の予定</h2></div>${agenda}${ev.length>5?`<button class="link-btn" type="button" data-act="agAll">${S.agAll?"少なく表示":`すべて見る（${ev.length}件）`}</button>`:""}
     <div class="sec-h"><h2>お客様ごとの進み具合</h2><span class="spacer"></span><button class="btn btn-g btn-s" type="button" data-act="adminTab" data-t="clients">お客様の一覧へ</button></div>${cards}`;
 }
 function staffList(){
@@ -1581,7 +1627,7 @@ function staffForm(){
     </div>
     ${k!=="review"?`<div class="field"><label for="f_title">台本のお題（タイトル）</label><input type="text" id="f_title" data-key="title" value="${esc(draft.title)}" placeholder="例：三重の市町村を当てるアキネーター・クイズ"></div>`:""}
     <label class="check"><input type="checkbox" id="f_pub" data-key="published" ${draft.published?"checked":""}>お客様に公開する（外すと下書きのまま）</label></section>`;
-  const secs=FIELDS[k].map(s=>{const allShort=s.f.every(f=>f[2]!=="area"&&f[2]!=="images");return `<section class="fsec ${s.memo?"memo":""}"><h3><span class="hi">${ic(s.i)}</span>${s.t}</h3>${s.lead?`<p class="lead">${s.lead}</p>`:""}<div class="${allShort&&s.f.length>1?"grid2":"form"}">${s.f.map(inputFor).join("")}</div></section>`;}).join("");
+  const secs=FIELDS[k].map(s=>{const allShort=s.f.every(f=>f[2]!=="area"&&f[2]!=="images");const filled=s.f.filter(f=>has(draft[f[0]])).length;const key="f_"+s.t;return `<details class="fsec acc ${s.memo?"memo":""}" data-acc="${esc(key)}" ${S.open&&S.open[key]?"open":""}><summary><span class="hi">${ic(s.i)}</span><span class="acc-t">${s.t}<small>${filled?`${filled}/${s.f.length} 入力済み`:"未入力"}</small></span><span class="chev" aria-hidden="true"></span></summary><div class="acc-b">${s.lead?`<p class="lead">${s.lead}</p>`:""}<div class="${allShort&&s.f.length>1?"grid2":"form"}">${s.f.map(inputFor).join("")}</div></div></details>`;}).join("");
   const del=isEdit?(S.confirm===draft.id?`<div class="confirm">この台本を削除します。元には戻せません。<button class="btn btn-d btn-s" type="button" data-act="delYes">削除する</button><button class="btn btn-g btn-s" type="button" data-act="cancel">やめる</button></div>`:`<button class="btn btn-d btn-s" type="button" data-act="del">削除</button>`):"";
   return `<form class="form" id="itemForm" novalidate>${base}${secs}
     <div class="savebar">${del}<div class="spacer"></div>${isEdit?`<button class="btn btn-g" type="button" data-act="cancelEdit">戻る</button>`:""}${isEdit&&k!=="review"?`<button class="btn btn-g" type="button" data-act="print" data-id="${draft.id}">PDF</button>`:""}<button class="btn btn-g" type="button" data-act="previewDraft">お客様の見え方</button><button class="btn btn-p" type="submit">${isEdit?"保存する":"提出する"}</button></div></form>`;
@@ -1632,6 +1678,7 @@ function render(){
   document.body.style.overflow=(S.menu||S.lb)?"hidden":"";
 }
 app.addEventListener("submit",e=>{e.preventDefault();if(e.target.id==="loginForm")doLogin(document.getElementById("lid").value,document.getElementById("lpw").value);if(e.target.id==="itemForm")saveDraft();if(e.target.id==="clientForm")saveClient();if(e.target.id==="setupForm")doSetup();});
+app.addEventListener("toggle",e=>{const d=e.target;if(d&&d.dataset&&d.dataset.acc!==undefined){S.open=S.open||{};S.open[d.dataset.acc]=d.open;}},true);
 app.addEventListener("input",e=>{
   const t=e.target;
   if(t.dataset.cap&&draft){draft[t.dataset.cap][+t.dataset.i].cap=t.value;return;}
@@ -1694,6 +1741,7 @@ app.addEventListener("click",e=>{
     case "reset":set({confirm:"reset"});break;
     case "resetYes":db=seed();save();toast("サンプルの状態に戻しました");set({confirm:null});break;
     case "cancel":set({confirm:null});break;
+    case "agAll":set({agAll:!S.agAll});break;
     case "print":printItem(b.dataset.id);break;
     case "addSample":{if(!LIVE||S.busy)break;S.busy=true;toast("見本を入れています…");(async()=>{try{
       const sd=seed();const src=sd.clients[0];const rnd=Array.from(crypto.getRandomValues(new Uint8Array(24))).map(x=>x.toString(16).padStart(2,"0")).join("");
