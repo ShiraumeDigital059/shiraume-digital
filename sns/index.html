@@ -461,6 +461,53 @@ b.over{color:var(--danger)}
 .mini-r{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:12.5px;color:var(--ink-2)}
 .mini-r span{display:inline-flex;align-items:center;gap:4px}
 .ag .t .ico{vertical-align:-3px;color:var(--green-2)}
+
+/* 印刷 */
+#printRoot{display:none}
+.print-btn{width:max-content}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff!important}
+  #app,.deco,.toast,.bloom{display:none!important}
+  #printRoot{display:block!important}
+  :root{padding:0!important}
+}
+.pdoc{font-family:var(--f);color:#111;font-size:11pt;line-height:1.6;letter-spacing:.02em}
+.pdoc .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #1E3A2B;padding-bottom:6px;margin-bottom:10px}
+.pdoc .phl{display:flex;align-items:center;gap:10px}
+.pdoc .phs{font-weight:700;border-left:1px solid #999;padding-left:10px}
+.pdoc .phr{text-align:right;font-weight:700;font-size:10.5pt}
+.pdoc .phr span{font-weight:400;font-size:9pt;color:#555}
+.pdoc .pk2{font-size:9.5pt;color:#555;margin-top:4px}
+.pdoc .pt{font-size:18pt;line-height:1.4;margin:2px 0 8px}
+.pdoc .pone{border:1.5px solid #1E3A2B;border-radius:6px;padding:8px 12px;font-size:12.5pt;font-weight:700;margin-bottom:10px}
+.pdoc .pone span{display:block;font-size:8.5pt;color:#1E3A2B;font-weight:700}
+.pdoc .pkv{width:100%;border-collapse:collapse;margin:4px 0 10px;min-width:0;font-size:10.5pt}
+.pdoc .pkv th,.pdoc .pkv td{border:1px solid #bbb;padding:5px 8px;vertical-align:top;text-align:left;background:#fff;color:#111}
+.pdoc .pkv th{width:8.5em;background:#F2EFE6;font-weight:700;font-size:9.5pt;white-space:nowrap}
+.pdoc .pb{margin:10px 0;break-inside:avoid}
+.pdoc .pb h3{font-size:12pt;margin:0 0 5px;padding:3px 8px;background:#1E3A2B;color:#fff;border-radius:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pdoc .ask h3{background:#9C7A26}
+.pdoc .psub{font-weight:700;font-size:9.5pt;margin:6px 0 2px;color:#444}
+.pdoc .pl{padding:1px 0}
+.pdoc .purl{font-size:9pt;color:#444;word-break:break-all}
+.pdoc .cb{display:inline-block;width:12px;height:12px;border:1.5px solid #111;border-radius:2px;margin-right:8px;vertical-align:-1px;flex:none}
+.pdoc .pcheck{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.pdoc .pcheck li{display:flex;align-items:flex-start;gap:0}
+.pdoc .psc{display:grid;grid-template-columns:5.5em 1fr;gap:8px;border-bottom:1px dashed #bbb;padding:6px 0}
+.pdoc .pk{font-weight:700;display:flex;align-items:center}
+.pdoc .pimgs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:4px 0 6px}
+.pdoc .pgrid{display:grid;grid-template-columns:minmax(0,1fr) 44mm;gap:10px;align-items:start}
+.pdoc .pgrid.one{grid-template-columns:1fr}
+.pdoc .pgrid .pb{margin:0}
+.pdoc .pangle{width:100%;aspect-ratio:9/16;object-fit:cover;border:1px solid #bbb;border-radius:4px;display:block}
+.pdoc .pcap{font-size:8.5pt;line-height:1.4;margin-top:3px}
+.pdoc .pimgs figure{margin:0;break-inside:avoid}
+.pdoc .pimgs img{width:100%;aspect-ratio:var(--ar);object-fit:cover;border:1px solid #bbb;border-radius:4px;display:block}
+.pdoc .pimgs figcaption{font-size:8.5pt;line-height:1.4;margin-top:2px}
+.pdoc .plines{height:22mm;border-bottom:1px solid #bbb;background:repeating-linear-gradient(#fff 0 8.5mm,#bbb 8.5mm calc(8.5mm + 1px));-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pdoc .pf{margin-top:10px;border-top:1px solid #bbb;padding-top:4px;font-size:8.5pt;color:#555;text-align:center}
+.pdoc .logo-lock .ln{font-size:15px}.pdoc .logo-lock .mark{width:24px;height:24px}
 /* 白梅側：追加 */
 .today{display:flex;flex-direction:column;align-items:flex-end;line-height:1.3}
 .today b{font-size:14px}
@@ -1106,10 +1153,63 @@ function flowBox(it,isClient){
   return `<section class="flow" aria-label="進み具合">${steps}${s>0?`<p class="tiny muted" style="margin-top:-6px">終わった段階（緑の丸）を押すと、その段階に戻せます。</p>`:""}${it.redo&&it.redo.step>s?`<div class="confirm" style="background:var(--green-soft)"><span>「${f[Math.min(it.redo.step,f.length-1)].l}」${it.redo.step>=f.length?"の完了":""}から戻しました。</span><button class="btn btn-g btn-s" type="button" data-act="redo" data-id="${it.id}">戻す前の状態にする</button></div>`:""}${act}</section>`;
 }
 function consultInline(it){return `<div class="consult-inline"><p>この台本について気になることがあれば、公式LINEで「${esc(label(it))}」と送ってください。</p><a class="btn-line" href="${LINE_URL}" target="_blank" rel="noopener">${lineLogo}LINEで相談</a></div>`;}
+/* ============ 印刷用（PDFで保存・紙に印刷） ============ */
+function pLines(t){const a=String(t||"").split("\n").map(s=>s.trim()).filter(Boolean);return a.map(l=>`<div class="pl">${esc(l)}</div>`).join("");}
+function pBlock(title,inner,cls){return inner?`<section class="pb ${cls||""}"><h3>${title}</h3>${inner}</section>`:"";}
+function pImgs(arr,ar){return (arr&&arr.length)?`<div class="pimgs" style="--ar:${ar}">${arr.map((im,i)=>`<figure><img ${imgAttr(im.src)} alt=""><figcaption><b>${i+1}.</b> ${esc(im.cap||"")}</figcaption></figure>`).join("")}</div>`:"";}
+function printDoc(it,c){
+  const kv=rows=>{const r=rows.filter(x=>x[1]);return r.length?`<table class="pkv">${r.map(([k,v])=>`<tr><th>${k}</th><td>${esc(v)}</td></tr>`).join("")}</table>`:"";};
+  const checks=(rows)=>{const r=rows.filter(Boolean);return r.length?`<ul class="pcheck">${r.map(t=>`<li><span class="cb"></span>${esc(t)}</li>`).join("")}</ul>`:"";};
+  const scene=(rows)=>rows.filter(x=>x[1]).map(([k,v])=>`<div class="psc"><div class="pk"><span class="cb"></span>${k}</div><div class="pv">${pLines(v)}</div></div>`).join("");
+  const purpose=has(it.purposeWho,it.purposeWhat,it.purposeFeel)?kv([["誰に",it.purposeWho],["伝えたいこと",it.purposeWhat],["どう思ってほしいか",it.purposeFeel]]):"";
+  let body="";
+  if(it.kind==="video"){
+    const prepList=String(it.prep||"").split(/[、,，\n]/).map(s=>s.trim()).filter(Boolean);
+    body=`${kv([["撮影日",it.shoot?fmtFull(it.shoot):""],["初稿の共有",it.firstDraft?fmtFull(it.firstDraft):""],["投稿予定日",it.post?fmtFull(it.post):""]])}
+      ${pBlock("撮影の前に確認すること",kv([["演者",it.cast],["撮影場所",it.place],["事前アンケート",it.survey],["注意点",it.caution]])+(prepList.length?`<div class="psub">準備するもの</div>${checks(prepList)}`:""),"ask")}
+      <div class="pgrid ${has(it.angleImages)?"":"one"}">${pBlock("撮る順番（終わったら□にチェック）",scene([["冒頭",it.opening],["本編",it.body],["締め",it.ending]]),"scene")}
+      ${has(it.angleImages)?pBlock("画角イメージ",`<img class="pangle" ${imgAttr(it.angleImages[0].src)} alt="">${it.angleImages[0].cap?`<div class="pcap">${esc(it.angleImages[0].cap)}</div>`:""}`,"p-angle"):""}</div>
+      ${pBlock("動画の目的",purpose)}
+      ${pBlock("編集のイメージと指示",pImgs(it.editImages,"9/16")+pLines(it.editRequest),"edit")}
+      ${pBlock("参考にする動画",it.refTitle||it.refUrl?`<div class="pl">${esc(it.refTitle||"")}</div>${it.refUrl?`<div class="pl purl">${esc(it.refUrl)}</div>`:""}${it.refUse?`<div class="psub">まねするところ</div>${pLines(it.refUse)}`:""}${it.refDiff?`<div class="psub">変えるところ</div>${pLines(it.refDiff)}`:""}`:"")}`;
+  }else if(it.kind==="image"){
+    const sl=String(it.slides||"").split("\n").map(s=>s.trim()).filter(Boolean);
+    body=`${kv([["写真撮影",it.shoot?fmtFull(it.shoot):""],["投稿予定日",it.post?fmtFull(it.post):""],["準備するもの",it.prep]])}
+      ${pBlock("撮る写真（終わったら□にチェック）",sl.length?`<ul class="pcheck">${sl.map(t=>`<li><span class="cb"></span>${esc(t)}</li>`).join("")}</ul>`:"","scene")}
+      ${pBlock("仕上がりのイメージ",pImgs(it.finishImages,"4/5"),"edit")}
+      ${pBlock("投稿の目的",purpose)}
+      ${pBlock("キャプション",it.caption?`<div class="pl" style="white-space:pre-wrap">${esc(it.caption)}</div>${it.hashtags?`<div class="pl purl">${esc(it.hashtags)}</div>`:""}`:"")}`;
+  }else if(it.kind==="live"){
+    const tl=String(it.timeline||"").split("\n").map(s=>s.trim()).filter(Boolean).map(s=>s.split(/[｜|]/).map(x=>x.trim()));
+    body=`${kv([["配信日",it.liveDate?fmtFull(it.liveDate):""],["開始時間",it.liveTime],["配信の長さ",it.duration?it.duration+"分":""],["出演",it.cast],["配信場所",it.place],["注意点",it.caution]])}
+      ${pBlock("当日の流れ",tl.length?`<table class="pkv ptl">${tl.map(r=>`<tr><th>${esc(r[0]||"")}</th><td><b>${esc(r[1]||"")}</b>${r[2]?`<br>${esc(r[2])}`:""}</td></tr>`).join("")}</table>`:"","scene")}
+      ${pBlock("紹介する商品",pLines(it.products))}${pBlock("よくある質問と答え方",pLines(it.faq))}${pBlock("ライブ限定の特典",pLines(it.coupon))}${pBlock("準備するもの",checks(String(it.prep||"").split(/[、,，\n]/).map(s=>s.trim())))}`;
+  }
+  return `<div class="pdoc">
+    <header class="ph"><div class="phl">${LOGO}<span class="phs">SNS運用</span></div><div class="phr">${esc(c?c.name+" 様":"")}<br><span>印刷日 ${fmtFull(todayISO())}</span></div></header>
+    <div class="pk2">${esc(label(it))}</div><h1 class="pt">${esc(it.title||"")}</h1>
+    ${it.oneLine?`<div class="pone"><span>ひとことで言うと</span>${esc(it.oneLine)}</div>`:""}
+    ${body}
+    <section class="pb pmemo"><h3>メモ（撮影しながら書きこめます）</h3><div class="plines"></div></section>
+    <footer class="pf">白梅デジタル　SNS運用　｜　わからないことは公式LINEでご相談ください</footer>
+  </div>`;
+}
+function printItem(id){
+  const it=db.items.find(i=>i.id===id); if(!it) return;
+  const c=client(it.clientId);
+  let root=document.getElementById("printRoot"); if(!root){root=document.createElement("div");root.id="printRoot";document.body.appendChild(root);}
+  root.innerHTML=printDoc(it,c); hydrate();
+  toast("印刷の画面を開きます。「PDFに保存」を選ぶとPDFになります");
+  const imgs=[...root.querySelectorAll("img")];
+  const ready=()=>imgs.every(im=>!im.getAttribute("data-imgid")&&im.complete);
+  let n=0; const go=()=>{if(ready()||n++>40){setTimeout(()=>{try{window.print();}catch(e){toast("このブラウザでは印刷できませんでした");}},150);}else setTimeout(go,150);};
+  go();
+}
 function detail(it,c){
   const isClient=true;
   const head=`<button class="back" type="button" data-act="back">${ic("back",18)}${KINDS[it.kind]}の一覧へ</button>
-    <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(it.title)}</h1></div>`;
+    <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(it.title)}</h1></div>
+    <button class="btn btn-g print-btn" type="button" data-act="print" data-id="${it.id}">${ic("layout",18)}台本をPDFで保存・印刷する</button>`;
   const one=it.oneLine?`<div class="oneline"><div class="lab">ひとことで言うと</div><p>${esc(it.oneLine)}</p></div>`:"";
   if(it.kind==="live") return `<div class="stack">${head}${flowBox(it,isClient)}${one}${liveBody(it)}${consultInline(it)}</div>`;
   if(it.kind==="image") return `<div class="stack">${head}${flowBox(it,isClient)}${one}
@@ -1417,7 +1517,7 @@ function staffForm(){
   const secs=FIELDS[k].map(s=>{const allShort=s.f.every(f=>f[2]!=="area"&&f[2]!=="images");return `<section class="fsec ${s.memo?"memo":""}"><h3><span class="hi">${ic(s.i)}</span>${s.t}</h3>${s.lead?`<p class="lead">${s.lead}</p>`:""}<div class="${allShort&&s.f.length>1?"grid2":"form"}">${s.f.map(inputFor).join("")}</div></section>`;}).join("");
   const del=isEdit?(S.confirm===draft.id?`<div class="confirm">この台本を削除します。元には戻せません。<button class="btn btn-d btn-s" type="button" data-act="delYes">削除する</button><button class="btn btn-g btn-s" type="button" data-act="cancel">やめる</button></div>`:`<button class="btn btn-d btn-s" type="button" data-act="del">削除</button>`):"";
   return `<form class="form" id="itemForm" novalidate>${base}${secs}
-    <div class="savebar">${del}<div class="spacer"></div>${isEdit?`<button class="btn btn-g" type="button" data-act="cancelEdit">戻る</button>`:""}<button class="btn btn-g" type="button" data-act="previewDraft">お客様の見え方</button><button class="btn btn-p" type="submit">${isEdit?"保存する":"提出する"}</button></div></form>`;
+    <div class="savebar">${del}<div class="spacer"></div>${isEdit?`<button class="btn btn-g" type="button" data-act="cancelEdit">戻る</button>`:""}${isEdit&&k!=="review"?`<button class="btn btn-g" type="button" data-act="print" data-id="${draft.id}">PDF</button>`:""}<button class="btn btn-g" type="button" data-act="previewDraft">お客様の見え方</button><button class="btn btn-p" type="submit">${isEdit?"保存する":"提出する"}</button></div></form>`;
 }
 function readImage(file,cb){
   const fr=new FileReader();
@@ -1527,6 +1627,7 @@ app.addEventListener("click",e=>{
     case "reset":set({confirm:"reset"});break;
     case "resetYes":db=seed();save();toast("サンプルの状態に戻しました");set({confirm:null});break;
     case "cancel":set({confirm:null});break;
+    case "print":printItem(b.dataset.id);break;
     case "addSample":{if(!LIVE||S.busy)break;S.busy=true;toast("見本を入れています…");(async()=>{try{
       const sd=seed();const src=sd.clients[0];const rnd=Array.from(crypto.getRandomValues(new Uint8Array(24))).map(x=>x.toString(16).padStart(2,"0")).join("");
       const data=JSON.parse(JSON.stringify(src));["id","loginId","password"].forEach(k=>delete data[k]);data.name="【見本】"+data.name;
