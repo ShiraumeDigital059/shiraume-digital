@@ -704,6 +704,26 @@ body{font-size:15px;line-height:1.7}
   input[type=text],input[type=password],input[type=date],input[type=time],input[type=month],input[type=number],input[type=url],select,textarea{min-height:44px;padding:9px 12px;font-size:16px}
   .grid2{gap:10px}
 }
+
+/* 濃い緑の面をやめる（白〜生成りの面＋黒い文字に） */
+.summary-box{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
+.summary-box .tiny{color:var(--ink-3);opacity:1}
+.summary-box .mark{background-color:#fff}
+.summary-box::after{opacity:.18}
+.client-card{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
+.client-card .ct{opacity:1;color:var(--ink-2)}
+.client-card .branch{opacity:.25}
+.quota div{background:var(--surface);border:1px solid var(--line)}
+.quota dt{opacity:1;color:var(--ink-3)}
+.plan-link{color:var(--ink-2)}
+.rank{background:var(--surface);border:1px solid var(--line-2);color:var(--ink)}
+.plan-hero{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
+.plan-hero::after{opacity:.2}
+.ph-name{color:var(--ink)}
+.plan-hero p{opacity:1;color:var(--ink-2)}
+.purpose{background:var(--sunk);color:var(--ink)}
+.purpose .lab{color:var(--ink-3)}
+.purpose .row{border-top-color:var(--line)}
 </style>
 
 </head>
