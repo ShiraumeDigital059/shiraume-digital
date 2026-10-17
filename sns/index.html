@@ -777,6 +777,42 @@ body{font-size:15px;line-height:1.7}
 .rv-bubble p{font-size:14.5px;line-height:1.8}
 .rv-bubble footer{font-size:12px;color:var(--ink-3)}
 .rv-cmt textarea{min-height:84px}
+
+/* ===== 下のタブで切りかえ（ハンバーガーをやめる） ===== */
+.hd-plan{font-size:11.5px;font-weight:800;letter-spacing:.08em;color:var(--gold);border:1px solid var(--gold-line,#e6d4a8);background:#fffaf0;border-radius:999px;padding:3px 10px;margin-right:8px}
+.hd-line{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:13px;font-weight:700;text-decoration:none}
+.hd-line svg{width:22px;height:22px;padding:3px;border-radius:50%;background:var(--line-app);box-sizing:border-box}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px))}
+.tb-in{display:grid;grid-template-columns:repeat(5,1fr);max-width:560px;margin:0 auto}
+.tb{appearance:none;border:0;background:none;display:grid;justify-items:center;gap:2px;padding:4px 0 2px;color:var(--ink-3);font:inherit;cursor:pointer;min-height:50px;-webkit-tap-highlight-color:transparent}
+.tb-i{position:relative;display:grid;place-items:center;width:52px;height:30px;border-radius:999px;transition:background .25s ease}
+.tb-l{font-size:11px;font-weight:700;letter-spacing:.02em}
+.tb.on{color:var(--green-2)}
+.tb.on .tb-i{background:var(--green-soft)}
+.tabbar.pop .tb.on .tb-i{animation:tbPop .35s cubic-bezier(.3,1.4,.5,1)}
+.tb-n{position:absolute;top:-5px;right:-2px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#b45309;color:#fff;font-size:10.5px;font-weight:800;line-height:17px;text-align:center;border:2px solid #fff;box-sizing:content-box}
+@keyframes tbPop{0%{transform:scale(.7)}100%{transform:scale(1)}}
+main.wrap.pg-in{animation:pgIn .35s ease both}
+@keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+body:has(.tabbar) .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+.acct{padding:2px 2px 0}
+.acct-nm{font-size:16px;font-weight:800}
+.acct-ct{font-size:12.5px;color:var(--ink-3)}
+@media (min-width:760px){
+  .tabbar{position:sticky;top:61px;bottom:auto;border-top:0;border-bottom:1px solid var(--line);padding:8px 16px;background:rgba(255,255,255,.9)}
+  .tb-in{display:flex;gap:6px;justify-content:center;max-width:720px}
+  .tb{grid-auto-flow:column;align-items:center;gap:8px;padding:0 14px 0 6px;min-height:40px;border-radius:999px}
+  .tb-i{width:30px;height:30px}
+  .tb-l{font-size:13.5px}
+  .tb.on{background:var(--green-soft,#e8f0ea)}
+  .tb.on .tb-i{background:transparent;animation:none}
+  .tb:hover:not(.on){background:var(--sunk)}
+  .tb-n{top:-6px;right:-10px}
+  body:has(.tabbar) .wrap{padding-bottom:72px}
+}
+@media (max-width:400px){.hd-line span{display:none}.hd-line{padding:0 9px}}
+@media (prefers-reduced-motion:reduce){main.wrap.pg-in,.tabbar.pop .tb.on .tb-i{animation:none}}
+@media print{.tabbar{display:none}}
 </style>
 
 </head>
@@ -1223,6 +1259,7 @@ function planPage(c){
   const p=PLANS[c.plan]||PLANS.LIGHT; const tm=thisMonth(); const u=usage(c.id,tm);
   return `<div class="stack">
     <div class="page-head"><div class="illus"><img src="${IMG.stamp}" alt=""></div><div><div class="tiny muted" style="font-weight:700">${monthLabel(tm)}</div><h1>ご契約プラン</h1><p>いまのプランでできることと、今月使った本数です。</p></div></div><div class="twig" aria-hidden="true"></div>
+    <section class="acct"><div class="acct-nm">${esc(c.name)} 様</div><div class="acct-ct">ご担当：${esc(c.contact)}${c.insta?`　Instagram ${esc(c.insta)}`:""}</div></section>
     <section class="plan-hero"><div class="ph-top"><span class="ph-name">${esc(c.plan)}</span><span class="ph-price">¥${p.price}<small> / 月</small></span></div><b class="ph-catch">${esc(p.catch)}</b><p>${esc(p.lead)}</p></section>
     ${box("review",`${monthShort(tm)}に使った本数`,`<div class="stack" style="gap:12px">${planMeter("リール台本（ライブ台本の振替を含む）",u.reel,p.reel)}${planMeter("画像投稿の構成",u.image,p.image)}${u.live?`<p class="small muted">ライブ台本で、リール台本 ${u.live}本ぶんを使っています。</p>`:""}<dl class="quota-l">${p.make?`<div><dt>画像制作</dt><dd>月${p.make}枚</dd></div>`:""}${p.edit?`<div><dt>動画編集</dt><dd>月${p.edit}本</dd></div>`:""}${p.stories?`<div><dt>ストーリーズ</dt><dd>月${p.stories}本</dd></div>`:""}<div><dt>振り返り</dt><dd>${esc(p.review)}</dd></div></dl></div>`)}
     ${box("check","このプランでできること",`<ul class="checks">${p.items.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`)}
@@ -1231,6 +1268,7 @@ function planPage(c){
     ${box("gift","本数を超えたときの追加料金",`<dl class="kv">${ADDONS.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join("")}</dl><p class="small muted">追加は、必ず事前にご相談してから進めます。</p>`)}
     ${box("list","ご契約について",`<ul class="ul">${CONTRACT_NOTES.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`)}
     <div class="consult-inline"><p>プランの変更は、白梅デジタルが行います。変えたいときや、本数を追加したいときは、公式LINEでご相談ください。</p><a class="btn-line" href="${LINE_URL}" target="_blank" rel="noopener">${lineLogo}LINEで相談</a></div>
+    ${S.preview?"":`<button class="logout" type="button" data-act="logout">ログアウト</button>`}
   </div>`;
 }
 /* ---------- 月のリズム（台本お渡し日・振り返り日・ひとことの締切） ---------- */
@@ -1261,8 +1299,14 @@ function viewClient(){
   else body=listPage(c,S.view);
   const banner=S.preview?`<div class="preview-banner">お客様（${esc(c.name)} 様）の見え方を表示しています <button type="button" data-act="endPreview">白梅の画面に戻る</button></div>`:"";
   const todoCount=["video","image","live"].reduce((n,k)=>n+visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&(x.st.who==="you");}).length,0);
-  return banner+header(c.name+" 様",`<button class="menu-btn" type="button" data-act="menu" aria-label="メニューを開く">${todoCount?`<span class="chip t-you" style="padding:1px 8px">${todoCount}</span>`:""}<span class="mb-t">メニュー</span><span class="burger"><i></i></span></button>`)
-    +DECO()+`<main class="wrap">${body}</main>`+(S.menu?drawer(c):"");
+  return banner+header(c.name+" 様",`<span class="hd-plan" aria-label="ご契約プラン">${esc(c.plan)}</span><a class="hd-line" href="${LINE_URL}" target="_blank" rel="noopener" aria-label="公式LINEで相談する">${lineLogo}<span>相談</span></a>`)
+    +DECO()+tabBar(c)+`<main class="wrap pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`;
+}
+function tabBar(c){
+  const needs=k=>visible(c.id,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
+  const rvNeed=[thisMonth(),shiftMonth(thisMonth(),-1)].map(m=>reviewOf(c.id,m)).filter(r=>r&&r.published&&r.summary&&!r.clientComment&&todayISO()<=sched(c,r.month).due).length;
+  const t=(k,icon,l,n)=>{const on=S.view===k;return `<button class="tb ${on?"on":""}" type="button" data-act="nav" data-k="${k}" ${on?'aria-current="page"':""}><span class="tb-i">${ic(icon,22)}${n?`<span class="tb-n" aria-label="お願い${n}件">${n}</span>`:""}</span><span class="tb-l">${l}</span></button>`;};
+  return `<nav class="tabbar" aria-label="ページの切りかえ"><div class="tb-in">${t("video","video","動画",needs("video"))}${t("image","image","画像",needs("image"))}${t("live","live","ライブ",needs("live"))}${t("review","review","振り返り",rvNeed)}${t("plan","star","プラン",0)}</div></nav>`;
 }
 function drawer(c){
   const p=PLANS[c.plan]||PLANS.LIGHT;
@@ -1762,6 +1806,7 @@ function render(){
   app.innerHTML=html+lightbox();
   if(aid){const n=document.getElementById(aid);if(n&&n.tagName!=="BUTTON"){n.focus({preventScroll:true});try{if(sel)n.setSelectionRange(sel[0],sel[1]);}catch(_){}}}
   hydrate();
+  const mw=app.querySelector("main.wrap[data-key]"); if(mw){if(mw.dataset.key!==render._k){mw.classList.add("pg-in");const tb=app.querySelector(".tabbar");if(tb&&String(render._k||"").split("|")[0]!==mw.dataset.key.split("|")[0])tb.classList.add("pop");}render._k=mw.dataset.key;}
   document.body.style.overflow=(S.menu||S.lb)?"hidden":"";
 }
 app.addEventListener("submit",e=>{e.preventDefault();if(e.target.id==="loginForm")doLogin(document.getElementById("lid").value,document.getElementById("lpw").value);if(e.target.id==="itemForm")saveDraft();if(e.target.id==="clientForm")saveClient();if(e.target.id==="setupForm")doSetup();});
