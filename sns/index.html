@@ -591,6 +591,73 @@ b.over{color:var(--danger)}
   .box,.purpose,.oneline{padding:16px}
 }
 @media (prefers-reduced-motion:no-preference){.card,.navbtn,.mtab,.btn{transition:background-color .15s,border-color .15s}}
+
+/* ===== 読みやすさ（文字のコントラスト4.5:1以上・色は3つの意味だけ・スマホは余白を広く） ===== */
+:root{--ink-3:#5F6267;--gold:#7A5C12;--line-app:#06803A;--us:#55585D;--us-bg:#ECEBE6}
+.t-us{background:var(--mute-bg);color:var(--mute)}
+.oneline{background:var(--surface);border:1px solid var(--line-2)}
+.oneline .lab{color:var(--ink-2)}
+.dates .hl{border-color:var(--you);background:var(--you-bg)}
+.rhythm li.you{background:var(--you-bg)}
+.quote{background:var(--sunk)}
+.ask{border:1px solid var(--line-2);border-left-width:1px}
+.ask > h2 .hi{background:var(--you-bg);color:var(--you)}
+.box > h2 .hi,.fsec > h3 .hi{background:var(--sunk);color:var(--ink-2)}
+.sub h3{color:var(--ink)}
+.ul{gap:10px}
+.box::after,.fsec::after,.cbig::after{opacity:.18}
+.oneline::after{opacity:.22}
+.st .dt{font-size:12px}
+.mini i.c{background:var(--you)}
+.rank-s{color:var(--gold)}
+@media (max-width:600px){
+  body{font-size:16.5px;line-height:1.9}
+  .wrap{padding-block:18px 96px}
+  .stack{gap:24px}
+  .tiny{font-size:13.5px}
+  .small{font-size:15px}
+  h1,.page-head h1{letter-spacing:.03em}
+  .page-head{gap:12px}
+  .page-head .illus{width:60px;height:60px}
+  .page-head p{font-size:15px}
+  .card-k,.card-m,.dates dt,.summary dt,.stat dt,.kv dt,.oneline .lab,.purpose .lab,.st .l{font-size:13.5px}
+  .card{padding:20px 18px;gap:14px}
+  .card-t{font-size:17.5px;line-height:1.6}
+  .list{gap:14px}
+  .box,.purpose,.oneline,.flow,.rhythm,.consult-inline,.todo{padding:22px 18px}
+  .box{gap:16px}
+  .box > h2,.purpose h2{font-size:18px}
+  .oneline p{font-size:18.5px;line-height:1.8}
+  .purpose .val{font-size:17px;line-height:1.75}
+  .purpose{gap:18px}
+  .dates{grid-template-columns:1fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+  .dates div{border:0;border-bottom:1px solid var(--line);border-radius:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px}
+  .dates div:last-child{border-bottom:0}
+  .dates div.hl{border-color:var(--line)}
+  .dates dd{font-size:16.5px;text-align:right}
+  .summary{gap:10px}
+  .summary div{padding:12px 14px}
+  .summary dd{font-size:22px}
+  .rhythm li{grid-template-columns:1fr auto;grid-template-areas:"d c" "l l";row-gap:4px;padding:14px 0}
+  .rhythm .rd{grid-area:d}.rhythm li > .chip{grid-area:c}.rhythm .rl{grid-area:l;font-size:15.5px}
+  .rhythm li.you{margin:4px -8px;padding:14px 12px}
+  .todo li button{padding:14px;font-size:15.5px}
+  .scene-row{grid-template-columns:1fr;gap:6px;padding:16px 0}
+  .scene-row b{width:max-content;padding:3px 12px}
+  .kv dt{font-size:13.5px}
+  .kv dd{font-size:16px;padding-bottom:14px}
+  .stats{gap:10px}
+  .stat{padding:16px}
+  .title-area::before{display:none}
+  .deco .df{opacity:calc(var(--o) * .5)}
+  .deco .dp{opacity:.3}
+  .deco .db1,.deco .db2{opacity:.1}
+  .gallery{gap:14px}
+  .shot figcaption{font-size:14px;line-height:1.6}
+  .flow{gap:18px}
+  .action p{font-size:15px}
+  .navbtn{padding:14px 12px}
+}
 </style>
 
 </head>
