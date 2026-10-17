@@ -106,6 +106,35 @@
 }
 </style>
 <style>.sd-cta-line{background:#06C755!important;color:#fff!important;border:none!important;}.sd-cta-line:hover{background:#05b34c!important;}</style>
+<style>
+/* ===== 2026-10-17 白梅SNS運用（自社開発の専用ページ） ===== */
+.sapp{background:#1E3A2B;color:#fff;padding:64px 24px 70px;margin:10px 0 0;position:relative;overflow:hidden}
+.sapp__in{max-width:1080px;margin:0 auto}
+.sapp__eb{display:inline-block;font-size:11.5px;letter-spacing:.22em;color:#E4C77A;font-weight:700;border:1px solid rgba(228,199,122,.5);padding:5px 12px;border-radius:999px;margin-bottom:16px}
+.sapp__title{font-family:'Shippori Mincho',serif;font-size:32px;line-height:1.5;margin:0 0 14px;font-weight:700}
+.sapp__title em{font-style:normal;color:#E4C77A}
+.sapp__lead{font-size:15px;line-height:2;color:#d6dfd8;margin:0 0 30px;max-width:720px}
+.sapp__shots{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:16px;align-items:start;margin-bottom:30px}
+.sapp__shot{margin:0;background:#fff;border-radius:10px;padding:6px;box-shadow:0 22px 50px -20px rgba(0,0,0,.55)}
+.sapp__shot img{width:100%;display:block;border-radius:6px}
+.sapp__shot figcaption{font-size:12.5px;color:#2B2A2E;font-weight:700;text-align:center;padding:8px 4px 4px}
+.sapp__feats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+.sapp__feat{border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:16px 16px;background:rgba(255,255,255,.04)}
+.sapp__feat b{display:block;font-size:14.5px;color:#E4C77A;margin-bottom:6px;line-height:1.5}
+.sapp__feat span{font-size:12.8px;line-height:1.85;color:#d6dfd8}
+.sapp__cta{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.sapp__btn{display:inline-flex;align-items:center;gap:10px;background:#B8912F;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:15px 28px;border-radius:999px;transition:background .2s}
+.sapp__btn:hover{background:#a07c22}
+.sapp__note{font-size:12px;color:#a9b8ad}
+@media(max-width:820px){
+  .sapp{padding:48px 18px 54px}
+  .sapp__title{font-size:20.5px}
+  .sapp__eb{font-size:10.5px;letter-spacing:.1em}
+  .sapp__shots{grid-template-columns:1fr;gap:14px}
+  .sapp__shots figure:nth-child(n+2){display:none}
+  .sapp__feats{grid-template-columns:1fr 1fr;gap:10px}
+}
+</style>
 </head>
 <body>
 
@@ -144,12 +173,35 @@
       <span class="pq-hero__eb">SNS</span>
       <h1 class="pq-hero__title">SNS運用サポート</h1>
       <p class="pq-hero__desc">Instagram・TikTokを、どこまで任せるかで選べます。<br>はじめに初期アカウント設計 ¥20,000（初回のみ）。</p>
+      <a href="#sns-app" style="display:inline-block;margin-top:14px;background:rgba(184,145,47,.92);color:#fff;font-size:13px;font-weight:700;padding:7px 16px;border-radius:999px;text-decoration:none;letter-spacing:.04em">自社開発の専用ページつき ↓</a>
     </div>
   </header>
   <nav class="price-crumb"><a href="Pricing.html">料金プラン</a><span>/</span><span>SNS運用サポート</span></nav>
   <section class="pq" aria-label="料金">
     <div class="pq__grid pq__grid--3"><a class="pq-tile" href="#plan-0" data-idx="0"><span class="pq-tile__name">LIGHT</span><span class="pq-tile__price">¥<b>19,800</b><small>/月</small></span><span class="pq-tile__tag">考えるところだけ</span></a><a class="pq-tile pq-tile--rec" href="#plan-1" data-idx="1"><span class="pq-tile__badge">おすすめ</span><span class="pq-tile__name">STANDARD</span><span class="pq-tile__price">¥<b>39,800</b><small>/月</small></span><span class="pq-tile__tag">作って出すまで</span></a><a class="pq-tile" href="#plan-2" data-idx="2"><span class="pq-tile__name">BUSINESS</span><span class="pq-tile__price">¥<b>69,800</b><small>/月</small></span><span class="pq-tile__tag">動画編集まで</span></a></div>
     <p class="pq__note">税込・月額。最低3ヶ月。タップすると中身が見られます。</p>
+  </section>
+  <section class="sapp" id="sns-app" aria-label="白梅SNS運用">
+    <div class="sapp__in">
+      <span class="sapp__eb">ORIGINAL SYSTEM ／ 白梅デジタル自社開発</span>
+      <h2 class="sapp__title">ご契約のお客様だけの専用ページ<br><em>「白梅SNS運用」</em>がつきます。</h2>
+      <p class="sapp__lead">台本も、撮影のお願いも、振り返りも。運用に必要なことを、白梅デジタルが自社で開発した専用ページにまとめてお渡しします。LINEやメールに台本が流れて「どれが最新？」となることはありません。</p>
+      <div class="sapp__shots">
+        <figure class="sapp__shot"><img decoding="async" loading="lazy" src="assets/images/sns-app-home.webp" alt="今月の予定がわかる、専用ページのはじめの画面"><figcaption>今月の予定がひと目でわかる</figcaption></figure>
+        <figure class="sapp__shot"><img decoding="async" loading="lazy" src="assets/images/sns-app-list.webp" alt="台本の一覧と進み具合の画面"><figcaption>台本ごとの進み具合が見える</figcaption></figure>
+        <figure class="sapp__shot"><img decoding="async" loading="lazy" src="assets/images/sns-app-script.webp" alt="台本の中身。撮り方とお願いすること"><figcaption>撮り方まで台本に書いてある</figcaption></figure>
+      </div>
+      <div class="sapp__feats">
+        <div class="sapp__feat"><b>台本が1か所に</b><span>月ごと・種類ごとに並び、いつでも最新を開けます</span></div>
+        <div class="sapp__feat"><b>撮影で迷わない</b><span>撮る順番・画角・準備するものまで。紙に印刷もできます</span></div>
+        <div class="sapp__feat"><b>ボタンひとつで伝わる</b><span>「撮影が終わりました」を押すだけ。お客様の番は金色で</span></div>
+        <div class="sapp__feat"><b>毎月の振り返り</b><span>数字と「来月試すこと」を、言葉にしてお届けします</span></div>
+      </div>
+      <div class="sapp__cta">
+        <a class="sapp__btn" href="sns/guide.html">専用ページのご案内を見る<span>→</span></a>
+        <span class="sapp__note">全プランについています。画面はすべて見本（架空のお店）です。</span>
+      </div>
+    </div>
   </section>
   <section class="pc3 pc3--tight" id="plans">
     
@@ -213,7 +265,7 @@
   <section class="pmore">
     <div class="pmore__in">
       <h2 class="pmore__title">もっと詳しく見る</h2>
-      <div class="pmore__list"><a class="pmore__item" href="Pricing-SNS-compare.html"><span class="pmore__no">01</span><span class="pmore__t"><b>3つのプランの比較表</b><small>本数・サポート内容を1枚で見比べる</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-tickets.html"><span class="pmore__no">02</span><span class="pmore__t"><b>台本・動画編集の回数券</b><small>月額なしで、1本から。まとめ買いで最大15%OFF</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-guide.html"><span class="pmore__no">03</span><span class="pmore__t"><b>言葉の意味とご契約</b><small>何をどこまでやるか・追加料金・ご契約の決まり</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-live.html"><span class="pmore__no">04</span><span class="pmore__t"><b>ライブ台本</b><small>ライブ台本に何を書くか</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-promise.html"><span class="pmore__no">05</span><span class="pmore__t"><b>最低3ヶ月の理由とお約束</b><small>できること・できないこと</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-options.html"><span class="pmore__no">06</span><span class="pmore__t"><b>オプション</b><small>撮影の手配・画像制作・投稿の代行など</small></span><span class="pmore__go">→</span></a></div>
+      <div class="pmore__list"><a class="pmore__item" href="sns/guide.html"><span class="pmore__no">00</span><span class="pmore__t"><b>自社開発の専用ページ「白梅SNS運用」</b><small>台本・撮影・振り返りを、実際の画面でご紹介</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-compare.html"><span class="pmore__no">01</span><span class="pmore__t"><b>3つのプランの比較表</b><small>本数・サポート内容を1枚で見比べる</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-tickets.html"><span class="pmore__no">02</span><span class="pmore__t"><b>台本・動画編集の回数券</b><small>月額なしで、1本から。まとめ買いで最大15%OFF</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-guide.html"><span class="pmore__no">03</span><span class="pmore__t"><b>言葉の意味とご契約</b><small>何をどこまでやるか・追加料金・ご契約の決まり</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-live.html"><span class="pmore__no">04</span><span class="pmore__t"><b>ライブ台本</b><small>ライブ台本に何を書くか</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-promise.html"><span class="pmore__no">05</span><span class="pmore__t"><b>最低3ヶ月の理由とお約束</b><small>できること・できないこと</small></span><span class="pmore__go">→</span></a><a class="pmore__item" href="Pricing-SNS-options.html"><span class="pmore__no">06</span><span class="pmore__t"><b>オプション</b><small>撮影の手配・画像制作・投稿の代行など</small></span><span class="pmore__go">→</span></a></div>
     </div>
   </section>
     <!-- CTA -->
@@ -303,6 +355,6 @@
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "Service", "serviceType": "SNS運用サポート", "provider": {"@id": "https://shiraumedigital.com/#organization"}, "areaServed": {"@type": "Country", "name": "日本"}, "audience": {"@type": "Audience", "audienceType": "中小企業・飲食店・個人事業主"}, "url": "https://shiraumedigital.com/Pricing-SNS.html", "offers": [{"@type": "Offer", "name": "初期アカウント設計（初回のみ・一律）", "price": "20000", "priceCurrency": "JPY", "description": "コンセプト・ターゲット・投稿ジャンルの設計と初期投稿のアイデア出し"}, {"@type": "Offer", "name": "LIGHT", "price": "19800", "priceCurrency": "JPY", "description": "月額／最低3ヶ月"}, {"@type": "Offer", "name": "STANDARD", "price": "39800", "priceCurrency": "JPY", "description": "月額／最低3ヶ月"}, {"@type": "Offer", "name": "BUSINESS", "price": "69800", "priceCurrency": "JPY", "description": "月額／最低3ヶ月"}]}
 </script>
-<script src="assets/js/i18n.js?v=20261003b"></script>
+<script src="assets/js/i18n.js?v=20261017"></script>
 </body>
 </html>
