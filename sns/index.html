@@ -190,10 +190,11 @@ h1,h2,h3{text-wrap:balance;line-height:1.5}
 .oneline{background:var(--green-soft);border-radius:var(--r);padding:18px;display:grid;gap:6px}
 .oneline .lab{font-size:13px;font-weight:700;color:var(--green-2)}
 .oneline p{font-size:18px;font-weight:700;line-height:1.7}
-.dates{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px}
+.dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:600px){.dates{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .dates div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:0}
 .dates dt{font-size:12.5px;color:var(--ink-3);font-weight:500}
-.dates dd{margin:0;font-weight:700;font-size:16px;overflow-wrap:anywhere}
+.dates dd{margin:0;font-weight:700;font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .dates .hl{border-color:var(--gold);background:var(--gold-soft)}
 .box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px}
 .box > h2{font-size:17px;display:flex;align-items:center;gap:10px}
@@ -1056,6 +1057,15 @@ function seed(){
         title:"干物の焼き方 3ステップ",oneLine:"9月に伸びた動画の内容を、保存しやすい画像4枚にまとめ直す投稿",
         shoot:"",post:"2026-10-28",prep:"",purposeWho:"干物をうまく焼けない人",purposeWhat:"フライパンで3ステップ",purposeFeel:"「保存しておこう」",finishImages:[],
         slides:"1枚目：表紙「干物はフライパンで焼ける」\n2枚目：シートを敷く\n3枚目：皮から焼く\n4枚目：ふたをして2分",caption:"",hashtags:"#干物 #焼き方",memo:"動画の静止画を使う"},
+      {id:uid(),kind:"live",clientId:A,month:"2026-11",no:1,step:0,stamps:{},published:true,
+        title:"冬のお鍋セット 開封ライブ",oneLine:"冬のお鍋セットを、店長が開けながら紹介する30分のインスタライブ。最後にライブ限定の予約特典を案内",
+        liveDate:"2026-11-14",liveTime:"19:00",duration:"30",notice:"2026-11-11",
+        cast:"浜田店長（説明）・スタッフ1名（コメントを読む係）",place:"店内の鮮魚コーナー前",prep:"お鍋セット2種、土鍋、スマホ用の三脚、手元を照らすライト",caution:"値段と予約の締切は、画面に書いた紙を出して伝えてください",
+        purposeWho:"年末に家族で鍋をしたいけど、具材をそろえるのが面倒な人",purposeWhat:"うみかぜのお鍋セットなら、届いてすぐ鍋ができる",purposeFeel:"「今年はこれを予約しよう」",
+        timeline:"0:00｜オープニング｜あいさつと、今日はお鍋セットの中身を全部見せる日だと伝える\n3:00｜セットを開ける｜牡蠣鍋セットを箱から出し、1品ずつ見せる\n12:00｜作ってみる｜土鍋に入れて、煮えるまでの間にコメントに答える\n20:00｜試食｜スタッフと一緒に食べて、感想をそのまま話す\n25:00｜予約の案内｜ライブ限定特典と、予約の締切を紙で見せる\n29:00｜おわり｜保存とフォローのお願い",
+        products:"牡蠣鍋セット（2〜3人前・¥2,980）\n寄せ鍋セット（3〜4人前・¥3,980）",
+        faq:"いつ届きますか？ → 予約の順に、12/20から発送します\n冷凍ですか？ → 冷蔵でお届けします。届いた日から3日が目安です\n何人前ですか？ → 牡蠣鍋は2〜3人前、寄せ鍋は3〜4人前です",
+        coupon:"ライブを見た方限定：つみれ1パックをおまけ（DMで「ライブ見た」と送ってください）",memo:""},
       {id:uid(),kind:"review",clientId:A,month:"2026-09",published:true,posts:"10",views:"48200",followers:"312",saves:"1140",profile:"2310",
         topTitle:"開封！ 3000円の福袋の中身",topViews:"21000",
         good:"福袋の開封動画が2.1万回再生され、9月でいちばん伸びました\n保存数が8月の約1.6倍になりました",
@@ -1080,7 +1090,7 @@ function seed(){
 }
 
 /* ============ 保存（このブラウザの中だけ） ============ */
-const KEY="shiraume_sns_demo_v7";
+const KEY="shiraume_sns_demo_v8";
 let db;
 if("https://ysxvsrixarelqidgegyj.supabase.co".indexOf("https://")===0){db={v:9,staff:[],clients:[],items:[]};}else{try{const raw=localStorage.getItem(KEY);db=raw?JSON.parse(raw):seed();}catch(e){db=seed();}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true;}catch(e){toast("保存できませんでした。画像を減らすか、小さい画像にしてください");return false;}}
