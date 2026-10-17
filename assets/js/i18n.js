@@ -29,6 +29,33 @@
   'use strict';
 
   var TEXT = {
+
+    /* --- 2026-10-17 白梅SNS運用 --- */
+    "自社開発の専用ページつき ↓": "Includes our own client portal ↓",
+    "ORIGINAL SYSTEM ／ 白梅デジタル自社開発": "ORIGINAL SYSTEM / Built in-house by Shiraume Digital",
+    "ご契約のお客様だけの専用ページ": "A private page, only for our clients —",
+    "「白梅SNS運用」": "“Shiraume SNS”",
+    "がつきます。": "comes with every plan.",
+    "台本も、撮影のお願いも、振り返りも。運用に必要なことを、白梅デジタルが自社で開発した専用ページにまとめてお渡しします。LINEやメールに台本が流れて「どれが最新？」となることはありません。": "Scripts, shooting requests and monthly reviews — everything you need lives on one page we built ourselves. No more scripts lost in LINE or email, no more wondering which version is the latest.",
+    "今月の予定がひと目でわかる": "This month's schedule at a glance",
+    "台本ごとの進み具合が見える": "See where each script stands",
+    "撮り方まで台本に書いてある": "How to shoot, written into every script",
+    "台本が1か所に": "All scripts in one place",
+    "月ごと・種類ごとに並び、いつでも最新を開けます": "Sorted by month and type, always the latest version",
+    "撮影で迷わない": "No guesswork on shoot day",
+    "撮る順番・画角・準備するものまで。紙に印刷もできます": "Shot order, angles and props — printable on paper, too",
+    "ボタンひとつで伝わる": "One tap to let us know",
+    "「撮影が終わりました」を押すだけ。お客様の番は金色で": "Just tap “Done shooting.” Your turn is marked in gold",
+    "毎月の振り返り": "A monthly review",
+    "数字と「来月試すこと」を、言葉にしてお届けします": "Your numbers, and what we'll try next month — in plain words",
+    "専用ページのご案内を見る": "See the client portal",
+    "全プランについています。画面はすべて見本（架空のお店）です。": "Included in every plan. All screens show a sample (fictional) shop.",
+    "自社開発の専用ページ「白梅SNS運用」": "Our in-house client portal “Shiraume SNS”",
+    "台本・撮影・振り返りを、実際の画面でご紹介": "Scripts, shooting and reviews — shown on real screens",
+    "自社開発の専用ページ「白梅SNS運用」つき": "Comes with our in-house client portal “Shiraume SNS”",
+    "台本・撮影・振り返りを、1つの画面で。ご案内を見る →": "Scripts, shooting and reviews on one screen. Take a look →",
+    "専用ページ「白梅SNS運用」": "Client portal “Shiraume SNS”",
+    "自社開発の専用ページつき": "With our own client portal",
     /* --- 2026-09-20 SNS初期費用 --- */
     "はじめに「初期アカウント設計」¥20,000をいただきます。": "A one-off account setup fee of \\u00a520,000 applies.",
     "初回のみ、プランに関わらず一律です。コンセプト・ターゲット・投稿ジャンルの設計と、最初の投稿のアイデア出しまでを行います。": "Charged once, the same on every plan. It covers concept, audience and content direction, plus ideas for your first posts.",
