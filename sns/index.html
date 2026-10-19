@@ -841,7 +841,7 @@ h1,.svc,.card-t,.pt,.acct-nm,.ph-name,.ph-catch,.rv-h h2,.box > h2,.acc-t,.rv-su
 .vc-sub{font-family:var(--f);font-size:12.5px;color:var(--ink-3);font-weight:500;letter-spacing:.02em;width:100%;padding-left:44px;margin-top:-6px}
 .vc-b{font-size:15.5px;line-height:1.9;color:var(--ink)}
 .vc-b p,.vc p{font-size:15.5px;line-height:1.9}
-.dv .lead-one{display:none}
+.dv .lead-one{font-family:var(--fm);font-weight:600;font-size:18px;line-height:1.7;background:var(--green-soft);border-radius:14px;padding:14px 16px;color:var(--ink)}
 .jn{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px}
 .jn button{flex:none;font:inherit;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
 .jn button:hover{border-color:var(--green-2);color:var(--green-2)}
@@ -922,6 +922,32 @@ h1,.svc,.card-t,.pt,.acct-nm,.ph-name,.ph-catch,.rv-h h2,.box > h2,.acc-t,.rv-su
 .dv .meta-line{font-size:14px}
 .dv .title-area h1{font-size:23px;line-height:1.5}
 @media print{.jn,.line-cta{display:none}}
+
+/* 動画台本：セクション見出しと読みやすさ */
+.vh{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.vh-n{width:34px;height:34px;border-radius:50%;background:var(--green-2);color:#fff;display:grid;place-items:center;font-family:var(--f);font-size:16px;font-weight:800;flex:none;margin-top:1px}
+.ask2 .vh-n{background:var(--gold)}
+.vh-t{flex:1;min-width:0;font-size:20px;line-height:1.45}
+.vh-t small{display:block;font-family:var(--f);font-size:13px;font-weight:500;color:var(--ink-3);margin-top:2px;letter-spacing:.02em}
+.vh .you-tag{margin-top:6px}
+.v2{gap:16px;padding:20px 20px 22px}
+.v2 p,.v2 li{font-size:16px;line-height:1.9}
+.v2-sub{display:grid;gap:10px}
+.v2-sub h3{font-size:16px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.v2-sub h3 small{font-family:var(--f);font-size:12.5px;color:var(--ink-3);font-weight:500}
+.pur2{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:p}
+.pur2 li{background:var(--sunk);border-radius:14px;padding:14px 16px 16px;display:grid;gap:6px;align-content:start;position:relative}
+.pur2 li::before{counter-increment:p;content:counter(p);position:absolute;right:14px;top:10px;font-family:var(--fl,serif);font-size:28px;line-height:1;color:var(--line-2);font-weight:700}
+.p2-k{font-size:12.5px;font-weight:800;color:var(--green-2);letter-spacing:.04em}
+.pur2 p{font-weight:700;font-size:16.5px!important;line-height:1.7!important}
+@media (max-width:700px){.pur2{grid-template-columns:minmax(0,1fr)}}
+.ask-i p{font-size:16px!important}
+.ak{font-size:12.5px}
+.chk li{font-size:16px}
+.sb-f figcaption{font-size:14px}
+.jn button{display:inline-flex;align-items:center;gap:6px;font-size:13.5px}
+.jn button b{width:20px;height:20px;border-radius:50%;background:var(--green-soft);color:var(--green-2);display:grid;place-items:center;font-size:11.5px}
+.ref .sub h3,.gain h3{font-size:14px}
 </style>
 
 </head>
@@ -1578,23 +1604,22 @@ function detail0(it,c){
   const sc=[["冒頭","最初の数秒",it.opening],["本編","中身",it.body],["締め","最後",it.ending]].filter(x=>x[2]);
   const eimgs=it.editImages||[];
   const pur=[["誰に",it.purposeWho],["いちばん伝えたいこと",it.purposeWhat],["見た人にどう思ってほしいか",it.purposeFeel]].filter(x=>x[1]);
-  const nav=[["sec-plan","設計図"],askRows.length&&["sec-ask","撮影の準備"],it.editRequest&&["sec-edit","編集の指示"],has(it.aim,it.benefitClient,it.benefitViewer)&&["sec-aim","狙い"],has(it.refTitle,it.refUrl)&&["sec-ref","参考動画"]].filter(Boolean);
   const sb=eimgs.length?`<div class="sb" style="--n:${eimgs.length}">${eimgs.map((im,i)=>`<figure class="sb-f"><button type="button" data-act="lb" data-g="editImages" data-i="${i}" aria-label="場面${i+1}を大きく見る"><img ${imgAttr(im.src)} alt="${esc(im.cap||"場面"+(i+1))}"><span class="sb-n">${i+1}</span></button>${im.cap?`<figcaption>${esc(im.cap)}</figcaption>`:""}</figure>`).join("")}</div>`:"";
   const tl=sc.length?`<ol class="tl3">${sc.map(([k,sub,v])=>`<li><div class="tl3-k"><b>${k}</b><small>${sub}</small></div><div class="tl3-v">${lines(v)}</div></li>`).join("")}</ol>`:"";
   const angle=has(it.angleImages)?`<figure class="ang"><button type="button" data-act="lb" data-g="angleImages" data-i="0" aria-label="画角を大きく見る"><img ${imgAttr(it.angleImages[0].src)} alt="画角のイメージ"></button><figcaption><b>画角</b>${esc(it.angleImages[0].cap||"")}</figcaption></figure>`:"";
-  const plan=`<section class="vc bp" id="sec-plan"><div class="bp-top"><span class="bp-k">この動画の設計図</span>${it.oneLine?`<p class="bp-one">${esc(it.oneLine)}</p>`:""}</div>
-    ${pur.length?`<dl class="pur">${pur.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`:""}
-    ${sb?`<div class="bp-sec"><h3>完成イメージ<small>タップで大きく見られます</small></h3>${sb}</div>`:""}
-    ${(tl||angle)?`<div class="bp-sec"><h3>構成の流れ</h3><div class="bp-flow">${tl}${angle}</div></div>`:""}
-  </section>`;
-  const ask=askRows.length?`<section class="vc ask2" id="sec-ask"><h2 class="vc-h"><span class="hi">${ic("hand")}</span>撮影の準備<span class="you-tag">お願いすること</span></h2><div class="ask-g">${askRows.map(([i,k,v])=>`<div class="ask-i"><span class="ai">${ic(i,18)}</span><div><span class="ak">${k}</span><p>${esc(v)}</p></div></div>`).join("")}</div></section>`:"";
-  const edit=it.editRequest?`<section class="vc" id="sec-edit"><h2 class="vc-h"><span class="hi">${ic("pen")}</span>編集の指示<small class="vc-sub">白梅デジタルが、この通りに仕上げます</small></h2><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></section>`:"";
-  const aim=has(it.aim,it.benefitClient,it.benefitViewer)?`<section class="vc" id="sec-aim"><h2 class="vc-h"><span class="hi">${ic("compass")}</span>この動画の狙い</h2>${it.aim?`<div class="aim">${lines(it.aim)}</div>`:""}${has(it.benefitClient,it.benefitViewer)?`<div class="gain">${it.benefitClient?`<div><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)}</div>`:""}${it.benefitViewer?`<div><h3>見る人にとって</h3>${lines(it.benefitViewer)}</div>`:""}</div>`:""}</section>`:"";
-  const rf=ref(it)?`<section class="vc" id="sec-ref"><h2 class="vc-h"><span class="hi">${ic("link")}</span>参考にする動画</h2>${ref(it)}</section>`:"";
+  const H=(n,icon,title,sub,cls)=>`<h2 class="vh"><span class="vh-n">${n}</span><span class="vh-t">${title}${sub?`<small>${sub}</small>`:""}</span>${cls||""}</h2>`;
+  const secs=[];
+  if(askRows.length) secs.push(["sec-ask","お願いすること",n=>`<section class="vc v2 ask2" id="sec-ask">${H(n,"hand","お客様にお願いすること","撮影の前に、ここだけ確認してください",'<span class="you-tag">お願い</span>')}<div class="ask-g">${askRows.map(([i,k,v])=>`<div class="ask-i"><span class="ai">${ic(i,18)}</span><div><span class="ak">${k}</span><p>${esc(v)}</p></div></div>`).join("")}</div></section>`]);
+  if(pur.length) secs.push(["sec-pur","動画の目的",n=>`<section class="vc v2" id="sec-pur">${H(n,"target","動画の目的","この動画で、誰に何を届けるか")}<ol class="pur2">${pur.map(([k,v],i)=>`<li><span class="p2-k">${k}</span><p>${esc(v)}</p></li>`).join("")}</ol></section>`]);
+  if(eimgs.length||it.editRequest) secs.push(["sec-edit","編集のイメージ",n=>`<section class="vc v2" id="sec-edit">${H(n,"pen","編集のイメージと指示","仕上がりはこうなります。白梅デジタルがこの通りに編集します")}${sb?`<div class="v2-sub"><h3>場面ごとの仕上がり<small>タップで大きく見られます</small></h3>${sb}</div>`:""}${it.editRequest?`<div class="v2-sub"><h3>編集の指示</h3><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></div>`:""}</section>`]);
+  if(tl||angle) secs.push(["sec-flow","構成と画角",n=>`<section class="vc v2" id="sec-flow">${H(n,"layout","大まかな構成と画角","撮る順番と、カメラの置き方")}<div class="bp-flow">${tl}${angle}</div></section>`]);
+  if(has(it.benefitClient,it.benefitViewer)) secs.push(["sec-gain","得られること",n=>`<section class="vc v2" id="sec-gain">${H(n,"gift","この動画で得られること")}<div class="gain">${it.benefitClient?`<div><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)}</div>`:""}${it.benefitViewer?`<div><h3>見る人にとって</h3>${lines(it.benefitViewer)}</div>`:""}</div></section>`]);
+  if(it.aim) secs.push(["sec-aim","今月の狙い",n=>`<section class="vc v2" id="sec-aim">${H(n,"compass","今月の中での、この動画の狙い")}<div class="aim">${lines(it.aim)}</div></section>`]);
+  if(ref(it)) secs.push(["sec-ref","参考動画",n=>`<section class="vc v2" id="sec-ref">${H(n,"link","参考にする動画","まねするところと、変えるところ")}${ref(it)}</section>`]);
   return `<div class="stack dv">${head}${flowBox(it,isClient)}
-    ${nav.length>1?`<nav class="jn" aria-label="この台本の中身">${nav.map(([id,l])=>`<button type="button" data-act="jump" data-to="${id}">${l}</button>`).join("")}</nav>`:""}
+    ${secs.length>1?`<nav class="jn" aria-label="この台本の中身">${secs.map(([id,l],i)=>`<button type="button" data-act="jump" data-to="${id}"><b>${i+1}</b>${l}</button>`).join("")}</nav>`:""}
     ${it.deliveryUrl?`<a class="btn btn-g btn-s" style="width:max-content" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext",16)}初稿・納品の動画を開く</a>`:""}
-    ${plan}${ask}${edit}${aim}${rf}
+    ${secs.map(([, ,f],i)=>f(i+1)).join("")}
     ${consultInline(it)}</div>`;
 }
 function slidesHtml(t){
