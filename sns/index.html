@@ -833,6 +833,95 @@ h1,.svc,.card-t,.pt,.acct-nm,.ph-name,.ph-catch,.rv-h h2,.box > h2,.acc-t,.rv-su
 .rv-big b{font-weight:600}
 @media print{.pdoc{font-family:var(--f)}.pdoc h1,.pdoc .pt{font-family:var(--fm)}}
 .checks li,.scene,.scene-row,.scene-row>*,label.check{overflow-wrap:anywhere;min-width:0}
+
+/* ===== 台本の中身：開け閉めをやめて、全体が見える形に ===== */
+.vc{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;display:grid;gap:14px;scroll-margin-top:80px}
+.vc-h{display:flex;align-items:center;gap:10px;font-size:18px;line-height:1.4;flex-wrap:wrap}
+.vc-h .hi{width:34px;height:34px;border-radius:10px;background:var(--green-soft);color:var(--green-2);display:grid;place-items:center;flex:none}
+.vc-sub{font-family:var(--f);font-size:12.5px;color:var(--ink-3);font-weight:500;letter-spacing:.02em;width:100%;padding-left:44px;margin-top:-6px}
+.vc-b{font-size:15.5px;line-height:1.9;color:var(--ink)}
+.vc-b p,.vc p{font-size:15.5px;line-height:1.9}
+.dv .lead-one{display:none}
+.jn{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px}
+.jn button{flex:none;font:inherit;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
+.jn button:hover{border-color:var(--green-2);color:var(--green-2)}
+/* 設計図 */
+.bp{padding:0;overflow:hidden;gap:0}
+.bp-top{padding:20px 20px 18px;background:linear-gradient(180deg,var(--green-soft),var(--surface));border-bottom:1px solid var(--line)}
+.bp-k{font-size:12px;font-weight:800;letter-spacing:.16em;color:var(--green-2)}
+.bp-one{font-family:var(--fm);font-weight:600;font-size:19px!important;line-height:1.65!important;margin-top:6px;color:var(--ink)}
+.pur{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:0;border-bottom:1px solid var(--line)}
+.pur div{padding:14px 16px;border-left:1px solid var(--line)}
+.pur div:first-child{border-left:0}
+.pur dt{font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.04em}
+.pur dd{margin:4px 0 0;font-size:15px;line-height:1.7;font-weight:700}
+@media (max-width:640px){.pur{grid-template-columns:minmax(0,1fr)}.pur div{border-left:0;border-top:1px solid var(--line)}.pur div:first-child{border-top:0}}
+.bp-sec{padding:18px 20px 20px;display:grid;gap:12px;border-bottom:1px solid var(--line)}
+.bp-sec:last-child{border-bottom:0}
+.bp-sec h3{font-size:16px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.bp-sec h3 small{font-family:var(--f);font-size:12px;color:var(--ink-3);font-weight:500}
+.sb{display:grid;grid-template-columns:repeat(var(--n),minmax(120px,1fr));gap:12px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory}
+.sb-f{margin:0;display:grid;gap:8px;align-content:start;scroll-snap-align:start}
+.sb-f button{position:relative;display:block;width:100%;padding:0;border:0;border-radius:12px;overflow:hidden;background:var(--sunk);cursor:zoom-in;aspect-ratio:9/16}
+.sb-f img{width:100%;height:100%;object-fit:cover;display:block}
+.sb-n{position:absolute;left:8px;top:8px;width:26px;height:26px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800}
+.sb-f figcaption{font-size:13.5px;line-height:1.6;color:var(--ink)}
+@media (max-width:640px){.sb{grid-template-columns:repeat(var(--n),minmax(42%,1fr))}}
+.bp-flow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:start}
+@media (max-width:640px){.bp-flow{grid-template-columns:minmax(0,1fr)}}
+.tl3{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.tl3>li{display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;position:relative;padding-bottom:18px}
+.tl3>li:last-child{padding-bottom:0}
+.tl3>li::before{content:"";position:absolute;left:41px;top:44px;bottom:2px;width:2px;background:var(--line)}
+.tl3>li:last-child::before{display:none}
+.tl3-k{display:grid;justify-items:center;align-content:start;gap:2px;background:var(--green-2);color:#fff;border-radius:12px;padding:8px 4px;height:max-content;position:relative}
+.tl3-k b{font-size:15px;letter-spacing:.08em}
+.tl3-k small{font-size:10.5px;opacity:.85}
+.tl3-v{padding-top:4px}
+.tl3-v p,.tl3-v li{font-size:15.5px;line-height:1.85}
+.tl3-v li{display:list-item}
+.ang{margin:0;width:150px;display:grid;gap:6px}
+.ang button{padding:0;border:0;border-radius:12px;overflow:hidden;cursor:zoom-in;aspect-ratio:9/16;background:var(--sunk)}
+.ang img{width:100%;height:100%;object-fit:cover;display:block}
+.ang figcaption{font-size:12.5px;line-height:1.6;color:var(--ink-2)}
+.ang figcaption b{display:block;font-size:12px;color:var(--green-2)}
+@media (max-width:640px){.ang{width:min(200px,60%)}}
+/* 撮影の準備 */
+.ask2{border-color:#E7D3A0;background:linear-gradient(180deg,var(--you-bg,#FBF4E2),var(--surface) 70%)}
+.ask2 .hi{background:#fff;color:var(--gold)}
+.you-tag{font-family:var(--f);font-size:11.5px;font-weight:800;letter-spacing:.06em;padding:2px 10px;border-radius:999px;background:var(--gold);color:#fff}
+.ask-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.ask-g{grid-template-columns:minmax(0,1fr)}}
+.ask-i{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.ai{width:34px;height:34px;border-radius:50%;background:var(--gold-soft,#FBF4E2);color:var(--gold);display:grid;place-items:center}
+.ak{font-size:12px;font-weight:700;color:var(--ink-3)}
+.ask-i p{font-size:15px!important;line-height:1.7!important;font-weight:700}
+/* 編集の指示 */
+.chk{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.chk li{position:relative;padding:10px 12px 10px 42px;border-radius:12px;background:var(--sunk);font-size:15px;line-height:1.75}
+.chk li::before{content:"";position:absolute;left:12px;top:13px;width:20px;height:20px;border-radius:50%;background:var(--green-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center/12px no-repeat}
+/* 狙い */
+.aim{border-left:3px solid var(--green-2);padding:2px 0 2px 14px}
+.gain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gain div{background:var(--sunk);border-radius:12px;padding:12px 14px}
+.gain h3{font-size:13.5px;color:var(--green-2);margin-bottom:4px}
+@media (max-width:640px){.gain{grid-template-columns:minmax(0,1fr)}}
+/* LINE相談 */
+.line-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-radius:18px;padding:18px;background:#EAF7EF;border:1px solid #BFE5CC}
+.lc-l{display:flex;gap:14px;align-items:center;flex:1 1 280px;min-width:0}
+.lm{width:48px;height:48px;border-radius:14px;background:#06A54B;display:grid;place-items:center;flex:none}
+.lm svg{width:36px;height:36px;display:block}
+.lc-l b{display:block;font-family:var(--fm);font-size:16.5px;line-height:1.5;color:#0B3B20}
+.lc-l p{font-size:13.5px!important;line-height:1.7!important;color:#2F4A3A;margin-top:2px}
+.lc-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;background:#06803A;color:#fff;font-weight:800;font-size:16px;text-decoration:none;flex:1 1 220px}
+.lc-btn span{font-size:22px;line-height:1}
+.lc-btn:hover{background:#05702F}
+.hd-line svg{background:#06A54B!important}
+.btn-line svg{width:24px;height:24px;padding:2px;border-radius:7px;background:#06A54B;box-sizing:border-box}
+/* 文字を読みやすく */
+.dv .meta-line{font-size:14px}
+.dv .title-area h1{font-size:23px;line-height:1.5}
+@media print{.jn,.line-cta{display:none}}
 </style>
 
 </head>
@@ -919,6 +1008,7 @@ const P={
   back:'<path d="M15 18l-6-6 6-6"/>',
   ext:'<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
   bell:'<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10.3 20a1.9 1.9 0 0 0 3.4 0"/>',
+  map:'<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
   mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
@@ -1378,7 +1468,9 @@ function listPage(c,kind){
       ${miniBar(i)}</div></button>`).join("")}</div></div>`;
 }
 /* --- 詳細の部品 --- */
-const box=(icon,title,inner,cls,hint)=>inner?`<details class="box acc ${cls||""}" data-acc="${esc(title)}" ${S.open&&S.open[title]?"open":""}><summary><span class="hi">${ic(icon)}</span><span class="acc-t">${title}${hint?`<small>${esc(hint)}</small>`:""}</span><span class="chev" aria-hidden="true"></span></summary><div class="acc-b">${inner}</div></details>`:"";
+let FLAT=false;
+const card=(icon,title,inner,cls,id)=>inner?`<section class="vc ${cls||""}"${id?` id="${id}"`:""}><h2 class="vc-h"><span class="hi">${ic(icon)}</span>${title}</h2><div class="vc-b">${inner}</div></section>`:"";
+const box=(icon,title,inner,cls,hint)=>FLAT?card(icon,title,inner,cls):inner?`<details class="box acc ${cls||""}" data-acc="${esc(title)}" ${S.open&&S.open[title]?"open":""}><summary><span class="hi">${ic(icon)}</span><span class="acc-t">${title}${hint?`<small>${esc(hint)}</small>`:""}</span><span class="chev" aria-hidden="true"></span></summary><div class="acc-b">${inner}</div></details>`:"";
 function gallery(imgs,ar,cols,group){
   if(!imgs||!imgs.length) return "";
   return `<div class="gallery" style="--cols:${cols};--ar:${ar}">${imgs.map((im,i)=>`<figure class="shot"><button type="button" data-act="lb" data-g="${group}" data-i="${i}" aria-label="画像${i+1}を大きく見る"><img ${imgAttr(im.src)} alt="${esc(im.cap||"イメージ"+(i+1))}"><span class="zoom">${ic("zoom",16)}</span></button>${im.cap?`<figcaption><span class="idx">${i+1}.</span> ${esc(im.cap)}</figcaption>`:""}</figure>`).join("")}</div>`;
@@ -1410,7 +1502,8 @@ function flowBox(it,isClient){
   }
   return `<section class="flow" aria-label="進み具合">${steps}${it.redo&&it.redo.step>s?`<div class="confirm" style="background:var(--green-soft)"><span>「${f[Math.min(it.redo.step,f.length-1)].l}」${it.redo.step>=f.length?"の完了":""}から戻しました。</span><button class="btn btn-g btn-s" type="button" data-act="redo" data-id="${it.id}">戻す前の状態にする</button></div>`:""}${act}</section>`;
 }
-function consultInline(it){return `<div class="consult-inline"><p>気になることは公式LINEへ</p><a class="btn-line" href="${LINE_URL}" target="_blank" rel="noopener">${lineLogo}LINEで相談</a></div>`;}
+const lineMark='<span class="lm" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 4.2C7.1 4.2 3.2 7.4 3.2 11.3c0 3.5 3.1 6.4 7.3 7 .3.1.7.2.8.4.1.3.1.6 0 .9l-.1.8c0 .3-.2 1 .8.5s5.3-3.1 7.2-5.3c1.3-1.5 2-3 2-4.3 0-3.9-3.9-7.1-8.8-7.1z"/><text x="12" y="13.4" text-anchor="middle" font-size="4.6" font-weight="800" fill="#06A54B" font-family="Arial,sans-serif">LINE</text></svg></span>';
+function consultInline(it){return `<section class="line-cta"><div class="lc-l">${lineMark}<div><b>わからないことは、LINEで聞いてください</b><p>台本の直し・撮影の日程・ちょっとした質問も、白梅デジタルがお返事します。</p></div></div><a class="lc-btn" href="${LINE_URL}" target="_blank" rel="noopener">公式LINEで相談する<span aria-hidden="true">›</span></a></section>`;}
 /* ============ 印刷用（PDFで保存・紙に印刷） ============ */
 function pLines(t){const a=String(t||"").split("\n").map(s=>s.trim()).filter(Boolean);return a.map(l=>`<div class="pl">${esc(l)}</div>`).join("");}
 function pBlock(title,inner,cls){return inner?`<section class="pb ${cls||""}"><h3>${title}</h3>${inner}</section>`:"";}
@@ -1463,7 +1556,8 @@ function printItem(id){
   let n=0; const go=()=>{if(ready()||n++>40){setTimeout(()=>{try{window.print();}catch(e){toast("このブラウザでは印刷できませんでした");}},150);}else setTimeout(go,150);};
   go();
 }
-function detail(it,c){
+function detail(it,c){FLAT=true;try{return detail0(it,c);}finally{FLAT=false;}}
+function detail0(it,c){
   const isClient=true;
   const head=`<button class="back" type="button" data-act="back">${ic("back",18)}${KINDS[it.kind]}の一覧へ</button>
     <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(it.title)}</h1>
@@ -1480,19 +1574,27 @@ function detail(it,c){
     ${box("pen","キャプション（投稿の文章）",has(it.caption,it.hashtags)?`<p style="white-space:pre-wrap">${esc(it.caption)}</p>${it.hashtags?`<p class="muted small">${esc(it.hashtags)}</p>`:""}`:"")}
     ${box("link","参考にする投稿",ref(it))}
     ${consultInline(it)}</div>`;
-  const ask=has(it.cast,it.place,it.prep,it.survey,it.caution)?box("hand","お客様にお願いすること",`<dl class="kv">${[["演者",it.cast],["撮影場所",it.place],["準備するもの",it.prep],["事前アンケート",it.survey],["注意点",it.caution]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`,"ask",[it.place,it.prep].filter(Boolean).join("・")):"";
-  const benefit=has(it.benefitClient,it.benefitViewer)?`<div class="two"><div class="sub"><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)||"—"}</div><div class="sub"><h3>見る人にとって</h3>${lines(it.benefitViewer)||"—"}</div></div>`:"";
-  const sc=[["冒頭",it.opening],["本編",it.body],["締め",it.ending]].filter(x=>x[1]);
-  const struct=(has(it.angleImages)||sc.length)?`${has(it.angleImages)?`<div class="angle">${gallery(it.angleImages.slice(0,1),"9/16",1,"angleImages")}<div class="scene">${sc.map(([k,v])=>`<div class="scene-row"><b>${k}</b><div>${lines(v)}</div></div>`).join("")}</div></div>`:`<div class="scene">${sc.map(([k,v])=>`<div class="scene-row"><b>${k}</b><div>${lines(v)}</div></div>`).join("")}</div>`}`:"";
-  return `<div class="stack">${head}${flowBox(it,isClient)}${one}
+  const askRows=[["user","演者",it.cast],["map","撮影場所",it.place],["box","準備するもの",it.prep],["chat","事前アンケート",it.survey],["bell","注意点",it.caution]].filter(x=>x[2]);
+  const sc=[["冒頭","最初の数秒",it.opening],["本編","中身",it.body],["締め","最後",it.ending]].filter(x=>x[2]);
+  const eimgs=it.editImages||[];
+  const pur=[["誰に",it.purposeWho],["いちばん伝えたいこと",it.purposeWhat],["見た人にどう思ってほしいか",it.purposeFeel]].filter(x=>x[1]);
+  const nav=[["sec-plan","設計図"],askRows.length&&["sec-ask","撮影の準備"],it.editRequest&&["sec-edit","編集の指示"],has(it.aim,it.benefitClient,it.benefitViewer)&&["sec-aim","狙い"],has(it.refTitle,it.refUrl)&&["sec-ref","参考動画"]].filter(Boolean);
+  const sb=eimgs.length?`<div class="sb" style="--n:${eimgs.length}">${eimgs.map((im,i)=>`<figure class="sb-f"><button type="button" data-act="lb" data-g="editImages" data-i="${i}" aria-label="場面${i+1}を大きく見る"><img ${imgAttr(im.src)} alt="${esc(im.cap||"場面"+(i+1))}"><span class="sb-n">${i+1}</span></button>${im.cap?`<figcaption>${esc(im.cap)}</figcaption>`:""}</figure>`).join("")}</div>`:"";
+  const tl=sc.length?`<ol class="tl3">${sc.map(([k,sub,v])=>`<li><div class="tl3-k"><b>${k}</b><small>${sub}</small></div><div class="tl3-v">${lines(v)}</div></li>`).join("")}</ol>`:"";
+  const angle=has(it.angleImages)?`<figure class="ang"><button type="button" data-act="lb" data-g="angleImages" data-i="0" aria-label="画角を大きく見る"><img ${imgAttr(it.angleImages[0].src)} alt="画角のイメージ"></button><figcaption><b>画角</b>${esc(it.angleImages[0].cap||"")}</figcaption></figure>`:"";
+  const plan=`<section class="vc bp" id="sec-plan"><div class="bp-top"><span class="bp-k">この動画の設計図</span>${it.oneLine?`<p class="bp-one">${esc(it.oneLine)}</p>`:""}</div>
+    ${pur.length?`<dl class="pur">${pur.map(([k,v])=>`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>`:""}
+    ${sb?`<div class="bp-sec"><h3>完成イメージ<small>タップで大きく見られます</small></h3>${sb}</div>`:""}
+    ${(tl||angle)?`<div class="bp-sec"><h3>構成の流れ</h3><div class="bp-flow">${tl}${angle}</div></div>`:""}
+  </section>`;
+  const ask=askRows.length?`<section class="vc ask2" id="sec-ask"><h2 class="vc-h"><span class="hi">${ic("hand")}</span>撮影の準備<span class="you-tag">お願いすること</span></h2><div class="ask-g">${askRows.map(([i,k,v])=>`<div class="ask-i"><span class="ai">${ic(i,18)}</span><div><span class="ak">${k}</span><p>${esc(v)}</p></div></div>`).join("")}</div></section>`:"";
+  const edit=it.editRequest?`<section class="vc" id="sec-edit"><h2 class="vc-h"><span class="hi">${ic("pen")}</span>編集の指示<small class="vc-sub">白梅デジタルが、この通りに仕上げます</small></h2><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></section>`:"";
+  const aim=has(it.aim,it.benefitClient,it.benefitViewer)?`<section class="vc" id="sec-aim"><h2 class="vc-h"><span class="hi">${ic("compass")}</span>この動画の狙い</h2>${it.aim?`<div class="aim">${lines(it.aim)}</div>`:""}${has(it.benefitClient,it.benefitViewer)?`<div class="gain">${it.benefitClient?`<div><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)}</div>`:""}${it.benefitViewer?`<div><h3>見る人にとって</h3>${lines(it.benefitViewer)}</div>`:""}</div>`:""}</section>`:"";
+  const rf=ref(it)?`<section class="vc" id="sec-ref"><h2 class="vc-h"><span class="hi">${ic("link")}</span>参考にする動画</h2>${ref(it)}</section>`:"";
+  return `<div class="stack dv">${head}${flowBox(it,isClient)}
+    ${nav.length>1?`<nav class="jn" aria-label="この台本の中身">${nav.map(([id,l])=>`<button type="button" data-act="jump" data-to="${id}">${l}</button>`).join("")}</nav>`:""}
     ${it.deliveryUrl?`<a class="btn btn-g btn-s" style="width:max-content" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext",16)}初稿・納品の動画を開く</a>`:""}
-    ${ask}
-    ${purpose(it)}
-    ${box("pen","編集のイメージと指示",has(it.editImages,it.editRequest)?`${gallery(it.editImages,"9/16",Math.min(4,Math.max(2,(it.editImages||[]).length)),"editImages")}${lines(it.editRequest)}`:"","",(it.editImages||[]).length?`画像${it.editImages.length}枚`:"")}
-    ${box("gift","この動画で得られること",benefit)}
-    ${box("compass","今月の中での、この動画の狙い",lines(it.aim))}
-    ${box("link","参考にする動画",ref(it))}
-    ${box("layout","大まかな構成と画角",struct,"",sc.map(x=>x[0]).join("→"))}
+    ${plan}${ask}${edit}${aim}${rf}
     ${consultInline(it)}</div>`;
 }
 function slidesHtml(t){
@@ -1867,6 +1969,7 @@ app.addEventListener("click",e=>{
     case "month":set({month:b.dataset.m,cmtEdit:null,cmtDraft:null});break;
     case "open":set({itemId:b.dataset.id,confirmStep:null});scrollTo(0,0);break;
     case "back":set({itemId:null});break;
+    case "jump":{const t=document.getElementById(b.dataset.to);if(t){const y=t.getBoundingClientRect().top+scrollY-80;scrollTo({top:y,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});}break;}
     case "adv":{const it=find(b.dataset.id);advance(it,b.dataset.by);render();celebrate(stateOf(it).done);break;}
     case "undo":{undo(find(b.dataset.id));render();break;}
     case "redo":{const it=find(b.dataset.id);if(it.redo){it.step=it.redo.step;it.stamps=it.redo.stamps;it.redo=null;persistItem(it,["step","stamps","lastBy","redo"]);toast("戻す前の状態にしました");}render();break;}
