@@ -31,6 +31,9 @@
   var TEXT = {
 
     /* --- 2026-10-20 スライド型PR動画 --- */
+    "制作例": "Sample",
+    "見本・20秒": "Sample · 20 sec",
+    "スライド型PR動画の見本": "Slide PR video sample",
     "撮影も、しゃべりも、いりません。1本 ¥8,500〜": "No filming, no talking. From ¥8,500 per video.",
     "1本あたり ¥7,650": "¥7,650 each",
     "1本あたり ¥7,225": "¥7,225 each",
