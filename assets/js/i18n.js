@@ -31,6 +31,10 @@
   var TEXT = {
 
     /* --- 2026-10-20 スライド型PR動画 --- */
+    "▶ を押すと再生されます。": "Tap ▶ to play.",
+    "カフェの見本動画": "Sample video: café",
+    "美容室の見本動画": "Sample video: hair salon",
+    "再生する": "Play",
     "制作例": "Sample",
     "見本・20秒": "Sample · 20 sec",
     "スライド型PR動画の見本": "Slide PR video sample",
