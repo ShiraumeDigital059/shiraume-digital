@@ -30,6 +30,19 @@
 
   var TEXT = {
 
+    /* --- 2026-10-21 SNSのお支払い方法 --- */
+    "3ヶ月分を一括でお支払いいただくと、初期費用が ¥20,000 → ¥15,000 になります。": "Pay for 3 months up front and the setup fee drops from ¥20,000 to ¥15,000.",
+    "月払いもお選びいただけます。": "Monthly payment is also available.",
+    "お支払いは「3ヶ月分一括」か「月払い」から選べます。": "Choose to pay for 3 months up front or monthly.",
+    "3ヶ月分を一括でお支払いいただくと、初期費用が ¥20,000 → ": "Pay for 3 months up front and the setup fee drops from ¥20,000 to ",
+    "¥15,000": "¥15,000",
+    " になります。": ".",
+    "最低契約期間の途中で、お客様のご都合でご解約される場合は、": "If you cancel for your own reasons before the 3-month minimum ends, ",
+    "残りの月数分の月額料金の半額": "half of the monthly fees for the remaining months",
+    "をお支払いいただきます（例：LIGHTを1ヶ月目の終わりにご解約 → 残り2ヶ月分 ¥39,600 の半額 ¥19,800）。一括払いの場合、お支払い済みの料金の返金はいたしません。": " will be charged (e.g. cancelling LIGHT after month 1 → half of the remaining ¥39,600 = ¥19,800). Up-front payments are non-refundable.",
+    "お申し込みの際は、プラン・金額・お支払い方法・解約の決まりをまとめた「お申し込み内容の確認」をLINEかメールでお送りします。": "When you apply, we send a summary of your plan, price, payment method and cancellation terms by LINE or email.",
+    "「同意します」とご返信いただいてから": "Once you reply \"I agree\"",
+    "、ご請求・準備を始めます。": ", we send the invoice and begin preparing.",
     /* --- 2026-10-20 スライド型PR動画 --- */
     "▶ を押すと再生されます。": "Tap ▶ to play.",
     "カフェの見本動画": "Sample video: café",
