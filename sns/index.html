@@ -1152,6 +1152,148 @@ h1,.svc,.card-t,.pt,.acct-nm,.ph-name,.ph-catch,.rv-h h2,.box > h2,.acc-t,.rv-su
 .vc .checks li{padding:12px 0 12px 30px;border-bottom:1px solid var(--line)}
 .vc .checks li:last-child{border-bottom:0}
 .vc .checks li::before{top:14px}
+/* ===== 枠（パネル）で読みやすく：Notionのコールアウトの考え方 ===== */
+:root{--panel:#F3F2EE}
+.vc,.shelf,.rhythm2,.flow,.road,.mp-sec,.fr,.rv-card,.nx{background:var(--panel)!important;border:0!important;border-radius:22px!important;padding:20px 18px 22px!important;--sunk:#FFFFFF;--line:#E3E0D7}
+.vc.ask2{background:#FBF4E2!important}
+.vc.ask2 .ask-i{border:0}
+.vc .vh{border-bottom-color:#E3E0D7}
+.vc .kv>div,.vc .ask-i,.vc .gain div,.vc .chk li,.vc .checks{background:#fff}
+.vc .checks{border-radius:16px}
+.rh,.mpc,.mrc,.ms-i,.mk,.cat{border:0!important}
+.rh{background:#fff}
+.rh.you{background:#FFF8E8}
+.mp-sec{gap:14px}
+.mpc,.mrc{background:#fff}
+.mp-h{padding:0 2px}
+.shelf{gap:14px}
+.shelf-r{margin:0 -18px;padding:2px 18px 8px;scroll-padding-left:18px}
+.shelf-h h2,.rhythm2 .shelf-h h2{font-size:19px;white-space:nowrap}
+.rhythm2 .shelf-h{flex-wrap:wrap}
+.pc-t{font-size:15px}
+.ms{gap:10px}.ms-i{background:var(--panel)}
+.cats .cat{background:var(--panel);box-shadow:none}
+.cats .cat.on{background:#fff;box-shadow:0 0 0 2px var(--green-2)}
+.todo{border-radius:22px;padding:16px 18px}
+.line-cta{border-radius:22px;border:0}
+/* 見出し（アイコン＋太字） */
+.fr{display:grid;gap:14px;scroll-margin-top:80px}
+.fr-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:19px;line-height:1.45;font-weight:800}
+.fr-h small{flex-basis:100%;font-size:13.5px;font-weight:600;color:var(--ink-2);margin-top:-4px;padding-left:46px}
+.fr-i{width:36px;height:36px;border-radius:12px;background:#fff;color:var(--green-2);display:grid;place-items:center;flex:none}
+.fr-note{font-size:13.5px!important;color:var(--ink-2);font-weight:700}
+.fr .tk-s{background:var(--panel)}
+.fr .tasks li{background:#fff}
+.fr .scope-prog .sp-bar{background:#fff}
+/* 次にやること */
+.nx{display:grid;gap:12px}
+.nx-1{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:4px;background:#fff;border-radius:18px;padding:16px 18px;border-left:6px solid var(--green-2)}
+div.nx-1{cursor:default}
+.nx-1.you{border-left-color:var(--gold)}
+.nx-w{font-size:12.5px;font-weight:800;color:var(--green-2);letter-spacing:.06em}
+.nx-1.you .nx-w{color:var(--gold)}
+.nx-1 b{font-size:18px;line-height:1.55}
+.nx-d{font-size:14px;font-weight:800;color:var(--ink-2)}
+.nx-d small,.nx-dd small{margin-left:8px;font-size:12px;color:var(--ink-3)}
+.nx-l{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.nx-l li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;background:#fff;border-radius:14px;padding:10px 14px}
+.nx-dd{font-size:13px;font-weight:800;color:var(--ink-2);white-space:nowrap}
+.nx-t{font-size:14.5px;line-height:1.5;font-weight:700}
+.nx-wc{font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:999px;background:var(--green-soft);color:var(--green-2);white-space:nowrap}
+.nx-l li.you .nx-wc{background:#FBF4E2;color:var(--gold)}
+/* 道のり（小） */
+.road-mini{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;align-items:center;background:var(--panel);border-radius:22px;padding:16px 18px}
+.rm-k{font-size:12.5px;font-weight:800;letter-spacing:.12em;color:var(--green-2)}
+.rm-se{font-size:14.5px;font-weight:800;justify-self:end}.rm-se i{font-style:normal;color:var(--gold);margin:0 6px}
+.road-mini .road-bar{grid-column:1/-1;margin:4px 0 2px;background:#fff}
+.rm-now{grid-column:1/-1;font-size:14.5px;line-height:1.6}
+.rm-now b{display:inline-block;font-size:12px;background:var(--gold);color:#fff;border-radius:999px;padding:1px 9px;margin-right:8px}
+.rm-go{grid-column:1/-1;justify-self:end;display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:800;color:var(--green-2)}
+.rm-go svg{transform:rotate(180deg)}
+.road-se2{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center}
+.road-se2>div{background:#fff;border-radius:14px;padding:10px 14px;display:grid}
+.road-se2 small{font-size:12px;font-weight:800;color:var(--ink-3)}
+.road-se2 b{font-size:15px}
+.road-se2>i{font-style:normal;color:var(--gold);font-weight:800}
+.road .road-bar{background:#fff}
+.road .rl-s{background:#fff}
+.kpi3{display:grid;gap:6px}
+.kpi3-h,.kpi3-r{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:8px;align-items:center}
+.kpi3-h span{font-size:11.5px;font-weight:800;color:var(--ink-3);text-align:center}.kpi3-h span:first-child{text-align:left}
+.kpi3-r{background:#fff;border-radius:14px;padding:10px 12px}
+.kpi3-r b{font-size:14px;line-height:1.45}
+.kpi3-r span{text-align:center;font-size:14.5px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.kpi3-r .now{color:var(--green-2);font-weight:800;font-size:16px}
+.kpi3-r .goal{color:var(--gold);font-weight:800}
+/* はじめの準備 */
+.tasks.su .tk-t{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.who{font-style:normal;font-size:11px;font-weight:800;padding:1px 8px;border-radius:999px;background:var(--green-soft);color:var(--green-2)}
+.who.you{background:#FBF4E2;color:var(--gold)}
+/* 毎月の流れ */
+.cyc{list-style:none;margin:0;padding:0;display:grid}
+.cyc li{display:grid;grid-template-columns:92px 16px minmax(0,1fr);gap:10px;align-items:start;position:relative;padding-bottom:16px}
+.cyc li:last-child{padding-bottom:0}
+.cyc li::before{content:"";position:absolute;left:109px;top:18px;bottom:-2px;width:2px;background:#DAD6CB}
+.cyc li:last-child::before{display:none}
+.cy-d{font-size:13px;font-weight:800;color:var(--ink-2);text-align:right;line-height:1.5;padding-top:2px}
+.cy-dot{width:14px;height:14px;border-radius:50%;background:var(--green-2);margin-top:5px;position:relative;z-index:1;box-shadow:0 0 0 3px var(--panel)}
+.cyc li.you .cy-dot{background:var(--gold)}
+.cy-b{background:#fff;border-radius:14px;padding:10px 14px;display:grid;gap:2px}
+.cy-b b{font-size:15.5px;line-height:1.5}
+.cy-b p{font-size:14px!important;line-height:1.7!important;color:var(--ink-2)}
+.cy-w{justify-self:start;font-size:11.5px;font-weight:800;padding:1px 9px;border-radius:999px;background:var(--green-soft);color:var(--green-2);white-space:nowrap;margin-bottom:2px}
+.cyc li.you .cy-w{background:#FBF4E2;color:var(--gold)}
+/* 役割分担 */
+.roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ro{background:#fff;border-radius:16px;padding:14px 16px;display:grid;gap:8px;align-content:start;border-top:5px solid var(--green-2)}
+.ro.you{border-top-color:var(--gold)}
+.ro h3{font-size:15.5px}
+.ro ul{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.ro li{font-size:14.5px;line-height:1.65}
+/* 口コミの仕組み */
+.rcard-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center}
+.rcard{width:240px;box-sizing:border-box;background:#fff;border-radius:18px;padding:18px 16px;display:grid;justify-items:center;gap:6px;text-align:center;border:1.5px solid #E3E0D7}
+.rc-k{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--green-2)}
+.rc-n{font-family:var(--fm);font-size:16px;line-height:1.45;word-break:keep-all;overflow-wrap:anywhere}
+.rcard p{font-size:12.5px!important;line-height:1.6!important;color:var(--ink-2)}
+.rcard .qr{display:block;margin:4px 0}
+.rc-s{font-size:11px;color:var(--ink-3)}
+.qr-none{width:150px;height:150px;border:2px dashed #D6D2C6;border-radius:12px;display:grid;place-items:center;font-size:12px;color:var(--ink-3);padding:10px;box-sizing:border-box}
+.rc-side{display:grid;gap:10px;align-content:start}
+.rc-side h3{font-size:16px}.rc-side p{font-size:14px!important;color:var(--ink-2)}
+.rc-side .btn{justify-self:start}
+.ask-2{display:grid;gap:10px}
+.rules{background:#fff;border-radius:16px;padding:14px 16px;display:grid;gap:6px;border-left:6px solid #C0563B}
+.rules b{display:flex;align-items:center;gap:6px;font-size:14.5px;color:#9A3B25}
+.rules ul{margin:0;padding-left:1.2em;display:grid;gap:2px}.rules li{font-size:14.5px;line-height:1.7}
+.rules p{font-size:13px!important;color:var(--ink-2)}
+/* 約束 */
+.prom{list-style:none;margin:0;padding:0;display:grid;gap:8px;counter-reset:pr}
+.prom li{background:#fff;border-radius:14px;padding:12px 14px 12px 50px;position:relative;display:grid;gap:2px;counter-increment:pr}
+.prom li::before{content:counter(pr);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green-2);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px}
+.prom b{font-size:15.5px;line-height:1.6}
+.prom span{font-size:14px;color:var(--ink-2);line-height:1.7}
+#printArea{display:none}
+@media print{
+  body.print-card>*:not(#printArea){display:none!important}
+  body.print-card #printArea{display:grid!important;grid-template-columns:repeat(2,90mm);gap:8mm;justify-content:center;padding-top:10mm}
+  body.print-card #printArea .rcard{width:90mm;height:120mm;justify-content:center;align-content:center;border:1px dashed #999;break-inside:avoid}
+}
+@media (max-width:560px){
+  .roles{grid-template-columns:minmax(0,1fr)}
+  .rcard-wrap{grid-template-columns:minmax(0,1fr);justify-items:center}
+  .rc-side{width:100%}
+  .cyc li{grid-template-columns:70px 14px minmax(0,1fr)}
+  .cyc li::before{left:85px}
+  .cy-dot{width:12px;height:12px}
+  .kpi3-h,.kpi3-r{grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));gap:4px}
+  .kpi3-r{padding:10px}
+  .kpi3-r b{font-size:13px}
+  .kpi3-r span{font-size:13.5px}.kpi3-r .now{font-size:14.5px}
+  .vc,.shelf,.rhythm2,.flow,.road,.mp-sec,.fr,.rv-card,.nx{padding:18px 14px 20px!important}
+  .shelf-r{margin:0 -14px;padding:2px 14px 8px}
+  .fr-h small{padding-left:0}
+}
 </style>
 
 </head>
@@ -1161,6 +1303,7 @@ h1,.svc,.card-t,.pt,.acct-nm,.ph-name,.ph-catch,.rv-h h2,.box > h2,.acc-t,.rv-su
 <script>
 (function(){
 "use strict";
+var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1})},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(){var t=n("友");if(2!=t.length||38726!=(t[0]<<8|t[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}(function(){return qrcode});
 /* ============ 基本設定 ============ */
 const SITE="白梅SNS運用";
 const LINE_URL="https://lin.ee/zZOLYKc";
@@ -1315,7 +1458,7 @@ function seed(){
     clients:[
       {id:A,name:"産直マルシェ うみかぜ",kana:"さんちょくまるしぇ うみかぜ",contact:"浜田 様",insta:"@umikaze_marche",tiktok:"@umikaze_hamada",phone:"0599-00-0000",email:"info@umikaze.example",loginId:"umikaze",password:"ume1016",plan:"BUSINESS",meoPlan:"",fee:"69800",contractDate:"2026-08-20",paidDate:"2026-08-25",startDate:"2026-09-01",payDay:"25",scriptDay:"1",reviewDay:"28",payMethod:"銀行振込",memo:"撮影は火・木の午後が都合よい。浜田店長はLINEの返信が早い",payments:[{date:"2026-08-25",amount:"69800",status:"paid",note:"初回"},{date:"2026-09-25",amount:"69800",status:"paid",note:""}]},
       {id:B,name:"パン工房 こむぎの森",kana:"ぱんこうぼう こむぎのもり",contact:"森 様",insta:"@komugi_no_mori",tiktok:"",phone:"",email:"",loginId:"komugi",password:"ume1016",plan:"STANDARD",fee:"39800",contractDate:"2026-09-28",paidDate:"2026-10-01",startDate:"2026-10-01",payDay:"1",scriptDay:"5",reviewDay:"25",payMethod:"クレジットカード",memo:"朝7時までは焼成で手が離せない",payments:[{date:"2026-10-01",amount:"39800",status:"paid",note:"初回"}]},
-      {id:M,name:"鮮魚と干物の店 しおさい",kana:"せんぎょとひもののみせ しおさい",contact:"潮田 様",insta:"",tiktok:"",phone:"",email:"",loginId:"shiosai",password:"ume1016",plan:"",meoPlan:"STANDARD",fee:"19800",contractDate:"2026-08-25",paidDate:"2026-09-01",startDate:"2026-09-01",payDay:"1",scriptDay:"1",reviewDay:"28",payMethod:"銀行振込",memo:"見本（Googleマップ対策のみのお客様）",payments:[],meoStart:"2026-09-01",meoEnd:"2026-11-30",meoGoal:"「鮮魚店 近く」で検索したときに、地域の上位3位に入ること。口コミは80件・評価4.4を目指します。",meoRoadmap:"2026-09｜土台を整える（店名・営業時間・カテゴリ・写真を正しく）\n2026-10｜投稿と口コミ返信を毎月の習慣にする\n2026-11｜数字を見て、よく検索される言葉に合わせて直す\n2026-12｜続けるかどうかを、一緒に判断する"},
+      {id:M,name:"鮮魚と干物の店 しおさい",kana:"せんぎょとひもののみせ しおさい",contact:"潮田 様",insta:"",tiktok:"",phone:"",email:"",loginId:"shiosai",password:"ume1016",plan:"",meoPlan:"STANDARD",fee:"19800",contractDate:"2026-08-25",paidDate:"2026-09-01",startDate:"2026-09-01",payDay:"1",scriptDay:"1",reviewDay:"28",payMethod:"銀行振込",memo:"見本（Googleマップ対策のみのお客様）",payments:[],meoStart:"2026-09-01",meoEnd:"2026-11-30",meoGoal:"「鮮魚店 近く」で検索したときに、地域の上位3位に入ること。口コミは80件・評価4.4を目指します。",meoRoadmap:"2026-09｜土台を整える（店名・営業時間・カテゴリ・写真を正しく）\n2026-10｜投稿と口コミ返信を毎月の習慣にする\n2026-11｜数字を見て、よく検索される言葉に合わせて直す\n2026-12｜続けるかどうかを、一緒に判断する",meoKpi:"口コミの数｜32件｜41件｜80件\n口コミの評価｜4.1｜4.2｜4.4\n「鮮魚店 近く」の順位｜8位｜5位｜3位以内\nお店が表示された回数（月）｜1,240回｜2,180回｜3,000回",meoReviewUrl:"https://example.com/shiosai-review",meoSetup:"白梅デジタルを「管理者」に追加する（オーナーはお客様のまま）｜お客様｜済み\n店名・住所・電話番号を、看板やホームページと同じ表記にそろえる｜白梅｜済み\n営業時間・定休日・祝日の営業を正しく入れる｜白梅｜済み\nメインのカテゴリと、追加のカテゴリを決める｜白梅｜済み\nお店の説明文（750文字）を書く｜白梅｜済み\n外観・店内・商品・スタッフの写真をそろえる｜お客様｜進行中\n商品やメニュー、サービスを登録する｜白梅｜済み\nホームページ・予約・電話のボタンをつなぐ｜白梅｜済み\nスタート時点の数字（表示回数・口コミ数・順位）を記録する｜白梅｜済み\n口コミをお願いするリンクとカードを用意する｜白梅｜済み"},
     ],
     items:[
       v({clientId:A,month:"2026-10",no:1,step:1,stamps:{0:"10/12"},
@@ -1720,12 +1863,13 @@ function rhythmBox(c,month){
 function viewClient(){
   const cid=S.preview?S.previewClient:S.clientId; const c=client(cid); if(!c) return viewLogin();
   if(!hasSns(c)&&hasMeo(c)&&["video","image","live","review"].includes(S.view)) S.view="meo";
-  if(!hasMeo(c)&&S.view==="meo") S.view="video";
+  if(!hasMeo(c)&&(S.view==="meo"||S.view==="meoflow")) S.view="video";
   let body;
   if(S.itemId){const it=db.items.find(i=>i.id===S.itemId&&i.clientId===cid);body=it?detail(it,c):`<div class="empty">この台本は見つかりませんでした。</div>`;}
   else if(S.view==="review") body=reviewPage(c);
   else if(S.view==="plan") body=planPage(c);
   else if(S.view==="meo") body=meoPage(c);
+  else if(S.view==="meoflow") body=meoFlowPage(c);
   else body=listPage(c,S.view);
   const banner=S.preview?`<div class="preview-banner">お客様（${esc(c.name)} 様）の見え方を表示しています <button type="button" data-act="endPreview">白梅の画面に戻る</button></div>`:"";
   const todoCount=["video","image","live"].reduce((n,k)=>n+visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&(x.st.who==="you");}).length,0);
@@ -1738,7 +1882,7 @@ function tabBar(c){
   const t=(k,icon,l,n)=>{const on=S.view===k;return `<button class="tb ${on?"on":""}" type="button" data-act="nav" data-k="${k}" ${on?'aria-current="page"':""}><span class="tb-i">${ic(icon,22)}${n?`<span class="tb-n" aria-label="お願い${n}件">${n}</span>`:""}</span><span class="tb-l">${l}</span></button>`;};
   const list=[];
   if(hasSns(c)) list.push(t("video","video","動画",needs("video")),t("image","image","画像",needs("image")),t("live","live","ライブ",needs("live")),t("review","review","振り返り",rvNeed));
-  if(hasMeo(c)) list.push(t("meo","map","マップ",needs("meo_post")+needs("meo_review")));
+  if(hasMeo(c)) list.push(t("meo","map","マップ",needs("meo_post")+needs("meo_review")),t("meoflow","compass","進め方",0));
   list.push(t("plan","star","プラン",0));
   return `<nav class="tabbar" aria-label="ページの切りかえ"><div class="tb-in" style="--n:${list.length}">${list.join("")}</div></nav>`;
 }
@@ -1832,7 +1976,7 @@ function flowBox(it,isClient){
   return `<section class="flow" aria-label="進み具合">${steps}${it.redo&&it.redo.step>s?`<div class="confirm" style="background:var(--green-soft)"><span>「${f[Math.min(it.redo.step,f.length-1)].l}」${it.redo.step>=f.length?"の完了":""}から戻しました。</span><button class="btn btn-g btn-s" type="button" data-act="redo" data-id="${it.id}">戻す前の状態にする</button></div>`:""}${act}</section>`;
 }
 const lineMark='<span class="lm" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 4.2C7.1 4.2 3.2 7.4 3.2 11.3c0 3.5 3.1 6.4 7.3 7 .3.1.7.2.8.4.1.3.1.6 0 .9l-.1.8c0 .3-.2 1 .8.5s5.3-3.1 7.2-5.3c1.3-1.5 2-3 2-4.3 0-3.9-3.9-7.1-8.8-7.1z"/><text x="12" y="13.4" text-anchor="middle" font-size="4.6" font-weight="800" fill="#06A54B" font-family="Arial,sans-serif">LINE</text></svg></span>';
-function consultInline(it){return `<section class="line-cta"><div class="lc-l">${lineMark}<div><b>わからないことは、LINEで聞いてください</b><p>台本の直し・撮影の日程・ちょっとした質問も、白梅デジタルがお返事します。</p></div></div><a class="lc-btn" href="${LINE_URL}" target="_blank" rel="noopener">公式LINEで相談する<span aria-hidden="true">›</span></a></section>`;}
+function consultInline(it){return `<section class="line-cta"><div class="lc-l">${lineMark}<div><b>わからないことは、LINEで聞いてください</b><p>${it&&it.meo?"お休みや営業時間の変更・投稿の中身・ちょっとした質問も、白梅デジタルが2営業日以内にお返事します。":"台本の直し・撮影の日程・ちょっとした質問も、白梅デジタルがお返事します。"}</p></div></div><a class="lc-btn" href="${LINE_URL}" target="_blank" rel="noopener">公式LINEで相談する<span aria-hidden="true">›</span></a></section>`;}
 /* ============ 印刷用（PDFで保存・紙に印刷） ============ */
 function pLines(t){const a=String(t||"").split("\n").map(s=>s.trim()).filter(Boolean);return a.map(l=>`<div class="pl">${esc(l)}</div>`).join("");}
 function pBlock(title,inner,cls){return inner?`<section class="pb ${cls||""}"><h3>${title}</h3>${inner}</section>`:"";}
@@ -1944,10 +2088,115 @@ const n0=v=>Number(String(v||"").replace(/[^\d.-]/g,""))||0;
 const fmtN=v=>n0(v).toLocaleString("ja-JP");
 /* ============ Googleマップ（MEO）のページ ============ */
 const starStr=n=>{n=Math.max(0,Math.min(5,+n||0));return "★★★★★".slice(0,n)+"☆☆☆☆☆".slice(0,5-n);};
+/* ===== Googleマップ：進め方（仕組み） ===== */
+const cbox=(id,lab,text,cls)=>`<div class="cb ${cls||""}"><div class="cb-h"><span>${lab}</span><button class="cb-btn" type="button" data-act="copy" data-src="${id}">${ic("check",14)}<em>コピー</em></button></div><p class="cb-t" id="${id}">${esc(text||"")}</p></div>`;
+const MEO_SETUP_TPL=[
+ "白梅デジタルを「管理者」に追加する（オーナーはお客様のまま）｜お客様",
+ "店名・住所・電話番号を、看板やホームページと同じ表記にそろえる｜白梅",
+ "営業時間・定休日・祝日の営業を正しく入れる｜白梅",
+ "メインのカテゴリと、追加のカテゴリを決める｜白梅",
+ "お店の説明文（750文字）を書く｜白梅",
+ "外観・店内・商品・スタッフの写真をそろえる｜お客様",
+ "商品やメニュー、サービスを登録する｜白梅",
+ "ホームページ・予約・電話のボタンをつなぐ｜白梅",
+ "スタート時点の数字（表示回数・口コミ数・順位）を記録する｜白梅",
+ "口コミをお願いするリンクとカードを用意する｜白梅"];
+function qrSvg(text,px){
+  try{const q=qrcode(0,"M");q.addData(text);q.make();const n=q.getModuleCount();let d="";
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))d+=`M${c} ${r}h1v1h-1z`;
+    return `<svg class="qr" viewBox="-2 -2 ${n+4} ${n+4}" width="${px||150}" height="${px||150}" role="img" aria-label="口コミのページへのQRコード"><rect x="-2" y="-2" width="${n+4}" height="${n+4}" fill="#fff"/><path d="${d}" fill="#111"/></svg>`;}catch(e){return "";}
+}
+const splitRows=t=>String(t||"").split("\n").map(x=>x.split(/[｜|]/).map(y=>y.trim())).filter(x=>x[0]);
+function meoRoad(c,compact){
+  const tmon=thisMonth();
+  const rm=splitRows(c.meoRoadmap).filter(x=>x[1]).map(([m,t])=>{const g=m.match(/(\d{4})[-\/年](\d{1,2})/);const mm=g?`${g[1]}-${pad(+g[2])}`:null;return {lab:mm?monthShort(mm):m,mm,t,st:mm?(mm<tmon?"done":mm===tmon?"now":"next"):"next"};});
+  const span=(c.meoStart&&c.meoEnd)?Math.max(0,Math.min(1,(parseISO(todayISO())-parseISO(c.meoStart))/(parseISO(c.meoEnd)-parseISO(c.meoStart)||1))):null;
+  if(!(c.meoGoal||rm.length)) return "";
+  if(compact){const now=rm.find(r=>r.st==="now");const idx=now?rm.indexOf(now)+1:0;
+    return `<button class="road-mini" type="button" data-act="nav" data-k="meoflow"><span class="rm-k">全体の道のり</span><span class="rm-se">${c.meoStart?fmtDate(c.meoStart):"—"}<i>→</i>${c.meoEnd?fmtDate(c.meoEnd):"—"}</span>${span!=null?`<span class="road-bar"><i style="width:${span*100}%"></i></span>`:""}${now?`<span class="rm-now"><b>いま ${idx}/${rm.length}</b>${esc(now.t)}</span>`:""}<span class="rm-go">進め方を見る ${ic("back",14)}</span></button>`;}
+  const kpi=splitRows(c.meoKpi);
+  return `<section class="road fr" id="sec-road"><h2 class="fr-h"><span class="fr-i">${ic("target",18)}</span>全体の道のり<small>どこから始めて、どこをゴールにするか</small></h2>
+    ${c.meoStart||c.meoEnd?`<div class="road-se2"><div><small>スタート</small><b>${c.meoStart?fmtFull(c.meoStart):"—"}</b></div><i aria-hidden="true">→</i><div><small>ゴールの目安</small><b>${c.meoEnd?fmtFull(c.meoEnd):"—"}</b></div></div>`:""}
+    ${span!=null?`<div class="road-bar"><i style="width:${span*100}%"></i><em style="left:${span*100}%">今日</em></div>`:""}
+    ${c.meoGoal?`<div class="road-goal"><span>${ic("target",18)}終着点</span><p>${esc(c.meoGoal)}</p></div>`:""}
+    ${kpi.length?`<div class="kpi3"><div class="kpi3-h"><span>はかるもの</span><span>スタート時</span><span>いま</span><span>ゴール</span></div>${kpi.map(r=>`<div class="kpi3-r"><b>${esc(r[0])}</b><span>${esc(r[1]||"—")}</span><span class="now">${esc(r[2]||"—")}</span><span class="goal">${esc(r[3]||"—")}</span></div>`).join("")}</div>`:""}
+    ${rm.length?`<ol class="road-l">${rm.map(r=>`<li class="${r.st}"><span class="rl-m">${esc(r.lab)}</span><span class="rl-d" aria-hidden="true"></span><span class="rl-t">${esc(r.t)}</span><span class="rl-s">${r.st==="done"?"済み":r.st==="now"?"いまここ":"これから"}</span></li>`).join("")}</ol>`:""}</section>`;
+}
+function meoNext(c){
+  const t=todayISO(), cm=thisMonth(), nm=shiftMonth(cm,1);
+  const all=db.items.filter(i=>i.clientId===c.id&&isMeo(i.kind)&&i.published);
+  const ev=[];
+  all.filter(i=>(i.kind==="meo_post"||i.kind==="meo_review")).forEach(i=>{const x=stateOf(i);if(!x||x.done)return;
+    const you=x.st&&x.st.who==="you";const d=i.kind==="meo_post"?(i.postDate||t):t;
+    ev.push({d:d<t?t:d,late:d<t,who:you?"you":"us",t:i.kind==="meo_post"?(you?`投稿する：${i.title}`:`投稿の文章と写真を用意：${i.title}`):(you?`口コミに返信する：${i.title}さん`:`返信の文案を作る：${i.title}さん`),go:"m_"+i.id});});
+  const rep=all.find(i=>i.kind==="meo_report"&&i.month===cm);
+  const rd=sched(c,cm).review;
+  if(rd>=t&&!(rep&&rep.closing)) ev.push({d:rd,who:"us",t:MEO_PLANS[c.meoPlan]&&MEO_PLANS[c.meoPlan].report?"今月のしめくくりと報告をお送りします":"今月のしめくくりをお送りします"});
+  const ns=rep&&rep.nextStart&&rep.nextStart>=t?rep.nextStart:dayIn(nm,1);
+  ev.push({d:ns,who:"us",t:`${monthShort(ns.slice(0,7))}の作業と金額をお知らせして、作業を始めます`});
+  ev.sort((a,b)=>a.d.localeCompare(b.d)||(a.who==="you"?-1:1));
+  return ev;
+}
+function nextBox(c,n){
+  const ev=meoNext(c).slice(0,n||4); if(!ev.length) return "";
+  const t=todayISO();
+  const when=e=>e.late?"できれば今日":e.d===t?"今日":`${fmtDate(e.d)}${daysFrom(e.d)<=7?`<small>あと${daysFrom(e.d)}日</small>`:""}`;
+  const [f,...r]=ev;
+  return `<section class="nx fr"><h2 class="fr-h"><span class="fr-i">${ic("compass",18)}</span>次にやること<small>連絡が止まることはありません。次の予定は、いつもここに出ます。</small></h2>
+    <${f.go?(S.view==="meo"?`button type="button" data-act="jump" data-to="${f.go}"`:`button type="button" data-act="nav" data-k="meo"`):"div"} class="nx-1 ${f.who}"><span class="nx-w">${f.who==="you"?"お客様にお願い":"白梅デジタルがやります"}</span><b>${esc(f.t)}</b><span class="nx-d">${when(f)}</span></${f.go?"button":"div"}>
+    ${r.length?`<ul class="nx-l">${r.map(e=>`<li class="${e.who}"><span class="nx-dd">${when(e)}</span><span class="nx-t">${esc(e.t)}</span><span class="nx-wc">${e.who==="you"?"お客様":"白梅"}</span></li>`).join("")}</ul>`:""}</section>`;
+}
+function meoFlowPage(c){
+  const mp=MEO_PLANS[c.meoPlan]||MEO_PLANS.LIGHT; const name=c.name||"お店";
+  const sc=sched(c,thisMonth()); const sd=+(c.scriptDay||1), rd=+(c.reviewDay||28);
+  // はじめの準備
+  const su=splitRows(c.meoSetup||MEO_SETUP_TPL.join("\n")).map(([t,w,s])=>({t,w:/客/.test(w||"")?"you":"us",s:/済/.test(s||"")?"done":/進/.test(s||"")?"doing":"todo"}));
+  const sdn=su.filter(x=>x.s==="done").length;
+  const setup=`<section class="fr" id="sec-setup"><h2 class="fr-h"><span class="fr-i">${ic("list",18)}</span>はじめの準備<small>最初の1ヶ月で、お店の情報の土台を整えます</small></h2>
+    <div class="scope-prog"><div class="sp-bar"><i style="width:${su.length?sdn/su.length*100:0}%"></i></div><span><b>${sdn}</b> / ${su.length} 完了</span></div>
+    <ul class="tasks su">${su.map(x=>`<li class="${x.s==="done"?"done":x.s==="doing"?"doing":"todo"}"><span class="tk-c" aria-hidden="true"></span><span class="tk-t">${esc(x.t)}<em class="who ${x.w}">${x.w==="you"?"お客様":"白梅"}</em></span><span class="tk-s">${x.s==="done"?"済み":x.s==="doing"?"進行中":"これから"}</span></li>`).join("")}</ul></section>`;
+  // 毎月の流れ
+  const cyc=[
+    [`毎月${sd}日`,"us","今月の作業と金額をお知らせ","「今月はここまでやります」を、作業を始める前に必ずお送りします。"],
+    [`${sd}〜${sd+4}日`,"us",`投稿${mp.posts}本分の文章と写真をお渡し`,"この画面の「マップ」に届きます。投稿日も決めてあります。"],
+    ["投稿日","you","投稿する","「コピー」を押して貼りつけるだけ。終わったら「投稿しました」を押してください。"],
+    ["口コミが来たら","us",`3日以内に返信の文案をお渡し（${mp.replies}）`,"お客様は文案をコピーして返信し、「返信しました」を押してください。"],
+    ["休み・時間が変わるとき","you","LINEで一言ください","白梅デジタルが、その日のうちにGoogleマップの情報を直します。"],
+    [`毎月${rd}日`,"us",mp.report?"しめくくりと月次報告":"今月のしめくくり",mp.report?"やったこと、数字の変化、来月やることをまとめてお送りします。":"やったことと、来月やることを短くまとめてお送りします。"],
+    ["次の月の1日","us","次の作業を始める","しめくくりの中で、次の作業の開始日を必ずお伝えします。"]];
+  const cycle=`<section class="fr" id="sec-cycle"><h2 class="fr-h"><span class="fr-i">${ic("clock",18)}</span>毎月の流れ<small>はじまりと終わりを、毎月はっきりさせます</small></h2>
+    <ol class="cyc">${cyc.map(([d,w,t,s])=>`<li class="${w}"><span class="cy-d">${d}</span><span class="cy-dot" aria-hidden="true"></span><div class="cy-b"><span class="cy-w">${w==="you"?"お客様がやること":"白梅デジタル"}</span><b>${t}</b><p>${s}</p></div></li>`).join("")}</ol>
+    <p class="fr-note">今月：作業のお知らせ ${fmtDate(sc.scripts)}／しめくくり ${fmtDate(sc.review)}</p></section>`;
+  // 役割分担
+  const usL=[`投稿${mp.posts}本分の文章・写真づくり`,"口コミへの返信の文案づくり","営業時間・臨時休業などの情報の更新",mp.photos!=="—"?`写真の追加・入れ替え（${mp.photos}）`:"",mp.report?"月次報告（表示回数・電話・ルート検索など）":"",mp.rank?"近くの同業3社の順位の確認":"",mp.meet!=="—"?`オンライン打ち合わせ（${mp.meet}）`:"","毎月はじめのお知らせと、月末のしめくくり"].filter(Boolean);
+  const youL=["決まった日に投稿する（コピーして貼るだけ）","返信の文案をコピーして返信する","休み・営業時間の変更をLINEで知らせる","新しい商品や季節のものの写真を送る（スマホで十分です）","来てくださった方に、口コミを一言お願いする"];
+  const roles=`<section class="fr" id="sec-roles"><h2 class="fr-h"><span class="fr-i">${ic("hand",18)}</span>役割分担<small>だれが何をするかを、最初に決めておきます</small></h2>
+    <div class="roles"><div class="ro us"><h3>白梅デジタルがやること</h3><ul>${usL.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div><div class="ro you"><h3>お客様にお願いすること</h3><ul>${youL.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div></div></section>`;
+  // 口コミを集める仕組み
+  const url=c.meoReviewUrl||"";
+  const ask1=`今日はありがとうございました。もしよろしければ、Googleマップに一言だけ感想をいただけるとうれしいです。こちらのQRコードから書けます。`;
+  const ask2=`先日は${name}にお越しいただき、ありがとうございました。\nもしよろしければ、Googleマップに感想を一言いただけるとうれしいです。今後のお店づくりの参考にさせていただきます。\n${url||"（口コミのページのリンク）"}`;
+  const rv=`<section class="fr" id="sec-rv"><h2 class="fr-h"><span class="fr-i">${ic("star",18)}</span>口コミを集める仕組み<small>お願いの「場所」と「言葉」を決めておくと、口コミは自然に増えます</small></h2>
+    <div class="rcard-wrap"><div class="rcard" id="rcard"><span class="rc-k">ご来店ありがとうございます</span><b class="rc-n">${esc(name)}</b><p>よろしければ、Googleマップに<br>ご感想をお聞かせください</p>${url?qrSvg(url,150):`<div class="qr-none">口コミのページのリンクが入ると、ここにQRコードが出ます</div>`}<span class="rc-s">スマホのカメラで読みとれます</span></div>
+      <div class="rc-side"><h3>卓上カード・ショップカード</h3><p>レジ横やテーブルに置くカードです。このまま印刷できます。</p>${url?`<button class="btn btn-p" type="button" data-act="printCard">${ic("ext",16)}カードを印刷する</button>${cbox("rvurl","口コミのページのリンク",url)}`:""}</div></div>
+    <div class="ask-2">${cbox("ask1","お会計のときの声かけ",ask1)}${cbox("ask2","LINE・メッセージで送る文",ask2)}</div>
+    <div class="rules"><b>${ic("bell",16)}守ること（Googleの決まりです）</b><ul><li>割引やおまけと引きかえに、口コミをお願いしない</li><li>お店の人や家族が、お客様のふりをして書かない</li><li>満足していそうな人だけを選んでお願いしない（どなたにも同じようにお願いする）</li></ul><p>守らないと、口コミが消されたり、お店の表示が下がったりすることがあります。</p></div></section>`;
+  // 連絡の約束
+  const prom=`<section class="fr" id="sec-promise"><h2 class="fr-h"><span class="fr-i">${ic("chat",18)}</span>連絡の約束</h2>
+    <ol class="prom"><li><b>月のはじめに、必ず「今月の作業と金額」をお送りします。</b><span>今月どこまでやるのかが、作業の前に分かります。</span></li><li><b>月末に、必ず「しめくくり」と「次の作業の開始日」をお送りします。</b><span>月が変わっても、連絡が途切れることはありません。</span></li><li><b>ご相談への返事は、2営業日以内にします。</b><span>LINEで気軽に送ってください。</span></li><li><b>休みや営業時間の変更は、分かった時点で教えてください。</b><span>その日のうちに直します。</span></li></ol></section>`;
+  // 終わるとき・続けるとき
+  const end=`<section class="fr" id="sec-end"><h2 class="fr-h"><span class="fr-i">${ic("check",18)}</span>ゴールの月にすること</h2>
+    <ol class="prom"><li><b>スタート時と今の数字を並べて、成果をお見せします。</b><span>「全体の道のり」の表が、そのまま最終報告になります。</span></li><li><b>続けるか、一度区切るかを一緒に決めます。</b><span>最低契約期間は3ヶ月です。その後は1ヶ月ごとに決められます。</span></li><li><b>区切る場合も、お店の情報・投稿・口コミはそのまま残ります。</b><span>オーナーの権限は最初からお客様のものです。白梅デジタルの管理者権限を外して終わります。</span></li></ol></section>`;
+  const nav=[["sec-road","道のり"],["sec-setup","はじめの準備"],["sec-cycle","毎月の流れ"],["sec-roles","役割分担"],["sec-rv","口コミ"],["sec-promise","連絡の約束"],["sec-end","ゴールの月"]];
+  return `<div class="stack mp-page mf-page">${bigHead("進め方","Googleマップ対策を、スタートからゴールまで。毎月なにを、いつ、だれがやるか。",IMG.photo.map)}
+    ${nextBox(c,4)}
+    <nav class="jn" aria-label="このページの中身">${nav.map(([id,l],k)=>`<button type="button" data-act="jump" data-to="${id}"><b>${k+1}</b>${l}</button>`).join("")}</nav>
+    ${meoRoad(c)}${setup}${cycle}${roles}${rv}${prom}${end}${consultInline({meo:true})}</div>`;
+}
 function meoPage(c){
   const mp=MEO_PLANS[c.meoPlan]||MEO_PLANS.LIGHT;
   const all=db.items.filter(i=>i.clientId===c.id&&isMeo(i.kind)&&i.published);
-  const head=`<div class="page-head"><div class="illus mp-ill">${ic("map",34)}</div><div><div class="tiny muted" style="font-weight:700">Googleマップ対策｜${esc(c.meoPlan)}プラン</div><h1>Googleマップ</h1></div></div>`;
+  const head=bigHead("Googleマップ",`Googleマップ対策｜${esc(c.meoPlan)}プラン。今月の作業と、お願いしたいこと。`,IMG.photo.map)+nextBox(c,3)+meoRoad(c,true);
   if(!all.length) return `<div class="stack">${head}<div class="empty"><div class="ei"><img src="${IMG.emptyv}" alt=""></div><b>まだ今月の投稿はありません</b><span class="small">月のはじめに、白梅デジタルが投稿の中身をお渡しします。</span></div></div>`;
   const months=[...new Set(all.map(i=>i.month))].sort(); const cur=pickMonth(months);
   const posts=all.filter(i=>i.kind==="meo_post"&&i.month===cur).sort((a,b)=>String(a.postDate||"").localeCompare(String(b.postDate||""))||(a.no||0)-(b.no||0));
@@ -2013,7 +2262,7 @@ function meoPage(c){
     </section>`;
   }
   const how=(t,steps)=>`<div class="how"><b>${t}</b><ol>${steps.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
-  return `<div class="stack mp-page">${head}${road}${monthTabs(months,cur)}${scope}${sum||""}${todo}
+  return `<div class="stack mp-page">${head}${monthTabs(months,cur)}${scope}${sum||""}${todo}
     ${nav.length>1?`<nav class="jn" aria-label="今月の中身">${nav.map(([id,l],k)=>`<button type="button" data-act="jump" data-to="${id}"><b>${k+1}</b>${l}</button>`).join("")}</nav>`:""}
     ${posts.length?`<section class="mp-sec" id="sec-mpost"><h2 class="mp-h">${ic("map",20)}${monthShort(cur)}の投稿<small>文章と写真は白梅デジタルが用意しました。投稿日になったら、そのまま投稿してください。</small></h2>
       ${how("投稿のしかた",["Googleマップのアプリで、自分のお店（ビジネス）を開く","「投稿を追加」（または「最新情報を追加」）を押す","下の「コピー」を押して文章を貼りつけ、写真を選ぶ","投稿したら、この画面の「投稿しました」を押す"])}
@@ -2022,7 +2271,7 @@ function meoPage(c){
       ${how("返信のしかた",["Googleマップで自分のお店を開き、「クチコミ」を開く","その口コミの「返信」を押す","下の「コピー」で文案を貼りつけて送信する","返信したら、この画面の「返信しました」を押す"])}
       ${revs.map(revCard).join("")}</section>`:""}
     ${report}
-    ${consultInline()}</div>`;
+    ${consultInline({meo:true})}</div>`;
 }
 function spark(vals,on){
   const W=120,H=34,p=4; if(vals.length<2) return "";
@@ -2262,7 +2511,11 @@ function clientEditor(){
     ${hasMeo(c)?`<section class="fsec"><h3><span class="hi">${ic("target")}</span>Googleマップ改善のスタートとゴール</h3><p class="lead">お客様の画面のいちばん上に「全体の道のり」として出ます。どこから始めて、どこを終着点にするかを決めてください。</p>
       <div class="grid2">${f("meoStart","改善のスタート","date")}${f("meoEnd","ゴールの目安","date")}</div>
       <div class="field"><label for="c_meoGoal">終着点（ゴール）</label><textarea id="c_meoGoal" data-ckey="meoGoal" placeholder="例：「鮮魚店 近く」で地域の上位3位に入り、口コミ80件・評価4.4を目指す">${esc(c.meoGoal||"")}</textarea></div>
-      <div class="field"><label for="c_meoRoadmap">道のり（1行に1つ「何月｜やること」）</label><textarea id="c_meoRoadmap" data-ckey="meoRoadmap" placeholder="例：2026-09｜土台を整える（情報・カテゴリ・写真）">${esc(c.meoRoadmap||"")}</textarea><span class="hint">月は「2026-09」の形で書くと、お客様の画面で「済み・いまここ・これから」が自動で付きます。</span></div></section>`:""}
+      <div class="field"><label for="c_meoRoadmap">道のり（1行に1つ「何月｜やること」）</label><textarea id="c_meoRoadmap" data-ckey="meoRoadmap" placeholder="例：2026-09｜土台を整える（情報・カテゴリ・写真）">${esc(c.meoRoadmap||"")}</textarea><span class="hint">月は「2026-09」の形で書くと、お客様の画面で「済み・いまここ・これから」が自動で付きます。</span></div>
+      <div class="field"><label for="c_meoKpi">はかるもの（1行に1つ「指標｜スタート時｜いま｜ゴール」）</label><textarea id="c_meoKpi" data-ckey="meoKpi" placeholder="例：口コミの数｜32件｜41件｜80件">${esc(c.meoKpi||"")}</textarea><span class="hint">「全体の道のり」に表で出ます。毎月の報告を作ったら「いま」を書きかえてください。</span></div></section>
+    <section class="fsec"><h3><span class="hi">${ic("list")}</span>Googleマップの仕組み（はじめの準備・口コミ）</h3><p class="lead">お客様の画面の「進め方」に出ます。はじめの準備は「やること｜担当（白梅 / お客様）｜済み・進行中・これから」で1行に1つ。空のままだと、ひな形がすべて「これから」で出ます。</p>
+      <div class="field"><label for="c_meoSetup">はじめの準備</label><textarea id="c_meoSetup" data-ckey="meoSetup" rows="8" placeholder="例：営業時間・定休日を正しく入れる｜白梅｜済み">${esc(c.meoSetup||"")}</textarea>${c.meoSetup?"":`<button class="btn btn-g" type="button" data-act="setupTpl">ひな形を入れる</button>`}</div>
+      <div class="field"><label for="c_meoReviewUrl">口コミを書いてもらうページのリンク</label><input type="url" id="c_meoReviewUrl" data-ckey="meoReviewUrl" value="${esc(c.meoReviewUrl||"")}" placeholder="https://g.page/r/…/review"><span class="hint">Googleビジネスプロフィールの「口コミをもらう」で出るリンクです。入れると、お客様の画面にQRコード付きのカードが出て、印刷できます。</span></div></section>`:""}
     <section class="fsec"><h3><span class="hi">${ic("clock")}</span>毎月の流れ</h3><p class="lead">台本は月に1回まとめてお渡しします。お客様の画面にも、この日付が「今月の予定」として出ます。</p><div class="grid2">${f("scriptDay","台本をまとめてお渡しする日（毎月◯日）","number","1")}${f("reviewDay","振り返りを作ってお渡しする日（毎月◯日）","number","28")}</div>${(()=>{const sc=sched(c,thisMonth());return `<p class="small">今月は、台本 <b>${fmtDate(sc.scripts)}</b> → 振り返り <b>${fmtDate(sc.review)}</b> → お客様のひとこと締切 <b>${fmtDate(sc.due)}</b>（その週の日曜日）</p>`;})()}</section>
     <section class="fsec"><h3><span class="hi">${ic("cal")}</span>契約とお支払い</h3><p class="lead">契約日・初回のお支払い日・運用スタート日は、一覧とお客様情報の上に大きく表示されます。</p>
       <div class="grid2">${(()=>{const sv=hasMeo(c)&&!hasSns(c)?"meo":"sns";const opts=sv==="meo"?Object.keys(MEO_PLANS).map(k=>[k,k+"（¥"+MEO_PLANS[k].price+" / 月）"]):Object.keys(PLANS).map(k=>[k,k+"（¥"+PLANS[k].price+" / 月）"]);const cur=sv==="meo"?c.meoPlan:c.plan;
@@ -2420,6 +2673,10 @@ app.addEventListener("click",e=>{
     case "saveCmt":{const r=find(b.dataset.id);const el=document.querySelector(`[data-cmt="${b.dataset.id}"]`);const v=(el?el.value:"").trim();if(!v){toast("ひとことを書いてから送ってください");break;}r.clientComment=v;const d=new Date();r.clientCommentAt=`${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）`;persistItem(r,["clientComment","clientCommentAt"]);toast("送りました。白梅デジタルの画面にも表示されます");set({cmtEdit:null,cmtDraft:null});break;}
     case "lb":set({lb:{id:b.dataset.id||S.itemId||S.lbItem,g:b.dataset.g,i:+b.dataset.i,z:false}});break;
     case "lbClose":set({lb:null});break;
+    case "setupTpl":{if(cdraft){cdraft.meoSetup=MEO_SETUP_TPL.map(x=>x+"｜これから").join("\n");render();}break;}
+    case "printCard":{const el=document.getElementById("rcard");if(!el)break;let pa=document.getElementById("printArea");if(!pa){pa=document.createElement("div");pa.id="printArea";document.body.appendChild(pa);}
+      pa.innerHTML=Array.from({length:4},()=>el.outerHTML.replace('id="rcard"','')).join("");document.body.classList.add("print-card");
+      const done=()=>{document.body.classList.remove("print-card");pa.innerHTML="";removeEventListener("afterprint",done);};addEventListener("afterprint",done);setTimeout(()=>print(),60);break;}
     case "copy":{const el=document.getElementById(b.dataset.src);const tx=el?el.innerText.trim():"";
       const sel=()=>{if(!el)return;const r=document.createRange();r.selectNodeContents(el);const g=getSelection();g.removeAllRanges();g.addRange(r);toast("文章を選びました。長押しでコピーしてください");};
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tx).then(()=>{toast("コピーしました。Googleマップに貼りつけてください");b.classList.add("done");setTimeout(()=>b.classList.remove("done"),1600);}).catch(sel);}else sel();break;}
