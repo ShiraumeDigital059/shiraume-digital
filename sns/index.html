@@ -1520,6 +1520,9 @@ div.nx-1{cursor:default}
 .atag img{width:20px;height:20px;border-radius:50%;object-fit:cover}
 .rv-kpi.none b{color:var(--ink-3)}
 .action .btn-big+.btn-big{margin-top:8px}
+@media (max-width:560px){.preview-banner{font-size:12px!important;padding:6px 10px!important;gap:8px!important;flex-wrap:nowrap!important;justify-content:space-between!important;min-height:46px;box-sizing:border-box}.preview-banner button{white-space:nowrap;padding:4px 10px!important}
+  .ask2 .you-tag{display:none}.vh .vh-t{flex:1;min-width:0}}
+.rv-h h2 small{display:block;font-size:12px;font-weight:600;color:var(--ink-3);font-family:var(--f)}
 .pchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .pchip{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:1px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line-2);background:#fff;min-width:130px}
 .pchip b{font-size:14.5px}.pchip small{font-size:12px;color:var(--ink-3)}
@@ -2150,10 +2153,10 @@ function viewClient(){
   else if(S.view==="meo") body=meoPage(c);
   else if(S.view==="meoflow") body=meoFlowPage(c);
   else body=listPage(c,S.view);
-  const banner=S.preview?`<div class="preview-banner">お客様（${esc(c.name)} 様）の見え方を表示しています <button type="button" data-act="endPreview">${S.returnTo==="how"?"使い方に戻る":"白梅の画面に戻る"}</button></div>`:"";
+  const banner=S.preview?`<div class="preview-banner"><span>お客様（${esc(c.name)} 様）の見え方</span> <button type="button" data-act="endPreview">${S.returnTo==="how"?"使い方に戻る":"白梅の画面に戻る"}</button></div>`:"";
   const todoCount=["video","image","live"].reduce((n,k)=>n+visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&(x.st.who==="you");}).length,0);
   return banner+header(c.name+" 様",`<span class="hd-plan" aria-label="ご契約プラン">${[hasSns(c)?esc(c.plan):"",hasMeo(c)?"MAP "+esc(c.meoPlan):""].filter(Boolean).join("・")}</span>${hasSns(c)?`<button class="hd-idea" type="button" data-act="ideaOpen" aria-label="ネタを送る">${ic("gift",16)}<span>ネタを送る</span></button>`:""}<a class="hd-line" href="${LINE_URL}" target="_blank" rel="noopener" aria-label="公式LINEで相談する">${lineLogo}<span>相談</span></a>`,svcName(c))
-    +DECO()+tabBar(c)+`<main class="wrap pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`+ideaSheet(c)+(S.shoot&&S.itemId?(()=>{const it=db.items.find(i=>i.id===S.itemId);return it?shootMode(it,c):"";})():"");
+    +DECO()+tabBar(c)+`<main class="wrap pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`+(S.preview?`<style>.sm,.sheet-bg{top:46px!important}.sheet{max-height:calc(88dvh - 46px)!important}</style>`:"")+ideaSheet(c)+(S.shoot&&S.itemId?(()=>{const it=db.items.find(i=>i.id===S.itemId);return it?shootMode(it,c):"";})():"");
 }
 function tabBar(c){
   const needs=k=>visible(c.id,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
@@ -2186,7 +2189,7 @@ function drawer(c){
 function pageHead(kind,sub){const d=parseISO(todayISO());return `<div class="page-head">${HEAD_ILL[kind]?`<div class="illus"><img src="${HEAD_ILL[kind]}" alt=""></div>`:""}<div><div class="tiny muted" style="font-weight:700">今日は ${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</div><h1>${KINDS[kind]}</h1></div></div>`;}
 function monthTabs(months,cur){return `<div class="tabs-m" role="tablist" aria-label="月を選ぶ">${months.map(m=>`<button class="mtab ${m===cur?"on":""}" type="button" role="tab" aria-selected="${m===cur}" data-act="month" data-m="${m}">${monthLabel(m)}</button>`).join("")}</div>`;}
 function pickMonth(months){const tm=thisMonth();return months.includes(S.month)?S.month:months.includes(tm)?tm:months[0];}
-const thumbOf=i=>{const a=(i.editImages||[])[0]||(i.finishImages||[])[0]||(i.postImages||[])[0];return a&&a.src?a.src:null;};
+const thumbOf=i=>{const a=(i.editImages||[])[0]||(i.finishImages||[])[0]||(i.postImages||[])[0];if(a&&a.src)return a.src;const k=(i.angles||[])[0];return k&&IMG.angles[k]?IMG.angles[k]:null;};
 function bigHead(title,sub,photo){const d=parseISO(todayISO());return `<header class="bh">${photo?`<div class="bh-ph"><img src="${photo}" alt=""></div>`:""}<div class="bh-tx"><span class="bh-d">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div></header>`;}
 function catRow(c,cur){
   const needs=k=>visible(c.id,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
@@ -2320,9 +2323,10 @@ function detail0(it,c){
     <div class="hd-acts"><button class="link-btn print-link" type="button" data-act="print" data-id="${it.id}">${ic("layout",16)} PDFで保存・印刷</button>${it.kind==="video"&&shootCuts(it).length?`<button class="btn btn-p btn-s shoot-btn" type="button" data-act="shootOpen">${ic("video",16)}撮影モードで開く</button>`:""}</div></div>`;
   const one="";
   if(it.kind==="live") return `<div class="stack">${head}${flowBox(it,isClient)}${one}${liveBody(it)}${consultInline(it)}</div>`;
-  if(it.kind==="image") return `<div class="stack">${head}${resultBox(it,c)}${flowBox(it,isClient)}${materialBox(it,c,isClient)}${one}
+  if(it.kind==="image") return `<div class="stack">${head}${resultBox(it,c)}${flowBox(it,isClient)}${one}
     ${it.prep?box("hand","お客様にお願いすること",`<dl class="kv"><dt>準備するもの</dt><dd>${esc(it.prep)}</dd></dl>`,"ask"):""}
     ${anglesSection(it,ic("image",16))}
+    ${materialBox(it,c,isClient)}
     ${purpose(it,"投稿の目的")}
     ${box("image","仕上がりのイメージ",gallery(it.finishImages,"4/5",2,"finishImages"))}
     ${box("list","1枚ずつの中身",slidesHtml(it.slides))}
@@ -2639,7 +2643,7 @@ const docNo=(c,p,k)=>`${k}-${String(p.date||"").replace(/-/g,"")}-${String(c.id|
 function billsBox(c){
   const ps=(c.payments||[]).slice().sort((a,b)=>String(b.date).localeCompare(String(a.date)));
   if(!ps.length) return "";
-  return `<section class="vc bills"><h2 class="vc-h"><span class="hi">${ic("list")}</span>お支払いの記録・請求書・領収書</h2><div class="vc-b"><ul class="bl">${ps.map(p=>{const ix=(c.payments||[]).indexOf(p);return `<li><div class="bl-l"><b>${fmtFull(p.date)}</b><span>${fmtYen(p.amount)}${p.note?`　${esc(p.note)}`:""}</span></div><span class="chip ${p.status==="paid"?"t-done":"t-you"}">${p.status==="paid"?"お支払い済み":"お支払い前"}</span><div class="bl-b"><button class="btn btn-g btn-s" type="button" data-act="bill" data-k="inv" data-i="${ix}">請求書</button>${p.status==="paid"?`<button class="btn btn-g btn-s" type="button" data-act="bill" data-k="rcp" data-i="${ix}">領収書</button>`:""}</div></li>`;}).join("")}</ul><p class="tiny muted">ボタンを押すと印刷の画面が開きます。「PDFに保存」を選ぶと、ファイルとして残せます。</p></div></section>`;
+  return `<section class="vc bills"><h2 class="vc-h"><span class="hi">${ic("list")}</span>お支払いと請求書・領収書</h2><div class="vc-b"><ul class="bl">${ps.map(p=>{const ix=(c.payments||[]).indexOf(p);return `<li><div class="bl-l"><b>${fmtFull(p.date)}</b><span>${fmtYen(p.amount)}${p.note?`　${esc(p.note)}`:""}</span></div><span class="chip ${p.status==="paid"?"t-done":"t-you"}">${p.status==="paid"?"お支払い済み":"お支払い前"}</span><div class="bl-b"><button class="btn btn-g btn-s" type="button" data-act="bill" data-k="inv" data-i="${ix}">請求書</button>${p.status==="paid"?`<button class="btn btn-g btn-s" type="button" data-act="bill" data-k="rcp" data-i="${ix}">領収書</button>`:""}</div></li>`;}).join("")}</ul><p class="tiny muted">ボタンを押すと印刷の画面が開きます。「PDFに保存」を選ぶと、ファイルとして残せます。</p></div></section>`;
 }
 function billDoc(c,p,kind){
   const inv=kind==="inv"; const t=inv?"請求書":"領収書"; const no=docNo(c,p,inv?"INV":"RCP");
