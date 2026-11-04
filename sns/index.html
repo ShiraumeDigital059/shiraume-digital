@@ -1516,6 +1516,10 @@ div.nx-1{cursor:default}
 .hw-daily ol{margin:0;padding-left:1.3em;display:grid;gap:4px}.hw-daily li{font-size:14.5px;line-height:1.7}
 @media (max-width:760px){.hw-flow ol{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .preview-banner{z-index:95!important}
+.atag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800;color:var(--green-2);background:var(--green-soft);border-radius:999px;padding:2px 9px 2px 2px;margin-right:4px;vertical-align:1px;white-space:nowrap}
+.atag img{width:20px;height:20px;border-radius:50%;object-fit:cover}
+.rv-kpi.none b{color:var(--ink-3)}
+.action .btn-big+.btn-big{margin-top:8px}
 .pchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .pchip{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:1px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line-2);background:#fff;min-width:130px}
 .pchip b{font-size:14.5px}.pchip small{font-size:12px;color:var(--ink-3)}
@@ -1706,7 +1710,7 @@ const items=[
   editRequest:"3位→2位→1位の順に、数字を大きく出してください\n音（パリッ・ジュッ）を大きめに\n最後に地図とお店の名前",caption:"今夜の一杯に合うつまみ、店主が本気で選びました。\n3位から順にどうぞ。保存して、帰りに寄ってください。",hashtags:"#居酒屋 #つまみ #今夜の一杯 #仕事帰り",hashtagSet:"A",aim:"保存される動画にして、来店のきっかけをつくる"}},
  {kind:"video",month:"2026-11",published:true,d:{...base,no:2,step:0,title:"仕込みの朝 開店までの8時間に密着",oneLine:"朝の仕込みから開店ののれんを出すまでを、1分にまとめる密着動画",shoot:"2026-11-18",post:"2026-11-27",postTime:"18:00",pattern:"密着",angles:["follow","hands","wide"],
   cast:"店主",place:"仕入れ先〜厨房〜店の前",prep:"いつもどおりの仕込み",opening:"【後ろからついていく】朝、店に入る店主の背中\n【引き（全体）】まだ暗い店内",body:"【手元のアップ】だしをとる・串を打つ\n【手元のアップ】包丁の音\n【引き（全体）】開店前の店内が明るくなる",ending:"【引き（全体）】のれんを出して「いらっしゃいませ」"}},
- {kind:"video",month:"2026-11",published:true,d:{...base,no:3,step:3,stamps:{0:"11/1",1:"11/3",2:"11/5"},shotAt:"11/3",materialAt:"11/3（火）",materialUrl:"https://drive.google.com/",materialOk:true,title:"焼き鳥 一本ができるまで",oneLine:"串打ちから焼き上がりまでを、手元だけで見せるハウツー動画",shoot:"2026-11-03",firstDraft:"2026-11-06",post:"2026-11-10",postTime:"19:00",pattern:"ハウツー",angles:["hands","close"],
+ {kind:"video",month:"2026-11",published:true,d:{...base,no:3,step:3,stamps:{0:"11/1",1:"11/3",2:"11/5"},shotAt:"11/3",materialAt:"11/3（火）",materialUrl:"https://drive.google.com/",materialOk:true,title:"焼き鳥 一本ができるまで",deliveryUrl:"https://drive.google.com/",oneLine:"串打ちから焼き上がりまでを、手元だけで見せるハウツー動画",shoot:"2026-11-03",firstDraft:"2026-11-06",post:"2026-11-10",postTime:"19:00",pattern:"ハウツー",angles:["hands","close"],
   cast:"店主（手元だけ）",place:"焼き台",prep:"鶏もも・ねぎ",opening:"【手元のアップ】串を打つ手",body:"【寄り（アップ）】炭の上で脂が落ちる\n【手元のアップ】たれをくぐらせる",ending:"【寄り（アップ）】焼き上がりのアップ"}},
  {kind:"image",month:"2026-11",published:true,d:{...base,no:1,step:1,stamps:{0:"11/1"},title:"忘年会コース 3つのポイント",oneLine:"忘年会コースの中身を、スワイプ5枚で見せる画像投稿",shoot:"2026-11-14",post:"2026-11-21",postTime:"12:00",pattern:"紹介",angles:["top","eye"],prep:"コース料理一式（撮影用）",
   slides:"1枚目：表紙「忘年会コース 3つのポイント」\n2枚目：料理8品（真上から）\n3枚目：飲み放題2時間\n4枚目：個室あり・12名まで\n5枚目：予約はプロフィールのリンクから",caption:"今年の忘年会は、居酒屋Aで。\n料理8品と飲み放題2時間のコースをご用意しました。",hashtags:"#忘年会 #居酒屋 #宴会"}},
@@ -1863,7 +1867,7 @@ function seed0(){
 }
 
 /* ============ 保存（このブラウザの中だけ） ============ */
-const KEY="shiraume_sns_demo_v11";
+const KEY="shiraume_sns_demo_v12";
 let db;
 if("https://ysxvsrixarelqidgegyj.supabase.co".indexOf("https://")===0){db={v:9,staff:[],clients:[],items:[]};}else{try{const raw=localStorage.getItem(KEY);db=raw?JSON.parse(raw):seed();}catch(e){db=seed();}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true;}catch(e){toast("保存できませんでした。画像を減らすか、小さい画像にしてください");return false;}}
@@ -2011,7 +2015,7 @@ function viewLogin(){
     <div class="field"><label for="lpw">パスワード</label><input type="password" id="lpw" autocomplete="current-password" required></div>
     ${S.err?`<div class="err" role="alert">${esc(S.err)}</div>`:""}
     <button class="btn btn-p btn-big" type="submit">ログイン</button>
-    ${LIVE?"":`<details class="demo"><summary><b>デモ用のIDを見る（試作品）</b></summary>
+    ${true?"":`<details class="demo"><summary><b>デモ用のIDを見る（試作品）</b></summary>
       お客様：<code>umikaze</code> / <code>ume1016</code>（うみかぜ様）<br>
       お客様：<code>komugi</code> / <code>ume1016</code>（こむぎの森様）<br>
       白梅デジタル：<code>shiraume</code> / <code>admin1016</code></details>`}
@@ -2245,7 +2249,8 @@ function flowBox(it,isClient){
   if(x.done){act=`<div class="action"><div class="done-row"><div class="done-note">${ic("check")}${DONE_CHIP[it.kind]}（${(it.stamps||{})[f.length-1]||""}）</div><span class="stamp" aria-hidden="true"></span></div>${confirm}${backLink}</div>`;}
   else{
     const st=x.st; const mine=isClient?(st.who==="you"||st.who==="both"):true;
-    if(mine&&isClient&&MAT_KINDS.includes(it.kind)&&s===1){act=`<div class="action"><p>${it.kind==="image"||it.shotAt?"撮った写真・動画を、下の「素材を送る」から送ってください。":"撮影が終わったら、下の「撮影が終わりました」を押してください。"}</p><button class="btn btn-p btn-big" type="button" data-act="jump" data-to="mat_${it.id}">${ic("box")}${it.kind==="image"||it.shotAt?"素材を送る":"撮影が終わったら"}</button>${confirm}${backLink}</div>`;}
+    if(mine&&isClient&&MAT_KINDS.includes(it.kind)&&s===1){const shot=it.kind==="image"||it.shotAt;act=`<div class="action"><p>${shot?(it.kind==="image"?"写真を撮ったら、下の「素材を送る」から送ってください。":"撮影おつかれさまでした。撮った動画を、下の「素材を送る」から送ってください。"):"撮影が終わったら押してください。次に、撮った動画を送ります。"}</p>${shot?`<button class="btn btn-p btn-big" type="button" data-act="jump" data-to="mat_${it.id}">${ic("box")}素材を送る</button>`:`<button class="btn btn-p btn-big" type="button" data-act="shot" data-id="${it.id}">${ic("check")}撮影が終わりました</button>`}${confirm}${backLink}</div>`;}
+    else if(mine&&isClient&&it.kind==="video"&&s===3&&it.deliveryUrl){act=`<div class="action">${st.hint?`<p class="tiny muted">${st.hint}</p>`:""}<a class="btn btn-g btn-big" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext")}初稿を見る</a><button class="btn btn-p btn-big" type="button" data-act="adv" data-id="${it.id}" data-by="you">${ic("check")}${st.act}</button>${confirm}${backLink}</div>`;}
     else if(mine){act=`<div class="action">${st.hint&&isClient?`<p class="tiny muted">${st.hint}</p>`:""}<button class="btn btn-p btn-big" type="button" data-act="adv" data-id="${it.id}" data-by="${isClient?"you":"us"}">${ic("check")}${st.act}</button>${confirm}${backLink}</div>`;}
     else{act=`<div class="action"><p>いまは白梅デジタルが「${st.l}」を進めています。終わったらここに表示されます。</p>${confirm}${backLink}</div>`;}
   }
@@ -2329,7 +2334,8 @@ function detail0(it,c){
   const eimgs=it.editImages||[];
   const pur=[["誰に",it.purposeWho],["いちばん伝えたいこと",it.purposeWhat],["見た人にどう思ってほしいか",it.purposeFeel]].filter(x=>x[1]);
   const sb=eimgs.length?`<div class="sb" style="--n:${eimgs.length}">${eimgs.map((im,i)=>`<figure class="sb-f"><button type="button" data-act="lb" data-g="editImages" data-i="${i}" aria-label="場面${i+1}を大きく見る"><img ${imgAttr(im.src)} alt="${esc(im.cap||"場面"+(i+1))}"><span class="sb-n">${i+1}</span></button>${im.cap?`<figcaption>${esc(im.cap)}</figcaption>`:""}</figure>`).join("")}</div>`:"";
-  const tl=sc.length?`<ol class="tl3">${sc.map(([k,sub,v])=>`<li><div class="tl3-k"><b>${k}</b><small>${sub}</small></div><div class="tl3-v">${lines(v)}</div></li>`).join("")}</ol>`:"";
+  const angTag=h=>h.replace(/【([^】]+)】/g,(m,n)=>{const a=ANGLES.find(x=>x.l===n||x.l.replace(/（.*）/,"")===n);return a?`<span class="atag"><img src="${angleImg(a.k)}" alt="">${esc(a.l)}</span>`:`<span class="atag">${esc(n)}</span>`;});
+  const tl=sc.length?`<ol class="tl3">${sc.map(([k,sub,v])=>`<li><div class="tl3-k"><b>${k}</b><small>${sub}</small></div><div class="tl3-v">${angTag(lines(v))}</div></li>`).join("")}</ol>`:"";
   const angle=has(it.angleImages)?`<figure class="ang"><button type="button" data-act="lb" data-g="angleImages" data-i="0" aria-label="画角を大きく見る"><img ${imgAttr(it.angleImages[0].src)} alt="画角のイメージ"></button><figcaption><b>画角</b>${esc(it.angleImages[0].cap||"")}</figcaption></figure>`:"";
   const H=(n,icon,title,sub,cls)=>`<h2 class="vh"><span class="vh-n">${n}</span><span class="vh-t">${title}${sub?`<small>${sub}</small>`:""}</span>${cls||""}</h2>`;
   const secs=[];
@@ -2344,7 +2350,7 @@ function detail0(it,c){
   if(has(it.caption,it.hashtags)||it.captionEnNeed) secs.push(["sec-cap","キャプション",n=>captionBox(it,c,isClient,n)]);
   return `<div class="stack dv">${head}${resultBox(it,c)}${flowBox(it,isClient)}${materialBox(it,c,isClient)}
     ${secs.length>1?`<nav class="jn" aria-label="この台本の中身">${secs.map(([id,l],i)=>`<button type="button" data-act="jump" data-to="${id}"><b>${i+1}</b>${l}</button>`).join("")}</nav>`:""}
-    ${it.deliveryUrl?`<a class="btn btn-g btn-s" style="width:max-content" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext",16)}初稿・納品の動画を開く</a>`:""}
+    ${it.deliveryUrl&&(it.step||0)!==3?`<a class="btn btn-g btn-s" style="width:max-content" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext",16)}初稿・納品の動画を開く</a>`:""}
     ${secs.map(([, ,f],i)=>f(i+1)).join("")}
     ${consultInline(it)}</div>`;
 }
@@ -2558,10 +2564,11 @@ function materialBox(it,c,isClient){
   }
   if(!isClient) return "";
   const shot=it.kind==="image"||it.shotAt;
+  if(!shot) return "";
   const imgs=S.matImgs&&S.matImgs.id===it.id?S.matImgs.list:[];
   return `<section class="mat" id="mat_${it.id}">
     <div class="mat-h"><span class="mat-i">${ic("box",18)}</span><div><b>${shot?"撮った素材を送ってください":"撮影が終わったら、素材をここから送ります"}</b><p>${shot?"送り先に入れて、いちばん下の「素材を送りました」を押してください。":"撮影が終わったら、まず「撮影が終わりました」を押してください。"}</p></div></div>
-    ${it.kind==="video"&&!it.shotAt?`<button class="btn btn-p btn-big" type="button" data-act="shot" data-id="${it.id}">${ic("check")}撮影が終わりました</button>`:""}
+
     ${shot?`<ol class="mat-steps">
       <li><span class="ms-n">1</span><div><b>素材を入れる</b>${folder?`<a class="btn btn-p" href="${esc(folder)}" target="_blank" rel="noopener">${ic("ext",16)}素材を入れるフォルダを開く</a><p class="tiny muted">スマホの「写真」から、撮った動画・写真をまとめて選んで入れてください。</p>`:`<p class="tiny muted">Googleドライブやギガファイル便などに入れて、共有のリンクを下に貼ってください。</p>`}</div></li>
       <li><span class="ms-n">2</span><div><b>リンク・ひとこと（あれば）</b>
@@ -2577,7 +2584,7 @@ function materialBox(it,c,isClient){
 function resultBox(it,c){
   if(!(it.postUrl||hasMet(it))) return "";
   const tiles=MET.filter(([k])=>it["m_"+k]!==undefined&&it["m_"+k]!=="").map(([k,l,u])=>`<div class="rs-k"><dt>${l}</dt><dd><b>${fmtN(it["m_"+k])}</b><small>${u}</small></dd></div>`).join("");
-  return `<section class="res"><div class="res-h"><span class="res-i">${ic("review",18)}</span><div><b>投稿の結果</b><p>${postWhen(it,c)}${it.metricsAt?`　｜　${esc(it.metricsAt)} 時点の数字`:""}</p></div></div>
+  return `<section class="res"><div class="res-h"><span class="res-i">${ic("review",18)}</span><div><b>投稿の結果</b><p>${postWhen(it,c)}${it.metricsAt?`　｜　${/^\d{4}-\d\d-\d\d$/.test(it.metricsAt)?fmtDate(it.metricsAt):esc(it.metricsAt)} 時点の数字`:""}</p></div></div>
     ${tiles?`<dl class="rs">${tiles}</dl>`:""}
     ${it.postUrl?`<a class="btn btn-p" href="${esc(it.postUrl)}" target="_blank" rel="noopener">${ic("ext",16)}実際の投稿を開く</a>`:""}</section>`;
 }
@@ -2886,7 +2893,7 @@ function reviewPage(c){
   const pct=k=>{if(!prev)return null;const a=n0(r[k]),b=n0(prev[k]);if(!b)return null;return Math.round((a-b)/b*100);};
   const delta=k=>{const p=pct(k);if(p===null)return `<span class="rv-delta flat">はじめての月</span>`;return `<span class="rv-delta ${p<0?"down":"up"}">${p<0?"▼":"▲"} ${Math.abs(p)}%<small>先月より</small></span>`;};
   const upto=all.slice(0,idx+1);
-  const kpi=(l,k,unit,plus)=>`<div class="rv-kpi"><dt>${l}</dt><dd><b>${plus&&n0(r[k])>0?"+":""}${fmtN(r[k])}</b><small>${unit}</small></dd>${delta(k)}${spark(upto.map(x=>n0(x[k])),upto.length-1)}</div>`;
+  const kpi=(l,k,unit,plus)=>(r[k]===undefined||r[k]===null||r[k]==="")?`<div class="rv-kpi none"><dt>${l}</dt><dd><b>—</b></dd><span class="rv-delta flat">まだ入っていません</span></div>`:`<div class="rv-kpi"><dt>${l}</dt><dd><b>${plus&&n0(r[k])>0?"+":""}${fmtN(r[k])}</b><small>${unit}</small></dd>${delta(k)}${spark(upto.map(x=>n0(x[k])),upto.length-1)}</div>`;
   const pv=pct("views");
   const editing=S.cmtEdit===r.id||!r.clientComment;
   const due=sched(c,r.month).due;
