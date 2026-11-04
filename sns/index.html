@@ -1493,6 +1493,29 @@ div.nx-1{cursor:default}
 .guide li>span{width:26px;height:26px;border-radius:50%;background:var(--green-2);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
 .guide li b{font-size:14.5px}.guide li p{font-size:13px!important;color:var(--ink-2)}
 @media (max-width:560px){.q-r{grid-template-columns:64px minmax(0,1fr)}.q-r .btn{grid-column:auto}.q-r .btn:first-of-type{grid-column:1/-1}.secnav{top:56px}}
+.hw-flow{background:var(--panel);border-radius:20px;padding:16px 18px;display:grid;gap:10px}
+.hw-flow h2{font-size:17px}
+.hw-flow ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.hw-flow li{background:#fff;border-radius:14px;padding:10px 8px;display:grid;justify-items:center;gap:2px;text-align:center;border-top:4px solid var(--green-2);position:relative}
+.hw-flow li.you{border-top-color:var(--gold-2,#C9A04A)}
+.hf-n{width:24px;height:24px;border-radius:50%;background:var(--green-2);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
+.hw-flow li.you .hf-n{background:var(--gold)}
+.hw-flow b{font-size:13.5px;line-height:1.4}.hw-flow small{font-size:11.5px;color:var(--ink-3)}
+.hw{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:12px}
+.hw-s{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:grid;gap:10px;align-content:start}
+.hw-h{display:flex;gap:12px;align-items:flex-start}
+.hw-n{width:36px;height:36px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.hw-h h3{font-size:17px;line-height:1.45}
+.hw-m{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:3px}
+.hw-w{font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:999px}
+.hw-w.us{background:var(--green-soft);color:var(--green-2)}.hw-w.you{background:#FBF4E2;color:var(--gold)}.hw-w.both{background:#EEF0F7;color:#3C4A7A}
+.hw-when{display:inline-flex;align-items:center;gap:3px;font-size:12.5px;color:var(--ink-3);font-weight:700}
+.hw-s ul{margin:0;padding-left:1.2em;display:grid;gap:4px}.hw-s li{font-size:14px;line-height:1.7}
+.hw-daily{background:#FFF8E8;border:1.5px solid #E3C98A;border-radius:18px;padding:16px 18px;display:grid;gap:8px}
+.hw-daily h2{display:flex;align-items:center;gap:6px;font-size:16px;color:var(--gold)}
+.hw-daily ol{margin:0;padding-left:1.3em;display:grid;gap:4px}.hw-daily li{font-size:14.5px;line-height:1.7}
+@media (max-width:760px){.hw-flow ol{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.preview-banner{z-index:95!important}
 .pchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .pchip{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:1px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line-2);background:#fff;min-width:130px}
 .pchip b{font-size:14.5px}.pchip small{font-size:12px;color:var(--ink-3)}
@@ -1670,6 +1693,31 @@ function seed(){const d=seed0();
     if(AG[i.title]&&!i.angles)i.angles=AG[i.title];});
   d.items.push({id:uid(),kind:"idea",clientId:A.id,month:"2026-11",published:true,text:"11月の終わりに、カニの入荷があります。届いた箱を開けるところを撮れます。",from:"client",at:"2026-11-02",status:"new",images:[]});
   d.items.push({id:uid(),kind:"idea",clientId:A.id,month:"2026-11",published:false,text:"常連さんの「いつもの」を当てるクイズ（顔は出さない）",pattern:"クイズ",from:"us",at:"2026-11-01",status:"hold"});
+  {const C="c_izakaya";const base={stamps:{},editImages:[],angleImages:[],finishImages:[]};const data={name:"【見本】居酒屋A",kana:"いざかやえー",contact:"店主 様",insta:"@izakaya_a_sample",tiktok:"",plan:"STANDARD",meoPlan:"",fee:"39800",contractDate:"2026-10-25",paidDate:"2026-10-25",startDate:"2026-11-01",payDay:"25",payType:"monthly",minMonths:"3",scriptDay:"1",reviewDay:"28",payMethod:"銀行振込",tz:"Asia/Tokyo",langCode:"ja",owner:"大西",
+ target:"仕事帰りの30〜50代、近くで一杯飲みたい人",tone:"あたたかい・店主の人柄を出す・湯気と音を活かす",ngList:"お客様の顔を映さない（映るときは許可をとる）\n飲酒をあおる言い方をしない\n他店と比べない",rules:"撮影はお店の方、編集と投稿は白梅デジタル\n営業中の撮影は、お客様が少ない17時台まで",
+ inclExtra:"リール台本 月8本と動画の編集\n画像投稿の構成\n毎月の振り返り",exclExtra:"撮影（お店の方にお願いしています）\n広告の出稿",
+ memo:"見本（架空のお店）",payments:[{date:"2026-10-25",amount:"39800",status:"paid",type:"monthly",period:"2026年11月分",note:"SNS運用 STANDARDプラン 11月分"}]};
+
+const items=[
+ {kind:"video",month:"2026-11",published:true,d:{...base,no:1,step:1,stamps:{0:"11/1"},title:"店主が選ぶ 今夜の一杯に合うつまみ BEST3",oneLine:"店主が、ビールに合うつまみを3位から順に発表するランキング動画",shoot:"2026-11-12",firstDraft:"2026-11-16",post:"2026-11-20",postTime:"19:00",pattern:"ランキング",angles:["tripod","front","close"],
+  cast:"店主（顔出しOK）",place:"カウンターの中",prep:"つまみ3品（ポテトサラダ・だし巻き・鶏皮ポン酢）、ビール1杯",caution:"お客様が映らない時間（17時前）に撮る",
+  purposeWho:"仕事帰りに、近くで軽く一杯飲みたい人",purposeWhat:"居酒屋Aには、ビールが進むつまみがそろっている",purposeFeel:"「今日の帰りに寄ってみよう」",
+  opening:"【正面（話す人）】店主「今夜の一杯に合うつまみ、ベスト3！」\n【寄り（アップ）】ビールの泡のアップ（1秒）",body:"【置いて撮る】3位：鶏皮ポン酢。店主がひとこと説明\n【寄り（アップ）】鶏皮のパリッとした音\n【置いて撮る】2位：だし巻き。切るところ\n【寄り（アップ）】湯気と断面\n【正面（話す人）】1位：ポテトサラダ。「うちの名物です」",ending:"【正面（話す人）】「今夜、お待ちしています」＋お店の場所",
+  editRequest:"3位→2位→1位の順に、数字を大きく出してください\n音（パリッ・ジュッ）を大きめに\n最後に地図とお店の名前",caption:"今夜の一杯に合うつまみ、店主が本気で選びました。\n3位から順にどうぞ。保存して、帰りに寄ってください。",hashtags:"#居酒屋 #つまみ #今夜の一杯 #仕事帰り",hashtagSet:"A",aim:"保存される動画にして、来店のきっかけをつくる"}},
+ {kind:"video",month:"2026-11",published:true,d:{...base,no:2,step:0,title:"仕込みの朝 開店までの8時間に密着",oneLine:"朝の仕込みから開店ののれんを出すまでを、1分にまとめる密着動画",shoot:"2026-11-18",post:"2026-11-27",postTime:"18:00",pattern:"密着",angles:["follow","hands","wide"],
+  cast:"店主",place:"仕入れ先〜厨房〜店の前",prep:"いつもどおりの仕込み",opening:"【後ろからついていく】朝、店に入る店主の背中\n【引き（全体）】まだ暗い店内",body:"【手元のアップ】だしをとる・串を打つ\n【手元のアップ】包丁の音\n【引き（全体）】開店前の店内が明るくなる",ending:"【引き（全体）】のれんを出して「いらっしゃいませ」"}},
+ {kind:"video",month:"2026-11",published:true,d:{...base,no:3,step:3,stamps:{0:"11/1",1:"11/3",2:"11/5"},shotAt:"11/3",materialAt:"11/3（火）",materialUrl:"https://drive.google.com/",materialOk:true,title:"焼き鳥 一本ができるまで",oneLine:"串打ちから焼き上がりまでを、手元だけで見せるハウツー動画",shoot:"2026-11-03",firstDraft:"2026-11-06",post:"2026-11-10",postTime:"19:00",pattern:"ハウツー",angles:["hands","close"],
+  cast:"店主（手元だけ）",place:"焼き台",prep:"鶏もも・ねぎ",opening:"【手元のアップ】串を打つ手",body:"【寄り（アップ）】炭の上で脂が落ちる\n【手元のアップ】たれをくぐらせる",ending:"【寄り（アップ）】焼き上がりのアップ"}},
+ {kind:"image",month:"2026-11",published:true,d:{...base,no:1,step:1,stamps:{0:"11/1"},title:"忘年会コース 3つのポイント",oneLine:"忘年会コースの中身を、スワイプ5枚で見せる画像投稿",shoot:"2026-11-14",post:"2026-11-21",postTime:"12:00",pattern:"紹介",angles:["top","eye"],prep:"コース料理一式（撮影用）",
+  slides:"1枚目：表紙「忘年会コース 3つのポイント」\n2枚目：料理8品（真上から）\n3枚目：飲み放題2時間\n4枚目：個室あり・12名まで\n5枚目：予約はプロフィールのリンクから",caption:"今年の忘年会は、居酒屋Aで。\n料理8品と飲み放題2時間のコースをご用意しました。",hashtags:"#忘年会 #居酒屋 #宴会"}},
+ {kind:"idea",month:"2026-11",published:true,d:{text:"12月は牡蠣の限定メニューを出します。仕入れの日（毎週火曜）に撮れます。",from:"client",at:"2026-11-03",status:"new",images:[]}},
+];
+
+items.push({kind:"video",month:"2026-11",published:true,d:{stamps:{0:"10/28",1:"10/30",2:"11/1",3:"11/2",4:"11/3"},editImages:[],angleImages:[],finishImages:[],no:4,step:5,title:"開店前のカウンター 30秒で全部見せます",oneLine:"開店前の店内とカウンターを、引きから寄りで見せる紹介動画",shoot:"2026-10-30",post:"2026-11-03",postTime:"18:00",pattern:"紹介",angles:["wide","eye","close"],shotAt:"10/30",materialAt:"10/30（金）",materialOk:true,postUrl:"https://www.instagram.com/",metricsAt:"2026-11-10",m_views:"8400",m_reach:"6100",m_likes:"410",m_comments:"22",m_saves:"186",m_shares:"35",m_follows:"48",hashtagSet:"A",caption:"開店前のカウンター、全部見せます。今夜もお待ちしています。"}});
+items.push({kind:"review",month:"2026-11",published:true,d:{reviewDate:"2026-11-28",reviewer:"大西",summary:"はじめての月は「お店の空気が伝わる動画」を目標にしました。開店前のカウンターの動画が8,400回見られ、保存も多く集まりました。来月は、ランキングの型を2本に増やします。",tried:"開店前の紹介動画\n焼き鳥のハウツー",good:"保存が186件と多かった\nフォローが48人増えた",issue:"投稿の時間が18時と19時でばらばら",next:"投稿は19時にそろえて比べる\nランキングの型を2本に"}});
+
+   d.clients.push(Object.assign({id:C,loginId:"mihon-izakaya",password:"ume1016"},data));
+   items.forEach(it=>d.items.push(Object.assign({id:uid(),clientId:C,kind:it.kind,month:it.month,published:it.published},it.d)));}
   return d;}
 function seed0(){
   const A="c_umikaze",B="c_komugi",M="c_shiosai";
@@ -1815,7 +1863,7 @@ function seed0(){
 }
 
 /* ============ 保存（このブラウザの中だけ） ============ */
-const KEY="shiraume_sns_demo_v10";
+const KEY="shiraume_sns_demo_v11";
 let db;
 if("https://ysxvsrixarelqidgegyj.supabase.co".indexOf("https://")===0){db={v:9,staff:[],clients:[],items:[]};}else{try{const raw=localStorage.getItem(KEY);db=raw?JSON.parse(raw):seed();}catch(e){db=seed();}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true;}catch(e){toast("保存できませんでした。画像を減らすか、小さい画像にしてください");return false;}}
@@ -2098,7 +2146,7 @@ function viewClient(){
   else if(S.view==="meo") body=meoPage(c);
   else if(S.view==="meoflow") body=meoFlowPage(c);
   else body=listPage(c,S.view);
-  const banner=S.preview?`<div class="preview-banner">お客様（${esc(c.name)} 様）の見え方を表示しています <button type="button" data-act="endPreview">白梅の画面に戻る</button></div>`:"";
+  const banner=S.preview?`<div class="preview-banner">お客様（${esc(c.name)} 様）の見え方を表示しています <button type="button" data-act="endPreview">${S.returnTo==="how"?"使い方に戻る":"白梅の画面に戻る"}</button></div>`:"";
   const todoCount=["video","image","live"].reduce((n,k)=>n+visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&(x.st.who==="you");}).length,0);
   return banner+header(c.name+" 様",`<span class="hd-plan" aria-label="ご契約プラン">${[hasSns(c)?esc(c.plan):"",hasMeo(c)?"MAP "+esc(c.meoPlan):""].filter(Boolean).join("・")}</span>${hasSns(c)?`<button class="hd-idea" type="button" data-act="ideaOpen" aria-label="ネタを送る">${ic("gift",16)}<span>ネタを送る</span></button>`:""}<a class="hd-line" href="${LINE_URL}" target="_blank" rel="noopener" aria-label="公式LINEで相談する">${lineLogo}<span>相談</span></a>`,svcName(c))
     +DECO()+tabBar(c)+`<main class="wrap pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`+ideaSheet(c)+(S.shoot&&S.itemId?(()=>{const it=db.items.find(i=>i.id===S.itemId);return it?shootMode(it,c):"";})():"");
@@ -2713,6 +2761,36 @@ function angleLb(){
   return `<div class="lb" role="dialog" aria-modal="true" aria-label="撮り方の見本"><div class="lb-top"><b>${esc(a.l)}</b><div class="spacer"></div><button class="lb-btn" type="button" data-act="angLbX" aria-label="閉じる">×</button></div><div class="lb-stage" data-act="angLbX"><img src="${angleImg(a.k)}" alt=""></div><div class="lb-cap">${esc(a.how)}</div></div>`;
 }
 
+/* ===== 使い方（見本の居酒屋Aで説明する） ===== */
+function howClient(){return db.clients.find(c=>c.loginId==="mihon-izakaya")||db.clients.find(c=>/居酒屋A/.test(c.name||""));}
+function howPage(){
+  const c=howClient();
+  if(!c) return `<div class="empty"><b>見本「居酒屋A」が見つかりません</b><span class="small">お客様の一覧に「【見本】居酒屋A」があると、このページから実際の画面を開いて説明できます。</span></div>`;
+  const its=db.items.filter(i=>i.clientId===c.id);
+  const byT=re=>its.find(i=>re.test(i.title||""));
+  const v1=byT(/つまみ/),v3=byT(/焼き鳥/),vd=its.find(i=>i.kind==="video"&&stateOf(i)&&stateOf(i).done),im=its.find(i=>i.kind==="image"),rv=its.find(i=>i.kind==="review");
+  const B=(to,l,g)=>to?`<button class="btn ${g?"btn-g":"btn-p"} btn-s" type="button" data-act="howGo" data-to="${to}">${l}</button>`:"";
+  const W=w=>w==="us"?`<span class="hw-w us">白梅デジタル</span>`:w==="you"?`<span class="hw-w you">お客様</span>`:`<span class="hw-w both">白梅とお客様</span>`;
+  const steps=[
+    {n:1,w:"us",when:"契約したとき",t:"お客様を登録する",d:["お店の名前・担当・ログインIDとパスワード","前提（ターゲット・トーン・NG・決まりごと）。台本を書く画面のいちばん上に毎回出ます","ふだんのタイムゾーン・言語、お支払いの区分、最低契約期間","素材を入れてもらうフォルダ（Googleドライブなど）"],b:[B("client","居酒屋Aのお客様情報を開く")]},
+    {n:2,w:"both",when:"いつでも",t:"ネタを集める（ネタ帳）",d:["お客様は、右上の「ネタを送る」から思いついたことを写真付きで送れます","白梅は、ネタ帳に思いつきを書いておけます。型（ランキング・密着など）と、いつ使うかも","「動画の台本にする」を押すと、そのまま台本の下書きになります"],b:[B("ideas","ネタ帳を開く"),B("pvIdea","お客様の「ネタを送る」を見る",1)]},
+    {n:3,w:"us",when:"毎月1日",t:"台本を書いて、お客様に公開する",d:["「どこ向け？」で投稿日・時刻・タイムゾーン・言語を決める","撮り方の見本の写真をえらぶ。本編は1行に1カット、【手元のアップ】のように撮り方を書く","テンプレートから作る・前の月を複製する、もできます","「お客様に公開する」に印をつけて提出"],b:[v1?B("edit:"+v1.id,"台本の編集画面を見る（つまみBEST3）"):"",B("list","台本の一覧",1)]},
+    {n:4,w:"you",when:"台本が届いたら",t:"お客様は「あなたの番です」を見る",d:["今やることと期限が、いちばん上に出ます","台本は月ごと・種類ごとに並び、過去の台本も言葉で探せます"],b:[B("pv:video","お客様の画面を見る")]},
+    {n:5,w:"you",when:"撮影の日",t:"撮り方の見本を見て、撮影する",d:["台本の「撮り方の見本」に、写真と一言の撮り方が出ます","「撮影モードで開く」で、1カットずつ大きく出して、撮れたら印をつけながら進められます","撮り終わったら「撮影が終わりました」"],b:[v1?B("pvItem:"+v1.id,"撮影の台本を見る（つまみBEST3）"):""]},
+    {n:6,w:"you",when:"撮ったら",t:"素材を送る → 白梅に届く",d:["お客様は台本の中の「素材を送る」から。フォルダを開く・リンクを貼る・写真を選ぶ、のどれか","送ると、状態が「素材待ち」から「素材が届きました」に変わります","白梅は台本の一覧やホームで「素材を確認した」を押します"],b:[im?B("pvItem:"+im.id,"素材を送る画面を見る（忘年会コース）"):"",B("list","白梅の台本の一覧",1)]},
+    {n:7,w:"both",when:"素材が届いたら",t:"編集して、初稿を見てもらう",d:["白梅が編集して、初稿のURLを入れて「初稿を共有する」","お客様は初稿を見て「初稿OKです」。直してほしいところはLINEで"],b:[v3?B("pvItem:"+v3.id,"初稿の確認を見る（焼き鳥）"):""]},
+    {n:8,w:"us",when:"投稿したら",t:"投稿して、URLと数字を入れる",d:["投稿のURLと、再生・保存・フォローなどの数字を台本の「投稿したあと」に入れる","お客様の画面に「投稿の結果」が出ます","型・ハッシュタグの組み合わせ・投稿の時間ごとの比較が、自動で出ます"],b:[vd?B("pvItem:"+vd.id,"投稿の結果を見る"):"",vd?B("edit:"+vd.id,"数字を入れる画面",1):""]},
+    {n:9,w:"both",when:"毎月28日",t:"振り返りをお渡しして、ひとことをもらう",d:["白梅が総括と「来月試すこと」を書いて公開。数字は投稿ごとの合計から自動で入ります","お客様はその週の日曜日までに、ひとことを書きます","ひとことと来月試すことが、翌月1日の台本に入ります"],b:[rv?B("pv:review","振り返りの画面を見る"):""]},
+    {n:10,w:"us",when:"毎日",t:"ホームで「白梅がやること」を片付ける",d:["期限の近い順に並びます。過ぎているものは赤","お客様の番で3日止まっているものは、催促の文をコピーしてLINEで送る","契約の満了日・解約のお申し出の期限も、30日前から予定に出ます"],b:[B("home","白梅のホームを開く")]},
+    {n:11,w:"you",when:"いつでも",t:"契約内容と請求書・領収書",d:["プランのタブに、満了日・解約のお申し出の期限・次のお支払いが出ます","お支払いの記録から、請求書・領収書を印刷・PDF保存できます"],b:[B("pv:plan","お客様のプランの画面を見る")]}
+  ];
+  const daily=["朝、ホームの「白梅がやること」を上から片付ける","「素材が届きました」は、その日のうちに中身を確認する","お客様の番で止まっているものは、3日たったら催促の文を送る","お客様から届いたネタは、ネタ帳で「あたためる」か「台本にする」か決める","投稿した翌週に、数字を台本に入れる"];
+  return `<div class="staff-head"><div><h1>使い方</h1><p class="muted small">見本の「${esc(c.name)}」で、実際の画面を開きながら説明できます。角田さんなど、はじめての人に見せるときに使ってください。</p></div></div>
+    <section class="hw-flow"><h2>1か月の流れ</h2><ol>${[["1日","台本をお渡し","us"],["撮影日","撮影","you"],["撮ったら","素材を送る","you"],["届いたら","編集・初稿","us"],["初稿OK","投稿・数字","us"],["28日","振り返り","us"],["日曜まで","ひとこと","you"]].map(([d,t,w],k)=>`<li class="${w}"><span class="hf-n">${k+1}</span><b>${t}</b><small>${d}</small></li>`).join("")}</ol><p class="tiny muted">緑が白梅デジタル、金色がお客様の番です。ひとことと「来月試すこと」が、次の月の台本に入ります。</p></section>
+    <div class="hw">${steps.map(s=>`<section class="hw-s" id="hw_${s.n}"><div class="hw-h"><span class="hw-n">${s.n}</span><div><h3>${s.t}</h3><div class="hw-m">${W(s.w)}<span class="hw-when">${ic("clock",13)}${s.when}</span></div></div></div><ul>${s.d.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="rowbtns">${s.b.filter(Boolean).join("")}</div></section>`).join("")}</div>
+    <section class="hw-daily"><h2>${ic("check",18)}白梅が毎日やること</h2><ol>${daily.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></section>`;
+}
+
 function meoPage(c){
   const mp=MEO_PLANS[c.meoPlan]||MEO_PLANS.LIGHT;
   const all=db.items.filter(i=>i.clientId===c.id&&isMeo(i.kind)&&i.published);
@@ -2961,10 +3039,10 @@ const ILL_DESK=()=>`<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60
 function todayBox(){const t=todayISO();const d=parseISO(t);return `<div class="today"><b><span class="lg">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><span class="sh">${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）</span></b><span>${d.getFullYear()}年　今日</span></div>`;}
 function viewStaff(){
   const tab=(k,icon,l)=>`<button class="stab ${S.admin===k||(k==="clients"&&S.admin==="client")||(k==="new"&&S.admin==="edit")?"on":""}" type="button" data-act="adminTab" data-t="${k}">${ic(icon)}${k==="new"&&S.admin==="edit"?"台本を編集中":l}</button>`;
-  const tabs=`<div class="stabs" role="tablist">${tab("home","star","ホーム")}${tab("list","list","台本")}${tab("clients","user","お客様")}${tab("ideas","gift","ネタ帳"+((n=>n?`（${n}）`:"")(db.items.filter(i=>i.kind==="idea"&&i.status==="new"&&i.from==="client").length)))}${tab("new","pen","提出する")}</div>`;
+  const tabs=`<div class="stabs" role="tablist">${tab("home","star","ホーム")}${tab("list","list","台本")}${tab("clients","user","お客様")}${tab("ideas","gift","ネタ帳"+((n=>n?`（${n}）`:"")(db.items.filter(i=>i.kind==="idea"&&i.status==="new"&&i.from==="client").length)))}${tab("new","pen","提出する")}${tab("how","compass","使い方")}</div>`;
   const right=`${todayBox()}<button class="btn btn-g btn-s" type="button" data-act="logout">ログアウト</button>`;
   let body;
-  switch(S.admin){case "home":body=staffHome();break;case "clients":body=clientsPage();break;case "client":body=clientEditor();break;case "new":case "edit":body=staffForm();break;case "ideas":body=ideasPage();break;default:body=staffList();}
+  switch(S.admin){case "home":body=staffHome();break;case "clients":body=clientsPage();break;case "client":body=clientEditor();break;case "new":case "edit":body=staffForm();break;case "ideas":body=ideasPage();break;case "how":body=howPage();break;default:body=staffList();}
   return `<div class="staff-bg">${DECO()}${header("管理画面",right)}<main class="wrap wide"><div class="stack">${tabs}${body}</div></main></div>`;
 }
 function staffHome(){
@@ -3043,7 +3121,7 @@ function clientsPage(){
       ${(()=>{const ci=contractInfo(c);return ci?`<div class="pay-next ${ci.noticeLeft>=0&&ci.noticeLeft<=30?"warn":""}">${ic("bell")}満了 <b>${fmtFull(ci.end)}</b><span class="tiny muted">解約のお申し出は ${fmtDate(ci.notice)} まで</span>${ci.left>=0&&ci.left<=30?`<span class="chip t-you">あと${ci.left}日</span>`:""}</div>`:"";})()}
       ${c.owner?`<div class="tiny muted">担当：${esc(c.owner)}</div>`:""}
       <div class="rowbtns"><button class="btn btn-p btn-s" type="button" data-act="openClient" data-id="${c.id}">${ic("pen")}編集する</button><button class="btn btn-g btn-s" type="button" data-act="fclient" data-id="${c.id}">台本を見る</button><button class="btn btn-g btn-s" type="button" data-act="previewClient" data-id="${c.id}">お客様の見え方</button></div></section>`;};
-  return `<div class="staff-head"><div><h1>お客様</h1><p class="muted small">${db.clients.length}社と契約中</p></div><div class="spacer"></div><button class="btn btn-p" type="button" data-act="newClient">＋ お客様を追加</button></div>${LIVE&&(!db.clients.some(c=>c.loginId==="mihon")||!db.clients.some(c=>c.loginId==="mihon-map"))?`<div class="consult-inline"><p>試し用に、見本のお客様（架空のお店）と台本・レポートを入れられます。入れたあと、お客様情報で「新しいパスワード」を決めると、お客様の画面でもログインして試せます。いらなくなったら削除してください。</p><div class="rowbtns">${db.clients.some(c=>c.loginId==="mihon")?"":`<button class="btn btn-g" type="button" data-act="addSample">見本（SNS運用）を入れる</button>`}${db.clients.some(c=>c.loginId==="mihon-map")?"":`<button class="btn btn-g" type="button" data-act="addSample" data-kind="meo">見本（Googleマップ対策）を入れる</button>`}</div></div>`:""}
+  return `<div class="staff-head"><div><h1>お客様</h1><p class="muted small">${db.clients.length}社と契約中</p></div><div class="spacer"></div><button class="btn btn-p" type="button" data-act="newClient">＋ お客様を追加</button></div>${false?`<div class="consult-inline"><p>試し用に、見本のお客様（架空のお店）と台本・レポートを入れられます。入れたあと、お客様情報で「新しいパスワード」を決めると、お客様の画面でもログインして試せます。いらなくなったら削除してください。</p><div class="rowbtns">${db.clients.some(c=>c.loginId==="mihon")?"":`<button class="btn btn-g" type="button" data-act="addSample">見本（SNS運用）を入れる</button>`}${db.clients.some(c=>c.loginId==="mihon-map")?"":`<button class="btn btn-g" type="button" data-act="addSample" data-kind="meo">見本（Googleマップ対策）を入れる</button>`}</div></div>`:""}
     <div class="clients" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))">${db.clients.map(card).join("")}</div>`;
 }
 let cdraft=null;
@@ -3326,6 +3404,16 @@ app.addEventListener("click",e=>{
     case "openAll":{S.open=S.open||{};FIELDS[draft.kind].forEach(x=>S.open["f_"+x.t]=b.dataset.v==="1");render();break;}
     case "secGo":{S.open=S.open||{};S.open[b.dataset.k]=true;render();setTimeout(()=>{const t=document.querySelector(`details[data-acc="${CSS.escape(b.dataset.k)}"]`);if(t)scrollTo({top:t.getBoundingClientRect().top+scrollY-80,behavior:"smooth"});},30);break;}
     case "guideX":{try{localStorage.setItem("ume_guide_x","1");}catch(_){}render();break;}
+    case "howGo":{const c=howClient();if(!c)break;const to=b.dataset.to;const [k,v]=to.split(":");
+      if(k==="client"){cdraft=JSON.parse(JSON.stringify(c));cdraft.payments=cdraft.payments||[];set({admin:"client",confirm:null});}
+      else if(k==="ideas")set({fClient:c.id,admin:"ideas",ideaF:"open"});
+      else if(k==="edit"){draft=JSON.parse(JSON.stringify(find(v)));draft.editImages=draft.editImages||[];draft.angleImages=draft.angleImages||[];draft.finishImages=draft.finishImages||[];set({admin:"edit",confirm:null});}
+      else if(k==="list")set({fClient:c.id,fState:null,admin:"list"});
+      else if(k==="home")set({admin:"home"});
+      else if(k==="pv")set({preview:true,previewClient:c.id,itemId:null,view:v,month:null,returnTo:"how"});
+      else if(k==="pvItem"){const it=find(v);set({preview:true,previewClient:c.id,itemId:it.id,view:it.kind,month:it.month,returnTo:"how"});}
+      else if(k==="pvIdea")set({preview:true,previewClient:c.id,itemId:null,view:"video",month:null,returnTo:"how",idea:true});
+      scrollTo(0,0);break;}
     case "setupTpl":{if(cdraft){cdraft.meoSetup=MEO_SETUP_TPL.map(x=>x+"｜これから").join("\n");render();}break;}
     case "printCard":{const el=document.getElementById("rcard");if(!el)break;let pa=document.getElementById("printArea");if(!pa){pa=document.createElement("div");pa.id="printArea";document.body.appendChild(pa);}
       pa.innerHTML=Array.from({length:4},()=>el.outerHTML.replace('id="rcard"','')).join("");document.body.classList.add("print-card");
@@ -3352,7 +3440,7 @@ app.addEventListener("click",e=>{
     case "preview":{const it=find(b.dataset.id);set({preview:true,previewClient:it.clientId,itemId:isRep(it.kind)||isMeo(it.kind)?null:it.id,view:isMeo(it.kind)?"meo":it.kind,month:it.month,returnTo:S.admin});scrollTo(0,0);break;}
     case "previewClient":set({preview:true,previewClient:b.dataset.id,itemId:null,view:"video",month:null,returnTo:"list"});scrollTo(0,0);break;
     case "previewDraft":{if(!isRep(draft.kind)&&!draft.title){toast("先にお題を入れてください");break;}db.items=db.items.filter(i=>i.id!=="__pv__");db.items.push({...JSON.parse(JSON.stringify(draft)),id:"__pv__",published:true});set({preview:true,previewClient:draft.clientId,itemId:isRep(draft.kind)||isMeo(draft.kind)?null:"__pv__",view:isMeo(draft.kind)?"meo":draft.kind,month:draft.month,returnTo:S.admin});scrollTo(0,0);break;}
-    case "endPreview":db.items=db.items.filter(i=>i.id!=="__pv__");set({preview:false,itemId:null,menu:false,lb:null,admin:S.returnTo||"list"});break;
+    case "endPreview":db.items=db.items.filter(i=>i.id!=="__pv__"&&i.id!=="__pv_idea__");set({preview:false,itemId:null,menu:false,lb:null,idea:false,shoot:null,admin:S.returnTo||"list"});break;
     case "rmImg":draft[b.dataset.key].splice(+b.dataset.i,1);render();break;
     case "del":set({confirm:draft.id});break;
     case "delYes":{const id=draft.id;(LIVE?rpc("sns_staff_delete_item",{p_token:getToken(),p_id:id}):Promise.resolve(save())).then(()=>{db.items=db.items.filter(i=>i.id!==id);draft=null;toast("削除しました");set({admin:"list",confirm:null});}).catch(e=>toast(e.message));break;}
