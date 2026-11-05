@@ -2177,6 +2177,291 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 :root[data-ui="dark"] .btn.apple:hover{background:#eee;border-color:#eee;color:#000}
 .authsplit{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--ink-4);font-size:12px}
 .authsplit::before,.authsplit::after{content:"";flex:1;border-top:1px solid var(--line)}
+
+/* ============================================================
+   v18 — カレンダーの作り直し
+   ----------------------------------------------------------------
+   直したかったこと
+     1. 週表示で「何の予定か」が読めない（列が細すぎ、字が小さすぎ）
+        → 横スクロールにして、1列の最低幅を確保する。
+          時刻の軸と曜日の見出しは貼りついたまま動かない。
+     2. 月表示で日を押したときに、その日の中身が小さい
+        → 予定ひとつを1行として大きく出す。
+     3. どこの時間で見ているのか分からない
+        → 画面の上に必ず「◯◯時間で表示」と出す。
+   ============================================================ */
+
+/* ---- 共通：いまどこの時間で見ているか ---- */
+.tzflag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
+  color:var(--ink-2);background:var(--sunken);border:1px solid var(--line);
+  border-radius:99px;padding:3px 11px;white-space:nowrap}
+.tzflag .ic{width:14px;height:14px;opacity:.6}
+.tzflag b{font-weight:700;color:var(--ink)}
+
+/* ============================================================
+   週／日の時間割
+   ============================================================ */
+.wgrid{--hr:56px;--colw:132px;border-top:1px solid var(--line-2);margin-top:2px}
+.wgrid .wbody{position:relative;overflow:auto;max-height:min(70vh,700px);
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.wgrid .wtable{position:relative;display:block}
+
+/* 曜日の見出し —— 上に貼りつく */
+.wgrid .whd{display:grid;position:sticky;top:0;z-index:6;background:var(--paper);
+  border-bottom:1.5px solid var(--line-2)}
+.wgrid .whd .c{padding:9px 6px 8px;text-align:center;display:flex;flex-direction:column;
+  align-items:center;gap:1px;border-right:1px solid var(--line);min-width:0}
+.wgrid .whd .c:last-child{border-right:0}
+.wgrid .whd .c.gutc{position:sticky;left:0;z-index:7;background:var(--paper);border-right:1px solid var(--line-2)}
+.wgrid .whd .c .dw{font-size:11.5px;color:var(--ink-3);font-weight:700;letter-spacing:.06em}
+.wgrid .whd .c .dn{font-size:19px;font-weight:700;line-height:1.15;
+  width:30px;height:30px;display:grid;place-items:center;border-radius:50%}
+.wgrid .whd .c.sun .dw,.wgrid .whd .c.sun .dn{color:var(--sun)}
+.wgrid .whd .c.sat .dw,.wgrid .whd .c.sat .dn{color:var(--sat)}
+.wgrid .whd .c.today .dn{background:var(--accent);color:#fff}
+:root[data-ui="dark"] .wgrid .whd .c.today .dn{color:#15161A}
+.wgrid .whd .c.today .dw{color:var(--accent-3);font-weight:800}
+.wgrid .whd .c .cnt{font-size:10.5px;color:var(--ink-3);font-family:var(--lat);font-weight:600;line-height:1.3}
+.wgrid .whd .c.today .cnt{color:var(--accent-3)}
+
+/* 終日・休暇の帯 */
+.wgrid .wallday{display:grid;position:sticky;top:var(--hdh,62px);z-index:5;background:var(--paper);
+  border-bottom:1px solid var(--line-2)}
+.wgrid .wallday .ad{border-right:1px solid var(--line);padding:3px 4px;min-height:24px;
+  display:flex;flex-direction:column;gap:2px;min-width:0}
+.wgrid .wallday .ad:last-child{border-right:0}
+.wgrid .wallday .adg{position:sticky;left:0;z-index:6;background:var(--paper);
+  border-right:1px solid var(--line-2);font-size:10.5px;color:var(--ink-4);
+  display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-weight:600}
+.wgrid .wallday .chip{font-size:11.5px;font-weight:700;border-radius:4px;padding:2px 7px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1.5;
+  background:var(--k-holiday-bg);color:var(--k-holiday);border:1px solid var(--k-holiday-ln)}
+
+/* 本体 */
+.wgrid .inner{display:grid;position:relative}
+.wgrid .gut{position:sticky;left:0;z-index:4;background:var(--paper);
+  border-right:1px solid var(--line-2)}
+.wgrid .gut .h{height:var(--hr);font-size:11.5px;color:var(--ink-3);font-weight:600;
+  text-align:right;padding-right:9px;transform:translateY(-8px);font-family:var(--lat)}
+.wgrid .col{border-right:1px solid var(--line);position:relative;min-width:0}
+.wgrid .col:last-child{border-right:0}
+.wgrid .col .h{height:var(--hr);border-bottom:1px solid var(--line)}
+.wgrid .col .h.mid{border-bottom-style:solid}
+.wgrid .col .h.off{background:var(--sunken)}
+.wgrid .col.dow-0{background:var(--sun-bg)} .wgrid .col.dow-6{background:var(--sat-bg)}
+.wgrid .col.today{background:var(--accent-2)}
+.wgrid .col .h[data-newslot]{cursor:pointer}
+
+/* 予定のブロック —— 中身が読めることを最優先 */
+.wgrid .evb{position:absolute;border-radius:6px;padding:4px 7px 4px 8px;overflow:hidden;
+  cursor:pointer;background:var(--sunken);border:1px solid var(--line-2);
+  border-left:3.5px solid var(--c-off);z-index:2;line-height:1.3;display:block;
+  box-shadow:0 1px 2px rgba(20,20,22,.05)}
+.wgrid .evb .n{font-weight:700;font-size:12.5px;color:var(--ink);display:block;
+  overflow:hidden;text-overflow:ellipsis}
+.wgrid .evb .t{font-size:11px;color:var(--ink-2);display:block;font-family:var(--lat);
+  font-variant-numeric:tabular-nums;font-weight:600;margin-top:1px}
+.wgrid .evb .w{font-size:10.5px;color:var(--ink-3);display:block;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.wgrid .evb.tiny{padding:1px 6px;display:flex;align-items:center;gap:6px}
+.wgrid .evb.tiny .n{font-size:11.5px;white-space:nowrap}
+.wgrid .evb.tiny .t{margin:0;font-size:10.5px}
+.wgrid .evb.tiny .w{display:none}
+.wgrid .evb.short .w{display:none}
+.wgrid .evb:hover{filter:brightness(.97);box-shadow:0 2px 8px -2px rgba(20,20,22,.18);z-index:3}
+:root[data-ui="dark"] .wgrid .evb:hover{filter:brightness(1.12)}
+
+/* いまの時刻 */
+.wgrid .nowline{position:absolute;left:0;right:0;height:0;border-top:2px solid var(--sun);
+  z-index:5;pointer-events:none}
+.wgrid .nowline::before{content:"";position:absolute;left:-4px;top:-4px;width:9px;height:9px;
+  border-radius:50%;background:var(--sun)}
+.wgrid .nowtag{position:absolute;left:2px;top:-9px;z-index:5;pointer-events:none;
+  font-family:var(--lat);font-size:10.5px;font-weight:700;color:#fff;background:var(--sun);
+  border-radius:4px;padding:1px 5px;line-height:1.4}
+
+/* 休暇で埋まっている列 */
+.wgrid .holmask{position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:repeating-linear-gradient(135deg,transparent 0 9px,var(--k-holiday-bg) 9px 18px);
+  opacity:.75;display:flex;align-items:flex-start;justify-content:center;padding-top:40px}
+.wgrid .holmask span{font-size:12px;font-weight:700;color:var(--k-holiday);
+  background:var(--paper);border:1px solid var(--k-holiday-ln);border-radius:99px;padding:2px 12px}
+
+/* 1日表示のときは、ゆったり広く */
+.wgrid.oneday{--hr:70px}
+.wgrid.oneday .evb .n{font-size:14px}
+.wgrid.oneday .evb .t{font-size:12px}
+.wgrid.oneday .evb .w{font-size:11.5px}
+
+/* 画面が狭いとき —— 列幅を確保して横スクロールにする */
+@media (max-width:980px){
+  .wgrid{--colw:124px;--hr:54px}
+  .wgrid .wbody{max-height:calc(100vh - 290px);min-height:340px}
+}
+@media (max-width:660px){
+  .wgrid{--colw:112px}
+  .wgrid .whd .c .dn{font-size:17px;width:27px;height:27px}
+}
+
+/* ============================================================
+   月表示
+   ============================================================ */
+.mgrid .cell{gap:2px}
+.mgrid .cell>.n{font-size:14px;font-weight:700}
+.mgrid .cell.today>.n{width:25px;height:25px;font-size:14px}
+.mgrid .ev{font-size:12px;padding:1px 5px 1px 6px;border-radius:0 4px 4px 0;gap:5px;
+  align-items:baseline;border-left-width:3px}
+.mgrid .ev .hm{font-family:var(--lat);font-variant-numeric:tabular-nums;font-size:11px;
+  font-weight:700;color:var(--ink-3);flex:none}
+.mgrid .ev .n{font-weight:600;color:var(--ink);font-size:12px}
+.mgrid .ev.more-ev .n{color:var(--ink-3);font-weight:700;font-size:11.5px}
+.mgrid .cell .cnt{font-family:var(--lat);font-size:10.5px;font-weight:700;color:var(--ink-4);
+  position:absolute;top:6px;right:7px}
+.mgrid .cell{position:relative}
+.mgrid .cell.today .cnt{color:var(--accent-3)}
+@media (max-width:660px){
+  .mgrid .cell .cnt{display:none}
+}
+
+/* ============================================================
+   日別パネル（月表示で日付を押したときに出るもの）
+   ============================================================ */
+.modal.daymodal{width:min(620px,100%)}
+.daymodal .dayhd{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;
+  padding:2px 0 16px;border-bottom:1.5px solid var(--line-2);margin-bottom:4px}
+.daymodal .dayhd .big{font-family:var(--disp);font-size:40px;font-weight:600;line-height:1;
+  letter-spacing:.01em;color:var(--ink)}
+.daymodal .dayhd .mo{font-size:14px;color:var(--ink-2);font-weight:600;line-height:1.5}
+.daymodal .dayhd .dw{font-size:14px;font-weight:700}
+.daymodal .dayhd .dw.sun{color:var(--sun)} .daymodal .dayhd .dw.sat{color:var(--sat)}
+.daymodal .dayhd .todaytag{font-size:11.5px;font-weight:700;color:#fff;background:var(--accent);
+  border-radius:99px;padding:2px 10px}
+:root[data-ui="dark"] .daymodal .dayhd .todaytag{color:#15161A}
+.daymodal .dayhd .sp{flex:1}
+
+/* 1件を大きく、横1行で読み切れるように */
+.dplist{border-top:1px solid var(--line)}
+.dpi{display:flex;align-items:stretch;gap:0;border-bottom:1px solid var(--line);position:relative}
+.dpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c-off)}
+.dpi.k-meeting::before{background:var(--k-meeting)} .dpi.k-sales::before{background:var(--k-sales)}
+.dpi.k-focus::before{background:var(--k-focus)} .dpi.k-shoot::before{background:var(--k-shoot)}
+.dpi.k-delivery::before{background:var(--k-delivery)} .dpi.k-sns::before{background:var(--k-sns)}
+.dpi.k-trip::before{background:var(--k-trip)} .dpi.k-holiday::before{background:var(--k-holiday)}
+.dpi.k-personal::before{background:var(--k-personal)}
+.dpi:hover{background:var(--side)}
+.dpi .main{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:14px;align-items:center;
+  flex:1;min-width:0;padding:14px 8px 14px 16px;text-align:left}
+.dpi .tm{font-family:var(--lat);font-variant-numeric:tabular-nums;line-height:1.25}
+.dpi .tm b{display:block;font-size:19px;font-weight:700;color:var(--ink)}
+.dpi .tm i{display:block;font-size:12.5px;font-style:normal;color:var(--ink-3);font-weight:600}
+.dpi .bd{min-width:0}
+.dpi .ti{display:block;font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.5;
+  overflow:hidden;text-overflow:ellipsis}
+.dpi .ti .kicon,.dpi .ti .kimg{width:15px;height:15px;margin-right:7px;vertical-align:-2px}
+.dpi .mt{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px;line-height:1.55}
+.dpi .ppl{display:flex;gap:-4px;flex:none}
+.dpi .ppl .av{margin-left:-6px;box-shadow:0 0 0 2px var(--paper)}
+.dpi .ed{flex:none;align-self:center;margin-right:10px;opacity:.55}
+.dpi:hover .ed{opacity:1}
+.dpnow{display:flex;align-items:center;gap:10px;padding:9px 0 0;font-size:12.5px;color:var(--ink-3)}
+@media (max-width:560px){
+  .daymodal .dayhd .big{font-size:34px}
+  .dpi .main{grid-template-columns:64px minmax(0,1fr);gap:11px;padding:12px 8px 12px 14px}
+  .dpi .ppl{display:none}
+  .dpi .tm b{font-size:17px}
+  .dpi .ti{font-size:15px}
+}
+
+/* ============================================================
+   スマホの週表示 —— 時間割ではなく、日ごとの一覧
+   ------------------------------------------------------------
+   390px の画面に7列は入らない。縦に積んで、1件を大きく出す。
+   ============================================================ */
+.agd{border-top:1px solid var(--line-2)}
+.agd-d{border-bottom:1px solid var(--line-2)}
+.agd-d.today{background:var(--accent-2)}
+.agd-h{display:flex;align-items:center;gap:10px;width:100%;padding:11px 4px 10px 2px;
+  border-bottom:1px solid var(--line)}
+.agd-h .dn{font-family:var(--lat);font-variant-numeric:tabular-nums;font-size:21px;
+  font-weight:700;color:var(--ink);min-width:26px;text-align:center;line-height:1.1}
+.agd-h .dw{font-size:13px;font-weight:700;color:var(--ink-2)}
+.agd-h .dn.sun,.agd-h .dw.sun{color:var(--sun)}
+.agd-h .dn.sat,.agd-h .dw.sat{color:var(--sat)}
+.agd-d.today .agd-h .dn{background:var(--accent);color:#fff;border-radius:50%;
+  width:30px;height:30px;display:grid;place-items:center;min-width:0}
+:root[data-ui="dark"] .agd-d.today .agd-h .dn{color:#15161A}
+.agd-h .tg{font-size:10.5px;font-weight:700;color:#fff;background:var(--accent);
+  border-radius:99px;padding:1px 8px}
+:root[data-ui="dark"] .agd-h .tg{color:#15161A}
+.agd-h .ct{font-size:12px;color:var(--ink-3);font-weight:600}
+.agd-h .ic{width:16px;height:16px;opacity:.35}
+.agd-e{display:grid;grid-template-columns:62px minmax(0,1fr);gap:12px;width:100%;
+  padding:12px 6px 12px 14px;border-bottom:1px solid var(--line);position:relative;align-items:center}
+.agd-e:last-child{border-bottom:0}
+.agd-e::before{content:"";position:absolute;left:2px;top:9px;bottom:9px;width:4px;
+  border-radius:2px;background:var(--c-off)}
+.agd-e.k-meeting::before{background:var(--k-meeting)} .agd-e.k-sales::before{background:var(--k-sales)}
+.agd-e.k-focus::before{background:var(--k-focus)} .agd-e.k-shoot::before{background:var(--k-shoot)}
+.agd-e.k-delivery::before{background:var(--k-delivery)} .agd-e.k-sns::before{background:var(--k-sns)}
+.agd-e.k-trip::before{background:var(--k-trip)} .agd-e.k-holiday::before{background:var(--k-holiday)}
+.agd-e.k-personal::before{background:var(--k-personal)}
+.agd-e:active{background:var(--raise)}
+.agd-e .tm{font-family:var(--lat);font-variant-numeric:tabular-nums;line-height:1.25}
+.agd-e .tm b{display:block;font-size:17px;font-weight:700;color:var(--ink)}
+.agd-e .tm i{display:block;font-size:11.5px;font-style:normal;color:var(--ink-3);font-weight:600}
+.agd-e .bd{min-width:0}
+.agd-e .ti{display:block;font-size:15px;font-weight:700;line-height:1.5;color:var(--ink)}
+.agd-e .ti .kicon,.agd-e .ti .kimg{width:14px;height:14px;margin-right:6px;vertical-align:-2px}
+.agd-e .mt{display:block;font-size:12px;color:var(--ink-3);line-height:1.55;margin-top:1px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agd-hol{padding:8px 14px;font-size:12.5px;color:var(--k-holiday);font-weight:700;
+  display:flex;flex-wrap:wrap;gap:4px 14px}
+.agd-add{display:block;width:100%;padding:11px 14px;font-size:13px;color:var(--ink-4);font-weight:600}
+.agd-add:active{background:var(--raise)}
+
+/* スマホ全般：カレンダーまわりの詰め */
+@media (max-width:660px){
+  .calbar{gap:8px}
+  .calbar .title{font-size:17px;min-width:0;flex:1}
+  .calbar #cal-scope{order:9;width:100%}
+  .legend-kinds{display:none}
+  /* 月：色の帯ではなく、名前の入った札にする。
+     他のカレンダーアプリと同じで、名前が見えないと意味がない。 */
+  .mgrid .cell{min-height:84px;padding:3px 2px 4px;gap:1.5px}
+  .mgrid .cell>.n{font-size:15px;font-weight:800;padding:0}
+  .mgrid .cell.today>.n{width:23px;height:23px;font-size:13px}
+  .mgrid .cell .evdots{display:none}
+  .mgrid .cell .ev{display:flex;font-size:10.5px;line-height:1.45;padding:1px 3px;
+    border-radius:3px;border-left:0;gap:0;min-height:0}
+  .mgrid .cell .ev .hm{display:none}
+  .mgrid .cell .ev .n{font-weight:700;font-size:10.5px;letter-spacing:-.01em}
+  .mgrid .cell .ev.k-meeting{background:var(--k-meeting-bg)} .mgrid .cell .ev.k-meeting .n{color:var(--k-meeting)}
+  .mgrid .cell .ev.k-sales{background:var(--k-sales-bg)} .mgrid .cell .ev.k-sales .n{color:var(--k-sales)}
+  .mgrid .cell .ev.k-focus{background:var(--k-focus-bg)} .mgrid .cell .ev.k-focus .n{color:var(--k-focus)}
+  .mgrid .cell .ev.k-shoot{background:var(--k-shoot-bg)} .mgrid .cell .ev.k-shoot .n{color:var(--k-shoot)}
+  .mgrid .cell .ev.k-delivery{background:var(--k-delivery-bg)} .mgrid .cell .ev.k-delivery .n{color:var(--k-delivery)}
+  .mgrid .cell .ev.k-sns{background:var(--k-sns-bg)} .mgrid .cell .ev.k-sns .n{color:var(--k-sns)}
+  .mgrid .cell .ev.k-trip{background:var(--k-trip-bg)} .mgrid .cell .ev.k-trip .n{color:var(--k-trip)}
+  .mgrid .cell .ev.k-holiday{background:var(--k-holiday-bg)} .mgrid .cell .ev.k-holiday .n{color:var(--k-holiday)}
+  .mgrid .cell .ev.k-personal{background:var(--k-personal-bg)} .mgrid .cell .ev.k-personal .n{color:var(--k-personal)}
+  .mgrid .cell .ev.more-ev{background:transparent;padding-left:3px}
+  .mgrid .cell .ev.more-ev .n{color:var(--ink-3);font-size:10px}
+  .mgrid .cell .natday{font-size:9.5px}
+  .mgrid .hd div{padding:5px 2px;font-size:11px}
+  /* 日：1列しかないので、たっぷり広く */
+  .wgrid.oneday{--hr:76px}
+  .wgrid.oneday .wbody{max-height:calc(100vh - 300px)}
+  .wgrid.oneday .evb{padding:6px 9px}
+  .wgrid.oneday .evb .n{font-size:15px}
+  .wgrid.oneday .evb .t{font-size:12.5px}
+  /* 日別パネルはほぼ全画面に */
+  .scrim{padding:0}
+  .modal.daymodal{width:100%;max-height:100vh;height:100%;border-radius:0;border:0}
+  .modal.daymodal .mb{padding:16px 16px calc(28px + env(safe-area-inset-bottom,0px))}
+  .modal.daymodal .mh{padding-top:calc(14px + env(safe-area-inset-top,0px))}
+  .modal.daymodal .mf{position:sticky;bottom:0;
+    padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 
 <div id="splash"><div class="spw">
@@ -4237,7 +4522,8 @@ function afterRender(){
         const st=((u&&u.work&&u.work.s)||(DB.company.defaultWork&&DB.company.defaultWork.s)||'09:00');
         sh=Math.min(23,Math.max(0,parseInt(st.split(':')[0],10)||9));
       }catch(e){}
-      b.scrollTop=Math.max(0,sh*46-22);
+      const HR=(S.cal==='day')?HRPX1:HRPX;
+      b.scrollTop=Math.max(0,sh*HR-30);
     }
   }
   if(S.view==='messages'){const b=document.querySelector('.thread .body');if(b)b.scrollTop=b.scrollHeight;
@@ -4456,6 +4742,10 @@ function viewCalendar(){
       ${[['month','月'],['week','週'],['day','日']].map(m=>`<button data-calmode="${m[0]}" aria-pressed="${S.cal===m[0]}">${m[1]}</button>`).join('')}
     </div>
   </div>
+  <div class="row" style="gap:10px;margin:-6px 0 12px">
+    <span class="tzflag">${icon('clock')}<b>${cityN(effCity(me()))}</b>時間で表示しています</span>
+    <span class="muted" style="font-size:12px">${offLabel(tz,now)}　ほかの人が別の国で入れた予定も、この時間に直して出しています。</span>
+  </div>
   <div class="legend-kinds">${Object.entries(KINDS).map(([k,v])=>`<span class="lk k-${k}">${kindMark(k)}${v}</span>`).join('')}</div>
   ${S.cal==='month'?monthGrid(c,tz):dayGrid(c,tz,S.cal==='week'?7:1)}`;
 }
@@ -4497,13 +4787,17 @@ function monthGrid(c,tz){
       const mine=hols.some(e=>e.who.includes(tgt));
       const nh=holidaysForDate(day);
       const jp=isJpHoliday(day);
-      html+=`<div class="cell ${day.m!==c.m?'out':''} ${k===today?'today':''} ${mine?'hol':''} ${jp?'jphol':''}" data-newday="${k}" title="${mine?'休暇':'クリックで予定を追加'}">
-        <button class="n" data-jumpday="${k}" title="この日を開く">${day.d===1?day.m+'/':''}${day.d}</button>
+      /* 予定の行は「時刻＋名前」。時刻が無いと、何時の話か分からない。
+         入りきらないぶんは「ほか◯件」。押すとその日の一覧が開く。 */
+      const room=hols.length?2:3;
+      html+=`<div class="cell ${day.m!==c.m?'out':''} ${k===today?'today':''} ${mine?'hol':''} ${jp?'jphol':''}" data-newday="${k}" title="${mine?'休暇':'押すとこの日の予定が開きます'}">
+        <button class="n" data-newday="${k}" title="この日の予定を見る">${day.d===1?day.m+'/':''}${day.d}</button>
+        ${rest.length?`<span class="cnt">${rest.length}</span>`:''}
         ${nh.length?`<span class="natday" title="${esc(nh.map(h=>h.land+'：'+h.names.join(' / ')).join('　'))}">${nh.map(h=>h.flag).join('')}</span>`:''}
         <span class="evdots">${rest.slice(0,3).map(e=>`<i class="k-${e.kind}" title="${esc(hhmm(e.start,tz)+' '+(e.title||''))}"></i>`).join('')}${rest.length>3?`<i class="more">+${rest.length-3}</i>`:''}</span>
         ${hols.map(e=>`<button class="ev holchip" data-ev="${e.id}" title="${esc(e.title)}">${kindMark(e.kind)}<span class="n">${esc(e.who.map(i=>(person(i)||{}).name||'').join('・'))} 休暇</span></button>`).join('')}
-        ${rest.slice(0,hols.length?2:3).map(e=>`<button class="ev ${evClass(e)}" data-ev="${e.id}" title="${esc(hhmm(e.start,tz)+'–'+hhmm(e.end,tz)+' '+e.title)}">${kindMark(e.kind)}<span class="n">${esc(e.title)}</span></button>`).join('')}
-        ${rest.length>(hols.length?2:3)?`<button class="ev more-ev" data-jumpday="${k}"><span class="n">ほか ${rest.length-(hols.length?2:3)} 件</span></button>`:''}
+        ${rest.slice(0,room).map(e=>`<button class="ev ${evClass(e)}" data-ev="${e.id}" title="${esc(hhmm(e.start,tz)+'–'+hhmm(e.end,tz)+'　'+e.title+'　'+evWho(e))}"><span class="hm">${hhmm(e.start,tz)}</span><span class="n">${esc(e.title)}</span></button>`).join('')}
+        ${rest.length>room?`<button class="ev more-ev" data-newday="${k}"><span class="n">ほか ${rest.length-room} 件</span></button>`:''}
         <span class="addhint" aria-hidden="true">＋</span>
       </div>`;
     }
@@ -4525,20 +4819,99 @@ function lanes(list){
   flush();
   return res;
 }
+/* 時間割（週＝7日 / 日＝1日）
+   ----------------------------------------------------------------
+   前のつくりでは、スマホだと1列が40pxほどしかなく、予定の名前が
+   1文字も読めなかった。列に最低幅を決めて、足りなければ横に
+   スクロールさせる。時刻の軸と曜日の見出しは貼りついたまま残す。 */
+const HRPX=56, HRPX1=70;   /* 1時間の高さ（週 / 1日） */
+
+function evWho(e){
+  const ns=e.who.map(i=>(person(i)||{}).name).filter(Boolean);
+  if(!ns.length)return '';
+  return ns.length<=2?ns.join('・'):`${ns[0]}ほか${ns.length-1}人`;
+}
+/* スマホの「週」は時間割をやめて、日ごとの一覧にする。
+   390pxの画面に7列入れると1列50px。何の予定か読めないので、
+   縦に積んで、1件ずつ大きく出したほうが早い。 */
+const isPhone=()=>{try{return window.matchMedia('(max-width:660px)').matches;}catch(e){return false;}};
+
+function weekAgenda(c,tz){
+  const start=weekStart(c),evs=calScopeEvents(),today=ckey(civil(Date.now(),tz));
+  let out='<div class="agd">';
+  for(let i=0;i<7;i++){
+    const d=addDays(start,i),k=ckey(d),w=cdow(d);
+    const ds=zToUTC(d.y,d.m,d.d,0,0,tz),de=ds+86400000;
+    const list=evs.filter(e=>e.end>ds&&e.start<de).sort((a,b)=>a.start-b.start);
+    const hols=list.filter(e=>e.kind==='holiday');
+    const rest=list.filter(e=>e.kind!=='holiday');
+    out+=`<div class="agd-d ${k===today?'today':''}">
+      <button class="agd-h" data-newday="${k}">
+        <span class="dn ${w===0?'sun':''}${w===6?'sat':''}">${d.d}</span>
+        <span class="dw ${w===0?'sun':''}${w===6?'sat':''}">${dowN(w)}</span>
+        ${k===today?'<span class="tg">今日</span>':''}
+        <span class="sp"></span>
+        <span class="ct">${rest.length?rest.length+'件':'予定なし'}</span>
+        ${icon('chevR')}
+      </button>`;
+    if(hols.length)out+=`<div class="agd-hol">${hols.map(e=>
+      `<span>${esc(e.who.map(x=>(person(x)||{}).name||'').join('・'))} は休暇</span>`).join('')}</div>`;
+    if(rest.length){
+      out+=rest.map(e=>{
+        const dur=Math.round((e.end-e.start)/60000);
+        const durT=dur>=60?`${Math.floor(dur/60)}時間${dur%60?dur%60+'分':''}`:`${dur}分`;
+        const who=evWho(e);
+        return `<button class="agd-e k-${e.kind}" data-ev="${e.id}">
+          <span class="tm"><b>${hhmm(e.start,tz)}</b><i>${hhmm(e.end,tz)}</i></span>
+          <span class="bd">
+            <span class="ti">${kindMark(e.kind)}${esc(e.title)}</span>
+            <span class="mt">${durT}${e.place?' ・ '+esc(e.place):''}${who?' ・ '+esc(who):''}</span>
+          </span></button>`;
+      }).join('');
+    }else if(!hols.length){
+      out+=`<button class="agd-add" data-newday="${k}">＋ 予定を入れる</button>`;
+    }
+    out+='</div>';
+  }
+  return out+'</div>';
+}
+
 function dayGrid(c,tz,days){
+  if(days===7&&isPhone())return weekAgenda(c,tz);
+  const one=days===1, HR=one?HRPX1:HRPX;
   const start=days===7?weekStart(c):c;
   const evs=calScopeEvents(),today=ckey(civil(Date.now(),tz));
   const cols=[];for(let i=0;i<days;i++)cols.push(addDays(start,i));
-  const gt=`grid-template-columns:48px repeat(${days},minmax(0,1fr))`;
-  let hd=`<div class="whd" style="${gt}"><div class="c"></div>`+
-    cols.map(d=>`<button class="c ${ckey(d)===today?'today':''}" data-jumpday="${ckey(d)}">
-      <span class="dw">${dowN(cdow(d))}</span><span class="dn">${d.d}</span></button>`).join('')+'</div>';
-  let body=`<div class="wbody"><div class="inner" style="${gt}"><div class="gut">`+
+  const gt=`grid-template-columns:60px repeat(${days},minmax(0,1fr))`;
+  const wtw=one?'width:100%':`width:max(100%,calc(60px + ${days} * var(--colw)))`;
+
+  /* 曜日の見出し：日付・曜日・その日の件数 */
+  const perDay=cols.map(d=>{
+    const ds=zToUTC(d.y,d.m,d.d,0,0,tz);
+    return {d,ds,de:ds+86400000,
+      list:evs.filter(e=>e.end>ds&&e.start<ds+86400000)};
+  });
+  const hd=`<div class="whd" style="${gt}"><div class="c gutc"></div>`+
+    perDay.map(({d,list})=>{
+      const w=cdow(d),n=list.filter(e=>e.kind!=='holiday').length;
+      return `<button class="c ${w===0?'sun':''}${w===6?'sat':''} ${ckey(d)===today?'today':''}" data-jumpday="${ckey(d)}" title="この日を開く">
+        <span class="dw">${dowN(w)}</span><span class="dn">${d.d}</span>
+        <span class="cnt">${n?n+'件':'—'}</span></button>`;
+    }).join('')+'</div>';
+
+  /* 終日あつかい（休暇）の帯 */
+  const anyHol=perDay.some(p=>p.list.some(e=>e.kind==='holiday'));
+  const allday=anyHol?`<div class="wallday" style="${gt}"><div class="ad adg">終日</div>`+
+    perDay.map(({list})=>`<div class="ad">`+
+      list.filter(e=>e.kind==='holiday').map(e=>
+        `<button class="chip" data-ev="${e.id}" title="${esc(e.title)}">${esc(e.who.map(i=>(person(i)||{}).name||'').join('・'))} 休暇</button>`
+      ).join('')+`</div>`).join('')+'</div>':'';
+
+  let body=`<div class="inner" style="${gt}"><div class="gut">`+
     Array.from({length:24},(_,h)=>`<div class="h">${h?pad2(h)+':00':''}</div>`).join('')+'</div>';
   const nowMs=Date.now();
-  cols.forEach(d=>{
-    const ds=zToUTC(d.y,d.m,d.d,0,0,tz),de=ds+86400000;
-    const lay=lanes(evs.filter(e=>e.end>ds&&e.start<de));
+  perDay.forEach(({d,ds,de,list})=>{
+    const lay=lanes(list.filter(e=>e.kind!=='holiday'));
     const dw=dayWork(me(),cdow(d)); const wk=!dw.off;
     const hol=holidayFor(me().id,ds,de);
     body+=`<div class="col dow-${cdow(d)} ${ckey(d)===today?'today':''} ${hol?'holcol':''}">`+
@@ -4546,15 +4919,27 @@ function dayGrid(c,tz,days){
       (hol?`<div class="holmask"><span>休暇</span></div>`:'');
     lay.forEach(o=>{
       const e=o.e,s2=Math.max(e.start,ds),en=Math.min(e.end,de);
-      const top=(s2-ds)/3600000*46,h=Math.max((en-s2)/3600000*46,16);
+      const top=(s2-ds)/3600000*HR;
+      const h=Math.max((en-s2)/3600000*HR,22);
       const w=100/o.n,left=w*o.i;
-      body+=`<button class="evb ${evClass(e)}" data-ev="${e.id}" style="top:${top}px;height:${h-1}px;left:calc(${left}% + 2px);width:calc(${w}% - 4px)">
-        <span class="n ell" style="display:block">${esc(e.title)}</span><span class="t">${hhmm(e.start,tz)}</span></button>`;
+      const size=h<30?'tiny':(h<60||o.n>2)?'short':'';
+      const who=evWho(e);
+      body+=`<button class="evb ${evClass(e)} ${size}" data-ev="${e.id}"
+        title="${esc(hhmm(e.start,tz)+'–'+hhmm(e.end,tz)+'　'+e.title+(who?'　'+who:''))}"
+        style="top:${top}px;height:${h-2}px;left:calc(${left}% + 2px);width:calc(${w}% - 4px)">
+        <span class="n">${esc(e.title)}</span>
+        <span class="t">${hhmm(e.start,tz)}–${hhmm(e.end,tz)}</span>
+        ${who?`<span class="w">${esc(who)}</span>`:''}</button>`;
     });
-    if(ckey(d)===today)body+=`<div class="nowline" data-day="${ds}" style="top:${(nowMs-ds)/3600000*46}px"></div>`;
+    if(ckey(d)===today){
+      const tp=(nowMs-ds)/3600000*HR;
+      body+=`<div class="nowline" data-day="${ds}" style="top:${tp}px"><span class="nowtag">${hhmm(nowMs,tz)}</span></div>`;
+    }
     body+='</div>';
   });
-  return `<div class="wgrid">${hd}${body}</div></div></div>`;
+  body+='</div>';
+  return `<div class="wgrid ${one?'oneday':''}" style="--hr:${HR}px">
+    <div class="wbody"><div class="wtable" style="${wtw}">${hd}${allday}${body}</div></div></div>`;
 }
 
 /* ================= PEOPLE ================= */
@@ -4642,8 +5027,26 @@ function dayPanel(k){
   const rest=all.filter(e=>e.kind!=='holiday');
   const myHol=hols.find(e=>e.who.includes(u.id));
   const dow=cdow(c),today=ckey(civil(Date.now(),tz))===k;
+  const nh=holidaysForDate(c);
+  /* 合計の拘束時間。「この日どれだけ埋まっているか」がひと目で分かる */
+  const mins=rest.reduce((n,e)=>n+Math.round((Math.min(e.end,de)-Math.max(e.start,ds))/60000),0);
+  const hrs=mins>=60?`${Math.floor(mins/60)}時間${mins%60?mins%60+'分':''}`:`${mins}分`;
   const body=`
-  <div class="dpbar">
+  <div class="dayhd">
+    <span class="big">${dd}</span>
+    <span>
+      <span class="mo">${LANG==='en'?`${MONEN[m-1]} ${y}`:`${y}年${m}月`}</span><br>
+      <span class="dw ${dow===0?'sun':''}${dow===6?'sat':''}">${dowN(dow)}曜日</span>
+    </span>
+    ${today?'<span class="todaytag">今日</span>':''}
+    <span class="sp"></span>
+    <span class="tzflag">${icon('clock')}<b>${cityN(effCity(u))}</b>時間</span>
+  </div>
+  <div class="dpnow">
+    ${rest.length?`<b style="color:var(--ink);font-size:14px">予定 ${rest.length}件</b>　合計 ${hrs}`:'予定なし'}
+    ${nh.length?`　/　${nh.map(h=>`${h.flag} ${esc(h.names[0])}`).join('　')}`:''}
+  </div>
+  <div class="dpbar" style="margin:14px 0 4px">
     ${myHol
       ? `<div class="dphol"><span class="hb">休暇</span><b>${esc(myHol.title)}</b>
            <span class="sp"></span>
@@ -4654,12 +5057,14 @@ function dayPanel(k){
       `<span class="ohol">${e.who.map(i=>esc((person(i)||{}).name||'')).join('・')} は休暇</span>`).join('')}</div>`:''}
   ${rest.length?`<div class="dplist">${rest.map(e=>{
       const kn=KINDS[e.kind]||'予定',mem=e.who.map(person).filter(Boolean);
+      const dur=Math.round((e.end-e.start)/60000);
+      const durT=dur>=60?`${Math.floor(dur/60)}時間${dur%60?dur%60+'分':''}`:`${dur}分`;
       return `<div class="dpi k-${e.kind}">
         <button class="main" data-ev="${e.id}">
-          <span class="tm">${hhmm(e.start,tz)}<i>${hhmm(e.end,tz)}</i></span>
+          <span class="tm"><b>${hhmm(e.start,tz)}</b><i>${hhmm(e.end,tz)}</i></span>
           <span class="bd">
             <span class="ti">${kindMark(e.kind)}${esc(e.title)}</span>
-            <span class="mt">${esc(kn)}${e.place?' ・ '+esc(e.place):''}</span>
+            <span class="mt">${esc(kn)} ・ ${durT}${e.place?' ・ '+esc(e.place):''}${mem.length?' ・ '+esc(mem.map(x=>x.name).join('、')):''}</span>
           </span>
           <span class="ppl">${mem.slice(0,4).map(x=>avatar(x,'s')).join('')}</span>
         </button>
@@ -4668,7 +5073,7 @@ function dayPanel(k){
     :`<div class="empty">${icon('cal')}${myHol?'休暇です。':'この日の予定はまだありません。'}</div>`}`;
   layer(modal(`${fmtYMD(y,m,dd)} (${dowN(dow)})${today?L(' ・ 今日',' · Today'):''}`,body,
     `<button class="btn" data-act="open-day" data-day="${k}">${icon('cal')}この日を時間割で見る</button>
-     <div class="sp"></div><button class="btn q" data-act="close-layer">閉じる</button>`));
+     <div class="sp"></div><button class="btn q" data-act="close-layer">閉じる</button>`,'daymodal'));
 }
 function personDrawer(id){
   const p=person(id),now=Date.now(),tz=effTz(p),u=me();
@@ -5630,7 +6035,8 @@ function afterLayer(){
   if(f&&window.innerWidth>900)f.focus();
 }
 function modal(title,body,footer,wide){
-  return `<div class="scrim" data-scrim="1"><div class="modal ${wide?'wide':''}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+  /* wide は true のほか、付けたいクラス名をそのまま渡せる */
+  return `<div class="scrim" data-scrim="1"><div class="modal ${wide===true?'wide':(wide||'')}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
     <div class="mh"><h3>${esc(title)}</h3><div class="sp"></div><button class="x" data-act="close-layer" aria-label="閉じる">${icon('x')}</button></div>
     <div class="mb">${body}</div>${footer?`<div class="mf">${footer}</div>`:''}</div></div>`;
 }
@@ -5691,7 +6097,12 @@ function openEvent(id){
 }
 function eventEditor(id,pre){
   const u=me(),e=id?DB.events.find(x=>x.id===id):null;
-  const tz=e?e.tz:effTz(u);
+  /* 開くときは必ず「自分の場所の時間」。
+     前は作った人のタイムゾーンで開いていたので、ブダペストで入れた予定を
+     日本の人が開くとブダペストの時刻が出てしまっていた。
+     中身（start/end）は世界共通の時刻なので、表示を変えても予定はずれない。 */
+  const tz=effTz(u);
+  const origTz=e?e.tz:null;
   const st=e?e.start:(pre&&pre.start)||Math.ceil(Date.now()/1800000)*1800000+1800000;
   const en=e?e.end:st+((pre&&pre.dur)||30)*60000;
   const ps=P(st,tz),pe=P(en,tz);
@@ -5706,7 +6117,8 @@ function eventEditor(id,pre){
         ${(()=>{const nh=holidaysForDate({y:ps.y,m:ps.m,d:ps.d});return nh.length
           ?`<span class="muted holwarn">${nh.map(h=>`${h.flag} ${esc(h.land)}：${esc(h.names.join(' / '))}`).join('　')}　${L('この国のメンバーはお休みかもしれません。','People there may be off.')}</span>`:'';})()}</div>
       <div class="field"><label>入力するタイムゾーン</label><select id="e-tz">
-        ${tzOpts.map(t=>`<option value="${t}" ${tz===t?'selected':''}>${t}（${offLabel(t,st)}）</option>`).join('')}</select></div>
+        ${tzOpts.map(t=>`<option value="${t}" ${tz===t?'selected':''}>${t}（${offLabel(t,st)}）</option>`).join('')}</select>
+        <span class="muted" style="font-size:12px">いまは <b>${cityN(effCity(u))}</b> の時間で表示しています。${origTz&&origTz!==tz?`この予定は <b>${esc(origTz)}</b> で入力されたものです。`:''}</span></div>
       <div class="field"><label>開始</label><input type="time" id="e-start" value="${pad2(ps.h)}:${pad2(ps.mi)}" ${dk==='holiday'?'disabled':''}></div>
       <div class="field"><label>終了</label><input type="time" id="e-end" value="${pad2(pe.h)}:${pad2(pe.mi)}" ${dk==='holiday'?'disabled':''}></div>
     </div>
@@ -6649,6 +7061,16 @@ render();
       : 'サーバに接続できませんでした。通信環境を確認して、開き直してください。';
     renderAuth();
   }finally{ splashOff(); }
+})();
+/* 横向きにしたときなど、幅が変わったら週表示の作りを切り替える */
+(function(){
+  let wasPhone=isPhone();
+  window.addEventListener('resize',()=>{
+    const now=isPhone();
+    if(now===wasPhone)return;
+    wasPhone=now;
+    if(S.view==='calendar'&&S.cal==='week'&&!$('#layer').innerHTML)render();
+  });
 })();
 setInterval(tick,1000);
 setInterval(()=>{try{messageCheck();}catch(e){}try{inboxCheck();}catch(e){}},2000);
