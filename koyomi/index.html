@@ -2192,6 +2192,9 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
    ============================================================ */
 
 /* ---- 共通：いまどこの時間で見ているか ---- */
+.calsub{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-4px 0 12px}
+.calsub #cal-scope{width:auto;height:31px;padding:3px 10px;font-size:13.5px}
+.calsub .tznote{font-size:12px;color:var(--ink-3)}
 .tzflag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;
   color:var(--ink-2);background:var(--sunken);border:1px solid var(--line);
   border-radius:99px;padding:3px 11px;white-space:nowrap}
@@ -2419,22 +2422,52 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
 .agd-add{display:block;width:100%;padding:11px 14px;font-size:13px;color:var(--ink-4);font-weight:600}
 .agd-add:active{background:var(--raise)}
 
-/* スマホ全般：カレンダーまわりの詰め */
+/* ============================================================
+   スマホ：上のほうを削って、カレンダーに高さを渡す
+   ------------------------------------------------------------
+   前は世界時計・月の見出し・絞り込み・時差の説明で画面の半分が
+   埋まり、肝心の日付が下半分に押し込まれていた。
+   見出しは1行、説明は消す。余った高さは全部マス目に回す。
+   ============================================================ */
 @media (max-width:660px){
-  .calbar{gap:8px}
-  .calbar .title{font-size:17px;min-width:0;flex:1}
-  .calbar #cal-scope{order:9;width:100%}
+  /* 世界時計は「今日」の画面のもの。カレンダーでは出さない。
+     ここで60px以上が日付に返る。 */
+  #app.calview .clockbar{display:none}
+  .clockbar .ck{padding:5px 13px 6px 0;margin-left:13px}
+  .clockbar .ck+.ck{padding-left:13px}
+  .clockbar .ck .t{font-size:16px;line-height:1.1}
+  .clockbar .ck .c{font-size:10px;letter-spacing:.04em}
+  .clockbar .tail{display:none}
+  /* 見出しは折り返さず1行に収める */
+  .calbar{flex-wrap:nowrap;gap:6px;margin-bottom:5px}
+  .calbar .title{flex:1;min-width:0;text-align:center;white-space:nowrap;
+    overflow:hidden;text-overflow:ellipsis;font-size:16.5px;font-weight:700}
+  .calbar .sp{display:none}
+  .calbar .seg{flex:none}
+  .calbar .seg button{height:29px;padding:0 9px;font-size:12.5px}
+  /* 絞り込みと時間表示は、文字だけの細い行に */
+  .calsub{gap:9px;margin:0 0 5px;flex-wrap:nowrap;align-items:center}
+  .calsub .tznote{display:none}
+  .calsub #cal-scope{flex:none;max-width:52%;height:24px;padding:0 4px 0 6px;
+    font-size:11.5px;font-weight:700;color:var(--ink-2);
+    border-color:transparent;background:transparent}
+  .calsub .tzflag{flex:none;font-size:11px;padding:1px 8px;border-radius:99px;
+    background:transparent;border-color:var(--line)}
+  .calsub .tzflag .ic{width:12px;height:12px}
+  /* 左右の余白を削って、マス目を広く */
+  .pad{padding:8px 6px 104px}
+  .content.fill>.pad{padding:8px 6px 92px}
   .legend-kinds{display:none}
   /* 月：色の帯ではなく、名前の入った札にする。
      他のカレンダーアプリと同じで、名前が見えないと意味がない。 */
-  .mgrid .cell{min-height:84px;padding:3px 2px 4px;gap:1.5px}
-  .mgrid .cell>.n{font-size:15px;font-weight:800;padding:0}
+  .mgrid .cell{min-height:92px;padding:3px 2px 4px;gap:2px}
+  .mgrid .cell>.n{font-size:15px;font-weight:800;padding:0;line-height:1.3}
   .mgrid .cell.today>.n{width:23px;height:23px;font-size:13px}
   .mgrid .cell .evdots{display:none}
-  .mgrid .cell .ev{display:flex;font-size:10.5px;line-height:1.45;padding:1px 3px;
-    border-radius:3px;border-left:0;gap:0;min-height:0}
+  .mgrid .cell .ev{display:flex;font-size:11px;line-height:1.5;padding:1.5px 3px;
+    border-radius:3px;border-left:0;gap:0;min-height:0;flex:none}
   .mgrid .cell .ev .hm{display:none}
-  .mgrid .cell .ev .n{font-weight:700;font-size:10.5px;letter-spacing:-.01em}
+  .mgrid .cell .ev .n{font-weight:700;font-size:11px;letter-spacing:-.01em}
   .mgrid .cell .ev.k-meeting{background:var(--k-meeting-bg)} .mgrid .cell .ev.k-meeting .n{color:var(--k-meeting)}
   .mgrid .cell .ev.k-sales{background:var(--k-sales-bg)} .mgrid .cell .ev.k-sales .n{color:var(--k-sales)}
   .mgrid .cell .ev.k-focus{background:var(--k-focus-bg)} .mgrid .cell .ev.k-focus .n{color:var(--k-focus)}
@@ -2450,7 +2483,8 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
   .mgrid .hd div{padding:5px 2px;font-size:11px}
   /* 日：1列しかないので、たっぷり広く */
   .wgrid.oneday{--hr:76px}
-  .wgrid.oneday .wbody{max-height:calc(100vh - 300px)}
+  .wgrid.oneday .wbody{max-height:calc(100vh - 210px)}
+  .wgrid .wbody{max-height:calc(100vh - 210px)}
   .wgrid.oneday .evb{padding:6px 9px}
   .wgrid.oneday .evb .n{font-size:15px}
   .wgrid.oneday .evb .t{font-size:12.5px}
@@ -3997,7 +4031,8 @@ const TITLES={today:['今日','TODAY'],calendar:['カレンダー','CALENDAR'],p
 function render(){
   if(!DB.authed||!person(DB.userId)){renderAuth();return;}
   if(needSetup()&&!S.setup.skip){renderSetup();return;}
-  $('#app').className='';
+  /* カレンダーの画面では、スマホのとき世界時計を隠して高さを譲る */
+  $('#app').className = S.view==='calendar' ? 'calview' : '';
   const u=me(),now=Date.now();
   const badge={messages:unreadOf('msg'),calendar:unreadOf('event'),people:unreadOf('member')};
   $('#app').innerHTML=`
@@ -4733,18 +4768,18 @@ function viewCalendar(){
     </div>
     <span class="title">${label}</span>
     <div class="sp"></div>
-    <select id="cal-scope" style="width:auto" data-act="scope">
-      <option value="all" ${S.scope==='all'?'selected':''}>全員の予定</option>
-      <option value="mine" ${S.scope==='mine'?'selected':''}>自分の予定</option>
-      ${DB.people.filter(p=>p.id!==me().id).map(p=>`<option value="${p.id}" ${S.scope===p.id?'selected':''}>${esc(p.name)} の予定</option>`).join('')}
-    </select>
     <div class="seg">
       ${[['month','月'],['week','週'],['day','日']].map(m=>`<button data-calmode="${m[0]}" aria-pressed="${S.cal===m[0]}">${m[1]}</button>`).join('')}
     </div>
   </div>
-  <div class="row" style="gap:10px;margin:-6px 0 12px">
-    <span class="tzflag">${icon('clock')}<b>${cityN(effCity(me()))}</b>時間で表示しています</span>
-    <span class="muted" style="font-size:12px">${offLabel(tz,now)}　ほかの人が別の国で入れた予定も、この時間に直して出しています。</span>
+  <div class="calsub">
+    <select id="cal-scope" data-act="scope">
+      <option value="all" ${S.scope==='all'?'selected':''}>全員の予定</option>
+      <option value="mine" ${S.scope==='mine'?'selected':''}>自分の予定</option>
+      ${DB.people.filter(p=>p.id!==me().id).map(p=>`<option value="${p.id}" ${S.scope===p.id?'selected':''}>${esc(p.name)} の予定</option>`).join('')}
+    </select>
+    <span class="tzflag" title="ほかの人が別の国で入れた予定も、この時間に直して出しています。">${icon('clock')}<b>${cityN(effCity(me()))}</b>時間</span>
+    <span class="tznote">${offLabel(tz,now)}　ほかの人が別の国で入れた予定も、この時間に直して出しています。</span>
   </div>
   <div class="legend-kinds">${Object.entries(KINDS).map(([k,v])=>`<span class="lk k-${k}">${kindMark(k)}${v}</span>`).join('')}</div>
   ${S.cal==='month'?monthGrid(c,tz):dayGrid(c,tz,S.cal==='week'?7:1)}`;
