@@ -1527,6 +1527,21 @@ div.nx-1{cursor:default}
 @media (max-width:560px){.preview-banner{font-size:12px!important;padding:6px 10px!important;gap:8px!important;flex-wrap:nowrap!important;justify-content:space-between!important;min-height:46px;box-sizing:border-box}.preview-banner button{white-space:nowrap;padding:4px 10px!important}
   .ask2 .you-tag{display:none}.vh .vh-t{flex:1;min-width:0}}
 .rv-h h2 small{display:block;font-size:12px;font-weight:600;color:var(--ink-3);font-family:var(--f)}
+.pc-kind{position:absolute;right:10px;top:10px;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--ink-2)}
+.pc-kind.k-image{background:#FBF4E2;color:var(--gold)}
+.turn.prep{background:var(--green-soft)}
+.bm{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:#FFF8E8;border:1.5px solid #E3C98A;border-radius:22px;padding:14px 16px}
+.bm>div{flex:1;min-width:220px}.bm b{display:flex;align-items:center;gap:6px;font-size:15.5px}.bm p{font-size:13.5px!important;color:var(--ink-2)}
+.bm-l{display:grid;gap:6px}.bm-l>b{font-size:14px}
+.bm-i{display:flex;gap:10px;align-items:center;background:var(--panel);border-radius:12px;padding:8px 12px;cursor:pointer}
+.bm-i input{width:20px;height:20px;flex:none}.bm-i small{display:block;font-size:11.5px;color:var(--ink-3)}.bm-i span{font-size:14px;line-height:1.45}
+.mprog{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--panel);border-radius:16px;padding:10px 14px}
+.mprog span{font-size:13px;font-weight:800;color:var(--ink-2)}.mprog b{font-size:16px}.mprog small{font-size:12px;color:var(--ink-3)}
+.mp-bar{height:8px;border-radius:4px;background:#fff;overflow:hidden}.mp-bar i{display:block;height:100%;background:var(--green-2);border-radius:4px}
+.bk-l{display:grid;gap:4px}.bk-l>div{display:grid;grid-template-columns:32px 130px minmax(0,1fr);gap:8px;align-items:center;background:var(--sunk);border-radius:10px;padding:6px 10px;font-size:14px}
+.bk-no{font-weight:800;color:var(--green-2)}
+.tzc{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#FFF1D6!important}
+@media (max-width:560px){.bk-l>div{grid-template-columns:28px 1fr}.bk-l>div b{grid-column:1/-1}}
 .pchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
 .pchip{all:unset;box-sizing:border-box;cursor:pointer;display:grid;gap:1px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--line-2);background:#fff;min-width:130px}
 .pchip b{font-size:14.5px}.pchip small{font-size:12px;color:var(--ink-3)}
@@ -1949,7 +1964,7 @@ function hydrate(){
   });
 }
 async function uploadImages(it){
-  for(const key of ["editImages","angleImages","finishImages","postImages","materialImages"]){
+  for(const key of ["editImages","angleImages","finishImages","postImages","materialImages","thumb"]){
     for(const im of (it[key]||[])){
       if(/^data:image\/(jpeg|png|webp)/.test(im.src)){const id=await rpc("sns_staff_save_image",{p_token:getToken(),p_client:it.clientId,p_data:im.src});IMGC[id]=im.src;im.src="img:"+id;}
     }
@@ -2084,7 +2099,7 @@ function usage(cid,month){
   const its=db.items.filter(i=>i.clientId===cid&&i.month===month);
   const v=its.filter(i=>i.kind==="video").length;
   const lv=its.filter(i=>i.kind==="live").reduce((n,i)=>n+(n0(i.duration)>30?4:2),0);
-  return {reel:v+lv,video:v,live:lv,image:its.filter(i=>i.kind==="image").length};
+  return {reel:v+lv,video:v,live:lv,image:its.filter(i=>i.kind==="image").length,made:its.filter(i=>i.kind==="image").reduce((n,i)=>n+n0(i.makeCount),0)};
 }
 const planMeter=(l,a,b,u)=>`<div class="meter"><div class="meter-l"><span>${l}</span><span class="num"><b class="${b&&a>b?"over":""}">${a}</b> / ${b}${u||"本"}</span></div><div class="meter-b"><i style="width:${Math.min(100,b?a/b*100:0)}%" class="${b&&a>b?"over":""}"></i></div></div>`;
 function planTable(cur){
@@ -2117,7 +2132,7 @@ function planPage0(c){
     ${contractBox(c)}${billsBox(c)}
     ${hasMeo(c)?`<div class="plan-sec-h">${ic("video")}SNS運用</div>`:""}
     <section class="plan-hero"><div class="ph-top"><span class="ph-name">${esc(c.plan)}</span><span class="ph-price">¥${p.price}<small> / 月</small></span></div><b class="ph-catch">${esc(p.catch)}</b><p>${esc(p.lead)}</p></section>
-    ${box("review",`${monthShort(tm)}に使った本数`,`<div class="stack" style="gap:12px">${planMeter("リール台本（ライブ台本の振替を含む）",u.reel,p.reel)}${planMeter("画像投稿の構成",u.image,p.image)}${u.live?`<p class="small muted">ライブ台本で、リール台本 ${u.live}本ぶんを使っています。</p>`:""}<dl class="quota-l">${p.make?`<div><dt>画像制作</dt><dd>月${p.make}枚</dd></div>`:""}${p.edit?`<div><dt>動画編集</dt><dd>月${p.edit}本</dd></div>`:""}${p.stories?`<div><dt>ストーリーズ</dt><dd>月${p.stories}本</dd></div>`:""}<div><dt>振り返り</dt><dd>${esc(p.review)}</dd></div></dl></div>`)}
+    ${box("review",`${monthShort(tm)}に使った本数`,`<div class="stack" style="gap:12px">${planMeter("リール台本（ライブ台本の振替を含む）",u.reel,p.reel)}${planMeter("画像投稿の構成",u.image,p.image)}${u.live?`<p class="small muted">ライブ台本で、リール台本 ${u.live}本ぶんを使っています。</p>`:""}<dl class="quota-l">${p.make?`<div><dt>画像制作</dt><dd>${u.made?`${u.made} / `:""}月${p.make}枚</dd></div>`:""}${p.edit?`<div><dt>動画編集</dt><dd>月${p.edit}本</dd></div>`:""}${p.stories?`<div><dt>ストーリーズ</dt><dd>月${p.stories}本</dd></div>`:""}<div><dt>振り返り</dt><dd>${esc(p.review)}</dd></div></dl></div>`)}
     ${box("check","このプランでできること",`<ul class="checks">${p.items.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`)}
     ${box("target","このプランに含まないもの",`<ul class="crosses">${p.excludes.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`)}
     ${box("layout","3つのプランのちがい",planTable(c.plan))}
@@ -2132,7 +2147,7 @@ function planPage0(c){
 function dayIn(month,day){const[y,m]=month.split("-").map(Number);const last=new Date(y,m,0).getDate();return `${y}-${pad(m)}-${pad(Math.min(Math.max(1,+day||1),last))}`;}
 function sched(c,month){
   const scripts=dayIn(month,c.scriptDay||1), review=dayIn(month,c.reviewDay||28);
-  const rd=parseISO(review); const add=(7-rd.getDay())%7||7; const due=new Date(rd); due.setDate(rd.getDate()+add);
+  const rd=parseISO(review); const cd=+c.cmtDays; const add=cd>0?cd:((7-rd.getDay())%7||7); const due=new Date(rd); due.setDate(rd.getDate()+add);
   return {scripts,review,due:isoOf(due)};
 }
 const shiftMonth=(m,n)=>{const[y,mm]=m.split("-").map(Number);const d=new Date(y,mm-1+n,1);return `${d.getFullYear()}-${pad(d.getMonth()+1)}`;};
@@ -2140,9 +2155,10 @@ const reviewOf=(cid,month)=>db.items.find(i=>i.clientId===cid&&i.kind==="review"
 function rhythmBox(c,month){
   const s=sched(c,month); const r=reviewOf(c.id,month); const t=todayISO();
   const st=(iso,done)=>done?'<span class="chip t-done">済み</span>':iso<t?'<span class="chip t-plan">過ぎました</span>':iso===t?'<span class="chip t-you">今日</span>':`<span class="chip t-plan">あと${daysFrom(iso)}日</span>`;
-  const sent=visible(c.id,"video").some(i=>i.month===month)||visible(c.id,"image").some(i=>i.month===month);
+  const ss=scriptsSent(c,month);
+  const sBox=ss.state==="none"?`<b>${fmtDate(s.scripts)}</b><span>台本をお渡し（予定）</span><span class="chip t-plan">準備中</span>`:`<b>${ss.date?fmtDate(ss.date):"お渡し済み"}</b><span>台本をお渡し</span><span class="chip t-done">済み</span>`;
   return `<section class="rhythm2"><div class="shelf-h"><h2>${monthShort(month)}の予定</h2><span>台本は月に1回、まとめてお渡しします</span></div><div class="rh-r">
-    <div class="rh"><span class="rh-i t-a">${ic("pen",18)}</span><b>${fmtDate(s.scripts)}</b><span>台本をお渡し</span>${st(s.scripts,sent&&s.scripts<=t)}</div>
+    <div class="rh"><span class="rh-i t-a">${ic("pen",18)}</span>${sBox}</div>
     <div class="rh"><span class="rh-i t-d">${ic("review",18)}</span><b>${fmtDate(s.review)}</b><span>振り返りをお渡し</span>${st(s.review,!!(r&&r.published&&r.summary))}</div>
     <div class="rh you"><span class="rh-i t-b">${ic("chat",18)}</span><b>${fmtDate(s.due)}</b><span>ひとことの締切</span>${st(s.due,!!(r&&r.clientComment))}</div></div></section>`;
 }
@@ -2160,7 +2176,7 @@ function viewClient(){
   const banner=S.preview?`<div class="preview-banner"><span>お客様（${esc(c.name)} 様）の見え方</span> <button type="button" data-act="endPreview">${S.returnTo==="how"?"使い方に戻る":"白梅の画面に戻る"}</button></div>`:"";
   const todoCount=["video","image","live"].reduce((n,k)=>n+visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&(x.st.who==="you");}).length,0);
   return banner+header(c.name+" 様",`<span class="hd-plan" aria-label="ご契約プラン">${[hasSns(c)?esc(c.plan):"",hasMeo(c)?"MAP "+esc(c.meoPlan):""].filter(Boolean).join("・")}</span>${hasSns(c)?`<button class="hd-idea" type="button" data-act="ideaOpen" aria-label="ネタを送る">${ic("gift",16)}<span>ネタを送る</span></button>`:""}<a class="hd-line" href="${LINE_URL}" target="_blank" rel="noopener" aria-label="公式LINEで相談する">${lineLogo}<span>相談</span></a>`,svcName(c))
-    +DECO()+tabBar(c)+`<main class="wrap pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`+(S.preview?`<style>.sm,.sheet-bg{top:46px!important}.sheet{max-height:calc(88dvh - 46px)!important}</style>`:"")+ideaSheet(c)+(S.shoot&&S.itemId?(()=>{const it=db.items.find(i=>i.id===S.itemId);return it?shootMode(it,c):"";})():"");
+    +DECO()+tabBar(c)+`<main class="wrap pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`+(S.preview?`<style>.sm,.sheet-bg{top:46px!important}.sheet{max-height:calc(88dvh - 46px)!important}</style>`:"")+ideaSheet(c)+bulkMatSheet(c)+(S.shoot&&S.itemId?(()=>{const it=db.items.find(i=>i.id===S.itemId);return it?shootMode(it,c):"";})():"");
 }
 function tabBar(c){
   const needs=k=>visible(c.id,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
@@ -2193,8 +2209,9 @@ function drawer(c){
 function pageHead(kind,sub){const d=parseISO(todayISO());return `<div class="page-head">${HEAD_ILL[kind]?`<div class="illus"><img src="${HEAD_ILL[kind]}" alt=""></div>`:""}<div><div class="tiny muted" style="font-weight:700">今日は ${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</div><h1>${KINDS[kind]}</h1></div></div>`;}
 function monthTabs(months,cur){return `<div class="tabs-m" role="tablist" aria-label="月を選ぶ">${months.map(m=>`<button class="mtab ${m===cur?"on":""}" type="button" role="tab" aria-selected="${m===cur}" data-act="month" data-m="${m}">${monthLabel(m)}</button>`).join("")}</div>`;}
 function pickMonth(months){const tm=thisMonth();return months.includes(S.month)?S.month:months.includes(tm)?tm:months[0];}
-const thumbOf=i=>{const a=(i.editImages||[])[0]||(i.finishImages||[])[0]||(i.postImages||[])[0];if(a&&a.src)return a.src;const k=(i.angles||[])[0];return k&&IMG.angles[k]?IMG.angles[k]:null;};
-function bigHead(title,sub,photo){const d=parseISO(todayISO());return `<header class="bh">${photo?`<div class="bh-ph"><img src="${photo}" alt=""></div>`:""}<div class="bh-tx"><span class="bh-d">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div></header>`;}
+const thumbOf=i=>{const a=(i.thumb||[])[0]||(i.editImages||[])[0]||(i.finishImages||[])[0]||(i.postImages||[])[0];if(a&&a.src)return a.src;const c=client(i.clientId);const ct=c&&(c.thumbImage||[])[0];if(ct&&ct.src)return ct.src;const k=(i.angles||[])[0];return k&&IMG.angles[k]?IMG.angles[k]:null;};
+const clientPhoto=(c,kind)=>{const ct=c&&(c.thumbImage||[])[0];return ct&&ct.src?ct.src:IMG.photo[kind];};
+function bigHead(title,sub,photo){const d=parseISO(todayISO());return `<header class="bh">${photo?`<div class="bh-ph"><img ${imgAttr(photo)} alt=""></div>`:""}<div class="bh-tx"><span class="bh-d">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><h1>${title}</h1>${sub?`<p>${sub}</p>`:""}</div></header>`;}
 function catRow(c,cur){
   const needs=k=>visible(c.id,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
   const t=(k,icon,l,tone)=>{const n=k==="review"?0:needs(k);return `<button class="cat ${S.view===k?"on":""}" type="button" data-act="nav" data-k="${k}"><span class="cat-i t-${tone}">${ic(icon,20)}</span><span class="cat-l">${l}</span>${n?`<span class="cat-n">${n}</span>`:""}</button>`;};
@@ -2204,12 +2221,12 @@ function shelfRow(title,items,kind,note){
   if(!items.length) return "";
   const dateOf=i=>{const x=stateOf(i);const d=x.done?["投稿",i.post]:i.step<=1&&i.shoot&&kind!=="live"?["撮影",i.shoot]:kind==="live"?["配信",i.liveDate]:["投稿",i.post];return x.done&&hasMet(i)?`再生 ${fmtN(i.m_views)}　保存 ${fmtN(i.m_saves)}`:d[1]?`${d[0]} ${fmtDate(d[1])}`:"";};
   return `<section class="shelf"><div class="shelf-h"><h2>${title}</h2>${note?`<span>${note}</span>`:""}</div><div class="shelf-r">${items.map(i=>{const x=stateOf(i);const th=thumbOf(i);
-    return `<button class="pc ${x.done?"is-done":""} ${x.st&&x.st.who==="you"?"is-you":""}" type="button" data-act="open" data-id="${i.id}"><span class="pc-im">${th?`<img ${imgAttr(th)} alt="">`:`<img src="${IMG.photo[kind]}" alt="" class="ph">`}<span class="pc-no">${circ(i.no)}</span><span class="pc-chip">${chip(i)}</span><span class="pc-go" aria-hidden="true">${ic(x.done?"check":"back",16)}</span></span><span class="pc-t">${esc(i.title)}</span><span class="pc-d">${dateOf(i)}</span></button>`;}).join("")}</div></section>`;
+    return `<button class="pc ${x.done?"is-done":""} ${x.st&&x.st.who==="you"?"is-you":""}" type="button" data-act="open" data-id="${i.id}"><span class="pc-im">${th?`<img ${imgAttr(th)} alt="">`:`<img src="${IMG.photo[kind]}" alt="" class="ph">`}<span class="pc-no">${circ(i.no)}</span><span class="pc-kind k-${i.kind}">${KIND_TAG[i.kind]||""}</span><span class="pc-chip">${chip(i)}</span><span class="pc-go" aria-hidden="true">${ic(x.done?"check":"back",16)}</span></span><span class="pc-t">${esc(shortTitle(i.title))}</span><span class="pc-d">${dateOf(i)}</span></button>`;}).join("")}</div></section>`;
 }
 function listPage(c,kind){
   const subs={video:"1本ずつ開くと、撮り方と目的がわかります。",image:"スワイプ投稿の1枚ずつの中身です。",live:"ライブ配信の流れと話すことです。"};
   const all=visible(c.id,kind);
-  const head=bigHead(KINDS[kind],subs[kind],IMG.photo[kind])+catRow(c);
+  const head=bigHead(KINDS[kind],subs[kind],clientPhoto(c,kind))+catRow(c);
   if(!all.length) return `<div class="stack">${head}${turnBox(c)}<div class="empty"><div class="ei"><img src="${IMG.emptyv}" alt=""></div><b>まだ${KINDS[kind]}はありません</b><span class="small">白梅デジタルが台本を入れると、ここに並びます。</span></div></div>`;
   const months=[...new Set(all.map(i=>i.month))].sort(); const cur=pickMonth(months);
   const list=all.filter(i=>i.month===cur).sort((a,b)=>a.no-b.no);
@@ -2220,7 +2237,9 @@ function listPage(c,kind){
   const cm=[rv2,rv].filter(r=>r&&r.published&&r.summary&&!r.clientComment&&todayISO()<=sched(c,r.month).due);
   const cmBox=cm.length?`<section class="todo"><h2>${ic("bell")}振り返りへのひとこと</h2><ul>${cm.map(r=>`<li><button type="button" data-act="nav" data-k="review" data-m="${r.month}">${monthShort(r.month)}の振り返りに、ひとことを書く<span>${fmtDate(sched(c,r.month).due)}まで</span></button></li>`).join("")}</ul></section>`:"";
   const guide=(()=>{try{if(localStorage.getItem("ume_guide_x"))return "";}catch(_){}return `<section class="guide"><div class="gd-h"><b>${ic("compass",18)}この画面の使い方</b><button type="button" class="gd-x" data-act="guideX" aria-label="閉じる">×</button></div><ol><li><span>1</span><div><b>「あなたの番です」を見る</b><p>今やることと期限が、いちばん上に出ます。</p></div></li><li><span>2</span><div><b>台本を開いて撮る</b><p>撮り方の見本の写真と、撮影モードがあります。</p></div></li><li><span>3</span><div><b>素材を送る</b><p>撮ったら台本の中の「素材を送る」から。あとは白梅デジタルが進めます。</p></div></li></ol><p class="tiny muted">思いついたネタは、右上の${ic("gift",13)}からいつでも送れます。</p></section>`;})();
-  return `<div class="stack">${head}${guide}${turnBox(c)}${searchBox(c)}${monthTabs(months,cur)}
+  const mAll=["video","image"].flatMap(k=>visible(c.id,k)).filter(i=>i.month===cur);const mDone=mAll.filter(i=>stateOf(i).done).length;
+  const prog=mAll.length?`<div class="mprog"><span>${monthShort(cur)}の投稿</span><div class="mp-bar"><i style="width:${mDone/mAll.length*100}%"></i></div><b>${mDone}<small> / ${mAll.length}本</small></b></div>`:"";
+  return `<div class="stack">${head}${guide}${turnBox(c)}${bulkMatBox(c)}${searchBox(c)}${monthTabs(months,cur)}${prog}
     ${shelfRow("お願いしたいこと",you,kind,`${you.length}件`)}
     ${shelfRow("白梅デジタルが進めています",doing,kind,`${doing.length}本`)}
     ${shelfRow("終わったもの",done,kind,`${done.length}本`)}
@@ -2551,13 +2570,14 @@ function yourTurn(c){
 }
 function turnBox(c){
   const t=yourTurn(c);
-  if(!t.length) return `<section class="turn none"><span class="turn-i">${ic("check",20)}</span><div><b>いま、お願いしたいことはありません</b><p>次にお願いすることができたら、ここに出ます。</p></div></section>`;
+  if(!t.length){const prep=["video","image","live"].flatMap(k=>visible(c.id,k)).filter(i=>{const x=stateOf(i);return x&&!x.done;}).length;
+    return prep?`<section class="turn none prep"><span class="turn-i">${ic("pen",20)}</span><div><b>白梅デジタルが準備しています（${prep}本）</b><p>撮影や確認をお願いするときは、ここでお知らせします。</p></div></section>`:`<section class="turn none"><span class="turn-i">${ic("check",20)}</span><div><b>いま、お願いしたいことはありません</b><p>次にお願いすることができたら、ここに出ます。</p></div></section>`;}
   const when=d=>{if(!d)return "";const n=daysFrom(d);return n<0?`<em class="late">${fmtDate(d)}（過ぎています）</em>`:n===0?`<em class="today">今日</em>`:n===1?`<em>明日</em>`:`<em>${fmtDate(d)}</em>`;};
   const [f,...r]=t;
   const go=o=>o.k==="rv"?`data-act="nav" data-k="review" data-m="${o.i.month}"`:`data-act="open" data-id="${o.i.id}"`;
   return `<section class="turn"><div class="turn-h"><span class="turn-k">あなたの番です</span><span class="turn-n">${t.length}件</span></div>
-    <button class="turn-1" type="button" ${go(f)}><span class="t1-w">${esc(f.what)}</span><b>${f.k==="rv"?"":esc(f.i.title)}</b><span class="t1-d">${f.k==="rv"?"":esc(label(f.i))}　${when(f.due)}</span><span class="t1-go" aria-hidden="true">${ic("back",16)}</span></button>
-    ${r.length?`<ul class="turn-l">${r.map(o=>`<li><button type="button" ${go(o)}><span class="tl-w">${esc(o.what)}</span><span class="tl-t">${o.k==="rv"?"":esc(o.i.title)}</span>${when(o.due)}</button></li>`).join("")}</ul>`:""}</section>`;
+    <button class="turn-1" type="button" ${go(f)}><span class="t1-w">${esc(f.what)}</span><b>${f.k==="rv"?"":esc(shortTitle(f.i.title))}</b><span class="t1-d">${f.k==="rv"?"":esc(label(f.i))}　${when(f.due)}</span><span class="t1-go" aria-hidden="true">${ic("back",16)}</span></button>
+    ${r.length?`<ul class="turn-l">${r.map(o=>`<li><button type="button" ${go(o)}><span class="tl-w">${esc(o.what)}</span><span class="tl-t">${o.k==="rv"?"":esc(shortTitle(o.i.title))}</span>${when(o.due)}</button></li>`).join("")}</ul>`:""}</section>`;
 }
 /* 素材の受け渡し（お客様の画面・撮影の段階） */
 function materialBox(it,c,isClient){
@@ -2738,7 +2758,7 @@ function ideasPage(){
 function linkIdea(it){if(!it.ideaId)return;const idea=db.items.find(x=>x.id===it.ideaId);if(!idea||idea.scriptId===it.id)return;idea.status="used";idea.scriptId=it.id;idea.scriptTitle=it.title;persistItem(idea,[]);}
 function dupItem(src,month){
   const d=JSON.parse(JSON.stringify(src));
-  ["id","ideaId","stamps","redo","lastBy","turnAt","shotAt","materialUrl","materialNote","materialAt","materialImages","materialOk","captionEn","captionEnAt","postUrl","metricsAt","clientComment","clientCommentAt","shoot","firstDraft","post","deadline","deliveryUrl","isTemplate"].forEach(k=>delete d[k]);
+  ["id","ideaId","publishedAt","stamps","redo","lastBy","turnAt","shotAt","materialUrl","materialNote","materialAt","materialImages","materialOk","captionEn","captionEnAt","postUrl","metricsAt","clientComment","clientCommentAt","shoot","firstDraft","post","deadline","deliveryUrl","isTemplate"].forEach(k=>delete d[k]);
   MET.forEach(([k])=>delete d["m_"+k]);
   d.id=null;d.step=0;d.stamps={};d.published=false;d.month=month||thisMonth();
   const nos=db.items.filter(i=>i.clientId===d.clientId&&i.kind===d.kind&&i.month===d.month).map(i=>i.no||0);d.no=(nos.length?Math.max(...nos):0)+1;
@@ -2804,6 +2824,61 @@ function howPage(){
     <section class="hw-flow"><h2>1か月の流れ</h2><ol>${[["1日","台本をお渡し","us"],["撮影日","撮影","you"],["撮ったら","素材を送る","you"],["届いたら","編集・初稿","us"],["初稿OK","投稿・数字","us"],["28日","振り返り","us"],["日曜まで","ひとこと","you"]].map(([d,t,w],k)=>`<li class="${w}"><span class="hf-n">${k+1}</span><b>${t}</b><small>${d}</small></li>`).join("")}</ol><p class="tiny muted">緑が白梅デジタル、金色がお客様の番です。ひとことと「来月試すこと」が、次の月の台本に入ります。</p></section>
     <div class="hw">${steps.map(s=>`<section class="hw-s" id="hw_${s.n}"><div class="hw-h"><span class="hw-n">${s.n}</span><div><h3>${s.t}</h3><div class="hw-m">${W(s.w)}<span class="hw-when">${ic("clock",13)}${s.when}</span></div></div></div><ul>${s.d.map(x=>`<li>${esc(x)}</li>`).join("")}</ul><div class="rowbtns">${s.b.filter(Boolean).join("")}</div></section>`).join("")}</div>
     <section class="hw-daily"><h2>${ic("check",18)}白梅が毎日やること</h2><ol>${daily.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></section>`;
+}
+
+/* ===== 改善メモ（11/9）対応 ===== */
+const cjkN=s=>(String(s).match(/[぀-ヿ一-鿿]/g)||[]).length;
+function shortTitle(t){t=String(t||"");const pre=(t.match(/^【[^】]*】/)||[""])[0];const body=t.slice(pre.length);const parts=body.split(/\s*[／|｜]\s*|\s+\/\s+/).map(x=>x.trim()).filter(Boolean);if(parts.length<2)return t;const best=parts.slice().sort((a,b)=>cjkN(b)-cjkN(a))[0];return cjkN(best)?pre+best:t;}
+const KIND_TAG={video:"動画",image:"写真で",live:"ライブ"};
+/* 台本をお渡しした日：予定ではなく、実際に公開した日 */
+function scriptsSent(c,month){
+  const its=["video","image","live"].flatMap(k=>visible(c.id,k)).filter(i=>i.month===month);
+  if(!its.length) return {state:"none"};
+  const ds=its.map(i=>i.publishedAt).filter(Boolean).sort();
+  return ds.length?{state:"sent",date:ds[0]}:{state:"sent"};
+}
+/* お客様の番：素材をまとめて送れるもの */
+const matWaitItems=c=>["video","image"].flatMap(k=>visible(c.id,k)).filter(i=>(i.step||0)===1&&!i.materialAt).sort((a,b)=>String(a.shoot||"").localeCompare(String(b.shoot||""))||(a.no-b.no));
+function bulkMatBox(c){
+  const its=matWaitItems(c); if(its.length<2) return "";
+  return `<section class="bm"><div><b>${ic("box",18)}撮った素材を、まとめて送れます</b><p>撮影や素材を待っている台本が${its.length}本あります。1本ずつ開かなくても、ここから一度に送れます。</p></div><button class="btn btn-p" type="button" data-act="bulkMatOpen">${ic("box",16)}今月の素材をまとめて送る</button></section>`;
+}
+function bulkMatSheet(c){
+  if(!S.bulkMat) return "";
+  const its=matWaitItems(c); const sel=S.bulkSel||Object.fromEntries(its.map(i=>[i.id,true]));
+  return `<div class="sheet-bg" data-act="bulkMatX"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="素材をまとめて送る">
+    <div class="sheet-h"><b>${ic("box",18)}素材をまとめて送る</b><span class="spacer"></span><button class="sm-x" type="button" data-act="bulkMatX" aria-label="閉じる">×</button></div>
+    ${c.materialFolder?`<a class="btn btn-p" href="${esc(c.materialFolder)}" target="_blank" rel="noopener">${ic("ext",16)}素材を入れるフォルダを開く</a><p class="tiny muted">撮った動画・写真をまとめて入れてから、下で送る台本を選んでください。</p>`:`<p class="small muted">Googleドライブなどにまとめて入れて、共有のリンクを下に貼ってください。</p>`}
+    <div class="field"><label for="bm_url">素材のリンク${c.materialFolder?"（フォルダに入れた場合は空のままで大丈夫です）":""}</label><input type="url" id="bm_url" value="${esc(S.bmUrl||"")}" placeholder="https://drive.google.com/…"></div>
+    <div class="field"><label for="bm_note">ひとこと</label><textarea id="bm_note" rows="2" placeholder="例：③の動画は2回撮ったので、2本目を使ってください">${esc(S.bmNote||"")}</textarea></div>
+    <div class="bm-l"><b>素材を送る台本（${its.filter(i=>sel[i.id]).length} / ${its.length}本）</b>${its.map(i=>`<label class="bm-i"><input type="checkbox" data-bmsel="${i.id}" ${sel[i.id]?"checked":""}><span><small>${esc(label(i))}</small>${esc(shortTitle(i.title))}</span></label>`).join("")}</div>
+    <button class="btn btn-p btn-big" type="button" data-act="bulkMatSend">${ic("check")}選んだ台本の素材を送りました</button></div>`;
+}
+/* 月まとめて作る（白梅） */
+function bulkPage(){
+  const b=S.bk||(S.bk={clientId:S.fClient!=="all"?S.fClient:(db.clients[0]||{}).id,kind:"video",month:shiftMonth(thisMonth(),0),count:"12",start:"",every:"2",time:"",src:"",titles:"",pub:false});
+  const c=client(b.clientId)||{};
+  const nos=db.items.filter(i=>i.clientId===b.clientId&&i.kind===b.kind&&i.month===b.month).map(i=>i.no||0);const no0=(nos.length?Math.max(...nos):0)+1;
+  const n=Math.max(1,Math.min(40,+b.count||1));const titles=String(b.titles||"").split("\n").map(x=>x.trim());
+  const dates=Array.from({length:n},(_,k)=>b.start?addDays(b.start,k*(Math.max(1,+b.every||1))):"");
+  const srcs=db.items.filter(i=>i.clientId===b.clientId&&(i.kind===b.kind)).sort((x,y)=>y.month.localeCompare(x.month)||(x.no-y.no));
+  const tz=c.tz||"Asia/Tokyo";
+  const opt=(v,l,cur)=>`<option value="${esc(v)}" ${cur===v?"selected":""}>${l}</option>`;
+  return `<div class="staff-head"><div><h1>月まとめて作る</h1><p class="muted small">決まった間隔で投稿する台本を、まとめて下書きで作ります。作ったあと、1本ずつ中身を足して公開してください。</p></div></div>
+  <section class="fsec"><div class="grid2">
+    <div class="field"><label for="bk_c">お客様</label><select id="bk_c" data-bk="clientId">${db.clients.map(x=>opt(x.id,esc(x.name),b.clientId)).join("")}</select></div>
+    <div class="field"><label for="bk_k">種類</label><select id="bk_k" data-bk="kind">${["video","image","live"].map(k=>opt(k,KINDS[k],b.kind)).join("")}</select></div>
+    <div class="field"><label for="bk_m">何月用</label><input type="month" id="bk_m" data-bk="month" value="${esc(b.month)}"></div>
+    <div class="field"><label for="bk_n">本数</label><input type="number" min="1" max="40" id="bk_n" data-bk="count" value="${esc(b.count)}"></div>
+    <div class="field"><label for="bk_s">最初の投稿日</label><input type="date" id="bk_s" data-bk="start" value="${esc(b.start)}"></div>
+    <div class="field"><label for="bk_e">間隔</label><select id="bk_e" data-bk="every">${[["1","毎日"],["2","1日おき"],["3","2日おき"],["7","毎週"]].map(([v,l])=>opt(v,l,String(b.every))).join("")}</select></div>
+    <div class="field"><label for="bk_t">投稿する時刻（${esc(tzName(tz))}の時間）</label><input type="time" id="bk_t" data-bk="time" value="${esc(b.time)}"></div>
+    <div class="field"><label for="bk_src">中身をコピーする元（あれば）</label><select id="bk_src" data-bk="src">${opt("","なし（空で作る）",b.src)}${srcs.slice(0,40).map(i=>opt(i.id,esc(label(i)+"　"+shortTitle(i.title)),b.src)).join("")}</select></div>
+  </div>
+  <div class="field"><label for="bk_ti">タイトル（1行に1本。空の行は「（タイトル未定）」で作ります）</label><textarea id="bk_ti" data-bk="titles" rows="6" placeholder="例：三年番茶という考え方">${esc(b.titles)}</textarea></div>
+  <p class="small">タイムゾーン・言語・前提は「${esc(c.name||"")}」の設定を使います。${tz!=="Asia/Tokyo"&&b.time&&b.start?`<b>現地 ${esc(b.time)} ＝ 日本 ${esc(toJST(b.start,b.time,tz)||"")}</b>`:""}</p></section>
+  <section class="fsec"><h3><span class="hi">${ic("list")}</span>作られるもの（${n}本・番号 ${no0}〜${no0+n-1}）</h3><div class="bk-l">${dates.map((d,k)=>`<div><span class="bk-no">${circ(no0+k)}</span><span>${d?fmtDate(d):"日付なし"}${b.time?" "+esc(b.time):""}</span><b>${esc(titles[k]||"（タイトル未定）")}</b></div>`).join("")}</div>
+    <div class="savebar" style="position:static"><div class="spacer"></div><button class="btn btn-g" type="button" data-act="adminTab" data-t="list">やめる</button><button class="btn btn-p" type="button" data-act="bulkCreate">${ic("check",16)}${n}本を下書きで作る</button></div></section>`;
 }
 
 function meoPage(c){
@@ -2946,7 +3021,7 @@ function viewsChart(all,cur){
 /* ============ 白梅デジタル側 ============ */
 const FIELDS={
   video:[
-    {t:"ひとことで言うと",i:"chat",f:[["oneLine","ひとことで言うと","area","例：はい・いいえで答えられる質問をして、市町村を当てるクイズ"]]},
+    {t:"ひとことで言うと",i:"chat",f:[["oneLine","ひとことで言うと","area","例：はい・いいえで答えられる質問をして、市町村を当てるクイズ"],["thumb","サムネイル（お客様の一覧に出る写真・1枚）","images","1/1",1]]},
     {t:"日程",i:"cal",f:[["shoot","撮影日","date"],["firstDraft","初稿の共有日","date"],["post","投稿予定日","date"],["deadline","納期","date"],["deliveryUrl","初稿・納品のURL","url"]]},
     {t:"お客様にお願いすること",i:"hand",lead:"お客様の画面では、金色の枠で目立つように出ます。",f:[["cast","演者","text"],["place","撮影場所","text"],["prep","準備するもの","text"],["survey","事前アンケート","text"],["caution","注意点・懸念点","text"]]},
     {t:"動画の目的",i:"target",f:[["purposeWho","どんな状態の、誰に","text"],["purposeWhat","いちばん伝えたいこと","text"],["purposeFeel","見た人に、どう思ってほしいか","text"]]},
@@ -2961,7 +3036,7 @@ const FIELDS={
     {t:"社内メモ（お客様には表示されません）",i:"list",memo:true,f:[["memo","メモ","area"]]}
   ],
   image:[
-    {t:"ひとことで言うと",i:"chat",f:[["oneLine","ひとことで言うと","area"]]},
+    {t:"ひとことで言うと",i:"chat",f:[["oneLine","ひとことで言うと","area"],["thumb","サムネイル（お客様の一覧に出る写真・1枚）","images","1/1",1],["makeCount","白梅が制作する枚数（プランの画像制作に数えます）","number"]]},
     {t:"日程",i:"cal",f:[["shoot","写真撮影日","date"],["post","投稿予定日","date"]]},
     {t:"お客様にお願いすること",i:"hand",f:[["prep","準備するもの","text"],["angles","撮り方の見本（えらんだ写真がお客様の台本に出ます）","angles"]]},
     {t:"投稿の目的",i:"target",f:[["purposeWho","どんな状態の、誰に","text"],["purposeWhat","いちばん伝えたいこと","text"],["purposeFeel","見た人に、どう思ってほしいか","text"]]},
@@ -3053,11 +3128,11 @@ const ILL_DESK=()=>`<svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60
 /* ---------- 白梅デジタル側 ---------- */
 function todayBox(){const t=todayISO();const d=parseISO(t);return `<div class="today"><b><span class="lg">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><span class="sh">${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）</span></b><span>${d.getFullYear()}年　今日</span></div>`;}
 function viewStaff(){
-  const tab=(k,icon,l)=>`<button class="stab ${S.admin===k||(k==="clients"&&S.admin==="client")||(k==="new"&&S.admin==="edit")?"on":""}" type="button" data-act="adminTab" data-t="${k}">${ic(icon)}${k==="new"&&S.admin==="edit"?"台本を編集中":l}</button>`;
+  const tab=(k,icon,l)=>`<button class="stab ${S.admin===k||(k==="clients"&&S.admin==="client")||(k==="new"&&(S.admin==="edit"||S.admin==="bulk"))?"on":""}" type="button" data-act="adminTab" data-t="${k}">${ic(icon)}${k==="new"&&S.admin==="edit"?"台本を編集中":l}</button>`;
   const tabs=`<div class="stabs" role="tablist">${tab("home","star","ホーム")}${tab("list","list","台本")}${tab("clients","user","お客様")}${tab("ideas","gift","ネタ帳"+((n=>n?`（${n}）`:"")(db.items.filter(i=>i.kind==="idea"&&i.status==="new"&&i.from==="client").length)))}${tab("new","pen","提出する")}${tab("how","compass","使い方")}</div>`;
   const right=`${todayBox()}<button class="btn btn-g btn-s" type="button" data-act="logout">ログアウト</button>`;
   let body;
-  switch(S.admin){case "home":body=staffHome();break;case "clients":body=clientsPage();break;case "client":body=clientEditor();break;case "new":case "edit":body=staffForm();break;case "ideas":body=ideasPage();break;case "how":body=howPage();break;default:body=staffList();}
+  switch(S.admin){case "home":body=staffHome();break;case "clients":body=clientsPage();break;case "client":body=clientEditor();break;case "new":case "edit":body=staffForm();break;case "ideas":body=ideasPage();break;case "how":body=howPage();break;case "bulk":body=bulkPage();break;default:body=staffList();}
   return `<div class="staff-bg">${DECO()}${header("管理画面",right)}<main class="wrap wide"><div class="stack">${tabs}${body}</div></main></div>`;
 }
 function staffHome(){
@@ -3077,8 +3152,8 @@ function staffHome(){
   const agenda=ev.length?`<div class="agenda">${ev.slice(0,S.agAll?12:5).map(e=>{const d=parseISO(e.d);return `<button class="ag ag-${e.k}" type="button" data-act="openClient" data-id="${e.c.id}"><div class="d ${e.d===t?"is-today":""}"><b>${d.getDate()}</b><span>${d.getMonth()+1}月・${WD[d.getDay()]}</span></div><div class="w"><div class="t">${ic(kindIc[e.k],16)} ${esc(e.l)}</div><div class="c">${esc(e.c.name)}${e.m?"　"+monthLabel(e.m)+"分":""}</div></div><span class="chip ${e.ok?"t-done":e.d===t?"t-you":e.k==="pay"?"t-you":"t-plan"}">${e.ok?"済み":e.d===t?"今日":daysFrom(e.d)===1?"明日":daysFrom(e.d)+"日後"}</span></button>`;}).join("")}</div>`:`<div class="empty"><b>これから3週間の予定はありません</b></div>`;
   const cards=`<div class="clients">${db.clients.map(c=>{const p=PLANS[c.plan]||PLANS.LIGHT;const uu=usage(c.id,tm);const rv=uu.reel;const im=uu.image;
     const meter=(l,a,b)=>`<div class="meter"><div class="meter-l"><span>${l}</span><span class="num"><b>${a}</b> / ${b}本</span></div><div class="meter-b"><i style="width:${Math.min(100,b?a/b*100:0)}%"></i></div></div>`;
-    return `<section class="cl"><div class="cl-h">${avatar(c)}<div style="min-width:0;flex:1"><b>${esc(c.name)}</b><div class="tiny muted">${esc(c.contact)}　${planBadges(c)}</div></div></div><div class="mini-r"><span>${ic("pen",14)}台本 毎月${esc(c.scriptDay||1)}日</span><span>${ic("review",14)}振り返り 毎月${esc(c.reviewDay||28)}日</span></div>${hasSns(c)?meter(monthShort(tm)+"のリール台本",rv,p.reel)+meter(monthShort(tm)+"の画像投稿",im,p.image):""}${hasMeo(c)?meter(monthShort(tm)+"のマップ投稿",db.items.filter(i=>i.clientId===c.id&&i.kind==="meo_post"&&i.month===tm).length,MEO_PLANS[c.meoPlan].posts):""}
-      <div class="rowbtns"><button class="btn btn-g btn-s" type="button" data-act="openClient" data-id="${c.id}">お客様情報</button><button class="btn btn-g btn-s" type="button" data-act="fclient" data-id="${c.id}">台本を見る</button><button class="btn btn-g btn-s" type="button" data-act="previewClient" data-id="${c.id}">見え方</button></div></section>`;}).join("")}</div>`;
+    return `<section class="cl"><div class="cl-h">${avatar(c)}<div style="min-width:0;flex:1"><b>${esc(c.name)}</b><div class="tiny muted">${esc(c.contact)}　${planBadges(c)}</div></div></div><div class="mini-r"><span>${ic("pen",14)}台本 毎月${esc(c.scriptDay||1)}日</span><span>${ic("review",14)}振り返り 毎月${esc(c.reviewDay||28)}日</span></div>${hasSns(c)?meter(monthShort(tm)+"のリール台本",rv,p.reel)+meter(monthShort(tm)+"の画像投稿",im,p.image)+(p.make?meter(monthShort(tm)+"の画像制作（枚）",uu.made,p.make):""):""}${hasMeo(c)?meter(monthShort(tm)+"のマップ投稿",db.items.filter(i=>i.clientId===c.id&&i.kind==="meo_post"&&i.month===tm).length,MEO_PLANS[c.meoPlan].posts):""}
+      <div class="rowbtns"><button class="btn btn-g btn-s" type="button" data-act="openClient" data-id="${c.id}">お客様情報</button><button class="btn btn-g btn-s" type="button" data-act="fclient" data-id="${c.id}">台本を見る</button><button class="btn btn-g btn-s" type="button" data-act="previewClient" data-id="${c.id}">${esc(c.name)} 様の見え方</button></div></section>`;}).join("")}</div>`;
   // 白梅が今やること（期限の近い順）
   const ourQ=[];
   prod.forEach(i=>{const x=stateOf(i);if(!x||x.done)return;const c=client(i.clientId);if(!c)return;
@@ -3135,12 +3210,13 @@ function clientsPage(){
       ${np?`<div class="pay-next">${ic("cal")}次のお支払い <b>${fmtFull(np.iso)}</b>${np.paid?'<span class="chip t-done">入金済み</span>':`<span class="chip t-you">あと${daysFrom(np.iso)}日</span>`}<span class="tiny muted">${esc(c.payMethod||"")}・${payMonths(c)>1?esc(payTypeName(c)):"毎月"+esc(c.payDay)+"日"}${np.manual?"・手入力":""}</span></div>`:""}
       ${(()=>{const ci=contractInfo(c);return ci?`<div class="pay-next ${ci.noticeLeft>=0&&ci.noticeLeft<=30?"warn":""}">${ic("bell")}満了 <b>${fmtFull(ci.end)}</b><span class="tiny muted">解約のお申し出は ${fmtDate(ci.notice)} まで</span>${ci.left>=0&&ci.left<=30?`<span class="chip t-you">あと${ci.left}日</span>`:""}</div>`:"";})()}
       ${c.owner?`<div class="tiny muted">担当：${esc(c.owner)}</div>`:""}
-      <div class="rowbtns"><button class="btn btn-p btn-s" type="button" data-act="openClient" data-id="${c.id}">${ic("pen")}編集する</button><button class="btn btn-g btn-s" type="button" data-act="fclient" data-id="${c.id}">台本を見る</button><button class="btn btn-g btn-s" type="button" data-act="previewClient" data-id="${c.id}">お客様の見え方</button></div></section>`;};
+      <div class="rowbtns"><button class="btn btn-p btn-s" type="button" data-act="openClient" data-id="${c.id}">${ic("pen")}編集する</button><button class="btn btn-g btn-s" type="button" data-act="fclient" data-id="${c.id}">台本を見る</button><button class="btn btn-g btn-s" type="button" data-act="previewClient" data-id="${c.id}">${esc(c.name)} 様の見え方</button></div></section>`;};
   return `<div class="staff-head"><div><h1>お客様</h1><p class="muted small">${db.clients.length}社と契約中</p></div><div class="spacer"></div><button class="btn btn-p" type="button" data-act="newClient">＋ お客様を追加</button></div>${false?`<div class="consult-inline"><p>試し用に、見本のお客様（架空のお店）と台本・レポートを入れられます。入れたあと、お客様情報で「新しいパスワード」を決めると、お客様の画面でもログインして試せます。いらなくなったら削除してください。</p><div class="rowbtns">${db.clients.some(c=>c.loginId==="mihon")?"":`<button class="btn btn-g" type="button" data-act="addSample">見本（SNS運用）を入れる</button>`}${db.clients.some(c=>c.loginId==="mihon-map")?"":`<button class="btn btn-g" type="button" data-act="addSample" data-kind="meo">見本（Googleマップ対策）を入れる</button>`}</div></div>`:""}
     <div class="clients" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))">${db.clients.map(card).join("")}</div>`;
 }
 let cdraft=null;
 function blankClient(){return {id:null,scriptDay:"1",reviewDay:"28",name:"",kana:"",contact:"",insta:"",tiktok:"",plan:"LIGHT",meoPlan:"",fee:"19800",contractDate:todayISO(),paidDate:"",startDate:"",payDay:"25",payMethod:"銀行振込",loginId:"",password:"",phone:"",email:"",memo:"",payments:[]};}
+function cslot(){const im=(cdraft.thumbImage||[])[0];return `<div class="slots" style="--cols:1;--ar:1/1;max-width:160px"><div class="slot"><div class="slot-frame">${im?`<img ${imgAttr(im.src)} alt=""><button class="slot-x" type="button" data-act="cThumbRm" aria-label="この写真を外す">×</button>`:`<label class="slot-add"><span>＋</span>写真を追加<input type="file" accept="image/*" data-cthumb="1"></label>`}</div></div></div>`;}
 function clientEditor(){
   if(!cdraft) cdraft=blankClient();
   const c=cdraft, isEdit=!!c.id;
@@ -3163,6 +3239,7 @@ function clientEditor(){
       <div class="field"><label for="c_ngList">NG（1行に1つ）</label><textarea id="c_ngList" data-ckey="ngList" placeholder="例：顔出しNG&#10;味の話をしない&#10;「有機JAS」と言い切らない">${esc(c.ngList||"")}</textarea></div>
       <div class="field"><label for="c_rules">進め方の決まりごと（1行に1つ）</label><textarea id="c_rules" data-ckey="rules" placeholder="例：編集はしない（お客様が編集）&#10;英語のキャプションはお客様が書く">${esc(c.rules||"")}</textarea></div>
       <div class="field"><label for="c_materialFolder">素材を入れてもらうフォルダ（Googleドライブなど）</label><input type="url" id="c_materialFolder" data-ckey="materialFolder" value="${esc(c.materialFolder||"")}" placeholder="https://drive.google.com/drive/folders/…"><span class="hint">入れると、お客様の台本の「素材を送る」に「フォルダを開く」ボタンが出ます。</span></div>
+      <div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">このお客様の写真（台本の一覧と、画面の上に出ます・1枚）</span>${cslot()}<span class="hint">お客様から届いた写真を1枚入れてください。台本ごとのサムネイルがないときは、これが出ます。</span></div>
       <label class="check"><input type="checkbox" data-ckey="captionEnDefault" data-ck="1" ${c.captionEnDefault?"checked":""}>新しい台本は「英語のキャプションをお客様に書いてもらう」にしておく</label></section>
     ${hasSns(c)?"":"<!--"}<section class="fsec"><h3><span class="hi">${IG.replace('viewBox','width="18" height="18" viewBox')}</span>SNSのアカウント</h3><div class="grid2">${f("insta","InstagramのID","text","@umikaze_marche","@から入れてください")}${f("tiktok","TikTokのID","text","@umikaze_hamada")}</div></section>${hasSns(c)?"":"-->"}
     ${hasMeo(c)?`<section class="fsec"><h3><span class="hi">${ic("target")}</span>Googleマップ改善のスタートとゴール</h3><p class="lead">お客様の画面のいちばん上に「全体の道のり」として出ます。どこから始めて、どこを終着点にするかを決めてください。</p>
@@ -3173,7 +3250,7 @@ function clientEditor(){
     <section class="fsec"><h3><span class="hi">${ic("list")}</span>Googleマップの仕組み（はじめの準備・口コミ）</h3><p class="lead">お客様の画面の「進め方」に出ます。はじめの準備は「やること｜担当（白梅 / お客様）｜済み・進行中・これから」で1行に1つ。空のままだと、ひな形がすべて「これから」で出ます。</p>
       <div class="field"><label for="c_meoSetup">はじめの準備</label><textarea id="c_meoSetup" data-ckey="meoSetup" rows="8" placeholder="例：営業時間・定休日を正しく入れる｜白梅｜済み">${esc(c.meoSetup||"")}</textarea>${c.meoSetup?"":`<button class="btn btn-g" type="button" data-act="setupTpl">ひな形を入れる</button>`}</div>
       <div class="field"><label for="c_meoReviewUrl">口コミを書いてもらうページのリンク</label><input type="url" id="c_meoReviewUrl" data-ckey="meoReviewUrl" value="${esc(c.meoReviewUrl||"")}" placeholder="https://g.page/r/…/review"><span class="hint">Googleビジネスプロフィールの「口コミをもらう」で出るリンクです。入れると、お客様の画面にQRコード付きのカードが出て、印刷できます。</span></div></section>`:""}
-    <section class="fsec"><h3><span class="hi">${ic("clock")}</span>毎月の流れ</h3><p class="lead">台本は月に1回まとめてお渡しします。お客様の画面にも、この日付が「今月の予定」として出ます。</p><div class="grid2">${f("scriptDay","台本をまとめてお渡しする日（毎月◯日）","number","1")}${f("reviewDay","振り返りを作ってお渡しする日（毎月◯日）","number","28")}</div>${(()=>{const sc=sched(c,thisMonth());return `<p class="small">今月は、台本 <b>${fmtDate(sc.scripts)}</b> → 振り返り <b>${fmtDate(sc.review)}</b> → お客様のひとこと締切 <b>${fmtDate(sc.due)}</b>（その週の日曜日）</p>`;})()}</section>
+    <section class="fsec"><h3><span class="hi">${ic("clock")}</span>毎月の流れ</h3><p class="lead">台本は月に1回まとめてお渡しします。お客様の画面にも、この日付が「今月の予定」として出ます。</p><div class="grid2">${f("scriptDay","台本をまとめてお渡しする日（毎月◯日）","number","1")}${f("reviewDay","振り返りを作ってお渡しする日（毎月◯日）","number","28")}${f("cmtDays","ひとことの締切（振り返りから何日後）","number","","空のままなら、振り返りの週の日曜日。畑や現場に出るお客様は 3〜5日 がおすすめ")}</div>${(()=>{const sc=sched(c,thisMonth());return `<p class="small">今月は、台本 <b>${fmtDate(sc.scripts)}</b> → 振り返り <b>${fmtDate(sc.review)}</b> → お客様のひとこと締切 <b>${fmtDate(sc.due)}</b>（その週の日曜日）</p>`;})()}</section>
     <section class="fsec"><h3><span class="hi">${ic("cal")}</span>契約とお支払い</h3><p class="lead">契約日・初回のお支払い日・運用スタート日は、一覧とお客様情報の上に大きく表示されます。</p>
       <div class="grid2">${(()=>{const sv=hasMeo(c)&&!hasSns(c)?"meo":"sns";const opts=sv==="meo"?Object.keys(MEO_PLANS).map(k=>[k,k+"（¥"+MEO_PLANS[k].price+" / 月）"]):Object.keys(PLANS).map(k=>[k,k+"（¥"+PLANS[k].price+" / 月）"]);const cur=sv==="meo"?c.meoPlan:c.plan;
       return `<div class="field"><label for="c_svc">ご契約のサービス</label><select id="c_svc" data-act="svc"><option value="sns" ${sv==="sns"?"selected":""}>SNS運用</option><option value="meo" ${sv==="meo"?"selected":""}>Googleマップ対策</option></select></div><div class="field"><label for="c_svcPlan">プラン（白梅デジタルだけが変更できます）</label><select id="c_svcPlan" data-act="svcPlan">${opts.map(([v,t])=>`<option value="${v}" ${cur===v?"selected":""}>${t}</option>`).join("")}</select></div>`;})()}<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">月額（プランで決まります）</span><div class="fee-box">¥${feeOf(c).toLocaleString("ja-JP")}<small> / 月</small></div></div>${f("contractDate","契約日","date")}${f("paidDate","初回のお支払い日","date")}${f("startDate","運用スタート日","date")}${f("payDay","お支払い日（日）","number","25")}${sel("payMethod","お支払い方法",[["銀行振込","銀行振込"],["クレジットカード","クレジットカード"],["口座振替","口座振替"]])}<div class="field" style="grid-column:1/-1"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">お支払いの区分</span><div class="pchips">${PAY_TYPES.map(([v,l,n])=>`<button type="button" class="pchip ${(c.payType||"monthly")===v?"on":""}" data-act="payType" data-v="${v}"><b>${l}</b><small>${fmtYen(feeOf(c)*n)}${n>1?`（${n}ヶ月分）`:" / 月"}</small></button>`).join("")}</div></div>${f("nextBill","次回のご請求日（手で直すときだけ）","date","","空のままなら、区分とお支払い日から自動で出します")}${f("minMonths","最低契約期間（ヶ月）","number","3")}${f("contractEnd","満了日（手で直すときだけ）","date","","空のままなら、運用スタート日から自動で出します")}</div>
@@ -3200,7 +3277,9 @@ function saveClient(){
   if(LIVE){
     if(S.busy) return; S.busy=true;
     const data=JSON.parse(JSON.stringify(copy));["id","loginId","password"].forEach(k=>delete data[k]);
-    rpc("sns_staff_save_client",{p_token:getToken(),p_id:copy.id||null,p_login:copy.loginId,p_pass:copy.password||"",p_data:data}).then(id=>{
+    (async()=>{let id=await rpc("sns_staff_save_client",{p_token:getToken(),p_id:copy.id||null,p_login:copy.loginId,p_pass:copy.password||"",p_data:data});
+      const im=(copy.thumbImage||[])[0];if(im&&/^data:image/.test(im.src)){const iid=await rpc("sns_staff_save_image",{p_token:getToken(),p_client:id,p_data:im.src});IMGC[iid]=im.src;im.src="img:"+iid;data.thumbImage=copy.thumbImage;await rpc("sns_staff_save_client",{p_token:getToken(),p_id:id,p_login:copy.loginId,p_pass:"",p_data:data});}
+      return id;})().then(id=>{
       copy.id=id;copy.password="";const i=db.clients.findIndex(x=>x.id===id);if(i>=0)db.clients[i]=copy;else db.clients.push(copy);
       S.busy=false;toast(c.id?"お客様の情報を保存しました":"お客様を追加しました");cdraft=null;set({admin:"clients",confirm:null});scrollTo(0,0);
     }).catch(e=>{S.busy=false;toast(e.message);});
@@ -3256,7 +3335,9 @@ function staffForm(){
   const secs=FIELDS[k].map(s=>{const allShort=s.f.every(f=>f[2]!=="area"&&f[2]!=="images");const filled=s.f.filter(f=>has(draft[f[0]])).length;const key="f_"+s.t;return `<details class="fsec acc ${s.memo?"memo":""}" data-acc="${esc(key)}" ${S.open&&S.open[key]?"open":""}><summary><span class="hi">${ic(s.i)}</span><span class="acc-t">${s.t}<small>${filled?`${filled}/${s.f.length} 入力済み`:"未入力"}</small></span><span class="chev" aria-hidden="true"></span></summary><div class="acc-b">${s.lead?`<p class="lead">${s.lead}</p>`:""}<div class="${allShort&&s.f.length>1?"grid2":"form"}">${s.f.map(inputFor).join("")}</div></div></details>`;}).join("");
   const del=isEdit?(S.confirm===draft.id?`<div class="confirm">この台本を削除します。元には戻せません。<button class="btn btn-d btn-s" type="button" data-act="delYes">削除する</button><button class="btn btn-g btn-s" type="button" data-act="cancel">やめる</button></div>`:`<button class="btn btn-d btn-s" type="button" data-act="del">削除</button>`):"";
   const secNav=`<nav class="secnav" aria-label="入力する項目">${FIELDS[k].map(x=>{const filled=x.f.filter(f=>has(draft[f[0]])).length;return `<button type="button" class="${filled?"has":""}" data-act="secGo" data-k="${esc("f_"+x.t)}">${ic(x.i,14)}${esc(x.t.replace(/（.*）/,""))}${filled?`<small>${filled}/${x.f.length}</small>`:""}</button>`;}).join("")}<span class="spacer"></span><button type="button" class="oa" data-act="openAll" data-v="1">すべて開く</button><button type="button" class="oa" data-act="openAll" data-v="0">すべて閉じる</button></nav>`;
-  return `<form class="form" id="itemForm" novalidate>${preBox}${tplBox}${base}${secNav}${secs}
+  const bulkLink=!isEdit?`<section class="tplbox"><b>${ic("list",16)}まとめて作る</b><p class="small" style="margin:0">隔日で12本など、投稿日が決まっている台本は、まとめて下書きで作れます。</p><div class="tpl-r"><button class="btn btn-p btn-s" type="button" data-act="adminTab" data-t="bulk">月まとめて作る</button></div></section>`:"";
+  return `<form class="form" id="itemForm" novalidate>${bulkLink}${preBox}${tplBox}${base}${secNav}${secs}
+    ${S.confirm==="tz"?(()=>{const cl=client(draft.clientId)||{};const tz=itemTz(draft,cl);return `<div class="confirm tzc">${ic("clock",16)}<span><b>現地（${esc(tzName(tz))}）${fmtDate(draft.post)} ${esc(draft.postTime)} ＝ 日本 ${esc(toJST(draft.post,draft.postTime,tz)||"")}</b> で保存します。合っていますか？</span><button class="btn btn-p btn-s" type="button" data-act="tzYes">この時刻で保存</button><button class="btn btn-g btn-s" type="button" data-act="cancel">直す</button></div>`;})():""}
     <div class="savebar">${del}<div class="spacer"></div>${isEdit?`<button class="btn btn-g" type="button" data-act="cancelEdit">戻る</button>`:""}${isEdit&&!isRep(k)&&!isMeo(k)?`<button class="btn btn-g" type="button" data-act="dup">複製する</button><button class="btn btn-g" type="button" data-act="print" data-id="${draft.id}">PDF</button>`:""}<button class="btn btn-g" type="button" data-act="previewDraft">お客様の見え方</button><button class="btn btn-p" type="submit">${isEdit?"保存する":"提出する"}</button></div></form>`;
 }
 function readImage(file,cb){
@@ -3267,6 +3348,9 @@ function readImage(file,cb){
 function saveDraft(){
   if(!isRep(draft.kind)&&!String(draft.title||"").trim()){toast(draft.kind==="meo_review"?"お名前を入れてください":"お題を入れてください");document.getElementById("f_title")?.focus();return;}
   draft.no=+draft.no||1; draft.step=+draft.step||0;
+  if(draft.published&&!draft.publishedAt) draft.publishedAt=todayISO();
+  if(!draft.published) delete draft.publishedAt;
+  {const cl=client(draft.clientId)||{};const tz=itemTz(draft,cl);if(!isRep(draft.kind)&&!isMeo(draft.kind)&&draft.post&&draft.postTime&&tz!=="Asia/Tokyo"&&S.tzOk!==draft.post+draft.postTime+tz){S.confirm="tz";render();setTimeout(()=>document.querySelector(".tzc")?.scrollIntoView({block:"center"}),30);return;}}
   const copy=JSON.parse(JSON.stringify(draft));
   if(LIVE){
     if(S.busy) return; S.busy=true; toast("保存しています…");
@@ -3317,6 +3401,9 @@ app.addEventListener("input",e=>{
   if(t.dataset.mat){S.matDraft=S.matDraft&&S.matDraft.id===t.dataset.id?S.matDraft:{id:t.dataset.id};S.matDraft[t.dataset.mat]=t.value;return;}
   if(t.dataset.en){S.enDraft={id:t.dataset.en,v:t.value};return;}
   if(t.id==="ideaTx"){S.ideaTx=t.value;return;}
+  if(t.id==="bm_url"){S.bmUrl=t.value;return;}
+  if(t.id==="bm_note"){S.bmNote=t.value;return;}
+  if(t.dataset.bk&&S.bk){S.bk[t.dataset.bk]=t.value;clearTimeout(render._bk);render._bk=setTimeout(render,t.tagName==="TEXTAREA"?500:0);return;}
   if(t.id==="ni_t"){S.niT=t.value;return;}
   if(t.id==="ni_p"){S.niP=t.value;return;}
   if(t.id==="ni_w"){S.niW=t.value;return;}
@@ -3333,6 +3420,9 @@ app.addEventListener("change",e=>{
   if(t.dataset.act==="fsel"){set({[t.dataset.k]:t.value});return;}
   if(t.dataset.img&&t.files.length){const key=t.dataset.img,max=+t.dataset.max;draft[key]=draft[key]||[];const files=[...t.files].slice(0,max-draft[key].length);let left=files.length;files.forEach(f=>readImage(f,u=>{draft[key].push({src:u,cap:""});if(--left===0)render();}));return;}
   if(t.dataset.matimg&&t.files.length){const id=t.dataset.matimg;S.matImgs=S.matImgs&&S.matImgs.id===id?S.matImgs:{id,list:[]};const files=[...t.files].slice(0,10-S.matImgs.list.length);let left=files.length;files.forEach(f=>readImage(f,u=>{S.matImgs.list.push(u);if(--left===0)render();}));return;}
+  if(t.dataset.bmsel){const its=matWaitItems(client(S.preview?S.previewClient:S.clientId));S.bulkSel=S.bulkSel||Object.fromEntries(its.map(i=>[i.id,true]));S.bulkSel[t.dataset.bmsel]=t.checked;render();return;}
+  if(t.dataset.bk&&S.bk){S.bk[t.dataset.bk]=t.value;if(t.tagName==="SELECT")render();return;}
+  if(t.dataset.cthumb&&t.files.length&&cdraft){readImage(t.files[0],u=>{cdraft.thumbImage=[{src:u,cap:""}];render();});return;}
   if(t.dataset.niimg&&t.files.length){S.niImgs=S.niImgs||[];const files=[...t.files].slice(0,4-S.niImgs.length);let left=files.length;files.forEach(f=>readImage(f,u=>{S.niImgs.push(u);if(--left===0)render();}));return;}
   if(t.dataset.ideaimg&&t.files.length){S.ideaImgs=S.ideaImgs||[];const files=[...t.files].slice(0,4-S.ideaImgs.length);let left=files.length;files.forEach(f=>readImage(f,u=>{S.ideaImgs.push(u);if(--left===0)render();}));return;}
   if(t.dataset.key==="kind"){draft=blank(t.value,draft.clientId);render();}
@@ -3429,6 +3519,19 @@ app.addEventListener("click",e=>{
       else if(k==="pvItem"){const it=find(v);set({preview:true,previewClient:c.id,itemId:it.id,view:it.kind,month:it.month,returnTo:"how"});}
       else if(k==="pvIdea")set({preview:true,previewClient:c.id,itemId:null,view:"video",month:null,returnTo:"how",idea:true});
       scrollTo(0,0);break;}
+    case "tzYes":{S.tzOk=draft.post+draft.postTime+itemTz(draft,client(draft.clientId)||{});S.confirm=null;saveDraft();break;}
+    case "cThumbRm":{cdraft.thumbImage=[];render();break;}
+    case "bulkMatOpen":set({bulkMat:true,bulkSel:null});break;
+    case "bulkMatX":set({bulkMat:false});break;
+    case "bulkMatSend":{const c=client(S.preview?S.previewClient:S.clientId);const its=matWaitItems(c);const sel=S.bulkSel||Object.fromEntries(its.map(i=>[i.id,true]));const pick=its.filter(i=>sel[i.id]);
+      const url=String(S.bmUrl||"").trim();if(!pick.length){toast("送る台本を選んでください");break;}if(url&&!/^https?:\/\//.test(url)){toast("リンクは https:// から始まる形で貼ってください");break;}if(!url&&!c.materialFolder){toast("素材のリンクを貼ってください");break;}if(S.busy)break;S.busy=true;
+      (async()=>{const d=new Date();const at=`${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）`;let ok=0;for(const it of pick){if(!it.shotAt)it.shotAt=todayStr();it.materialUrl=url||c.materialFolder||"";it.materialNote=String(S.bmNote||"").trim();it.materialAt=at;it.stamps=it.stamps||{};it.stamps[1]=todayStr();it.step=2;it.redo=null;it.lastBy="you";it.turnAt=todayISO();
+        if(await persistItem(it,["shotAt","materialUrl","materialNote","materialAt","step","stamps","lastBy","redo","turnAt"])!==false)ok++;}
+        S.busy=false;S.bmUrl="";S.bmNote="";S.bulkSel=null;S.bulkMat=false;toast(`${ok}本の素材を送りました。白梅デジタルの画面に「素材が届きました」と出ます`);celebrate(false);render();})();break;}
+    case "bulkCreate":{const b=S.bk;const c=client(b.clientId);if(!c)break;const n=Math.max(1,Math.min(40,+b.count||1));const titles=String(b.titles||"").split("\n").map(x=>x.trim());const src=b.src?find(b.src):null;
+      const nos=db.items.filter(i=>i.clientId===b.clientId&&i.kind===b.kind&&i.month===b.month).map(i=>i.no||0);const no0=(nos.length?Math.max(...nos):0)+1;if(S.busy)break;S.busy=true;toast("作っています…");
+      (async()=>{try{for(let k=0;k<n;k++){const d=src?dupItem(src,b.month):blank(b.kind,b.clientId);d.kind=b.kind;d.clientId=b.clientId;d.month=b.month;d.no=no0+k;d.title=titles[k]||"（タイトル未定）";d.published=false;if(b.start){const day=addDays(b.start,k*Math.max(1,+b.every||1));if(b.kind==="live")d.liveDate=day;else d.post=day;}if(b.time){if(b.kind==="live")d.liveTime=b.time;else d.postTime=b.time;}await saveNewItem(d);}
+        S.busy=false;toast(`${n}本を下書きで作りました`);S.bk=null;set({admin:"list",fClient:b.clientId,fState:null});scrollTo(0,0);}catch(e){S.busy=false;toast(e.message);}})();break;}
     case "setupTpl":{if(cdraft){cdraft.meoSetup=MEO_SETUP_TPL.map(x=>x+"｜これから").join("\n");render();}break;}
     case "printCard":{const el=document.getElementById("rcard");if(!el)break;let pa=document.getElementById("printArea");if(!pa){pa=document.createElement("div");pa.id="printArea";document.body.appendChild(pa);}
       pa.innerHTML=Array.from({length:4},()=>el.outerHTML.replace('id="rcard"','')).join("");document.body.classList.add("print-card");
