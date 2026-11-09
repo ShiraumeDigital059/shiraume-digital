@@ -1574,21 +1574,21 @@ const SHORT={video:"動画台本",image:"画像台本",live:"ライブ台本",me
 const FLOW={
   video:[
     {l:"企画",chip:"企画中",act:"台本を確定する",who:"us"},
-    {l:"撮影",chip:"撮影のお願い",act:"撮影が終わりました",who:"you",hint:"撮影が終わったら押してください。白梅デジタルの画面にも「撮影済み」と表示され、編集に入ります。",doneMsg:"撮影完了"},
+    {l:"撮影",chip:"撮影のお願い",act:"素材を送りました",who:"you",hint:"撮った動画を送ってください。",doneMsg:"素材を受け取りました"},
     {l:"編集",chip:"編集中",act:"初稿を共有する",who:"us"},
-    {l:"初稿確認",chip:"初稿の確認",act:"初稿OKです",who:"you",hint:"初稿を見て、このままで良ければ押してください。直してほしいところはLINEで送ってください。",doneMsg:"初稿OK"},
-    {l:"投稿",chip:"投稿待ち",act:"投稿しました",who:"both",hint:"投稿が終わったら押してください。",doneMsg:"投稿完了"}
+    {l:"初稿",chip:"初稿ができました",act:"投稿の準備に進める",who:"us"},
+    {l:"投稿",chip:"投稿待ち",act:"投稿しました",who:"both",hint:"投稿日に投稿してください。",doneMsg:"投稿完了"}
   ],
   image:[
     {l:"企画",chip:"企画中",act:"構成を確定する",who:"us"},
-    {l:"写真撮影",chip:"撮影のお願い",act:"写真を送りました",who:"you",hint:"写真を撮ってLINEで送ったら押してください。",doneMsg:"写真受け取り"},
+    {l:"写真撮影",chip:"撮影のお願い",act:"写真を送りました",who:"you",hint:"撮った写真を送ってください。",doneMsg:"写真受け取り"},
     {l:"制作",chip:"制作中",act:"仕上がりを共有する",who:"us"},
-    {l:"確認",chip:"仕上がりの確認",act:"仕上がりOKです",who:"you",hint:"仕上がりを見て、このままで良ければ押してください。",doneMsg:"仕上がりOK"},
-    {l:"投稿",chip:"投稿待ち",act:"投稿しました",who:"both",hint:"投稿が終わったら押してください。",doneMsg:"投稿完了"}
+    {l:"仕上がり",chip:"仕上がりました",act:"投稿の準備に進める",who:"us"},
+    {l:"投稿",chip:"投稿待ち",act:"投稿しました",who:"both",hint:"投稿日に投稿してください。",doneMsg:"投稿完了"}
   ],
   live:[
     {l:"企画",chip:"企画中",act:"台本を確定する",who:"us"},
-    {l:"準備",chip:"準備のお願い",act:"準備ができました",who:"you",hint:"準備物がそろったら押してください。",doneMsg:"準備完了"},
+    {l:"準備",chip:"準備中",act:"準備ができた",who:"us"},
     {l:"本番",chip:"配信待ち",act:"配信が終わりました",who:"both",hint:"配信が終わったら押してください。",doneMsg:"配信完了"}
   ],
   meo_post:[
@@ -1998,7 +1998,7 @@ function stateOf(it){
   const st=f[s];
   const tone= s===0?"t-plan": st.who==="you"?"t-you": st.who==="both"?"t-you":"t-us";
   const ms=matState(it);
-  if(ms==="wait") return {text:it.kind==="image"?"写真・素材待ち":"素材待ち",tone:"t-you",st,s,mat:"wait"};
+  if(ms==="wait") return {text:S.role==="staff"&&!S.preview?(it.kind==="image"?"写真・素材待ち":"素材待ち"):"撮影のお願い",tone:"t-you",st,s,mat:"wait"};
   if(ms==="arrived") return {text:"素材が届きました",tone:"t-us",st,s,mat:"arrived"};
   return {text:st.chip,tone,st,s};
 }
@@ -2236,7 +2236,7 @@ function listPage(c,kind){
   const rv=reviewOf(c.id,shiftMonth(thisMonth(),-1)), rv2=reviewOf(c.id,thisMonth());
   const cm=[rv2,rv].filter(r=>r&&r.published&&r.summary&&!r.clientComment&&todayISO()<=sched(c,r.month).due);
   const cmBox=cm.length?`<section class="todo"><h2>${ic("bell")}振り返りへのひとこと</h2><ul>${cm.map(r=>`<li><button type="button" data-act="nav" data-k="review" data-m="${r.month}">${monthShort(r.month)}の振り返りに、ひとことを書く<span>${fmtDate(sched(c,r.month).due)}まで</span></button></li>`).join("")}</ul></section>`:"";
-  const guide=(()=>{try{if(localStorage.getItem("ume_guide_x"))return "";}catch(_){}return `<section class="guide"><div class="gd-h"><b>${ic("compass",18)}この画面の使い方</b><button type="button" class="gd-x" data-act="guideX" aria-label="閉じる">×</button></div><ol><li><span>1</span><div><b>「あなたの番です」を見る</b><p>今やることと期限が、いちばん上に出ます。</p></div></li><li><span>2</span><div><b>台本を開いて撮る</b><p>撮り方の見本の写真と、撮影モードがあります。</p></div></li><li><span>3</span><div><b>素材を送る</b><p>撮ったら台本の中の「素材を送る」から。あとは白梅デジタルが進めます。</p></div></li></ol><p class="tiny muted">思いついたネタは、右上の${ic("gift",13)}からいつでも送れます。</p></section>`;})();
+  const guide=(()=>{try{if(localStorage.getItem("ume_guide_x"))return "";}catch(_){}return `<section class="guide"><div class="gd-h"><b>${ic("compass",18)}この画面の使い方</b><button type="button" class="gd-x" data-act="guideX" aria-label="閉じる">×</button></div><ol><li><span>1</span><div><b>見る</b><p>台本を開いて、撮るものと撮り方を見ます。</p></div></li><li><span>2</span><div><b>撮って、送る</b><p>撮ったら「撮ったものを送る」を押すだけ。編集は白梅デジタルが行います。</p></div></li><li><span>3</span><div><b>投稿する</b><p>決まった日に投稿します。投稿したあとは、何も押さなくて大丈夫です。</p></div></li></ol><p class="tiny muted">思いついたネタは、右上の${ic("gift",13)}からいつでも送れます。</p></section>`;})();
   const mAll=["video","image"].flatMap(k=>visible(c.id,k)).filter(i=>i.month===cur);const mDone=mAll.filter(i=>stateOf(i).done).length;
   const prog=mAll.length?`<div class="mprog"><span>${monthShort(cur)}の投稿</span><div class="mp-bar"><i style="width:${mDone/mAll.length*100}%"></i></div><b>${mDone}<small> / ${mAll.length}本</small></b></div>`:"";
   return `<div class="stack">${head}${guide}${turnBox(c)}${bulkMatBox(c)}${searchBox(c)}${monthTabs(months,cur)}${prog}
@@ -2270,13 +2270,14 @@ function flowBox(it,isClient){
     return `<li class="st ${cls}">${i<s?`<button class="st-btn" type="button" data-act="askStep" data-id="${it.id}" data-i="${i}" aria-label="「${st.l}」の段階に戻す">${inner}</button>`:inner}</li>`;}).join("")}</ol>`;
   let confirm="";
   if(cs!=null){confirm=`<div class="confirm" role="alert"><span>「${f[cs].l}」の段階に戻します。それより後に押した日付の記録は消えます。</span><span class="row" style="display:flex;gap:8px"><button class="btn btn-p btn-s" type="button" data-act="goStep" data-id="${it.id}" data-i="${cs}">戻す</button><button class="btn btn-g btn-s" type="button" data-act="cancelStep">やめる</button></span></div>`;}
-  const backLink=s>0&&cs==null?`<button class="link-btn" type="button" data-act="askStep" data-id="${it.id}" data-i="${s-1}">${isClient?"まちがえて押したときは、ひとつ前に戻せます":"ひとつ前に戻す"}</button>`:"";
+  const backLink=s>0&&cs==null&&!isClient?`<button class="link-btn" type="button" data-act="askStep" data-id="${it.id}" data-i="${s-1}">${isClient?"まちがえて押したときは、ひとつ前に戻せます":"ひとつ前に戻す"}</button>`:"";
   let act="";
   if(x.done){act=`<div class="action"><div class="done-row"><div class="done-note">${ic("check")}${DONE_CHIP[it.kind]}（${(it.stamps||{})[f.length-1]||""}）</div><span class="stamp" aria-hidden="true"></span></div>${confirm}${backLink}</div>`;}
   else{
     const st=x.st; const mine=isClient?(st.who==="you"||st.who==="both"):true;
-    if(mine&&isClient&&MAT_KINDS.includes(it.kind)&&s===1){const shot=it.kind==="image"||it.shotAt;act=`<div class="action"><p>${shot?(it.kind==="image"?"写真を撮ったら、下の「素材を送る」から送ってください。":"撮影おつかれさまでした。撮った動画を、下の「素材を送る」から送ってください。"):"撮影が終わったら押してください。次に、撮った動画を送ります。"}</p>${shot?`<button class="btn btn-p btn-big" type="button" data-act="jump" data-to="mat_${it.id}">${ic("box")}素材を送る</button>`:`<button class="btn btn-p btn-big" type="button" data-act="shot" data-id="${it.id}">${ic("check")}撮影が終わりました</button>`}${confirm}${backLink}</div>`;}
-    else if(mine&&isClient&&it.kind==="video"&&s===3&&it.deliveryUrl){act=`<div class="action">${st.hint?`<p class="tiny muted">${st.hint}</p>`:""}<a class="btn btn-g btn-big" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext")}初稿を見る</a><button class="btn btn-p btn-big" type="button" data-act="adv" data-id="${it.id}" data-by="you">${ic("check")}${st.act}</button>${confirm}${backLink}</div>`;}
+    if(mine&&isClient&&MAT_KINDS.includes(it.kind)&&s===1){act=`<div class="action"><p>${it.kind==="image"?"写真を撮ったら、送ってください。":"動画を撮ったら、送ってください。"}</p><button class="btn btn-p btn-big" type="button" data-act="jump" data-to="mat_${it.id}">${ic("box")}撮ったものを送る</button>${confirm}</div>`;}
+    else if(isClient&&st.who==="both"){act=`<div class="action"><p><b>${it.post?fmtDate(it.post)+(it.postTime?" "+esc(it.postTime):"")+" に":""}投稿してください。</b>投稿したあとは、何も押さなくて大丈夫です。白梅デジタルが確認します。</p>${it.deliveryUrl?`<a class="btn btn-g btn-big" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext")}投稿する動画を開く</a>`:""}</div>`;}
+    else if(isClient&&(it.kind==="video"||it.kind==="image")&&s===3){act=`<div class="action"><p>${it.kind==="image"?"仕上がりました。":"初稿ができました。"}見て、直してほしいところがあればLINEで送ってください。<b>何もなければ、このまま投稿の準備に進みます。</b></p>${it.deliveryUrl?`<a class="btn btn-p btn-big" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext")}${it.kind==="image"?"仕上がりを見る":"初稿を見る"}</a>`:""}</div>`;}
     else if(mine){act=`<div class="action">${st.hint&&isClient?`<p class="tiny muted">${st.hint}</p>`:""}<button class="btn btn-p btn-big" type="button" data-act="adv" data-id="${it.id}" data-by="${isClient?"you":"us"}">${ic("check")}${st.act}</button>${confirm}${backLink}</div>`;}
     else{act=`<div class="action"><p>いまは白梅デジタルが「${st.l}」を進めています。終わったらここに表示されます。</p>${confirm}${backLink}</div>`;}
   }
@@ -2550,19 +2551,18 @@ function postWhen(i,c){
 }
 /* 素材の段階：撮影が終わったのに、素材がまだ届いていない */
 const MAT_KINDS=["video","image"];
-const matState=i=>{if(!MAT_KINDS.includes(i.kind))return null;const s=i.step||0;if(s===1&&(i.shotAt||i.kind==="image"))return "wait";if(s===2&&i.materialAt&&!i.materialOk)return "arrived";return null;};
+const matState=i=>{if(!MAT_KINDS.includes(i.kind))return null;const s=i.step||0;if(s===1)return "wait";if(s===2&&i.materialAt&&!i.materialOk)return "arrived";return null;};
 /* お客様の「今日やること」 */
 function yourTurn(c){
   const out=[];
   ["video","image","live"].forEach(k=>visible(c.id,k).forEach(i=>{const x=stateOf(i);if(!x||x.done||!x.st||!(x.st.who==="you"||x.st.who==="both"))return;
     const ms=matState(i);let what=x.st.act,due=null;
-    if(i.kind!=="live"&&x.s===1){if(ms==="wait"){what=i.kind==="image"?"写真（素材）を送る":"撮った素材を送る";due=i.shoot;}else{what="撮影する";due=i.shoot;}}
-    else if(x.s===3){what="初稿を見て、OKかどうか伝える";due=i.firstDraft;}
+    if(i.kind!=="live"&&x.s===1){what=i.kind==="image"?"写真を撮って送る":"動画を撮って送る";due=i.shoot;}
     else if(x.st.who==="both"){what="投稿する";due=i.post;}
     else if(i.kind==="live"){what=x.s===1?"配信の準備をする":"配信する";due=i.liveDate;}
     if(i.captionEnNeed&&!i.captionEn&&(x.s>=2)) out.push({i,what:"英語のキャプションを書く",due:i.post,k:"en"});
     out.push({i,what,due,k:"step"});}));
-  ["video","image"].forEach(k=>visible(c.id,k).forEach(i=>{const x=stateOf(i);if(x&&x.s===2&&i.captionEnNeed&&!i.captionEn&&!out.some(o=>o.i===i&&o.k==="en"))out.push({i,what:"英語のキャプションを書く",due:i.post,k:"en"});}));
+  ["video","image"].forEach(k=>visible(c.id,k).forEach(i=>{const x=stateOf(i);if(x&&!x.done&&x.s>=2&&i.captionEnNeed&&!i.captionEn&&!out.some(o=>o.i===i&&o.k==="en"))out.push({i,what:"英語のキャプションを書く",due:i.post,k:"en"});}));
   const rv=[thisMonth(),shiftMonth(thisMonth(),-1)].map(m=>reviewOf(c.id,m)).filter(r=>r&&r.published&&r.summary&&!r.clientComment&&todayISO()<=sched(c,r.month).due);
   rv.forEach(r=>out.push({i:r,what:`${monthShort(r.month)}の振り返りに、ひとことを書く`,due:sched(c,r.month).due,k:"rv"}));
   out.sort((a,b)=>String(a.due||"9").localeCompare(String(b.due||"9")));
@@ -2591,11 +2591,10 @@ function materialBox(it,c,isClient){
       ${it.materialUrl?`<a class="btn btn-g btn-s" href="${esc(it.materialUrl)}" target="_blank" rel="noopener">${ic("ext",15)}送った素材を開く</a>`:""}${it.materialNote?`<p class="mat-note">${esc(it.materialNote)}</p>`:""}</section>`;
   }
   if(!isClient) return "";
-  const shot=it.kind==="image"||it.shotAt;
-  if(!shot) return "";
+  const shot=true;
   const imgs=S.matImgs&&S.matImgs.id===it.id?S.matImgs.list:[];
   return `<section class="mat" id="mat_${it.id}">
-    <div class="mat-h"><span class="mat-i">${ic("box",18)}</span><div><b>${shot?"撮った素材を送ってください":"撮影が終わったら、素材をここから送ります"}</b><p>${shot?"送り先に入れて、いちばん下の「素材を送りました」を押してください。":"撮影が終わったら、まず「撮影が終わりました」を押してください。"}</p></div></div>
+    <div class="mat-h"><span class="mat-i">${ic("box",18)}</span><div><b>撮ったものを送る</b><p>${c&&c.materialFolder?"フォルダに入れて、いちばん下のボタンを押すだけです。":"リンクを貼って、いちばん下のボタンを押すだけです。"}</p></div></div>
 
     ${shot?`<ol class="mat-steps">
       <li><span class="ms-n">1</span><div><b>素材を入れる</b>${folder?`<a class="btn btn-p" href="${esc(folder)}" target="_blank" rel="noopener">${ic("ext",16)}素材を入れるフォルダを開く</a><p class="tiny muted">スマホの「写真」から、撮った動画・写真をまとめて選んで入れてください。</p>`:`<p class="tiny muted">Googleドライブやギガファイル便などに入れて、共有のリンクを下に貼ってください。</p>`}</div></li>
@@ -2811,10 +2810,10 @@ function howPage(){
     {n:2,w:"both",when:"いつでも",t:"ネタを集める（ネタ帳）",d:["お客様は、右上の「ネタを送る」から思いついたことを写真付きで送れます","白梅は、ネタ帳に思いつきを書いておけます。型（ランキング・密着など）と、いつ使うかも","「動画の台本にする」を押すと、そのまま台本の下書きになります"],b:[B("ideas","ネタ帳を開く"),B("pvIdea","お客様の「ネタを送る」を見る",1)]},
     {n:3,w:"us",when:"毎月1日",t:"台本を書いて、お客様に公開する",d:["「どこ向け？」で投稿日・時刻・タイムゾーン・言語を決める","撮り方の見本の写真をえらぶ。本編は1行に1カット、【手元のアップ】のように撮り方を書く","テンプレートから作る・前の月を複製する、もできます","「お客様に公開する」に印をつけて提出"],b:[v1?B("edit:"+v1.id,"台本の編集画面を見る（つまみBEST3）"):"",B("list","台本の一覧",1)]},
     {n:4,w:"you",when:"台本が届いたら",t:"お客様は「あなたの番です」を見る",d:["今やることと期限が、いちばん上に出ます","台本は月ごと・種類ごとに並び、過去の台本も言葉で探せます"],b:[B("pv:video","お客様の画面を見る")]},
-    {n:5,w:"you",when:"撮影の日",t:"撮り方の見本を見て、撮影する",d:["台本の「撮り方の見本」に、写真と一言の撮り方が出ます","「撮影モードで開く」で、1カットずつ大きく出して、撮れたら印をつけながら進められます","撮り終わったら「撮影が終わりました」"],b:[v1?B("pvItem:"+v1.id,"撮影の台本を見る（つまみBEST3）"):""]},
-    {n:6,w:"you",when:"撮ったら",t:"素材を送る → 白梅に届く",d:["お客様は台本の中の「素材を送る」から。フォルダを開く・リンクを貼る・写真を選ぶ、のどれか","送ると、状態が「素材待ち」から「素材が届きました」に変わります","白梅は台本の一覧やホームで「素材を確認した」を押します"],b:[im?B("pvItem:"+im.id,"素材を送る画面を見る（忘年会コース）"):"",B("list","白梅の台本の一覧",1)]},
-    {n:7,w:"both",when:"素材が届いたら",t:"編集して、初稿を見てもらう",d:["白梅が編集して、初稿のURLを入れて「初稿を共有する」","お客様は初稿を見て「初稿OKです」。直してほしいところはLINEで"],b:[v3?B("pvItem:"+v3.id,"初稿の確認を見る（焼き鳥）"):""]},
-    {n:8,w:"us",when:"投稿したら",t:"投稿して、URLと数字を入れる",d:["投稿のURLと、再生・保存・フォローなどの数字を台本の「投稿したあと」に入れる","お客様の画面に「投稿の結果」が出ます","型・ハッシュタグの組み合わせ・投稿の時間ごとの比較が、自動で出ます"],b:[vd?B("pvItem:"+vd.id,"投稿の結果を見る"):"",vd?B("edit:"+vd.id,"数字を入れる画面",1):""]},
+    {n:5,w:"you",when:"撮影の日",t:"撮り方の見本を見て、撮影する",d:["台本の「撮り方の見本」に、写真と一言の撮り方が出ます","「撮影モードで開く」で、1カットずつ大きく出して、撮れたら印をつけながら進められます","お客様が押すボタンは「撮ったものを送る」だけ。撮影の報告はいりません"],b:[v1?B("pvItem:"+v1.id,"撮影の台本を見る（つまみBEST3）"):""]},
+    {n:6,w:"you",when:"撮ったら",t:"撮ったものを送る → 白梅に届く",d:["お客様は台本の中の「撮ったものを送る」から。何本かまとめて送ることもできます。フォルダを開く・リンクを貼る・写真を選ぶ、のどれか","送ると、状態が「素材待ち」から「素材が届きました」に変わります","白梅は台本の一覧やホームで「素材を確認した」を押します"],b:[im?B("pvItem:"+im.id,"素材を送る画面を見る（忘年会コース）"):"",B("list","白梅の台本の一覧",1)]},
+    {n:7,w:"both",when:"素材が届いたら",t:"編集して、初稿を見てもらう",d:["白梅が編集して、初稿のURLを入れて「初稿を共有する」","お客様は見るだけ。直してほしいところがあればLINEで。ボタンはありません","直しがなければ、白梅が「投稿の準備に進める」を押す"],b:[v3?B("pvItem:"+v3.id,"初稿の確認を見る（焼き鳥）"):""]},
+    {n:8,w:"both",when:"投稿日",t:"お客様が投稿 → 白梅がURLと数字を入れる",d:["お客様は投稿するだけ。「投稿しました」を押す必要はありません","白梅が投稿を確かめて「投稿しました」を押す","投稿のURLと、再生・保存・フォローなどの数字を台本の「投稿したあと」に入れる","お客様の画面に「投稿の結果」が出ます","型・ハッシュタグの組み合わせ・投稿の時間ごとの比較が、自動で出ます"],b:[vd?B("pvItem:"+vd.id,"投稿の結果を見る"):"",vd?B("edit:"+vd.id,"数字を入れる画面",1):""]},
     {n:9,w:"both",when:"毎月28日",t:"振り返りをお渡しして、ひとことをもらう",d:["白梅が総括と「来月試すこと」を書いて公開。数字は投稿ごとの合計から自動で入ります","お客様はその週の日曜日までに、ひとことを書きます","ひとことと来月試すことが、翌月1日の台本に入ります"],b:[rv?B("pv:review","振り返りの画面を見る"):""]},
     {n:10,w:"us",when:"毎日",t:"ホームで「白梅がやること」を片付ける",d:["期限の近い順に並びます。過ぎているものは赤","お客様の番で3日止まっているものは、催促の文をコピーしてLINEで送る","契約の満了日・解約のお申し出の期限も、30日前から予定に出ます"],b:[B("home","白梅のホームを開く")]},
     {n:11,w:"you",when:"いつでも",t:"契約内容と請求書・領収書",d:["プランのタブに、満了日・解約のお申し出の期限・次のお支払いが出ます","お支払いの記録から、請求書・領収書を印刷・PDF保存できます"],b:[B("pv:plan","お客様のプランの画面を見る")]}
