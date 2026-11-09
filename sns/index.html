@@ -1496,7 +1496,7 @@ div.nx-1{cursor:default}
 .guide li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;background:#fff;border-radius:14px;padding:10px 12px}
 .guide li>span{width:26px;height:26px;border-radius:50%;background:var(--green-2);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
 .guide li b{font-size:14.5px}.guide li p{font-size:13px!important;color:var(--ink-2)}
-@media (max-width:560px){.q-r{grid-template-columns:64px minmax(0,1fr)}.q-r .btn{grid-column:auto}.q-r .btn:first-of-type{grid-column:1/-1}.secnav{top:56px}}
+@media (max-width:560px){.q-r{grid-template-columns:64px minmax(0,1fr)}.q-r .btn{grid-column:auto}.q-r .btn:first-of-type{grid-column:1/-1}.secnav{top:56px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -14px;padding:8px 14px}.secnav>*{flex:none}.secnav::-webkit-scrollbar{display:none}}
 .hw-flow{background:var(--panel);border-radius:20px;padding:16px 18px;display:grid;gap:10px}
 .hw-flow h2{font-size:17px}
 .hw-flow ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
@@ -1645,6 +1645,22 @@ div.nx-1{cursor:default}
 .bl .sim{padding:0!important;margin:0!important}.bl .sim li{margin:0!important;padding:0!important}.bl .sim li::before{display:none!important}
 .bl-sum ol{padding:0!important;margin:0!important;list-style:none}.bl-sum li{margin:0!important;padding:12px 14px!important;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px}.bl-no{width:24px;height:24px;border-radius:50%;background:var(--green);color:#E9D39C;display:grid;place-items:center;font-size:12.5px;font-weight:800;margin-top:3px}.bl-sum li::before{display:none!important}
 .cprof{display:grid;gap:4px;font-size:13.5px}.cprof div{display:grid;grid-template-columns:9em minmax(0,1fr);gap:8px;border-bottom:1px dashed var(--line);padding:4px 0}.cprof dt{color:var(--ink-3);font-weight:700}.cprof dd{margin:0;word-break:break-all;white-space:pre-wrap}
+
+.tf{position:relative;width:min(100%,190px);aspect-ratio:9/16;border-radius:18px;background:linear-gradient(170deg,#3a4a40,#1b2620);box-shadow:inset 0 0 0 6px #0f1512,0 10px 24px -14px rgba(0,0,0,.6);overflow:hidden;flex:none}
+.tf-edit{cursor:crosshair}
+.tf-ui{position:absolute;background:rgba(255,255,255,.12);pointer-events:none}
+.tf-r{right:6px;top:52%;width:15%;height:30%;border-radius:10px 0 0 10px}.tf-b{left:6px;right:6px;bottom:6px;height:17%;border-radius:0 0 12px 12px}
+.tf-m{position:absolute;transform:translate(-50%,-50%);min-width:28px;height:28px;padding:0 6px;border-radius:999px;background:#E9D39C;color:#1E3A2B;font-weight:800;font-size:14px;display:grid;place-items:center;box-shadow:0 0 0 3px rgba(233,211,156,.35),0 4px 10px rgba(0,0,0,.4);pointer-events:none}
+.tf-hint{position:absolute;inset:0;display:grid;place-items:center;color:rgba(255,255,255,.7);font-size:13px;font-weight:700;pointer-events:none}
+.tel-ed,.tel-view{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.tel-rows{flex:1;min-width:220px;display:grid;gap:8px}
+.tel-row{display:grid;grid-template-columns:auto minmax(0,1fr) 110px auto;gap:6px;align-items:center}
+@media (max-width:520px){.tel-row{grid-template-columns:auto minmax(0,1fr) auto}.tel-row .tel-w{grid-column:2/3}}
+.tf-n{width:26px;height:26px;border-radius:50%;background:#1E3A2B;color:#E9D39C;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.tl-l{list-style:none;margin:0;padding:0;display:grid;gap:8px;flex:1;min-width:180px}
+.tl-l li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--sunk);font-weight:700}
+.tl-l li small{display:block;font-weight:600;color:var(--ink-3);font-size:12px}
+@media (max-width:520px){.tel-view{flex-direction:column;align-items:center}.tel-view .tl-l{width:100%}}
 </style>
 
 
@@ -2552,7 +2568,8 @@ function detail0(it,c){
   const secs=[];
   if(askRows.length) secs.push(["sec-ask","お願いすること",n=>`<section class="vc v2 ask2" id="sec-ask">${H(n,"hand","お客様にお願いすること","撮影の前に、ここだけ確認してください",'<span class="you-tag">お願い</span>')}<div class="ask-g">${askRows.map(([i,k,v])=>`<div class="ask-i"><span class="ai">${ic(i,18)}</span><div><span class="ak">${k}</span><p>${esc(v)}</p></div></div>`).join("")}</div></section>`]);
   if(pur.length) secs.push(["sec-pur","動画の目的",n=>`<section class="vc v2" id="sec-pur">${H(n,"target","動画の目的","この動画で、誰に何を届けるか")}<ol class="pur2">${pur.map(([k,v],i)=>`<li><span class="p2-k">${k}</span><p>${esc(v)}</p></li>`).join("")}</ol></section>`]);
-  if(eimgs.length||it.editRequest) secs.push(["sec-edit","編集のイメージ",n=>`<section class="vc v2" id="sec-edit">${H(n,"pen","編集のイメージと指示","仕上がりはこうなります。白梅デジタルがこの通りに編集します")}${sb?`<div class="v2-sub"><h3>場面ごとの仕上がり<small>タップで大きく見られます</small></h3>${sb}</div>`:""}${it.editRequest?`<div class="v2-sub"><h3>編集の指示</h3><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></div>`:""}</section>`]);
+  const tels=(it.telops||[]).filter(t=>t&&t.x!=null);
+  if(eimgs.length||it.editRequest||tels.length) secs.push(["sec-edit","編集のイメージ",n=>`<section class="vc v2" id="sec-edit">${H(n,"pen","編集のイメージと指示","仕上がりはこうなります。白梅デジタルがこの通りに編集します")}${sb?`<div class="v2-sub"><h3>場面ごとの仕上がり<small>タップで大きく見られます</small></h3>${sb}</div>`:""}${it.editRequest?`<div class="v2-sub"><h3>編集の指示</h3><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></div>`:""}${tels.length?`<div class="v2-sub"><h3>テロップ（字幕）を入れる場所<small>番号の場所に入ります</small></h3><div class="tel-view">${telFrame(tels,false)}${telList(tels)}</div></div>`:""}</section>`]);
   if((it.angles||[]).length) secs.push(["sec-ang","撮り方の見本",n=>anglesSection(it,n)]);
   if(tl||angle) secs.push(["sec-flow","構成と画角",n=>`<section class="vc v2" id="sec-flow">${H(n,"layout","大まかな構成と画角","撮る順番と、カメラの置き方")}<div class="bp-flow">${tl}${angle}</div></section>`]);
   if(has(it.benefitClient,it.benefitViewer)) secs.push(["sec-gain","得られること",n=>`<section class="vc v2" id="sec-gain">${H(n,"gift","この動画で得られること")}<div class="gain">${it.benefitClient?`<div><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)}</div>`:""}${it.benefitViewer?`<div><h3>見る人にとって</h3>${lines(it.benefitViewer)}</div>`:""}</div></section>`]);
@@ -2763,6 +2780,8 @@ function turnBox(c){
     ${r.length?`<ul class="turn-l">${r.map(o=>`<li><button type="button" ${go(o)}><span class="tl-w">${esc(o.what)}</span><span class="tl-t">${o.k==="rv"?"":esc(shortTitle(o.i.title))}</span>${when(o.due)}</button></li>`).join("")}</ul>`:""}</section>`;
 }
 /* 素材の受け渡し（お客様の画面・撮影の段階） */
+const telFrame=(tels,edit)=>`<div class="tf ${edit?"tf-edit":""}" ${edit?'data-act="telAdd" role="button" aria-label="タップしてテロップの位置を足す"':""}><span class="tf-ui tf-r" aria-hidden="true"></span><span class="tf-ui tf-b" aria-hidden="true"></span>${(tels||[]).map((t,k)=>`<span class="tf-m" style="left:${(+t.x).toFixed(1)}%;top:${(+t.y).toFixed(1)}%">${k+1}</span>`).join("")}${edit&&!(tels||[]).length?`<span class="tf-hint">ここをタップ</span>`:""}</div>`;
+const telList=tels=>`<ol class="tl-l">${tels.map((t,k)=>`<li><span class="tf-n">${k+1}</span><span>${esc(t.t||"（文字は未定）")}${t.when?`<small>${esc(t.when)}</small>`:""}</span></li>`).join("")}</ol>`;
 function materialBox(it,c,isClient){
   const s=it.step||0; if(!MAT_KINDS.includes(it.kind)) return "";
   const folder=c&&c.materialFolder;
@@ -3203,7 +3222,7 @@ const FIELDS={
     {t:"日程",i:"cal",f:[["shoot","撮影日","date"],["firstDraft","初稿の共有日","date"],["post","投稿予定日","date"],["deadline","納期","date"],["deliveryUrl","初稿・納品のURL","url"]]},
     {t:"お客様にお願いすること",i:"hand",lead:"お客様の画面では、金色の枠で目立つように出ます。",f:[["cast","演者","text"],["place","撮影場所","text"],["prep","準備するもの","text"],["survey","事前アンケート","text"],["caution","注意点・懸念点","text"]]},
     {t:"動画の目的",i:"target",f:[["purposeWho","どんな状態の、誰に","text"],["purposeWhat","いちばん伝えたいこと","text"],["purposeFeel","見た人に、どう思ってほしいか","text"]]},
-    {t:"編集のイメージと指示",i:"pen",lead:"画像は4枚まで。縦長（9:16）の枠に合わせて表示され、お客様はタップで拡大できます。",f:[["editImages","編集イメージ","images","9/16",4],["editRequest","編集の指示（1行ずつ。「→」で始まる行は補足）","area"]]},
+    {t:"編集のイメージと指示",i:"pen",lead:"画像は4枚まで。縦長（9:16）の枠に合わせて表示され、お客様はタップで拡大できます。",f:[["editImages","編集イメージ","images","9/16",4],["editRequest","編集の指示（1行ずつ。「→」で始まる行は補足）","area"],["telops","テロップ（字幕）を入れる場所","telops"]]},
     {t:"この動画で得られること",i:"gift",f:[["benefitClient","お客様にとって","area"],["benefitViewer","見る人にとって","area"]]},
     {t:"今月の中での、この動画の狙い",i:"compass",f:[["aim","狙い","area"]]},
     {t:"参考にする動画",i:"link",f:[["refTitle","動画のタイトル","text"],["refUrl","URL","url"],["refUse","まねするところ","area"],["refDiff","変えるところ","area"]]},
@@ -3492,6 +3511,7 @@ function slotsHtml(key,ar,max){
 function inputFor([key,lab,type,a,b]){
   const id="f_"+key, v=draft[key]??"";
   if(type==="images") return `<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">${lab}（${(draft[key]||[]).length}/${b}枚）</span>${slotsHtml(key,a,b)}</div>`;
+  if(type==="telops"){const tl=draft.telops||[];return `<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">${lab}</span><p class="tiny muted">縦長の画面の、入れたい場所をタップすると番号が付きます。灰色の部分はInstagramのボタンや説明文で隠れやすい場所です。</p><div class="tel-ed">${telFrame(tl,true)}<div class="tel-rows">${tl.map((t,k)=>`<div class="tel-row"><span class="tf-n">${k+1}</span><input type="text" data-tel="${k}" data-tk="t" value="${esc(t.t||"")}" placeholder="入れる文字（例：3位）"><input type="text" data-tel="${k}" data-tk="when" value="${esc(t.when||"")}" placeholder="いつ（例：0:03〜）" class="tel-w"><button type="button" class="btn btn-g btn-s" data-act="telRm" data-i="${k}" aria-label="${k+1}番を消す">×</button></div>`).join("")||`<p class="tiny muted">まだありません。</p>`}</div></div></div>`;}
   if(type==="angles"){const sel=draft[key]||[];return `<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">${lab}</span><div class="angpick">${ANGLES.map(a=>`<button type="button" class="ap ${sel.includes(a.k)?"on":""}" data-act="angPick" data-k="${a.k}"><img src="${angleImg(a.k)}" alt=""><span>${esc(a.l)}</span></button>`).join("")}</div></div>`;}
   if(type==="check") return `<label class="check"><input type="checkbox" id="${id}" data-key="${key}" ${v?"checked":""}>${lab}</label>`;
   if(type==="pattern") return `<div class="field"><label for="${id}">${lab}</label><input type="text" id="${id}" data-key="${key}" value="${esc(v)}" list="dl_pattern"><datalist id="dl_pattern">${[...new Set([...PATTERNS,...db.items.map(i=>i.pattern).filter(Boolean)])].map(x=>`<option value="${esc(x)}">`).join("")}</datalist></div>`;
@@ -3601,6 +3621,7 @@ app.addEventListener("input",e=>{
   if(t.dataset.cap&&draft){draft[t.dataset.cap][+t.dataset.i].cap=t.value;return;}
   if(t.dataset.act==="svc"&&cdraft){if(t.value==="meo"){cdraft.plan="";cdraft.meoPlan=cdraft.meoPlan||"LIGHT";}else{cdraft.meoPlan="";cdraft.plan=cdraft.plan||"LIGHT";}cdraft.fee=String(feeOf(cdraft));render();return;}
   if(t.dataset.act==="svcPlan"&&cdraft){if(hasMeo(cdraft)&&!hasSns(cdraft))cdraft.meoPlan=t.value;else cdraft.plan=t.value;cdraft.fee=String(feeOf(cdraft));render();return;}
+  if(t.dataset.tel&&draft&&draft.telops){const o=draft.telops[+t.dataset.tel];if(o)o[t.dataset.tk]=t.value;return;}
   if(t.dataset.me){S.meDraft=S.meDraft||{};S.meDraft[t.dataset.me]=t.value;return;}
   if(t.dataset.ckey&&cdraft){cdraft[t.dataset.ckey]=t.type==="checkbox"?t.checked:t.value;return;}
   if(t.dataset.mat){S.matDraft=S.matDraft&&S.matDraft.id===t.dataset.id?S.matDraft:{id:t.dataset.id};S.matDraft[t.dataset.mat]=t.value;return;}
@@ -3712,6 +3733,8 @@ app.addEventListener("click",e=>{
       if((it.images||[]).length){const key=k==="image"?"finishImages":"editImages";d[key]=it.images.slice(0,4).map(im=>({src:im.src||im,cap:"ネタの写真"}));}
       draft=d;toast("ネタを台本の下書きにしました。中身を足して「提出する」を押すと、ネタは「台本にした」になります");set({admin:"new",confirm:null});scrollTo(0,0);break;}
     case "matOk":{const it=find(b.dataset.id);it.materialOk=true;persistItem(it,[]);toast("素材を確認済みにしました");render();break;}
+    case "telAdd":{if(!draft)break;const r=b.getBoundingClientRect();const x=Math.max(4,Math.min(96,(e.clientX-r.left)/r.width*100)),y=Math.max(3,Math.min(97,(e.clientY-r.top)/r.height*100));draft.telops=draft.telops||[];if(draft.telops.length>=9){toast("テロップの場所は9か所までです");break;}draft.telops.push({x:+x.toFixed(1),y:+y.toFixed(1),t:"",when:""});render();setTimeout(()=>{const i=app.querySelector(`[data-tel="${draft.telops.length-1}"][data-tk="t"]`);if(i)i.focus();},50);break;}
+    case "telRm":{if(!draft||!draft.telops)break;draft.telops.splice(+b.dataset.i,1);render();break;}
     case "angPick":{const k=b.dataset.k;draft.angles=draft.angles||[];const i=draft.angles.indexOf(k);if(i>=0)draft.angles.splice(i,1);else draft.angles.push(k);render();break;}
     case "angLb":set({angLb:b.dataset.k});break;
     case "angLbX":set({angLb:null});break;
