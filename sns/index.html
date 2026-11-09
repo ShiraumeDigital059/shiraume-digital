@@ -3375,7 +3375,20 @@ function lightbox(){
 }
 
 /* ============ 描画とイベント ============ */
+// お客様の並び順：やることの期限が近い順（見本と白梅デジタルはいちばん下に固定）
+function clientGroup(c){if(/見本/.test(c.name||"")||/^mihon/.test(c.loginId||""))return 2;if(/白梅デジタル/.test(c.name||""))return 1;return 0;}
+function clientDue(c){const ds=[];
+  db.items.forEach(i=>{if(i.clientId!==c.id)return;
+    if(i.kind==="idea"){if(i.status==="new"&&i.from==="client"&&i.at)ds.push(i.at);return;}
+    if(!["video","image","live"].includes(i.kind))return;const x=stateOf(i);if(!x||x.done)return;
+    const d=x.s===0?(sched(c,i.month).scripts||i.shoot||i.post):x.s<=1?(i.shoot||i.firstDraft||i.post):x.s===2||(x.st&&x.st.who==="us")?(i.firstDraft||i.post):i.post;if(d)ds.push(d);});
+  try{const np=nextPay(c);if(np&&!np.paid)ds.push(np.iso);}catch(e){}
+  try{const ci=contractInfo(c);if(ci&&ci.noticeLeft>=0&&ci.noticeLeft<=45)ds.push(ci.notice);}catch(e){}
+  return ds.filter(Boolean).map(String).sort()[0]||"9999";}
+function orderClients(){if(!db||!db.clients||db.clients.length<2)return;const k=new Map(db.clients.map(c=>[c.id,[clientGroup(c),clientDue(c)]]));
+  db.clients.sort((a,b)=>{const x=k.get(a.id),y=k.get(b.id);return x[0]-y[0]||x[1].localeCompare(y[1]);});}
 function render(){
+  if(S.role==="staff"){try{orderClients();}catch(e){}}
   let html;
   if(LIVE&&S.loading) html=viewLoading();
   else if(!S.role) html=(LIVE&&S.setup)?viewSetup():viewLogin();
