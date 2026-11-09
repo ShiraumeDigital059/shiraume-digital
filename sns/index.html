@@ -1578,6 +1578,7 @@ div.nx-1{cursor:default}
 .cr-go svg{transform:rotate(180deg);color:var(--ink-3)}
 .cr-sep{font-size:12px;font-weight:800;color:var(--ink-3);margin:10px 4px 0}
 @media (max-width:560px){.cr{grid-template-columns:auto minmax(0,1fr) auto}.cr-d{grid-column:2/3;grid-row:2}.cr-go{grid-row:1/3;grid-column:3}}
+.mat-more{margin-top:10px}.mat-more summary{font-size:13px;color:var(--ink-3);cursor:pointer;font-weight:700}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
 
 </head>
@@ -1601,14 +1602,14 @@ const SHORT={video:"動画台本",image:"画像台本",live:"ライブ台本",me
 const FLOW={
   video:[
     {l:"企画",chip:"企画中",act:"台本を確定する",who:"us"},
-    {l:"撮影",chip:"撮影のお願い",act:"素材を送りました",who:"you",hint:"撮った動画を送ってください。",doneMsg:"素材を受け取りました"},
+    {l:"撮影",chip:"撮影のお願い",act:"入れました",who:"you",hint:"撮った動画をGoogleドライブに入れて、「入れました」を押してください。",doneMsg:"素材を受け取りました"},
     {l:"編集",chip:"編集中",act:"初稿を共有する",who:"us"},
     {l:"初稿",chip:"初稿ができました",act:"投稿の準備に進める",who:"us"},
     {l:"投稿",chip:"投稿待ち",act:"投稿しました",who:"both",hint:"投稿日に投稿してください。",doneMsg:"投稿完了"}
   ],
   image:[
     {l:"企画",chip:"企画中",act:"構成を確定する",who:"us"},
-    {l:"写真撮影",chip:"撮影のお願い",act:"写真を送りました",who:"you",hint:"撮った写真を送ってください。",doneMsg:"写真受け取り"},
+    {l:"写真撮影",chip:"撮影のお願い",act:"入れました",who:"you",hint:"撮った写真をGoogleドライブに入れて、「入れました」を押してください。",doneMsg:"写真受け取り"},
     {l:"制作",chip:"制作中",act:"仕上がりを共有する",who:"us"},
     {l:"仕上がり",chip:"仕上がりました",act:"投稿の準備に進める",who:"us"},
     {l:"投稿",chip:"投稿待ち",act:"投稿しました",who:"both",hint:"投稿日に投稿してください。",doneMsg:"投稿完了"}
@@ -2624,17 +2625,12 @@ function materialBox(it,c,isClient){
   const shot=true;
   const imgs=S.matImgs&&S.matImgs.id===it.id?S.matImgs.list:[];
   return `<section class="mat" id="mat_${it.id}">
-    <div class="mat-h"><span class="mat-i">${ic("box",18)}</span><div><b>撮ったものを送る</b><p>${c&&c.materialFolder?"フォルダに入れて、いちばん下のボタンを押すだけです。":"リンクを貼って、いちばん下のボタンを押すだけです。"}</p></div></div>
-
-    ${shot?`<ol class="mat-steps">
-      <li><span class="ms-n">1</span><div><b>素材を入れる</b>${folder?`<a class="btn btn-p" href="${esc(folder)}" target="_blank" rel="noopener">${ic("ext",16)}素材を入れるフォルダを開く</a><p class="tiny muted">スマホの「写真」から、撮った動画・写真をまとめて選んで入れてください。</p>`:`<p class="tiny muted">Googleドライブやギガファイル便などに入れて、共有のリンクを下に貼ってください。</p>`}</div></li>
-      <li><span class="ms-n">2</span><div><b>リンク・ひとこと（あれば）</b>
-        <div class="field"><label for="mu_${it.id}">素材のリンク${folder?"（フォルダに入れた場合は空のままで大丈夫です）":""}</label><input type="url" id="mu_${it.id}" data-mat="materialUrl" data-id="${it.id}" value="${esc(S.matDraft&&S.matDraft.id===it.id?S.matDraft.materialUrl||"":"")}" placeholder="https://drive.google.com/…"></div>
-        <div class="field"><label for="mn_${it.id}">ひとこと</label><textarea id="mn_${it.id}" data-mat="materialNote" data-id="${it.id}" rows="2" placeholder="例：2本目は音が小さいので、1本目を使ってください">${esc(S.matDraft&&S.matDraft.id===it.id?S.matDraft.materialNote||"":"")}</textarea></div>
-        ${it.kind==="image"?`<div class="mat-ph">${imgs.map((u,k)=>`<span class="mp"><img src="${u}" alt=""><button type="button" data-act="matRm" data-i="${k}" aria-label="この写真を外す">×</button></span>`).join("")}${imgs.length<10?`<label class="mp add">＋ 写真を選ぶ<input type="file" accept="image/*" multiple data-matimg="${it.id}"></label>`:""}</div>`:""}
-      </div></li>
-      <li><span class="ms-n">3</span><div><button class="btn btn-p btn-big" type="button" data-act="matSend" data-id="${it.id}">${ic("check")}素材を送りました</button><p class="tiny muted">白梅デジタルの画面に「素材が届きました」と出て、編集に入ります。</p></div></li>
-    </ol>`:""}
+    <div class="mat-h"><span class="mat-i">${ic("box",18)}</span><div><b>撮ったものを送る</b><p>Googleドライブに入れて、「入れました」を押すだけです。</p></div></div>
+    <ol class="mat-steps">
+      <li><span class="ms-n">1</span><div><b>Googleドライブに入れる</b>${folder?`<a class="btn btn-g" href="${esc(folder)}" target="_blank" rel="noopener">${ic("ext",16)}Googleドライブを開く</a>`:""}<p class="tiny muted">スマホの「写真」から、撮った動画・写真をまとめて選んで入れてください。${folder?"":"フォルダは、白梅デジタルからLINEでお送りしたものです。"}</p></div></li>
+      <li><span class="ms-n">2</span><div><button class="btn btn-p btn-big" type="button" data-act="matSend" data-id="${it.id}">${ic("check")}入れました</button><p class="tiny muted">白梅デジタルに届いたことが伝わり、編集に入ります。リンクを貼る必要はありません。</p>
+        <details class="mat-more"><summary>ひとこと添える（なくても大丈夫です）</summary><div class="field"><label for="mn_${it.id}" class="sr">ひとこと</label><textarea id="mn_${it.id}" data-mat="materialNote" data-id="${it.id}" rows="2" placeholder="例：2本目は音が小さいので、1本目を使ってください">${esc(S.matDraft&&S.matDraft.id===it.id?S.matDraft.materialNote||"":"")}</textarea></div></details></div></li>
+    </ol>
   </section>`;
 }
 /* 投稿の結果（投稿URLと、その回の数字） */
@@ -2841,7 +2837,7 @@ function howPage(){
     {n:3,w:"us",when:"毎月1日",t:"台本を書いて、お客様に公開する",d:["「どこ向け？」で投稿日・時刻・タイムゾーン・言語を決める","撮り方の見本の写真をえらぶ。本編は1行に1カット、【手元のアップ】のように撮り方を書く","テンプレートから作る・前の月を複製する、もできます","「お客様に公開する」に印をつけて提出"],b:[v1?B("edit:"+v1.id,"台本の編集画面を見る（つまみBEST3）"):"",B("list","台本の一覧",1)]},
     {n:4,w:"you",when:"台本が届いたら",t:"お客様は「あなたの番です」を見る",d:["今やることと期限が、いちばん上に出ます","台本は月ごと・種類ごとに並び、過去の台本も言葉で探せます"],b:[B("pv:video","お客様の画面を見る")]},
     {n:5,w:"you",when:"撮影の日",t:"撮り方の見本を見て、撮影する",d:["台本の「撮り方の見本」に、写真と一言の撮り方が出ます","「撮影モードで開く」で、1カットずつ大きく出して、撮れたら印をつけながら進められます","お客様が押すボタンは「撮ったものを送る」だけ。撮影の報告はいりません"],b:[v1?B("pvItem:"+v1.id,"撮影の台本を見る（つまみBEST3）"):""]},
-    {n:6,w:"you",when:"撮ったら",t:"撮ったものを送る → 白梅に届く",d:["お客様は台本の中の「撮ったものを送る」から。何本かまとめて送ることもできます。フォルダを開く・リンクを貼る・写真を選ぶ、のどれか","送ると、状態が「素材待ち」から「素材が届きました」に変わります","白梅は台本の一覧やホームで「素材を確認した」を押します"],b:[im?B("pvItem:"+im.id,"素材を送る画面を見る（忘年会コース）"):"",B("list","白梅の台本の一覧",1)]},
+    {n:6,w:"you",when:"撮ったら",t:"撮ったものを送る → 白梅に届く",d:["お客様は台本の中の「撮ったものを送る」から。Googleドライブに入れて「入れました」を押すだけ（リンクはいりません）。何本かまとめて押すこともできます","送ると、状態が「素材待ち」から「素材が届きました」に変わります","白梅は台本の一覧やホームで「素材を確認した」を押します"],b:[im?B("pvItem:"+im.id,"素材を送る画面を見る（忘年会コース）"):"",B("list","白梅の台本の一覧",1)]},
     {n:7,w:"both",when:"素材が届いたら",t:"編集して、初稿を見てもらう",d:["白梅が編集して、初稿のURLを入れて「初稿を共有する」","お客様は見るだけ。直してほしいところがあればLINEで。ボタンはありません","直しがなければ、白梅が「投稿の準備に進める」を押す"],b:[v3?B("pvItem:"+v3.id,"初稿の確認を見る（焼き鳥）"):""]},
     {n:8,w:"both",when:"投稿日",t:"お客様が投稿 → 白梅がURLと数字を入れる",d:["お客様は投稿するだけ。「投稿しました」を押す必要はありません","白梅が投稿を確かめて「投稿しました」を押す","投稿のURLと、再生・保存・フォローなどの数字を台本の「投稿したあと」に入れる","お客様の画面に「投稿の結果」が出ます","型・ハッシュタグの組み合わせ・投稿の時間ごとの比較が、自動で出ます"],b:[vd?B("pvItem:"+vd.id,"投稿の結果を見る"):"",vd?B("edit:"+vd.id,"数字を入れる画面",1):""]},
     {n:9,w:"both",when:"毎月28日",t:"振り返りをお渡しして、ひとことをもらう",d:["白梅が総括と「来月試すこと」を書いて公開。数字は投稿ごとの合計から自動で入ります","お客様はその週の日曜日までに、ひとことを書きます","ひとことと来月試すことが、翌月1日の台本に入ります"],b:[rv?B("pv:review","振り返りの画面を見る"):""]},
@@ -2877,11 +2873,11 @@ function bulkMatSheet(c){
   const its=matWaitItems(c); const sel=S.bulkSel||Object.fromEntries(its.map(i=>[i.id,true]));
   return `<div class="sheet-bg" data-act="bulkMatX"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="素材をまとめて送る">
     <div class="sheet-h"><b>${ic("box",18)}素材をまとめて送る</b><span class="spacer"></span><button class="sm-x" type="button" data-act="bulkMatX" aria-label="閉じる">×</button></div>
-    ${c.materialFolder?`<a class="btn btn-p" href="${esc(c.materialFolder)}" target="_blank" rel="noopener">${ic("ext",16)}素材を入れるフォルダを開く</a><p class="tiny muted">撮った動画・写真をまとめて入れてから、下で送る台本を選んでください。</p>`:`<p class="small muted">Googleドライブなどにまとめて入れて、共有のリンクを下に貼ってください。</p>`}
-    <div class="field"><label for="bm_url">素材のリンク${c.materialFolder?"（フォルダに入れた場合は空のままで大丈夫です）":""}</label><input type="url" id="bm_url" value="${esc(S.bmUrl||"")}" placeholder="https://drive.google.com/…"></div>
-    <div class="field"><label for="bm_note">ひとこと</label><textarea id="bm_note" rows="2" placeholder="例：③の動画は2回撮ったので、2本目を使ってください">${esc(S.bmNote||"")}</textarea></div>
+    <p class="small muted">撮った動画・写真をGoogleドライブにまとめて入れてから、入れた台本を選んで「入れました」を押してください。リンクを貼る必要はありません。</p>
+    ${c.materialFolder?`<a class="btn btn-g" href="${esc(c.materialFolder)}" target="_blank" rel="noopener">${ic("ext",16)}Googleドライブを開く</a>`:""}
+    <div class="field"><label for="bm_note">ひとこと（なくても大丈夫です）</label><textarea id="bm_note" rows="2" placeholder="例：③の動画は2回撮ったので、2本目を使ってください">${esc(S.bmNote||"")}</textarea></div>
     <div class="bm-l"><b>素材を送る台本（${its.filter(i=>sel[i.id]).length} / ${its.length}本）</b>${its.map(i=>`<label class="bm-i"><input type="checkbox" data-bmsel="${i.id}" ${sel[i.id]?"checked":""}><span><small>${esc(label(i))}</small>${esc(shortTitle(i.title))}</span></label>`).join("")}</div>
-    <button class="btn btn-p btn-big" type="button" data-act="bulkMatSend">${ic("check")}選んだ台本の素材を送りました</button></div>`;
+    <button class="btn btn-p btn-big" type="button" data-act="bulkMatSend">${ic("check")}選んだ台本の分を入れました</button></div>`;
 }
 /* 月まとめて作る（白梅） */
 function bulkPage(){
@@ -3060,7 +3056,7 @@ const FIELDS={
     {t:"参考にする動画",i:"link",f:[["refTitle","動画のタイトル","text"],["refUrl","URL","url"],["refUse","まねするところ","area"],["refDiff","変えるところ","area"]]},
     {t:"大まかな構成と画角",i:"layout",lead:"1行に1カットで書くと、お客様の「撮影モード」で1カットずつ大きく出ます。場面ごとの仕上がり画像は、同じ順番でカットに付きます。",f:[["angles","撮り方の見本（えらんだ写真がお客様の台本に出ます）","angles"],["angleImages","画角イメージ（自分で撮った写真を使うとき）","images","9/16",1],["opening","冒頭（タイトル・タイトルコールの有無）","area"],["body","本編（1行に1カット。「【手元のアップ】」のように撮り方の名前を入れると、撮影モードでその写真が出ます）","area"],["ending","締め","area"]]},
     {t:"投稿の情報（時刻・型・キャプション）",i:"pen",lead:"投稿日・時刻・どこ向けか（タイムゾーン・言語）は、いちばん上の「どこ向け？」で決めます。",f:[["pattern","型（ランキング・クイズ・密着・開封 など）","pattern"],["caption","キャプション（日本語の案）","area"],["captionEnNeed","英語のキャプションをお客様に書いてもらう","check"],["captionEn","英語のキャプション（お客様が書いたもの）","area","お客様が送ると、ここに入ります"],["hashtags","ハッシュタグ","text"],["hashtagSet","ハッシュタグの組み合わせの名前（例：A・B）","text"]]},
-    {t:"素材（お客様から届いたもの）",i:"box",lead:"お客様が「素材を送りました」を押すと、ここに入ります。中身を確かめたら「確認しました」に印をつけてください。",f:[["materialAt","届いた日","text"],["materialUrl","素材のリンク","url"],["materialNote","お客様からのひとこと","area"],["materialOk","中身を確認しました","check"]]},
+    {t:"素材（お客様から届いたもの）",i:"box",lead:"お客様がGoogleドライブに入れて「入れました」を押すと、ここに入ります。中身を確かめたら「確認しました」に印をつけてください。",f:[["materialAt","届いた日","text"],["materialUrl","素材のリンク","url"],["materialNote","お客様からのひとこと","area"],["materialOk","中身を確認しました","check"]]},
     {t:"投稿したあと（URLと数字）",i:"review",lead:"投稿のURLと数字を入れると、お客様の画面に「投稿の結果」が出て、振り返りの合計・型ごとの比較が自動で計算されます。",f:[["postUrl","投稿のURL","url"],["metricsAt","数字を見た日","date"],["m_views","再生数","number"],["m_reach","リーチ","number"],["m_likes","いいね","number"],["m_comments","コメント","number"],["m_saves","保存","number"],["m_shares","シェア","number"],["m_follows","フォロー","number"]]},
     {t:"社内メモ（お客様には表示されません）",i:"list",memo:true,f:[["memo","メモ","area"]]}
   ],
@@ -3506,13 +3502,12 @@ app.addEventListener("click",e=>{
     case "matSend":{const it=find(b.dataset.id);const c=client(it.clientId)||{};const md=S.matDraft&&S.matDraft.id===it.id?S.matDraft:{};const imgs=S.matImgs&&S.matImgs.id===it.id?S.matImgs.list:[];
       const url=String(md.materialUrl||"").trim();
       if(url&&!/^https?:\/\//.test(url)){toast("リンクは https:// から始まる形で貼ってください");break;}
-      if(!url&&!imgs.length&&!c.materialFolder){toast("素材のリンクを貼るか、写真を選んでください");break;}
       if(S.busy)break;S.busy=true;
       (async()=>{try{const out=[];for(const u of imgs){if(LIVE&&S.role==="client"&&!S.preview){const id=await rpc("sns_client_save_image",{p_token:getToken(),p_data:u});IMGC[id]=u;out.push({src:"img:"+id,cap:""});}else out.push({src:u,cap:""});}
         it.materialUrl=url||c.materialFolder||"";it.materialNote=String(md.materialNote||"").trim();it.materialImages=(it.materialImages||[]).concat(out);const d=new Date();it.materialAt=`${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）`;
         it.stamps=it.stamps||{};it.stamps[1]=todayStr();it.step=2;it.redo=null;it.lastBy="you";it.turnAt=todayISO();
         const ok=await persistItem(it,["materialUrl","materialNote","materialImages","materialAt","step","stamps","lastBy","redo","turnAt"]);
-        S.busy=false;S.matDraft=null;S.matImgs=null;if(ok!==false){toast("素材を送りました。白梅デジタルの画面に「素材が届きました」と出ます");celebrate(false);}render();}catch(e){S.busy=false;toast(e.message);}})();break;}
+        S.busy=false;S.matDraft=null;S.matImgs=null;if(ok!==false){toast("ありがとうございます。白梅デジタルに届いたことが伝わりました");celebrate(false);}render();}catch(e){S.busy=false;toast(e.message);}})();break;}
     case "enEdit":set({enEdit:b.dataset.id,enDraft:null});break;
     case "enSend":{const it=find(b.dataset.id);const v=(S.enDraft&&S.enDraft.id===it.id?S.enDraft.v:(document.getElementById("en_"+it.id)||{}).value||"").trim();if(!v){toast("英語のキャプションを書いてから送ってください");break;}
       it.captionEn=v;const d=new Date();it.captionEnAt=`${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）`;persistItem(it,["captionEn","captionEnAt"]);toast("英語のキャプションを送りました");set({enEdit:null,enDraft:null});break;}
@@ -3573,10 +3568,10 @@ app.addEventListener("click",e=>{
     case "bulkMatOpen":set({bulkMat:true,bulkSel:null});break;
     case "bulkMatX":set({bulkMat:false});break;
     case "bulkMatSend":{const c=client(S.preview?S.previewClient:S.clientId);const its=matWaitItems(c);const sel=S.bulkSel||Object.fromEntries(its.map(i=>[i.id,true]));const pick=its.filter(i=>sel[i.id]);
-      const url=String(S.bmUrl||"").trim();if(!pick.length){toast("送る台本を選んでください");break;}if(url&&!/^https?:\/\//.test(url)){toast("リンクは https:// から始まる形で貼ってください");break;}if(!url&&!c.materialFolder){toast("素材のリンクを貼ってください");break;}if(S.busy)break;S.busy=true;
+      const url=String(S.bmUrl||"").trim();if(!pick.length){toast("送る台本を選んでください");break;}if(url&&!/^https?:\/\//.test(url)){toast("リンクは https:// から始まる形で貼ってください");break;}if(S.busy)break;S.busy=true;
       (async()=>{const d=new Date();const at=`${d.getMonth()+1}/${d.getDate()}（${WD[d.getDay()]}）`;let ok=0;for(const it of pick){if(!it.shotAt)it.shotAt=todayStr();it.materialUrl=url||c.materialFolder||"";it.materialNote=String(S.bmNote||"").trim();it.materialAt=at;it.stamps=it.stamps||{};it.stamps[1]=todayStr();it.step=2;it.redo=null;it.lastBy="you";it.turnAt=todayISO();
         if(await persistItem(it,["shotAt","materialUrl","materialNote","materialAt","step","stamps","lastBy","redo","turnAt"])!==false)ok++;}
-        S.busy=false;S.bmUrl="";S.bmNote="";S.bulkSel=null;S.bulkMat=false;toast(`${ok}本の素材を送りました。白梅デジタルの画面に「素材が届きました」と出ます`);celebrate(false);render();})();break;}
+        S.busy=false;S.bmUrl="";S.bmNote="";S.bulkSel=null;S.bulkMat=false;toast(`${ok}本分、白梅デジタルに伝わりました。ありがとうございます`);celebrate(false);render();})();break;}
     case "bulkCreate":{const b=S.bk;const c=client(b.clientId);if(!c)break;const n=Math.max(1,Math.min(40,+b.count||1));const titles=String(b.titles||"").split("\n").map(x=>x.trim());const src=b.src?find(b.src):null;
       const nos=db.items.filter(i=>i.clientId===b.clientId&&i.kind===b.kind&&i.month===b.month).map(i=>i.no||0);const no0=(nos.length?Math.max(...nos):0)+1;if(S.busy)break;S.busy=true;toast("作っています…");
       (async()=>{try{for(let k=0;k<n;k++){const d=src?dupItem(src,b.month):blank(b.kind,b.clientId);d.kind=b.kind;d.clientId=b.clientId;d.month=b.month;d.no=no0+k;d.title=titles[k]||"（タイトル未定）";d.published=false;if(b.start){const day=addDays(b.start,k*Math.max(1,+b.every||1));if(b.kind==="live")d.liveDate=day;else d.post=day;}if(b.time){if(b.kind==="live")d.liveTime=b.time;else d.postTime=b.time;}await saveNewItem(d);}
