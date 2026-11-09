@@ -2258,7 +2258,7 @@ function listPage(c,kind){
   const subs={video:"1本ずつ開くと、撮り方と目的がわかります。",image:"スワイプ投稿の1枚ずつの中身です。",live:"ライブ配信の流れと話すことです。"};
   const all=visible(c.id,kind);
   const head=bigHead(KINDS[kind],subs[kind],clientPhoto(c,kind))+catRow(c);
-  if(!all.length) return `<div class="stack">${head}${turnBox(c)}<div class="empty"><div class="ei"><img src="${IMG.emptyv}" alt=""></div><b>まだ${KINDS[kind]}はありません</b><span class="small">白梅デジタルが台本を入れると、ここに並びます。</span></div></div>`;
+  if(!all.length) return `<div class="stack">${head}${driveBox(c)}${turnBox(c)}<div class="empty"><div class="ei"><img src="${IMG.emptyv}" alt=""></div><b>まだ${KINDS[kind]}はありません</b><span class="small">白梅デジタルが台本を入れると、ここに並びます。</span></div></div>`;
   const months=[...new Set(all.map(i=>i.month))].sort(); const cur=pickMonth(months);
   const list=all.filter(i=>i.month===cur).sort((a,b)=>a.no-b.no);
   const you=list.filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";});
