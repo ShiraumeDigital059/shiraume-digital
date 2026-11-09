@@ -20,14 +20,18 @@
 <link rel="icon" href="icons/favicon.png" sizes="512x512" type="image/png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
-  html{height:100%;-webkit-text-size-adjust:100%}
-  body{margin:0;height:100%;background:#fff;overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
+  html{height:100%;-webkit-text-size-adjust:100%;overflow-x:hidden}
+  /* ページは上下にだけ動く。左右にはずらさない。 */
+  body{margin:0;height:100%;background:#fff;overflow-x:hidden;
+       overscroll-behavior-y:none;overscroll-behavior-x:none;
+       -webkit-tap-highlight-color:transparent}
   @media (prefers-color-scheme:dark){body{background:#15161A}}
   [hidden]{display:none!important}
   @supports (padding:env(safe-area-inset-top)){
     .topbar{padding-top:env(safe-area-inset-top);height:calc(64px + env(safe-area-inset-top))}
     .tabbar{bottom:calc(14px + env(safe-area-inset-bottom))}
     .content{padding-bottom:env(safe-area-inset-bottom)}
+    .toast{bottom:calc(86px + env(safe-area-inset-bottom,0px))}
   }
 </style>
 <script src="vendor/supabase.js"></script>
@@ -501,8 +505,11 @@ table.t tbody tr:hover{background:var(--side)}
 /* ---------- 重ねる層 ---------- */
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,100%);background:var(--paper);
   border-left:1px solid var(--line-2);box-shadow:-24px 0 50px -34px rgba(20,20,22,.5);z-index:60;display:flex;flex-direction:column}
-.drawer .dh{padding:20px;border-bottom:1px solid var(--line);display:flex;gap:13px;align-items:flex-start}
-.drawer .db{overflow:auto;padding:20px;display:flex;flex-direction:column;gap:30px;flex:1}
+/* 横から出てくる板も、時計の帯とホームバーには入り込ませない */
+.drawer .dh{padding:calc(20px + env(safe-area-inset-top,0px)) 20px 20px;
+  border-bottom:1px solid var(--line);display:flex;gap:13px;align-items:flex-start}
+.drawer .db{overflow:auto;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));
+  display:flex;flex-direction:column;gap:30px;flex:1}
 .scrim{position:fixed;inset:0;background:rgba(18,18,20,.36);z-index:50;display:grid;place-items:center;padding:16px;overflow:auto;
   backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 .modal{background:var(--paper);border-radius:12px;box-shadow:0 24px 60px -22px rgba(18,18,20,.45);
@@ -2566,13 +2573,17 @@ input[type=time],input[type=date],input[type=number],select,textarea{border-radi
   .wgrid.oneday .evb{padding:6px 9px}
   .wgrid.oneday .evb .n{font-size:15px}
   .wgrid.oneday .evb .t{font-size:12.5px}
-  /* 日別パネルはほぼ全画面に */
-  .scrim{padding:0}
-  .modal.daymodal{width:100%;max-height:100vh;height:100%;border-radius:0;border:0}
-  .modal.daymodal .mb{padding:16px 16px calc(28px + env(safe-area-inset-bottom,0px))}
-  .modal.daymodal .mh{padding-top:calc(14px + env(safe-area-inset-top,0px))}
-  .modal.daymodal .mf{position:sticky;bottom:0;
-    padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+  /* 日別パネルはほぼ全画面に。
+     ただし、時計や電池のある帯（上）とホームバー（下）には
+     どのふきだしも入り込ませない。ここで場所を空けておけば、
+     見出しも「閉じる」も必ず指の届くところに出る。 */
+  .scrim{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+  .modal{max-height:100%}
+  .modal .mh{position:sticky;top:0;z-index:2;background:var(--paper)}
+  .modal.daymodal{width:100%;max-height:100%;height:100%;border-radius:0;border:0}
+  .modal.daymodal .mb{padding:16px 16px 28px}
+  .modal.daymodal .mh{padding-top:14px}
+  .modal.daymodal .mf{position:sticky;bottom:0;padding-bottom:14px}
 }
 </style>
 
@@ -4951,28 +4962,11 @@ function evWho(e){
 const isPhone=()=>{try{return window.matchMedia('(max-width:660px)').matches;}catch(e){return false;}};
 const DOWEN_FULL=['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
 
-/* 横にスワイプして、前の月／次の月へ。
-   縦スクロールの邪魔をしないよう、横の動きが縦の2倍以上のときだけ効かせる。
-   時間割を横スクロールしている最中は無視する。 */
-function wireSwipe(){
-  const box=document.querySelector('#content'); if(!box||box.dataset.swipe)return;
-  box.dataset.swipe='1';
-  let x0=0,y0=0,on=false;
-  box.addEventListener('touchstart',ev=>{
-    if(ev.touches.length!==1){on=false;return;}
-    if(ev.target.closest&&ev.target.closest('.wbody')){on=false;return;}
-    const t=ev.touches[0]; x0=t.clientX; y0=t.clientY; on=true;
-  },{passive:true});
-  box.addEventListener('touchend',ev=>{
-    if(!on)return; on=false;
-    const t=ev.changedTouches[0];
-    const dx=t.clientX-x0, dy=t.clientY-y0;
-    if(Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*2)return;
-    if($('#layer').innerHTML)return;
-    calStep(dx<0?1:-1);
-    render();
-  },{passive:true});
-}
+/* 横スワイプでの月送りはやめた。
+   指を少し横に滑らせただけで画面が切り替わってしまい、
+   読んでいる最中に勝手に動くのが使いづらかったため。
+   前／次へは上の「＜ ＞」ボタンで動かす。 */
+function wireSwipe(){ /* 何もしない */ }
 
 /* 前／次へ。ボタンと、横スワイプの両方から呼ぶ */
 function calStep(dir){
