@@ -1579,7 +1579,74 @@ div.nx-1{cursor:default}
 .cr-sep{font-size:12px;font-weight:800;color:var(--ink-3);margin:10px 4px 0}
 @media (max-width:560px){.cr{grid-template-columns:auto minmax(0,1fr) auto}.cr-d{grid-column:2/3;grid-row:2}.cr-go{grid-row:1/3;grid-column:3}}
 .mat-more{margin-top:10px}.mat-more summary{font-size:13px;color:var(--ink-3);cursor:pointer;font-weight:700}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ===== ホーム（お客様） ===== */
+.hh{position:relative;overflow:hidden;border-radius:22px;padding:26px 22px 22px;background:linear-gradient(150deg,#16301F 0%,#1E3A2B 55%,#2C5641 100%);color:#F6F1E4;box-shadow:0 18px 40px -24px rgba(16,32,22,.7)}
+.hh::before{content:"";position:absolute;inset:10px;border:1px solid rgba(214,186,120,.35);border-radius:16px;pointer-events:none}
+.hh::after{content:"";position:absolute;right:-30px;top:-30px;width:170px;height:170px;background:var(--flower) center/contain no-repeat;opacity:.16}
+.hh-d{font-size:12.5px;letter-spacing:.12em;color:#D6BA78;font-weight:700}
+.hh h1{font-family:var(--fm);font-size:clamp(24px,6.4vw,32px);font-weight:600;letter-spacing:.06em;margin:6px 0 8px;color:#fff}
+.hh p{font-size:13.5px;line-height:1.85;color:rgba(246,241,228,.86);margin:0}
+.hh-do{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:16px;position:relative;z-index:1}
+.hh-do span{display:grid;gap:1px;text-align:center;padding:9px 4px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(214,186,120,.28);font-size:10.5px;color:rgba(246,241,228,.8);line-height:1.4}
+.hh-do b{font-family:var(--fm);font-size:16px;color:#E9D39C;font-weight:600;letter-spacing:.08em}
+.hnone{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:18px;background:var(--green-soft);color:var(--green)}
+.hnone div{display:grid;gap:2px}.hnone span{font-size:13px;color:var(--ink-2)}
+.sec-t h2{font-family:var(--fm);font-size:19px;font-weight:600;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.sec-t h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,#D6BA78,transparent)}
+.htiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:900px){.htiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.ht{position:relative;display:grid;grid-template-columns:1fr;align-content:start;gap:10px;padding:14px;border-radius:18px;border:1px solid var(--line);background:#fff;font:inherit;color:var(--ink);text-align:left;cursor:pointer;box-shadow:0 1px 2px rgba(31,32,35,.04),0 10px 24px -20px rgba(31,32,35,.35);transition:border-color .2s,transform .2s}
+.ht:hover{border-color:#D6BA78;transform:translateY(-1px)}
+.ht-i{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(150deg,#1E3A2B,#2C5641);color:#E9D39C}
+.ht-t{display:grid;gap:1px;min-width:0}.ht-t b{font-size:16px;letter-spacing:.04em}.ht-t small{font-size:12.5px;color:var(--ink-3);font-weight:600}
+.ht-b{font-size:12px;font-weight:800;color:var(--you);background:var(--you-bg);padding:3px 10px;border-radius:999px;white-space:nowrap}
+.ht-go{position:absolute;right:12px;top:14px}.ht-go svg{transform:rotate(180deg);color:#B49A5C}
+.ht-b{position:absolute;right:10px;bottom:12px}.ht-t b{font-size:15px}.ht-i{width:42px;height:42px}.ht{min-height:118px}
+.hline{display:grid;gap:12px;padding:16px 18px;border-radius:18px;background:var(--sunk);border:1px solid var(--line)}
+.hline div{display:grid;gap:2px}.hline b{display:flex;align-items:center;gap:8px}.hline span{font-size:13px;color:var(--ink-2)}
+/* Googleドライブ */
+.dg-top{display:grid;gap:14px;padding:18px;border-radius:20px;background:#EEF4EE;border:1px solid #CFE0D2}
+.dg-top div{display:grid;gap:6px}.dg-top b{font-size:16px;line-height:1.6}.dg-top span{font-size:13.5px;color:var(--ink-2);line-height:1.8}
+.dg-wait{font-size:13.5px;color:var(--green);font-weight:700;background:#fff;border-radius:12px;padding:12px 14px;margin:0}
+.dg{padding:18px;border-radius:20px;background:#fff;border:1px solid var(--line);display:grid;gap:12px}
+.dg h2{font-size:17px;display:flex;gap:8px;align-items:center}
+.dg ol{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:none}
+.dg li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start}
+.dg-n{width:30px;height:30px;border-radius:50%;background:var(--green);color:#E9D39C;display:grid;place-items:center;font-weight:800;font-family:var(--fm)}
+.dg li b{font-size:15px}.dg li p{font-size:13.5px;color:var(--ink-2);margin:2px 0 0;line-height:1.8}
+.dg-q dl{display:grid;gap:12px;margin:0}.dg-q dt{font-weight:800;font-size:14.5px}.dg-q dd{margin:2px 0 0;font-size:13.5px;color:var(--ink-2);line-height:1.8}
+.dg-mail{display:grid;gap:2px;padding:14px;border-radius:14px;background:var(--gold-soft);border:1px solid #E6D3A6}
+.dg-mail span{font-size:12px;font-weight:800;color:var(--gold)}.dg-mail a{font-size:16px;font-weight:800;color:var(--ink);word-break:break-all}.dg-mail small{font-size:12px;color:var(--ink-3)}
+.drive .dv-go{grid-column:1/-1;justify-content:center}
+/* お客様情報 */
+.me{display:grid;gap:14px;padding:18px;border-radius:20px;background:#fff;border:1px solid var(--line)}
+.me-lead{font-size:13.5px;color:var(--ink-2);margin:0;line-height:1.8}
+.me-name{display:grid;padding:12px 14px;border-radius:12px;background:var(--sunk)}.me-name span{font-size:12px;color:var(--ink-3);font-weight:700}.me-name b{font-size:16px}
+/* 運用前の状況 */
+.bl{display:grid;gap:16px;padding:20px 18px;border-radius:22px;background:linear-gradient(180deg,#FBF8F0,#fff 140px);border:1px solid #E6D9B8}
+.bl-tag{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.12em;color:var(--gold);border:1px solid #D6BA78;border-radius:999px;padding:2px 10px}
+.bl-hd h2{font-family:var(--fm);font-size:21px;font-weight:600;letter-spacing:.05em;margin:8px 0 4px}.bl-hd p{font-size:13px;color:var(--ink-2);margin:0;line-height:1.8}
+.bl-as{display:grid;gap:12px}@media (min-width:760px){.bl-as{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.bl-a{display:grid;gap:10px;padding:14px;border-radius:16px;background:#fff;border:1px solid var(--line)}
+.bl-ah{display:grid;gap:1px}.bl-ah a{display:inline-flex;gap:6px;align-items:center;color:var(--green);text-decoration:none;font-size:15px}.bl-ah span{font-size:12.5px;color:var(--ink-3);font-weight:700}
+.bl-k{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:0}
+.bl-k div{padding:10px 6px;border-radius:12px;background:var(--sunk);text-align:center}.bl-k dt{font-size:11.5px;color:var(--ink-3);font-weight:700}.bl-k dd{margin:0}.bl-k b{font-size:21px;font-family:var(--fm);color:var(--green)}.bl-k small{font-size:11px;color:var(--ink-3);margin-left:2px}
+.bl-s{display:grid;gap:4px;margin:0;font-size:13px}.bl-s div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:3px 0}.bl-s dt{color:var(--ink-3);font-weight:700}.bl-s dd{margin:0;font-weight:700;text-align:right}
+.bl-n{font-size:13px;color:var(--ink-2);margin:0;line-height:1.8}
+.bl-sum,.bl-sim{display:grid;gap:10px}.bl-sum h3,.bl-sim h3{font-size:16px;display:flex;gap:8px;align-items:center}
+.bl-sum ol{margin:0;padding-left:1.4em;display:grid;gap:8px}.bl-sum li{font-size:14px;line-height:1.85}
+.bl-g h4{font-size:13.5px;margin:6px 0 8px;color:var(--ink-2)}.bl-g h4 small{font-weight:600;color:var(--ink-3);margin-left:6px}
+.sim{list-style:none;margin:0;padding:0;display:grid;gap:8px}@media (min-width:760px){.sim{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.sim a{display:grid;gap:2px;padding:11px 13px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;height:100%}
+.sim a:hover{border-color:#D6BA78}
+.sim-h{display:flex;justify-content:space-between;gap:8px}.sim-h b{color:var(--green);font-size:14px;word-break:break-all}.sim-h em{font-style:normal;font-size:11.5px;color:var(--gold);font-weight:800;white-space:nowrap}
+.sim-n{font-size:12.5px;font-weight:700}.sim-n i{font-style:normal;color:var(--ink-3);font-weight:600;margin-left:6px}
+.sim-w{font-size:12.5px;color:var(--ink-2);line-height:1.7}
+.bl .sim{padding:0!important;margin:0!important}.bl .sim li{margin:0!important;padding:0!important}.bl .sim li::before{display:none!important}
+.bl-sum ol{padding:0!important;margin:0!important;list-style:none}.bl-sum li{margin:0!important;padding:12px 14px!important;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;background:#fff;border:1px solid var(--line);border-radius:14px}.bl-no{width:24px;height:24px;border-radius:50%;background:var(--green);color:#E9D39C;display:grid;place-items:center;font-size:12.5px;font-weight:800;margin-top:3px}.bl-sum li::before{display:none!important}
+.cprof{display:grid;gap:4px;font-size:13.5px}.cprof div{display:grid;grid-template-columns:9em minmax(0,1fr);gap:8px;border-bottom:1px dashed var(--line);padding:4px 0}.cprof dt{color:var(--ink-3);font-weight:700}.cprof dd{margin:0;word-break:break-all;white-space:pre-wrap}
 </style>
+
 
 </head>
 <body>
@@ -1920,9 +1987,10 @@ function seed0(){
 const KEY="shiraume_sns_demo_v12";
 let db;
 if("https://ysxvsrixarelqidgegyj.supabase.co".indexOf("https://")===0){db={v:9,staff:[],clients:[],items:[]};}else{try{const raw=localStorage.getItem(KEY);db=raw?JSON.parse(raw):seed();}catch(e){db=seed();}}
+if("https://ysxvsrixarelqidgegyj.supabase.co".indexOf("https://")!==0){window.__dbg=()=>db;window.__render=()=>render();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));return true;}catch(e){toast("保存できませんでした。画像を減らすか、小さい画像にしてください");return false;}}
 
-let S={role:null,clientId:null,view:"video",month:null,itemId:null,menu:false,admin:"home",fClient:"all",fKind:"all",preview:false,previewClient:null,confirm:null,err:"",lb:null};
+let S={role:null,clientId:null,view:"home",month:null,itemId:null,menu:false,admin:"home",fClient:"all",fKind:"all",preview:false,previewClient:null,confirm:null,err:"",lb:null};
 if("https://ysxvsrixarelqidgegyj.supabase.co".indexOf("https://")!==0){try{const ss=JSON.parse(sessionStorage.getItem(KEY+"_s")||"null");if(ss)Object.assign(S,ss);}catch(e){}}
 function keepSession(){try{sessionStorage.setItem(KEY+"_s",JSON.stringify({role:S.role,clientId:S.clientId}));}catch(e){}}
 const app=document.getElementById("app");
@@ -2077,7 +2145,7 @@ async function doLogin(id,pw){
   if(LIVE){try{S.busy=true;const j=await rpc("sns_login",{p_login:id,p_pass:pw});setToken(j.token);S.role=j.role;S.err="";S.view="video";S.month=null;S.itemId=null;S.admin="home";await loadAll();}catch(e){S.err=e.message;S.role=null;}S.busy=false;render();return;}
   if(db.staff.find(s=>s.loginId===id&&s.password===pw)){set({role:"staff",clientId:null,err:"",admin:"home"});keepSession();return;}
   const c=db.clients.find(c=>c.loginId===id&&c.password===pw);
-  if(c){set({role:"client",clientId:c.id,err:"",view:"video",month:null,itemId:null});keepSession();return;}
+  if(c){set({role:"client",clientId:c.id,err:"",view:"home",month:null,itemId:null});keepSession();return;}
   set({err:"IDかパスワードが違います。もう一度入れてください。"});
 }
 
@@ -2190,12 +2258,96 @@ function rhythmBox(c,month){
     <div class="rh"><span class="rh-i t-d">${ic("review",18)}</span><b>${fmtDate(s.review)}</b><span>振り返りをお渡し</span>${st(s.review,!!(r&&r.published&&r.summary))}</div>
     <div class="rh you"><span class="rh-i t-b">${ic("chat",18)}</span><b>${fmtDate(s.due)}</b><span>ひとことの締切</span>${st(s.due,!!(r&&r.clientComment))}</div></div></section>`;
 }
+/* ===== お客様ホーム・Googleドライブ・お客様情報・運用前の状況 ===== */
+const DRIVE_MAIL="carp_no1.0024@icloud.com";
+const splitRow=l=>String(l).split(/[｜|]/).map(x=>x.trim());
+const baseAccts=c=>String(c.baseAccts||"").split("\n").map(l=>l.trim()).filter(l=>l&&/^@/.test(l)).map(l=>{const a=splitRow(l);return {h:a[0],label:a[1]||"",fol:a[2]||"",fing:a[3]||"",posts:a[4]||"",last:a[5]||"",likes:a[6]||"",note:a[7]||""};});
+const simAccts=c=>String(c.similar||"").split("\n").map(l=>l.trim()).filter(l=>l&&/^@/.test(l)).map(l=>{const a=splitRow(l);return {h:a[0],name:a[1]||"",region:a[2]||"",country:a[3]||"",why:a[4]||"",fol:a[5]||""};});
+const igUrl=h=>"https://www.instagram.com/"+encodeURIComponent(String(h).replace(/^@/,""))+"/";
+function baselineBox(c){
+  const ac=baseAccts(c); const sm=simAccts(c); const sum=String(c.baseSummary||"").split("\n").map(x=>x.replace(/^[・\-\s]+/,"").trim()).filter(Boolean);
+  if(!ac.length&&!sum.length&&!sm.length) return "";
+  const at=c.baseAt?fmtFull(c.baseAt):"";
+  const acc=ac.map(a=>`<article class="bl-a"><div class="bl-ah"><a href="${igUrl(a.h)}" target="_blank" rel="noopener"><b>${esc(a.h)}</b>${ic("ext",14)}</a>${a.label?`<span>${esc(a.label)}</span>`:""}</div>
+    <dl class="bl-k">${[["フォロワー",a.fol,"人"],["フォロー中",a.fing,"人"],["投稿",a.posts,"件"]].map(([l,v,u])=>`<div><dt>${l}</dt><dd><b>${esc(v||"—")}</b>${v?`<small>${u}</small>`:""}</dd></div>`).join("")}</dl>
+    <dl class="bl-s">${a.last?`<div><dt>最後の投稿</dt><dd>${esc(a.last)}</dd></div>`:""}${a.likes?`<div><dt>1投稿のいいね</dt><dd>${esc(a.likes)}</dd></div>`:""}</dl>
+    ${a.note?`<p class="bl-n">${esc(a.note)}</p>`:""}</article>`).join("");
+  const grp=r=>{const l=sm.filter(x=>(r==="日本")===/日本/.test(x.region));return l.length?`<div class="bl-g"><h4>${r==="日本"?"日本":"海外"}<small>${l.length}件</small></h4><ul class="sim">${l.map(x=>`<li><a href="${igUrl(x.h)}" target="_blank" rel="noopener"><span class="sim-h"><b>${esc(x.h)}</b>${x.fol?`<em>${esc(x.fol)}</em>`:""}</span><span class="sim-n">${esc(x.name)}${x.country?`<i>${esc(x.country)}</i>`:""}</span>${x.why?`<span class="sim-w">${esc(x.why)}</span>`:""}</a></li>`).join("")}</ul></div>`:"";};
+  return `<section class="bl"><div class="bl-hd"><span class="bl-tag">運用前の状況</span><h2>はじめる前の、いまの数字</h2><p>${at?`${at}時点の数字です。`:""}これからの毎月の振り返りは、この数字とくらべて見ていきます。</p></div>
+    ${acc?`<div class="bl-as">${acc}</div>`:""}
+    ${sum.length?`<div class="bl-sum"><h3>${ic("target",18)}白梅デジタルの見立て</h3><ol>${sum.map((x,k)=>`<li><span class="bl-no">${k+1}</span><span>${esc(x)}</span></li>`).join("")}</ol></div>`:""}
+    ${sm.length?`<div class="bl-sim"><h3>${ic("eye",18)}似ているアカウント</h3><p class="tiny muted">そのまま真似するものではありません。見せ方や言葉選びの参考として、白梅デジタルが選びました。</p>${grp("日本")}${grp("海外")}</div>`:""}</section>`;
+}
+function homePage(c){
+  const cid=c.id; const d=parseISO(todayISO());
+  const needs=k=>visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
+  const cnt=k=>visible(cid,k).length;
+  const rvs=db.items.filter(i=>i.clientId===cid&&i.kind==="review"&&i.published).length;
+  const tile=(view,icon,title,sub,badge,tone)=>`<button class="ht ${tone||""}" type="button" data-act="nav" data-k="${view}"><span class="ht-i">${ic(icon,22)}</span><span class="ht-t"><b>${title}</b><small>${sub}</small></span>${badge?`<span class="ht-b">${badge}</span>`:""}<span class="ht-go" aria-hidden="true">${ic("back",15)}</span></button>`;
+  const sns=hasSns(c), meo=hasMeo(c);
+  const tiles=[
+    sns?tile("video","video","動画の台本",`${cnt("video")}本`,needs("video")?`お願い ${needs("video")}`:"" ):"",
+    sns?tile("image","image","画像の台本",`${cnt("image")}本`,needs("image")?`お願い ${needs("image")}`:""):"",
+    sns?tile("live","live","ライブ台本",`${cnt("live")}本`,needs("live")?`お願い ${needs("live")}`:""):"",
+    sns?tile("review","review","振り返り",rvs?`${rvs}か月分・運用前の数字`:"運用前の数字と毎月の結果",""):"",
+    meo?tile("meo","map","Googleマップ","投稿・口コミの返信",(needs("meo_post")+needs("meo_review"))?`お願い ${needs("meo_post")+needs("meo_review")}`:""):"",
+    tile("drive","box","Googleドライブ","写真・動画・資料を送る",""),
+    tile("plan","star","ご契約プラン",esc([sns?c.plan:"",meo?"MAP "+c.meoPlan:""].filter(Boolean).join("・"))||"内容",""),
+    tile("me","user","お客様情報",c.profile&&c.profile.email?"入力済み":"メール・住所など","")].join("");
+  return `<div class="stack home">
+    <section class="hh"><div class="hh-d">${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</div><h1>${esc(c.name)} 様</h1><p>白梅デジタルの、${esc(c.name)} 様専用ページです。<br>台本・撮影のお願い・振り返りが、すべてここにまとまっています。</p>
+      <div class="hh-do"><span><b>見る</b>台本・振り返り</span><span><b>撮る</b>お願いの撮影</span><span><b>送る</b>ドライブへ</span><span><b>投稿</b>決まった日に</span></div></section>
+    ${turnBox(c)||`<section class="hnone">${ic("check",18)}<div><b>いま、お願いしていることはありません</b><span>白梅デジタルが進めています。お願いが出たら、ここにいちばんに表示されます。</span></div></section>`}
+    <div class="sec-t"><h2>このページでできること</h2></div>
+    <nav class="htiles" aria-label="メニュー">${tiles}</nav>
+    <section class="hline"><div><b>${ic("chat",18)}わからないことは、LINEで</b><span>台本の直し、撮影の日程、ちょっとした質問もお気軽にどうぞ。</span></div><a class="btn-line" href="${LINE_URL}" target="_blank" rel="noopener">公式LINEで相談する</a></section>
+  </div>`;
+}
+function drivePage(c){
+  const f=c.materialFolder;
+  const step=(n,t,d)=>`<li><span class="dg-n">${n}</span><div><b>${t}</b><p>${d}</p></div></li>`;
+  return `<div class="stack">${bigHead("Googleドライブ","写真・動画・資料の送り方です。",clientPhoto(c,"video"))}
+    <section class="dg-top"><div><b>撮った写真・動画、メニュー表やチラシなどの資料は、ぜんぶGoogleドライブへ。</b><span>LINEで送ると画質が落ちるため、Googleドライブでお願いしています。入れたら、台本の「入れました」を押すだけです。リンクを貼る必要はありません。</span></div>
+      ${f?`<a class="btn btn-p btn-big" href="${esc(f)}" target="_blank" rel="noopener">${ic("ext",18)}${esc(c.name)} 様のフォルダを開く</a>`:`<p class="dg-wait">${esc(c.name)} 様専用のフォルダは、白梅デジタルからLINEでお送りします。届くまで少しお待ちください。</p>`}</section>
+    <section class="dg"><h2>${ic("image",18)}スマホから入れる（はじめての方）</h2><ol>
+      ${step(1,"Googleドライブのアプリを入れる","iPhoneは App Store、Androidは Google Play で「Google ドライブ」と探して入れてください。Androidには、はじめから入っていることが多いです。")}
+      ${step(2,"Googleアカウントでログインする","Gmailのアドレスでログインします。お持ちでないときは、アプリの案内にそって無料で作れます。")}
+      ${step(3,"白梅デジタルのフォルダを開く",f?"上の「フォルダを開く」を押すと、アプリでフォルダが開きます。":"LINEでお送りするフォルダのリンクを押すと、アプリでフォルダが開きます。")}
+      ${step(4,"右下の「＋」→「アップロード」","「写真と動画」を選び、送りたいものをまとめて選んで「アップロード」を押します。")}
+      ${step(5,"終わるまで、アプリを開いたままに","動画は少し時間がかかります。「アップロード完了」と出るまで、アプリを閉じないでください。")}
+      ${step(6,"このページで「入れました」を押す","台本の「撮ったものを送る」で「入れました」を押すと、白梅デジタルに届いたことが伝わります。")}
+    </ol></section>
+    <section class="dg"><h2>${ic("layout",18)}パソコンから入れる</h2><ol>
+      ${step(1,"フォルダを開く","ブラウザ（ChromeやSafari）で、フォルダのリンクを開きます。")}
+      ${step(2,"ファイルをドラッグして入れる","入れたい写真・動画・資料を、フォルダの画面にそのままドラッグします。")}
+    </ol></section>
+    <section class="dg dg-q"><h2>${ic("hand",18)}うまくいかないとき</h2>
+      <dl><div><dt>「アクセス権が必要です」と出る</dt><dd>「アクセスをリクエスト」を押すか、お使いのGoogleアカウントのメールアドレスを、白梅デジタルのLINEかメールでお知らせください。こちらからフォルダを共有します。</dd></div>
+      <div><dt>アップロードが止まる・終わらない</dt><dd>Wi-Fiにつないでから、もう一度お試しください。動画は1本ずつでも大丈夫です。</dd></div>
+      <div><dt>どこに入れたかわからなくなった</dt><dd>入れた場所がちがっても、白梅デジタルで探します。LINEでひとこと教えてください。</dd></div></dl>
+      <div class="dg-mail"><span>白梅デジタルのメール</span><a href="mailto:${DRIVE_MAIL}">${DRIVE_MAIL}</a><small>フォルダの共有や、ドライブのことで困ったときの連絡先です。</small></div></section>
+  </div>`;
+}
+const PROFILE_FIELDS=[["person","ご担当者のお名前","text","例：山田 花子"],["email","メールアドレス","email","例：info@example.com"],["gmail","Googleドライブで使うメール（Gmail）","email","例：example@gmail.com","フォルダを共有するときに使います"],["phone","電話番号","tel","例：090-1234-5678"],["zip","郵便番号","text","例：790-0001"],["address","ご住所","text","例：愛媛県松山市…"],["billTo","請求書の宛名","text","例：株式会社〇〇 御中"],["hours","営業時間・定休日","text","例：10:00〜19:00／火曜定休"],["web","ホームページ・予約ページ","url","https://"],["note","そのほか、伝えておきたいこと","area","例：撮影は午前中が助かります"]];
+function mePage(c){
+  const p=S.meDraft||(S.meDraft=Object.assign({},c.profile||{}));
+  const fld=([k,l,t,ph,h])=>`<div class="field"><label for="me_${k}">${l}</label>${t==="area"?`<textarea id="me_${k}" data-me="${k}" rows="3" placeholder="${esc(ph)}">${esc(p[k]||"")}</textarea>`:`<input type="${t}" id="me_${k}" data-me="${k}" value="${esc(p[k]||"")}" placeholder="${esc(ph)}" ${t==="email"?'autocomplete="email"':""}>`}${h?`<p class="tiny muted">${h}</p>`:""}</div>`;
+  return `<div class="stack">${bigHead("お客様情報",`白梅デジタルにお知らせいただく、${esc(c.name)} 様の情報です。`)}
+    <section class="me"><p class="me-lead">ご連絡や請求書の送り先、Googleドライブの共有に使います。わかるところだけで大丈夫です。あとからいつでも直せます。</p>
+      <div class="me-name"><span>会社名・店名</span><b>${esc(c.name)}</b></div>
+      <div class="form">${PROFILE_FIELDS.map(fld).join("")}</div>
+      <button class="btn btn-p btn-big" type="button" data-act="meSave">${ic("check")}保存する</button>
+      ${c.profile&&c.profile.savedAt?`<p class="tiny muted" style="text-align:center">最後に保存した日：${esc(c.profile.savedAt)}</p>`:""}</section></div>`;
+}
 function viewClient(){
   const cid=S.preview?S.previewClient:S.clientId; const c=client(cid); if(!c) return viewLogin();
   if(!hasSns(c)&&hasMeo(c)&&["video","image","live","review"].includes(S.view)) S.view="meo";
   if(!hasMeo(c)&&(S.view==="meo"||S.view==="meoflow")) S.view="video";
   let body;
   if(S.itemId){const it=db.items.find(i=>i.id===S.itemId&&i.clientId===cid);body=it?detail(it,c):`<div class="empty">この台本は見つかりませんでした。</div>`;}
+  else if(S.view==="home") body=homePage(c);
+  else if(S.view==="drive") body=drivePage(c);
+  else if(S.view==="me") body=mePage(c);
   else if(S.view==="review") body=reviewPage(c);
   else if(S.view==="plan") body=planPage(c);
   else if(S.view==="meo") body=meoPage(c);
@@ -2210,7 +2362,7 @@ function tabBar(c){
   const needs=k=>visible(c.id,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
   const rvNeed=[thisMonth(),shiftMonth(thisMonth(),-1)].map(m=>reviewOf(c.id,m)).filter(r=>r&&r.published&&r.summary&&!r.clientComment&&todayISO()<=sched(c,r.month).due).length;
   const t=(k,icon,l,n)=>{const on=S.view===k;return `<button class="tb ${on?"on":""}" type="button" data-act="nav" data-k="${k}" ${on?'aria-current="page"':""}><span class="tb-i">${ic(icon,22)}${n?`<span class="tb-n" aria-label="お願い${n}件">${n}</span>`:""}</span><span class="tb-l">${l}</span></button>`;};
-  const list=[];
+  const list=[t("home","layout","ホーム",0)];
   if(hasSns(c)) list.push(t("video","video","動画",needs("video")),t("image","image","画像",needs("image")),t("live","live","ライブ",needs("live")),t("review","review","振り返り",rvNeed));
   if(hasMeo(c)) list.push(t("meo","map","マップ",needs("meo_post")+needs("meo_review")),t("meoflow","compass","進め方",0));
   list.push(t("plan","star","プラン",0));
@@ -2252,7 +2404,7 @@ function shelfRow(title,items,kind,note){
     return `<button class="pc ${x.done?"is-done":""} ${x.st&&x.st.who==="you"?"is-you":""}" type="button" data-act="open" data-id="${i.id}"><span class="pc-im">${th?`<img ${imgAttr(th)} alt="">`:`<img src="${IMG.photo[kind]}" alt="" class="ph">`}<span class="pc-no">${circ(i.no)}</span><span class="pc-kind k-${i.kind}">${KIND_TAG[i.kind]||""}</span><span class="pc-chip">${chip(i)}</span><span class="pc-go" aria-hidden="true">${ic(x.done?"check":"back",16)}</span></span><span class="pc-tx"><span class="pc-m">${chip(i)}</span><span class="pc-t">${esc(shortTitle(i.title))}</span><span class="pc-d">${dateOf(i)}</span></span></button>`;}).join("")}</div></section>`;
 }
 function driveBox(c){
-  return `<section class="drive"><span class="dv-i">${ic("image",22)}</span><div class="dv-tx"><b>写真・動画・資料は、ぜんぶGoogleドライブへ</b><span>撮った写真や動画、メニュー表やチラシなどの資料は、ここに入れてください。白梅デジタルが見て使います。</span></div>${c.materialFolder?`<a class="btn btn-p" href="${esc(c.materialFolder)}" target="_blank" rel="noopener">${ic("ext",16)}Googleドライブを開く</a>`:`<span class="dv-no">フォルダの場所は、白梅デジタルからLINEでお送りします。</span>`}</section>`;
+  return `<section class="drive"><span class="dv-i">${ic("image",22)}</span><div class="dv-tx"><b>写真・動画・資料は、ぜんぶGoogleドライブへ</b><span>撮った写真や動画、メニュー表やチラシなどの資料は、ここに入れてください。白梅デジタルが見て使います。</span></div>${c.materialFolder?`<a class="btn btn-p" href="${esc(c.materialFolder)}" target="_blank" rel="noopener">${ic("ext",16)}Googleドライブを開く</a>`:`<span class="dv-no">フォルダの場所は、白梅デジタルからLINEでお送りします。</span>`}<button class="btn btn-g btn-s dv-go" type="button" data-act="nav" data-k="drive">${ic("compass",15)}Googleドライブの使い方を見る</button></section>`;
 }
 function listPage(c,kind){
   const subs={video:"1本ずつ開くと、撮り方と目的がわかります。",image:"スワイプ投稿の1枚ずつの中身です。",live:"ライブ配信の流れと話すことです。"};
@@ -2995,7 +3147,7 @@ function spark(vals,on){
 function reviewPage(c){
   const fillR=r=>{const a=sumMet(postsOf(c.id,r.month));const o=Object.assign({},r);o._auto=a;const f=(k,v)=>{if((o[k]===undefined||o[k]===""||o[k]===null)&&v){o[k]=v;o["_a_"+k]=1;}};f("views",a.views);f("saves",a.saves);f("followers",a.follows);f("posts",a.n);return o;};
   const all=db.items.filter(i=>i.clientId===c.id&&i.kind==="review"&&i.published).sort((a,b)=>a.month.localeCompare(b.month)).map(fillR);
-  const head=pageHead("review","");
+  const head=pageHead("review","")+baselineBox(c);
   if(!all.length) return `<div class="stack">${head}<div class="empty"><div class="ei"><img src="${IMG.growth}" alt=""></div><b>振り返りはまだありません</b><span class="small">月末に白梅デジタルから入れます。</span></div></div>`;
   const months=all.map(r=>r.month); const cur=pickMonth(months); const idx=months.indexOf(cur); const r=all[idx]; const prev=all[idx-1];
   const pct=k=>{if(!prev)return null;const a=n0(r[k]),b=n0(prev[k]);if(!b)return null;return Math.round((a-b)/b*100);};
@@ -3031,6 +3183,7 @@ function reviewPage(c){
         +(byP||byH||byT?`<section class="rv-card"><div class="rv-h"><span class="rv-ic">${ic("star")}</span><h2>どの型が伸びたか<small>これまでの投稿すべての平均</small></h2></div>${byP}${byH}${byT}</section>`:"");})()}
     ${four.length?`<div class="rv-four">${four.map(([k,t,i,tone])=>`<section class="rv-card rv-${tone}"><div class="rv-h"><span class="rv-ic">${ic(i)}</span><h2>${t}</h2></div>${lines(r[k])}</section>`).join("")}</div>`:""}
     ${cmt}
+    ${baselineBox(c)}
   </div>`;
 }
 function viewsChart(all,cur){
@@ -3291,6 +3444,12 @@ function clientEditor(){
       ${hasSns(c)?"":`<!--nosns-->`}<details class="plan-detail" ${hasSns(c)?"":"hidden"}><summary class="small" style="cursor:pointer;font-weight:700">${esc(c.plan)}プランの内容を見る</summary><div class="stack" style="margin-top:10px"><ul class="checks">${(PLANS[c.plan]||PLANS.LIGHT).items.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>${planTable(c.plan)}</div></details>
       <div class="paylist"><div class="sec-h"><h3 style="font-size:15px">お支払いの記録</h3><span class="spacer"></span><button class="btn btn-g btn-s" type="button" data-act="addPay">＋ 記録を追加</button></div>${pays||`<p class="small muted">まだ記録はありません。</p>`}</div></section>
     <section class="fsec"><h3><span class="hi">${ic("hand")}</span>お客様に渡すログイン情報</h3><div class="grid2">${f("loginId","ログインID","text","半角英数字")}${LIVE?f("password",c.id?"新しいパスワード（変えるときだけ）":"パスワード（8文字以上）","text",c.id?"空のままなら変わりません":"8文字以上"):f("password","パスワード","text","8文字以上がおすすめ")}</div><p class="lead" style="margin:0">${LIVE?"パスワードは暗号化して保存するので、あとから見ることはできません。お客様に渡すときにメモしてください。":"本番ではパスワードは暗号化して保存し、ここには表示しない形にします。"}</p></section>
+    <section class="fsec"><h3><span class="hi">${ic("review")}</span>運用前の状況と、似ているアカウント</h3><p class="lead">お客様の「振り返り」のいちばん上に、毎月共通で表示されます。区切りは「｜」です。</p><div class="form">
+      <div class="field"><label for="c_baseAt">調べた日</label><input type="date" id="c_baseAt" data-ckey="baseAt" value="${esc(c.baseAt||"")}"></div>
+      <div class="field"><label for="c_baseAccts">アカウントの数字（1行に1つ）</label><textarea id="c_baseAccts" data-ckey="baseAccts" rows="4" placeholder="@アカウント｜呼び名｜フォロワー｜フォロー中｜投稿数｜最後の投稿｜1投稿のいいね｜ひとこと">${esc(c.baseAccts||"")}</textarea></div>
+      <div class="field"><label for="c_baseSummary">白梅デジタルの見立て（1行に1つ）</label><textarea id="c_baseSummary" data-ckey="baseSummary" rows="5">${esc(c.baseSummary||"")}</textarea></div>
+      <div class="field"><label for="c_similar">似ているアカウント（1行に1つ）</label><textarea id="c_similar" data-ckey="similar" rows="8" placeholder="@アカウント｜名前｜日本 または 海外｜国・地域｜参考になる点｜フォロワー">${esc(c.similar||"")}</textarea></div></div></section>
+    ${c.profile&&Object.keys(c.profile).length?`<section class="fsec"><h3><span class="hi">${ic("user")}</span>お客様が入力した情報</h3><dl class="cprof">${PROFILE_FIELDS.filter(([k])=>c.profile[k]).map(([k,l])=>`<div><dt>${l}</dt><dd>${esc(c.profile[k])}</dd></div>`).join("")}${c.profile.savedAt?`<div><dt>保存した日</dt><dd>${esc(c.profile.savedAt)}</dd></div>`:""}</dl></section>`:""}
     <section class="fsec memo"><h3><span class="hi">${ic("list")}</span>社内メモ（お客様には表示されません）</h3><div class="form"><div class="field"><label for="c_memo">メモ</label><textarea id="c_memo" data-ckey="memo">${esc(c.memo||"")}</textarea></div></div></section>
     ${isEdit?`<section class="fsec"><h3><span class="hi">${ic("video")}</span>このお客様の台本（${scripts.length}本）</h3>${scripts.length?`<div class="agenda">${scripts.sort((a,b)=>b.month.localeCompare(a.month)||(a.no-b.no)).map(i=>`<button class="ag" type="button" data-act="edit" data-id="${i.id}" style="grid-template-columns:1fr auto"><div class="w"><div class="t">${esc(i.title)}</div><div class="c">${esc(label(i))}</div></div>${chip(i)}</button>`).join("")}</div>`:`<p class="small muted">まだ台本はありません。</p>`}</section>`:""}
     <div class="savebar">${del}<div class="spacer"></div><button class="btn btn-g" type="button" data-act="adminTab" data-t="clients">戻る</button><button class="btn btn-p" type="submit">${isEdit?"保存する":"追加する"}</button></div>
@@ -3442,6 +3601,7 @@ app.addEventListener("input",e=>{
   if(t.dataset.cap&&draft){draft[t.dataset.cap][+t.dataset.i].cap=t.value;return;}
   if(t.dataset.act==="svc"&&cdraft){if(t.value==="meo"){cdraft.plan="";cdraft.meoPlan=cdraft.meoPlan||"LIGHT";}else{cdraft.meoPlan="";cdraft.plan=cdraft.plan||"LIGHT";}cdraft.fee=String(feeOf(cdraft));render();return;}
   if(t.dataset.act==="svcPlan"&&cdraft){if(hasMeo(cdraft)&&!hasSns(cdraft))cdraft.meoPlan=t.value;else cdraft.plan=t.value;cdraft.fee=String(feeOf(cdraft));render();return;}
+  if(t.dataset.me){S.meDraft=S.meDraft||{};S.meDraft[t.dataset.me]=t.value;return;}
   if(t.dataset.ckey&&cdraft){cdraft[t.dataset.ckey]=t.type==="checkbox"?t.checked:t.value;return;}
   if(t.dataset.mat){S.matDraft=S.matDraft&&S.matDraft.id===t.dataset.id?S.matDraft:{id:t.dataset.id};S.matDraft[t.dataset.mat]=t.value;return;}
   if(t.dataset.en){S.enDraft={id:t.dataset.en,v:t.value};return;}
@@ -3481,7 +3641,14 @@ app.addEventListener("click",e=>{
   switch(a){
     case "menu":set({menu:true});break;
     case "closeMenu":set({menu:false});break;
-    case "nav":set({view:b.dataset.k,itemId:null,month:b.dataset.m||null,menu:false});scrollTo(0,0);break;
+    case "nav":if(b.dataset.k==="me")S.meDraft=null;set({view:b.dataset.k,itemId:null,month:b.dataset.m||null,menu:false});scrollTo(0,0);break;
+    case "meSave":{const c=client(S.preview?S.previewClient:S.clientId);if(!c)break;const p=Object.assign({},c.profile||{},S.meDraft||{});Object.keys(p).forEach(k=>{if(typeof p[k]==="string")p[k]=p[k].trim();});
+      if(p.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.email)){toast("メールアドレスの形を確かめてください");break;}
+      if(p.gmail&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.gmail)){toast("Googleドライブ用のメールの形を確かめてください");break;}
+      const d=new Date();p.savedAt=`${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
+      if(S.preview&&LIVE){toast("見え方の確認中なので、保存はしていません");break;}
+      if(S.busy)break;S.busy=true;
+      (LIVE?rpc("sns_client_save_profile",{p_token:getToken(),p_profile:p}):Promise.resolve()).then(()=>{c.profile=p;S.meDraft=null;if(!LIVE)save();S.busy=false;toast("保存しました。ありがとうございます");render();}).catch(e=>{S.busy=false;toast(e.message);});break;}
     case "month":set({month:b.dataset.m,cmtEdit:null,cmtDraft:null});break;
     case "open":set({itemId:b.dataset.id,confirmStep:null});scrollTo(0,0);break;
     case "back":set({itemId:null});break;
@@ -3601,7 +3768,7 @@ app.addEventListener("click",e=>{
     case "fclient":set({fClient:b.dataset.id,fState:null,admin:"list"});scrollTo(0,0);break;
     case "fstate":set({fState:b.dataset.k||null,admin:"list"});break;
     case "preview":{const it=find(b.dataset.id);set({preview:true,previewClient:it.clientId,itemId:isRep(it.kind)||isMeo(it.kind)?null:it.id,view:isMeo(it.kind)?"meo":it.kind,month:it.month,returnTo:S.admin});scrollTo(0,0);break;}
-    case "previewClient":set({preview:true,previewClient:b.dataset.id,itemId:null,view:"video",month:null,returnTo:"list"});scrollTo(0,0);break;
+    case "previewClient":set({preview:true,previewClient:b.dataset.id,itemId:null,view:"home",month:null,returnTo:"list"});scrollTo(0,0);break;
     case "previewDraft":{if(!isRep(draft.kind)&&!draft.title){toast("先にお題を入れてください");break;}db.items=db.items.filter(i=>i.id!=="__pv__");db.items.push({...JSON.parse(JSON.stringify(draft)),id:"__pv__",published:true});set({preview:true,previewClient:draft.clientId,itemId:isRep(draft.kind)||isMeo(draft.kind)?null:"__pv__",view:isMeo(draft.kind)?"meo":draft.kind,month:draft.month,returnTo:S.admin});scrollTo(0,0);break;}
     case "endPreview":db.items=db.items.filter(i=>i.id!=="__pv__"&&i.id!=="__pv_idea__");set({preview:false,itemId:null,menu:false,lb:null,idea:false,shoot:null,admin:S.returnTo||"list"});break;
     case "rmImg":draft[b.dataset.key].splice(+b.dataset.i,1);render();break;
