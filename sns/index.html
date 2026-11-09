@@ -1924,7 +1924,7 @@ const fromItem=(r,cid)=>Object.assign({},r.data||{},{id:r.id,clientId:r.client_i
 const fromClient=r=>Object.assign({},r.data||{},{id:r.id,loginId:r.login_id,password:""});
 async function loadAll(){
   const tok=getToken();
-  if(S.role==="staff"){const j=await rpc("sns_staff_load",{p_token:tok});db={v:9,staff:[],clients:(j.clients||[]).map(fromClient),items:(j.items||[]).map(r=>fromItem(r))};S.staffName=(j.staff&&j.staff.name)||"";}
+  if(S.role==="staff"){const j=await rpc("sns_staff_load",{p_token:tok});db={v:9,staff:[],clients:(j.clients||[]).map(fromClient).reverse(),items:(j.items||[]).map(r=>fromItem(r))};S.staffName=(j.staff&&j.staff.name)||"";}
   else{const j=await rpc("sns_client_load",{p_token:tok});const c=fromClient(j.client);db={v:9,staff:[],clients:[c],items:(j.items||[]).map(r=>fromItem(r,c.id))};S.clientId=c.id;}
 }
 async function boot(){
@@ -3279,12 +3279,12 @@ function saveClient(){
     (async()=>{let id=await rpc("sns_staff_save_client",{p_token:getToken(),p_id:copy.id||null,p_login:copy.loginId,p_pass:copy.password||"",p_data:data});
       const im=(copy.thumbImage||[])[0];if(im&&/^data:image/.test(im.src)){const iid=await rpc("sns_staff_save_image",{p_token:getToken(),p_client:id,p_data:im.src});IMGC[iid]=im.src;im.src="img:"+iid;data.thumbImage=copy.thumbImage;await rpc("sns_staff_save_client",{p_token:getToken(),p_id:id,p_login:copy.loginId,p_pass:"",p_data:data});}
       return id;})().then(id=>{
-      copy.id=id;copy.password="";const i=db.clients.findIndex(x=>x.id===id);if(i>=0)db.clients[i]=copy;else db.clients.push(copy);
+      copy.id=id;copy.password="";const i=db.clients.findIndex(x=>x.id===id);if(i>=0)db.clients[i]=copy;else db.clients.unshift(copy);
       S.busy=false;toast(c.id?"お客様の情報を保存しました":"お客様を追加しました");cdraft=null;set({admin:"clients",confirm:null});scrollTo(0,0);
     }).catch(e=>{S.busy=false;toast(e.message);});
     return;
   }
-  if(copy.id){const i=db.clients.findIndex(x=>x.id===copy.id);db.clients[i]=copy;}else{copy.id="c_"+uid();db.clients.push(copy);}
+  if(copy.id){const i=db.clients.findIndex(x=>x.id===copy.id);db.clients[i]=copy;}else{copy.id="c_"+uid();db.clients.unshift(copy);}
   if(save()){toast(c.id?"お客様の情報を保存しました":"お客様を追加しました");cdraft=null;set({admin:"clients",confirm:null});scrollTo(0,0);}
 }
 function slotsHtml(key,ar,max){
