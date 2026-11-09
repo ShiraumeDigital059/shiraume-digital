@@ -1,0 +1,7 @@
+# サイトに出さないもの
+.DS_Store
+**/.DS_Store
+Claude outputs/
+*.bak
+*.bak-*
+koyomi/index.html.bak*
