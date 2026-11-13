@@ -1661,6 +1661,59 @@ div.nx-1{cursor:default}
 .tl-l li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--sunk);font-weight:700}
 .tl-l li small{display:block;font-weight:600;color:var(--ink-3);font-size:12px}
 @media (max-width:520px){.tel-view{flex-direction:column;align-items:center}.tel-view .tl-l{width:100%}}
+
+/* ===== わかりやすさ優先（ホーム・一覧） ===== */
+.kb{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:800;padding:3px 9px 3px 7px;border-radius:8px;white-space:nowrap;line-height:1.3}
+.kb .ico{width:14px;height:14px}
+.kb-v{background:#E5EEF8;color:#24507F}.kb-i{background:#FBEFD9;color:#8A5A0E}.kb-l{background:#EFE7F6;color:#6A3F8E}.kb-r{background:#E6F1EA;color:#2C5641}
+.home2{gap:22px}
+.h2h{display:grid;gap:2px;padding:4px 2px 0}
+.h2d{font-size:13px;color:var(--ink-3);font-weight:700}
+.h2h h1{font-family:var(--fm);font-size:clamp(24px,6.6vw,30px);font-weight:600;letter-spacing:.05em;color:var(--ink);margin:0}
+.h2p{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:13px;color:var(--ink-2);font-weight:700}
+.h2p .mp-bar{flex:1;height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}.h2p .mp-bar i{display:block;height:100%;background:#6A9A7A;border-radius:99px}
+.h2p b{font-size:15px;color:var(--ink)}.h2p small{color:var(--ink-3);font-weight:600}
+.hs{display:grid;gap:10px}
+.hs-h{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;margin:0;letter-spacing:.03em}
+.hs-n{font-size:13px;font-weight:800;color:var(--ink-3)}
+.hs-sub{font-size:13px;color:var(--ink-3);margin:-4px 0 0}
+.hs-you .hs-h{color:#7A4A00}.hs-dot{width:10px;height:10px;border-radius:50%;background:#E0A030;box-shadow:0 0 0 4px #FCEBC8}
+.ask-l{display:grid;gap:10px}
+.ask{display:grid;gap:4px;text-align:left;font:inherit;color:var(--ink);padding:14px 16px;border-radius:16px;background:#FFF8EA;border:1.5px solid #F0CF8C;cursor:pointer;position:relative}
+.ask:hover{border-color:#D9A74A}
+.ask-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ask-w{font-size:17px;line-height:1.5}
+.ask-t{font-size:14px;color:var(--ink-2);line-height:1.6}
+.ask-go{justify-self:end;display:inline-flex;align-items:center;gap:4px;font-size:13.5px;font-weight:800;color:#fff;background:#B5741A;padding:6px 14px;border-radius:999px;margin-top:4px}
+.ask-go svg{transform:rotate(180deg)}
+.hw{font-size:12.5px;font-weight:800;color:#8A5A0E}.hw.late{color:#B3261E}.hw.today{color:#B3261E}
+.hs-ok{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:16px;background:#F1F6F2;border:1px solid #D5E5DA}
+.hs-ok div{display:grid}.hs-ok b{font-size:15px}.hs-ok span{font-size:13px;color:var(--ink-3)}.ok-i{color:#2C7A4B}
+.hs-more{justify-self:start;font:inherit;font-size:13.5px;font-weight:700;color:var(--ink-2);background:none;border:0;padding:4px 2px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.dr-l{display:grid;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+.dr{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"k t" "k s";gap:2px 10px;align-items:center;text-align:left;font:inherit;color:var(--ink);padding:12px 14px;background:#fff;border:0;border-top:1px solid var(--line);cursor:pointer}
+.dr:first-child{border-top:0}.dr:hover{background:#FAFAF7}
+.dr .kb{grid-area:k;align-self:start;margin-top:2px}
+.dr-t{grid-area:t;font-size:15px;font-weight:700;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-s{grid-area:s;display:flex;gap:10px;font-size:12.5px;color:var(--ink-3);font-weight:700}
+.dr-c{color:#24507F}
+.mn-l{display:grid;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+.mn{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:13px 14px;font:inherit;color:var(--ink);text-align:left;background:#fff;border:0;border-top:1px solid var(--line);cursor:pointer}
+.mn:first-child{border-top:0}.mn:hover{background:#FAFAF7}
+.mn-i{width:38px;height:38px;border-radius:11px;background:#EEF3EF;color:#3D6B52;display:grid;place-items:center}
+.mn-t{display:grid}.mn-t b{font-size:15.5px}.mn-t small{font-size:12.5px;color:var(--ink-3);font-weight:600}
+.mn-b{font-size:12px;font-weight:800;color:#7A4A00;background:#FCEBC8;padding:3px 10px;border-radius:999px}
+.mn-go svg{transform:rotate(180deg);color:var(--ink-3)}
+.h2line{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:14px;background:var(--sunk);color:var(--ink-2);font-size:13.5px;font-weight:700;text-decoration:none}
+.lh{display:grid;gap:4px;justify-items:start;padding:4px 2px 0}
+.lh h1{font-family:var(--fm);font-size:26px;font-weight:600;letter-spacing:.05em;margin:0}
+.lh p{font-size:13.5px;color:var(--ink-3);margin:0}
+.lmon{font-size:14px;font-weight:800;color:var(--ink-2)}
+.list2 .shelf{background:none!important;padding:0!important;border:0!important;box-shadow:none!important}.list2 .shelf-h{padding:0 2px}
+.list2 .shelf-h h2{font-size:17px}
+/* タブバー：濃い緑の丸をやめて、やわらかく */
+.tabbar .tb.on .tb-i{background:#E6F0E9!important;color:#24533A!important;box-shadow:none!important}
+.tabbar .tb.on{color:#24533A!important}
 </style>
 
 
@@ -2294,29 +2347,41 @@ function baselineBox(c){
     ${sum.length?`<div class="bl-sum"><h3>${ic("target",18)}白梅デジタルの見立て</h3><ol>${sum.map((x,k)=>`<li><span class="bl-no">${k+1}</span><span>${esc(x)}</span></li>`).join("")}</ol></div>`:""}
     ${sm.length?`<div class="bl-sim"><h3>${ic("eye",18)}似ているアカウント</h3><p class="tiny muted">そのまま真似するものではありません。見せ方や言葉選びの参考として、白梅デジタルが選びました。</p>${grp("日本")}${grp("海外")}</div>`:""}</section>`;
 }
+const KB={video:["動画","video","kb-v"],image:["画像","image","kb-i"],live:["ライブ","live","kb-l"]};
+const kindBadge=(k,no)=>{const b=KB[k];return b?`<span class="kb ${b[2]}">${ic(b[1],14)}${b[0]}${no?" "+circ(no):""}</span>`:"";};
+const cTitle=t=>esc(shortTitle(String(t||"").replace(/【仮】\s*/g,"")));
 function homePage(c){
   const cid=c.id; const d=parseISO(todayISO());
-  const needs=k=>visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
-  const cnt=k=>visible(cid,k).length;
-  const rvs=db.items.filter(i=>i.clientId===cid&&i.kind==="review"&&i.published).length;
-  const tile=(view,icon,title,sub,badge,tone)=>`<button class="ht ${tone||""}" type="button" data-act="nav" data-k="${view}"><span class="ht-i">${ic(icon,22)}</span><span class="ht-t"><b>${title}</b><small>${sub}</small></span>${badge?`<span class="ht-b">${badge}</span>`:""}<span class="ht-go" aria-hidden="true">${ic("back",15)}</span></button>`;
+  const t=yourTurn(c);
+  const when=x=>{if(!x)return "";const n=daysFrom(x);return n<0?`<span class="hw late">${fmtDate(x)}まで（過ぎています）</span>`:n===0?`<span class="hw today">今日まで</span>`:`<span class="hw">${fmtDate(x)}まで</span>`;};
+  const go=o=>o.k==="rv"?`data-act="nav" data-k="review" data-m="${o.i.month}"`:`data-act="open" data-id="${o.i.id}"`;
+  const asks=t.length?`<section class="hs hs-you"><h2 class="hs-h"><span class="hs-dot"></span>お願いしたいこと<span class="hs-n">${t.length}件</span></h2>
+    <div class="ask-l">${t.map(o=>`<button class="ask" type="button" ${go(o)}><span class="ask-top">${o.k==="rv"?`<span class="kb kb-r">${ic("review",14)}振り返り</span>`:kindBadge(o.i.kind,o.i.no)}${when(o.due)}</span><b class="ask-w">${esc(o.what)}</b>${o.k==="rv"?"":`<span class="ask-t">${cTitle(o.i.title)}</span>`}<span class="ask-go">開く${ic("back",14)}</span></button>`).join("")}</div>
+    ${matWaitItems(c).length>=2?`<button class="hs-more" type="button" data-act="bulkMatOpen">${ic("box",15)}撮ったものを、まとめて「入れました」にする</button>`:""}</section>`
+   :`<section class="hs hs-ok"><span class="ok-i">${ic("check",20)}</span><div><b>いま、お願いしていることはありません</b><span>お願いが出たら、ここにいちばんに出ます。</span></div></section>`;
+  const doing=["video","image","live"].flatMap(k=>visible(cid,k)).filter(i=>{const x=stateOf(i);return x&&!x.done&&!(x.st&&x.st.who==="you");}).sort((a,b)=>String(a.post||a.liveDate||"9").localeCompare(String(b.post||b.liveDate||"9")));
+  const dateOf=i=>{const s=i.step||0;return s<=1&&i.shoot?["撮影",i.shoot]:i.kind==="live"?["配信",i.liveDate]:["投稿",i.post];};
+  const row=i=>{const x=stateOf(i);const [l,v]=dateOf(i);return `<button class="dr" type="button" data-act="open" data-id="${i.id}">${kindBadge(i.kind,i.no)}<span class="dr-t">${cTitle(i.title)}</span><span class="dr-s"><span class="dr-c">${esc(x.text)}</span>${v?`<span class="dr-d">${l} ${fmtDate(v)}</span>`:""}</span></button>`;};
+  const doingBox=doing.length?`<section class="hs"><h2 class="hs-h">白梅デジタルが進めていること<span class="hs-n">${doing.length}本</span></h2><p class="hs-sub">こちらで進めています。お願いが必要になったら、上に出ます。</p><div class="dr-l">${doing.slice(0,S.homeAll?99:5).map(row).join("")}</div>${doing.length>5&&!S.homeAll?`<button class="hs-more" type="button" data-act="homeAll">ほかの${doing.length-5}本も見る</button>`:""}</section>`:"";
+  const done=["video","image"].flatMap(k=>visible(cid,k)).filter(i=>{const x=stateOf(i);return x&&x.done;}).length;
+  const all=["video","image"].flatMap(k=>visible(cid,k)).filter(i=>i.month===thisMonth()).length;
   const sns=hasSns(c), meo=hasMeo(c);
-  const tiles=[
-    sns?tile("video","video","動画の台本",`${cnt("video")}本`,needs("video")?`お願い ${needs("video")}`:"" ):"",
-    sns?tile("image","image","画像の台本",`${cnt("image")}本`,needs("image")?`お願い ${needs("image")}`:""):"",
-    sns?tile("live","live","ライブ台本",`${cnt("live")}本`,needs("live")?`お願い ${needs("live")}`:""):"",
-    sns?tile("review","review","振り返り",rvs?`${rvs}か月分・運用前の数字`:"運用前の数字と毎月の結果",""):"",
-    meo?tile("meo","map","Googleマップ","投稿・口コミの返信",(needs("meo_post")+needs("meo_review"))?`お願い ${needs("meo_post")+needs("meo_review")}`:""):"",
-    tile("drive","box","Googleドライブ","写真・動画・資料を送る",""),
-    tile("plan","star","ご契約プラン",esc([sns?c.plan:"",meo?"MAP "+c.meoPlan:""].filter(Boolean).join("・"))||"内容",""),
-    tile("me","user","お客様情報",c.profile&&c.profile.email?"入力済み":"メール・住所など","")].join("");
-  return `<div class="stack home">
-    <section class="hh"><div class="hh-d">${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</div><h1>${esc(c.name)} 様</h1><p>白梅デジタルの、${esc(c.name)} 様専用ページです。<br>台本・撮影のお願い・振り返りが、すべてここにまとまっています。</p>
-      <div class="hh-do"><span><b>見る</b>台本・振り返り</span><span><b>撮る</b>お願いの撮影</span><span><b>送る</b>ドライブへ</span><span><b>投稿</b>決まった日に</span></div></section>
-    ${turnBox(c)||`<section class="hnone">${ic("check",18)}<div><b>いま、お願いしていることはありません</b><span>白梅デジタルが進めています。お願いが出たら、ここにいちばんに表示されます。</span></div></section>`}
-    <div class="sec-t"><h2>このページでできること</h2></div>
-    <nav class="htiles" aria-label="メニュー">${tiles}</nav>
-    <section class="hline"><div><b>${ic("chat",18)}わからないことは、LINEで</b><span>台本の直し、撮影の日程、ちょっとした質問もお気軽にどうぞ。</span></div><a class="btn-line" href="${LINE_URL}" target="_blank" rel="noopener">公式LINEで相談する</a></section>
+  const nv=(view,icon,title,sub,badge)=>`<button class="mn" type="button" data-act="nav" data-k="${view}"><span class="mn-i">${ic(icon,20)}</span><span class="mn-t"><b>${title}</b>${sub?`<small>${sub}</small>`:""}</span>${badge?`<span class="mn-b">${badge}</span>`:""}<span class="mn-go">${ic("back",14)}</span></button>`;
+  const needs=k=>visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
+  const menu=[sns?nv("video","video","動画の台本",`${visible(cid,"video").length}本`,needs("video")?`お願い ${needs("video")}`:""):"",
+    sns?nv("image","image","画像の台本",`${visible(cid,"image").length}本`,needs("image")?`お願い ${needs("image")}`:""):"",
+    sns&&visible(cid,"live").length?nv("live","live","ライブ台本",`${visible(cid,"live").length}本`,""):"",
+    sns?nv("review","review","振り返り","運用前の数字と、毎月の結果",""):"",
+    meo?nv("meo","map","Googleマップ","投稿・口コミの返信",""):"",
+    nv("drive","box","Googleドライブ","撮った写真・動画の送り方",""),
+    nv("plan","star","ご契約プラン",esc([sns?c.plan:"",meo?"MAP "+c.meoPlan:""].filter(Boolean).join("・")),""),
+    nv("me","user","お客様情報",c.profile&&c.profile.email?"入力済み":"メール・住所など","")].join("");
+  return `<div class="stack home2">
+    <header class="h2h"><span class="h2d">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><h1>${esc(c.name)} 様</h1>${all?`<div class="h2p"><span>${monthShort(thisMonth())}の投稿</span><div class="mp-bar"><i style="width:${Math.min(100,done/all*100)}%"></i></div><b>${done}<small> / ${all}本</small></b></div>`:""}</header>
+    ${asks}
+    ${doingBox}
+    <section class="hs"><h2 class="hs-h">メニュー</h2><div class="mn-l">${menu}</div></section>
+    <a class="h2line" href="${LINE_URL}" target="_blank" rel="noopener">${ic("chat",18)}わからないことは、公式LINEでご相談ください</a>
   </div>`;
 }
 function drivePage(c){
@@ -2379,7 +2444,7 @@ function tabBar(c){
   const rvNeed=[thisMonth(),shiftMonth(thisMonth(),-1)].map(m=>reviewOf(c.id,m)).filter(r=>r&&r.published&&r.summary&&!r.clientComment&&todayISO()<=sched(c,r.month).due).length;
   const t=(k,icon,l,n)=>{const on=S.view===k;return `<button class="tb ${on?"on":""}" type="button" data-act="nav" data-k="${k}" ${on?'aria-current="page"':""}><span class="tb-i">${ic(icon,22)}${n?`<span class="tb-n" aria-label="お願い${n}件">${n}</span>`:""}</span><span class="tb-l">${l}</span></button>`;};
   const list=[t("home","layout","ホーム",0)];
-  if(hasSns(c)) list.push(t("video","video","動画",needs("video")),t("image","image","画像",needs("image")),t("live","live","ライブ",needs("live")),t("review","review","振り返り",rvNeed));
+  if(hasSns(c)) list.push(t("video","video","動画",needs("video")),t("image","image","画像",needs("image")),...(visible(c.id,"live").length?[t("live","live","ライブ",needs("live"))]:[]),t("review","review","振り返り",rvNeed));
   if(hasMeo(c)) list.push(t("meo","map","マップ",needs("meo_post")+needs("meo_review")),t("meoflow","compass","進め方",0));
   list.push(t("plan","star","プラン",0));
   return `<nav class="tabbar" aria-label="ページの切りかえ"><div class="tb-in" style="--n:${list.length}">${list.join("")}</div></nav>`;
@@ -2417,7 +2482,7 @@ function shelfRow(title,items,kind,note){
   if(!items.length) return "";
   const dateOf=i=>{const x=stateOf(i);const d=x.done?["投稿",i.post]:i.step<=1&&i.shoot&&kind!=="live"?["撮影",i.shoot]:kind==="live"?["配信",i.liveDate]:["投稿",i.post];return x.done&&hasMet(i)?`再生 ${fmtN(i.m_views)}　保存 ${fmtN(i.m_saves)}`:d[1]?`${d[0]} ${fmtDate(d[1])}`:"";};
   return `<section class="shelf"><div class="shelf-h"><h2>${title}</h2>${note?`<span>${note}</span>`:""}</div><div class="shelf-r">${items.map(i=>{const x=stateOf(i);const th=thumbOf(i);
-    return `<button class="pc ${x.done?"is-done":""} ${x.st&&x.st.who==="you"?"is-you":""}" type="button" data-act="open" data-id="${i.id}"><span class="pc-im">${th?`<img ${imgAttr(th)} alt="">`:`<img src="${IMG.photo[kind]}" alt="" class="ph">`}<span class="pc-no">${circ(i.no)}</span><span class="pc-kind k-${i.kind}">${KIND_TAG[i.kind]||""}</span><span class="pc-chip">${chip(i)}</span><span class="pc-go" aria-hidden="true">${ic(x.done?"check":"back",16)}</span></span><span class="pc-tx"><span class="pc-m">${chip(i)}</span><span class="pc-t">${esc(shortTitle(i.title))}</span><span class="pc-d">${dateOf(i)}</span></span></button>`;}).join("")}</div></section>`;
+    return `<button class="pc ${x.done?"is-done":""} ${x.st&&x.st.who==="you"?"is-you":""}" type="button" data-act="open" data-id="${i.id}"><span class="pc-im">${th?`<img ${imgAttr(th)} alt="">`:`<img src="${IMG.photo[kind]}" alt="" class="ph">`}<span class="pc-no">${circ(i.no)}</span><span class="pc-kind k-${i.kind}">${KIND_TAG[i.kind]||""}</span><span class="pc-chip">${chip(i)}</span><span class="pc-go" aria-hidden="true">${ic(x.done?"check":"back",16)}</span></span><span class="pc-tx"><span class="pc-m">${chip(i)}</span><span class="pc-t">${S.role==="staff"&&!S.preview?esc(shortTitle(i.title)):cTitle(i.title)}</span><span class="pc-d">${dateOf(i)}</span></span></button>`;}).join("")}</div></section>`;
 }
 function driveBox(c){
   return `<section class="drive"><span class="dv-i">${ic("image",22)}</span><div class="dv-tx"><b>写真・動画・資料は、ぜんぶGoogleドライブへ</b><span>撮った写真や動画、メニュー表やチラシなどの資料は、ここに入れてください。白梅デジタルが見て使います。</span></div>${c.materialFolder?`<a class="btn btn-p" href="${esc(c.materialFolder)}" target="_blank" rel="noopener">${ic("ext",16)}Googleドライブを開く</a>`:`<span class="dv-no">フォルダの場所は、白梅デジタルからLINEでお送りします。</span>`}<button class="btn btn-g btn-s dv-go" type="button" data-act="nav" data-k="drive">${ic("compass",15)}Googleドライブの使い方を見る</button></section>`;
@@ -2425,8 +2490,8 @@ function driveBox(c){
 function listPage(c,kind){
   const subs={video:"1本ずつ開くと、撮り方と目的がわかります。",image:"スワイプ投稿の1枚ずつの中身です。",live:"ライブ配信の流れと話すことです。"};
   const all=visible(c.id,kind);
-  const head=bigHead(KINDS[kind],subs[kind],clientPhoto(c,kind))+catRow(c);
-  if(!all.length) return `<div class="stack">${head}${driveBox(c)}${turnBox(c)}<div class="empty"><div class="ei"><img src="${IMG.emptyv}" alt=""></div><b>まだ${KINDS[kind]}はありません</b><span class="small">白梅デジタルが台本を入れると、ここに並びます。</span></div></div>`;
+  const head=`<header class="lh">${kindBadge(kind)}<h1>${KINDS[kind]}</h1><p>${subs[kind]}</p></header>`;
+  if(!all.length) return `<div class="stack list2">${head}<div class="empty"><div class="ei"><img src="${IMG.emptyv}" alt=""></div><b>まだ${KINDS[kind]}はありません</b><span class="small">白梅デジタルが台本を入れると、ここに並びます。</span></div></div>`;
   const months=[...new Set(all.map(i=>i.month))].sort(); const cur=pickMonth(months);
   const list=all.filter(i=>i.month===cur).sort((a,b)=>a.no-b.no);
   const you=list.filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";});
@@ -2438,11 +2503,11 @@ function listPage(c,kind){
   const guide=(()=>{try{if(localStorage.getItem("ume_guide_x"))return "";}catch(_){}return `<section class="guide"><div class="gd-h"><b>${ic("compass",18)}この画面の使い方</b><button type="button" class="gd-x" data-act="guideX" aria-label="閉じる">×</button></div><ol><li><span>1</span><div><b>見る</b><p>台本を開いて、撮るものと撮り方を見ます。</p></div></li><li><span>2</span><div><b>撮って、送る</b><p>撮ったら「撮ったものを送る」を押すだけ。編集は白梅デジタルが行います。</p></div></li><li><span>3</span><div><b>投稿する</b><p>決まった日に投稿します。投稿したあとは、何も押さなくて大丈夫です。</p></div></li></ol><p class="tiny muted">思いついたネタは、右上の${ic("gift",13)}からいつでも送れます。</p></section>`;})();
   const mAll=["video","image"].flatMap(k=>visible(c.id,k)).filter(i=>i.month===cur);const mDone=mAll.filter(i=>stateOf(i).done).length;
   const prog=mAll.length?`<div class="mprog"><span>${monthShort(cur)}の投稿</span><div class="mp-bar"><i style="width:${mDone/mAll.length*100}%"></i></div><b>${mDone}<small> / ${mAll.length}本</small></b></div>`:"";
-  return `<div class="stack">${head}${driveBox(c)}${guide}${turnBox(c)}${bulkMatBox(c)}${searchBox(c)}${monthTabs(months,cur)}${prog}
+  return `<div class="stack list2">${head}${months.length>2?searchBox(c):""}${months.length>1?monthTabs(months,cur):`<div class="lmon">${monthLabel(cur)}</div>`}
     ${shelfRow("お願いしたいこと",you,kind,`${you.length}件`)}
     ${shelfRow("白梅デジタルが進めています",doing,kind,`${doing.length}本`)}
     ${shelfRow("終わったもの",done,kind,`${done.length}本`)}
-    ${rhythmBox(c,cur)}</div>`;
+    ${!list.length?`<div class="empty"><b>${monthLabel(cur)}の${KINDS[kind]}はまだありません</b></div>`:""}</div>`;
 }
 /* --- 詳細の部品 --- */
 let FLAT=false;
@@ -3663,6 +3728,7 @@ app.addEventListener("click",e=>{
     case "menu":set({menu:true});break;
     case "closeMenu":set({menu:false});break;
     case "nav":if(b.dataset.k==="me")S.meDraft=null;set({view:b.dataset.k,itemId:null,month:b.dataset.m||null,menu:false});scrollTo(0,0);break;
+    case "homeAll":set({homeAll:true});break;
     case "meSave":{const c=client(S.preview?S.previewClient:S.clientId);if(!c)break;const p=Object.assign({},c.profile||{},S.meDraft||{});Object.keys(p).forEach(k=>{if(typeof p[k]==="string")p[k]=p[k].trim();});
       if(p.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.email)){toast("メールアドレスの形を確かめてください");break;}
       if(p.gmail&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.gmail)){toast("Googleドライブ用のメールの形を確かめてください");break;}
@@ -3820,4 +3886,3 @@ boot();
 
 </body>
 </html>
-<!-- build 202611091957 -->
