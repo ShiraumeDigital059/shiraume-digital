@@ -1716,7 +1716,7 @@ div.nx-1{cursor:default}
 .tabbar .tb.on{color:#24533A!important}
 
 /* ===== お客様の画面：Appleのサポートページを手本に（白・薄いグレーの面・青い「押せる」印） ===== */
-.cv,.tabbar{--ap-ink:#1d1d1f;--ap-2:#6e6e73;--ap-bg:#f5f5f7;--ap-line:#d2d2d7;--ap-blue:#0066cc;--ap-btn:#0071e3;
+.cv,.tabbar{--ap-ink:#1d1d1f;--ap-2:#6e6e73;--ap-bg:#f5f5f7;--ap-line:#d2d2d7;--ap-blue:#0B6B45;--ap-btn:#127A4B;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro JP","SF Pro Text","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;letter-spacing:0;color:var(--ap-ink)}
 .cv{--panel:#f5f5f7;--sunk:#f5f5f7;--line:#d2d2d7;--ink:#1d1d1f;--ink-2:#424245;--ink-3:#6e6e73}
 .cv h1,.cv h2,.cv h3,.cv .h2h h1,.cv .lh h1,.cv .bl-hd h2,.cv .sec-t h2{font-family:inherit!important;letter-spacing:-.01em!important}
@@ -1737,7 +1737,7 @@ div.nx-1{cursor:default}
 .cv .dr,.cv .mn{background:transparent;border-top:1px solid var(--ap-line)}
 .cv .dr:first-child,.cv .mn:first-child{border-top:0}
 .cv .dr:hover,.cv .mn:hover{background:#ececf0}
-.cv .dr-c{color:var(--ap-blue)}
+.cv .dr-c{color:#0058b9}
 .cv .mn-i{background:#fff;color:var(--ap-ink);border-radius:10px}
 .cv .mn-go svg,.cv .ht-go svg{color:#86868b}
 .cv .mn-b{background:#fff1dc;color:#b25000}
@@ -1750,7 +1750,7 @@ div.nx-1{cursor:default}
 .cv .shelf-h h2{font-size:20px;font-weight:700}
 /* ボタン：押せるものは青 */
 .cv .btn-p{background:var(--ap-btn)!important;border-color:var(--ap-btn)!important;color:#fff!important;border-radius:980px!important;font-weight:600}
-.cv .btn-p:hover{background:#0077ed!important}
+.cv .btn-p:hover{background:#0E6A40!important}
 .cv .btn-g{border-radius:980px!important;color:var(--ap-blue)!important;border-color:var(--ap-line)!important;background:#fff!important;font-weight:600}
 .cv a:not(.btn):not(.btn-line):not(.h2line){color:var(--ap-blue)}
 /* 詳細ページ */
@@ -1765,6 +1765,35 @@ div.nx-1{cursor:default}
 .tabbar .tb{color:#6e6e73!important}
 .tabbar .tb.on{color:var(--ap-btn)!important}
 .tabbar .tb.on .tb-i{background:transparent!important;color:var(--ap-btn)!important}
+
+/* ===== ホーム（3）：Googleアカウント・Airbnb・Stripe・Appleの良いところを合わせる ===== */
+.home3{gap:24px}
+.h3h{display:grid;gap:2px;text-align:center;padding:10px 0 0}
+.h3d{font-size:13px;color:var(--ap-2);font-weight:600}
+.cv .h3h h1{font-size:28px;font-weight:700;margin:0}
+.h3h p{font-size:15px;color:var(--ap-2);margin:2px 0 0}.h3h p b{color:var(--ap-ink)}
+.hero{display:grid;gap:8px;padding:22px 20px 20px;border-radius:24px;background:#fff;border:1px solid #e3e3e8;box-shadow:0 10px 30px -12px rgba(0,0,0,.18)}
+.hero-k{font-size:12.5px;font-weight:700;color:var(--ap-2);letter-spacing:.04em}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cv .hero h2{font-size:24px;font-weight:700;line-height:1.4;margin:2px 0 0}
+.hero p{font-size:15px;color:var(--ap-2);margin:0;line-height:1.6}
+.hero-b{margin-top:10px;font:inherit;font-size:17px;font-weight:700;color:#fff;background:var(--ap-btn);border:0;border-radius:14px;padding:15px;cursor:pointer;width:100%}
+.hero-b:hover{background:#0E6A40}
+.hero-ok{justify-items:center;text-align:center;box-shadow:none;background:var(--ap-bg);border:0}.hero-ok .ok-i{color:#127A4B}
+.sts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.st{display:grid;justify-items:center;gap:0;padding:14px 4px 12px;border-radius:16px;background:var(--ap-bg)}
+.st b{font-size:28px;font-weight:700;line-height:1.2}.st span{font-size:12px;color:var(--ap-2);font-weight:600}
+.st-you b{color:#c25e00}.st-us b{color:#0058b9}.st-done b{color:#127A4B}
+.scs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 8px}
+@media (min-width:700px){.scs{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.sc{display:grid;justify-items:center;gap:8px;font:inherit;font-size:13px;font-weight:600;color:var(--ap-ink);background:none;border:0;padding:4px 0;cursor:pointer}
+.sc-i{position:relative;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;transition:transform .15s}
+.sc:hover .sc-i{transform:scale(1.06)}
+.sc-i i{position:absolute;right:-4px;top:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:99px;background:#d93025;color:#fff;font-size:12px;font-weight:700;font-style:normal;display:grid;place-items:center;border:2px solid #fff}
+.c-v{background:#e3eefc;color:#0b57d0}.c-i{background:#ffecd1;color:#b25e00}.c-l{background:#f0e6fa;color:#7b3fb3}.c-r{background:#dff3e6;color:#127A4B}.c-m{background:#fde3e0;color:#c5221f}.c-d{background:#fff3c4;color:#8a6d00}.c-p{background:#fbe1ee;color:#b0336f}.c-u{background:#e8eaed;color:#3c4043}
+.cv .hs-h{font-size:19px}
+.cv .dr-s{flex-wrap:wrap;gap:2px 10px}
+.tabbar .tb-n{background:#d93025!important}
 </style>
 
 
@@ -2406,33 +2435,35 @@ function homePage(c){
   const t=yourTurn(c);
   const when=x=>{if(!x)return "";const n=daysFrom(x);return n<0?`<span class="hw late">${fmtDate(x)}まで（過ぎています）</span>`:n===0?`<span class="hw today">今日まで</span>`:`<span class="hw">${fmtDate(x)}まで</span>`;};
   const go=o=>o.k==="rv"?`data-act="nav" data-k="review" data-m="${o.i.month}"`:`data-act="open" data-id="${o.i.id}"`;
-  const asks=t.length?`<section class="hs hs-you"><h2 class="hs-h"><span class="hs-dot"></span>お願いしたいこと<span class="hs-n">${t.length}件</span></h2>
-    <div class="ask-l">${t.map(o=>`<button class="ask" type="button" ${go(o)}><span class="ask-top">${o.k==="rv"?`<span class="kb kb-r">${ic("review",14)}振り返り</span>`:kindBadge(o.i.kind,o.i.no)}${when(o.due)}</span><b class="ask-w">${esc(o.what)}</b>${o.k==="rv"?"":`<span class="ask-t">${cTitle(o.i.title)}</span>`}<span class="ask-go">開く${ic("back",14)}</span></button>`).join("")}</div>
-    ${matWaitItems(c).length>=2?`<button class="hs-more" type="button" data-act="bulkMatOpen">${ic("box",15)}撮ったものを、まとめて「入れました」にする</button>`:""}</section>`
-   :`<section class="hs hs-ok"><span class="ok-i">${ic("check",20)}</span><div><b>いま、お願いしていることはありません</b><span>お願いが出たら、ここにいちばんに出ます。</span></div></section>`;
-  const doing=["video","image","live"].flatMap(k=>visible(cid,k)).filter(i=>{const x=stateOf(i);return x&&!x.done&&!(x.st&&x.st.who==="you");}).sort((a,b)=>String(a.post||a.liveDate||"9").localeCompare(String(b.post||b.liveDate||"9")));
+  const badge=o=>o.k==="rv"?`<span class="kb kb-r">${ic("review",14)}振り返り</span>`:kindBadge(o.i.kind,o.i.no);
+  const items=["video","image","live"].flatMap(k=>visible(cid,k));
+  const doing=items.filter(i=>{const x=stateOf(i);return x&&!x.done&&!(x.st&&x.st.who==="you");}).sort((a,b)=>String(a.post||a.liveDate||"9").localeCompare(String(b.post||b.liveDate||"9")));
+  const doneN=items.filter(i=>{const x=stateOf(i);return x&&x.done;}).length;
+  const [f,...rest]=t;
+  const hero=f?`<section class="hero"><span class="hero-k">つぎにお願いしたいこと</span>
+      <div class="hero-top">${badge(f)}${when(f.due)}</div>
+      <h2>${esc(f.what)}</h2>${f.k==="rv"?"":`<p>${cTitle(f.i.title)}</p>`}
+      <button class="hero-b" type="button" ${go(f)}>${f.k==="rv"?"振り返りを開く":"台本を開く"}</button></section>`
+    :`<section class="hero hero-ok"><span class="ok-i">${ic("check",26)}</span><h2>いま、お願いはありません</h2><p>白梅デジタルが進めています。お願いが出たら、ここに出ます。</p></section>`;
+  const more=rest.length?`<section class="hs"><h2 class="hs-h">ほかのお願い<span class="hs-n">${rest.length}件</span></h2><div class="dr-l">${rest.map(o=>`<button class="dr" type="button" ${go(o)}>${badge(o)}<span class="dr-t">${esc(o.what)}</span><span class="dr-s">${o.k==="rv"?"":`<span>${cTitle(o.i.title)}</span>`}${when(o.due)}</span></button>`).join("")}</div>
+    ${matWaitItems(c).length>=2?`<button class="hs-more" type="button" data-act="bulkMatOpen">撮ったものを、まとめて「入れました」にする</button>`:""}</section>`:"";
+  const stat=(n,l,cls)=>`<div class="st ${cls}"><b>${n}</b><span>${l}</span></div>`;
+  const stats=items.length?`<section class="sts" aria-label="いまの状況">${stat(t.filter(o=>o.k!=="rv").length,"お願い中","st-you")}${stat(doing.length,"白梅が進行中","st-us")}${stat(doneN,"投稿済み","st-done")}</section>`:"";
   const dateOf=i=>{const s=i.step||0;return s<=1&&i.shoot?["撮影",i.shoot]:i.kind==="live"?["配信",i.liveDate]:["投稿",i.post];};
-  const row=i=>{const x=stateOf(i);const [l,v]=dateOf(i);return `<button class="dr" type="button" data-act="open" data-id="${i.id}">${kindBadge(i.kind,i.no)}<span class="dr-t">${cTitle(i.title)}</span><span class="dr-s"><span class="dr-c">${esc(x.text)}</span>${v?`<span class="dr-d">${l} ${fmtDate(v)}</span>`:""}</span></button>`;};
-  const doingBox=doing.length?`<section class="hs"><h2 class="hs-h">白梅デジタルが進めていること<span class="hs-n">${doing.length}本</span></h2><p class="hs-sub">こちらで進めています。お願いが必要になったら、上に出ます。</p><div class="dr-l">${doing.slice(0,S.homeAll?99:5).map(row).join("")}</div>${doing.length>5&&!S.homeAll?`<button class="hs-more" type="button" data-act="homeAll">ほかの${doing.length-5}本も見る</button>`:""}</section>`:"";
-  const done=["video","image"].flatMap(k=>visible(cid,k)).filter(i=>{const x=stateOf(i);return x&&x.done;}).length;
-  const all=["video","image"].flatMap(k=>visible(cid,k)).filter(i=>i.month===thisMonth()).length;
+  const row=i=>{const x=stateOf(i);const [l,v]=dateOf(i);return `<button class="dr" type="button" data-act="open" data-id="${i.id}">${kindBadge(i.kind,i.no)}<span class="dr-t">${cTitle(i.title)}</span><span class="dr-s"><span class="dr-c">${esc(x.text)}</span>${v?`<span>${l} ${fmtDate(v)}</span>`:""}</span></button>`;};
+  const doingBox=doing.length?`<section class="hs"><h2 class="hs-h">白梅デジタルが進めていること<span class="hs-n">${doing.length}本</span></h2><div class="dr-l">${doing.slice(0,S.homeAll?99:3).map(row).join("")}</div>${doing.length>3&&!S.homeAll?`<button class="hs-more" type="button" data-act="homeAll">すべて見る（${doing.length}本）</button>`:""}</section>`:"";
   const sns=hasSns(c), meo=hasMeo(c);
-  const nv=(view,icon,title,sub,badge)=>`<button class="mn" type="button" data-act="nav" data-k="${view}"><span class="mn-i">${ic(icon,20)}</span><span class="mn-t"><b>${title}</b>${sub?`<small>${sub}</small>`:""}</span>${badge?`<span class="mn-b">${badge}</span>`:""}<span class="mn-go">${ic("back",14)}</span></button>`;
   const needs=k=>visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
-  const menu=[sns?nv("video","video","動画の台本",`${visible(cid,"video").length}本`,needs("video")?`お願い ${needs("video")}`:""):"",
-    sns?nv("image","image","画像の台本",`${visible(cid,"image").length}本`,needs("image")?`お願い ${needs("image")}`:""):"",
-    sns&&visible(cid,"live").length?nv("live","live","ライブ台本",`${visible(cid,"live").length}本`,""):"",
-    sns?nv("review","review","振り返り","運用前の数字と、毎月の結果",""):"",
-    meo?nv("meo","map","Googleマップ","投稿・口コミの返信",""):"",
-    nv("drive","box","Googleドライブ","撮った写真・動画の送り方",""),
-    nv("plan","star","ご契約プラン",esc([sns?c.plan:"",meo?"MAP "+c.meoPlan:""].filter(Boolean).join("・")),""),
-    nv("me","user","お客様情報",c.profile&&c.profile.email?"入力済み":"メール・住所など","")].join("");
-  return `<div class="stack home2">
-    <header class="h2h"><span class="h2d">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><h1>${esc(c.name)} 様</h1>${all?`<div class="h2p"><span>${monthShort(thisMonth())}の投稿</span><div class="mp-bar"><i style="width:${Math.min(100,done/all*100)}%"></i></div><b>${done}<small> / ${all}本</small></b></div>`:""}</header>
-    ${asks}
-    ${doingBox}
-    <section class="hs"><h2 class="hs-h">メニュー</h2><div class="mn-l">${menu}</div></section>
-    <a class="h2line" href="${LINE_URL}" target="_blank" rel="noopener">${ic("chat",18)}わからないことは、公式LINEでご相談ください</a>
+  const sc=(view,icon,title,cls,n)=>`<button class="sc" type="button" data-act="nav" data-k="${view}"><span class="sc-i ${cls}">${ic(icon,24)}${n?`<i>${n}</i>`:""}</span><span>${title}</span></button>`;
+  const grid=[sns?sc("video","video","動画の台本","c-v",needs("video")):"",sns?sc("image","image","画像の台本","c-i",needs("image")):"",
+    sns&&visible(cid,"live").length?sc("live","live","ライブ台本","c-l",0):"",sns?sc("review","review","振り返り","c-r",0):"",meo?sc("meo","map","マップ","c-m",0):"",
+    sc("drive","box","ドライブ","c-d",0),sc("plan","star","プラン","c-p",0),sc("me","user","お客様情報","c-u",0)].join("");
+  const sum=t.length?`お願いが <b>${t.length}件</b> あります。`:items.length?"いまは、白梅デジタルが進めています。":"これから台本をお届けします。";
+  return `<div class="stack home3">
+    <header class="h3h"><span class="h3d">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><h1>${esc(c.name)} 様</h1><p>${sum}</p></header>
+    ${hero}${more}${stats}${doingBox}
+    <section class="hs"><h2 class="hs-h">メニュー</h2><nav class="scs">${grid}</nav></section>
+    <a class="h2line" href="${LINE_URL}" target="_blank" rel="noopener">${ic("chat",18)}わからないことは、公式LINEへ</a>
   </div>`;
 }
 function drivePage(c){
