@@ -1714,6 +1714,57 @@ div.nx-1{cursor:default}
 /* タブバー：濃い緑の丸をやめて、やわらかく */
 .tabbar .tb.on .tb-i{background:#E6F0E9!important;color:#24533A!important;box-shadow:none!important}
 .tabbar .tb.on{color:#24533A!important}
+
+/* ===== お客様の画面：Appleのサポートページを手本に（白・薄いグレーの面・青い「押せる」印） ===== */
+.cv,.tabbar{--ap-ink:#1d1d1f;--ap-2:#6e6e73;--ap-bg:#f5f5f7;--ap-line:#d2d2d7;--ap-blue:#0066cc;--ap-btn:#0071e3;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro JP","SF Pro Text","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;letter-spacing:0;color:var(--ap-ink)}
+.cv{--panel:#f5f5f7;--sunk:#f5f5f7;--line:#d2d2d7;--ink:#1d1d1f;--ink-2:#424245;--ink-3:#6e6e73}
+.cv h1,.cv h2,.cv h3,.cv .h2h h1,.cv .lh h1,.cv .bl-hd h2,.cv .sec-t h2{font-family:inherit!important;letter-spacing:-.01em!important}
+.cv .h2h h1,.cv .lh h1{font-size:30px;font-weight:700}
+.cv .hs-h{font-size:21px;font-weight:700;color:var(--ap-ink)}
+.cv .hs-you .hs-h{color:var(--ap-ink)}
+.cv .hs-dot{background:#ff9f0a;box-shadow:none;width:9px;height:9px}
+.cv .ask{background:#fff;border:1px solid var(--ap-line);border-radius:18px;padding:16px 18px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.cv .ask:hover{border-color:#a1a1a6}
+.cv .ask-w{font-size:18px;font-weight:700}
+.cv .ask-t{color:var(--ap-2)}
+.cv .ask-go{background:var(--ap-btn);color:#fff;font-weight:600;border-radius:980px;padding:7px 16px}
+.cv .hw{color:#b25000}.cv .hw.late,.cv .hw.today{color:#d70015}
+.cv .hs-ok{background:var(--ap-bg);border:0;border-radius:18px}
+.cv .hs-more{color:var(--ap-blue);text-decoration:none;font-weight:600}
+.cv .hs-more::after{content:" ›"}
+.cv .dr-l,.cv .mn-l{background:var(--ap-bg);border:0;border-radius:18px}
+.cv .dr,.cv .mn{background:transparent;border-top:1px solid var(--ap-line)}
+.cv .dr:first-child,.cv .mn:first-child{border-top:0}
+.cv .dr:hover,.cv .mn:hover{background:#ececf0}
+.cv .dr-c{color:var(--ap-blue)}
+.cv .mn-i{background:#fff;color:var(--ap-ink);border-radius:10px}
+.cv .mn-go svg,.cv .ht-go svg{color:#86868b}
+.cv .mn-b{background:#fff1dc;color:#b25000}
+.cv .h2p .mp-bar{background:#e8e8ed}.cv .h2p .mp-bar i{background:#34c759}
+.cv .h2line{background:var(--ap-bg);color:var(--ap-blue);font-weight:600}
+.cv .kb-v{background:#e8f1fd;color:#0058b9}.cv .kb-i{background:#fff1dc;color:#9c4f00}.cv .kb-r{background:#e9f7ee;color:#1d7a3e}
+/* 一覧のカード */
+.cv .shelf .pc{background:var(--ap-bg)!important;border:0!important;border-radius:16px}
+.cv .shelf .pc.is-you{background:#fff!important;border:1px solid #ffcc80!important;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.cv .shelf-h h2{font-size:20px;font-weight:700}
+/* ボタン：押せるものは青 */
+.cv .btn-p{background:var(--ap-btn)!important;border-color:var(--ap-btn)!important;color:#fff!important;border-radius:980px!important;font-weight:600}
+.cv .btn-p:hover{background:#0077ed!important}
+.cv .btn-g{border-radius:980px!important;color:var(--ap-blue)!important;border-color:var(--ap-line)!important;background:#fff!important;font-weight:600}
+.cv a:not(.btn):not(.btn-line):not(.h2line){color:var(--ap-blue)}
+/* 詳細ページ */
+.cv .vc,.cv .shelf,.cv .flow,.cv .rv-card,.cv .mat,.cv .bl{background:var(--ap-bg)!important;border:0!important}
+.cv .mat{border:0!important}
+.cv .oneline,.cv .lead-one{background:var(--ap-bg)!important;color:var(--ap-ink)!important;font-family:inherit!important;font-weight:600}
+.cv .dg,.cv .me,.cv .dg-top{background:var(--ap-bg)!important;border:0!important}
+.cv .dg-n,.cv .bl-no,.cv .tf-n{background:var(--ap-ink)!important;color:#fff!important}
+.cv .bl-k b,.cv .rv-kpi b,.cv .bl-hd h2{font-family:inherit!important;color:var(--ap-ink)!important;font-weight:700}.cv .bl-k div{background:#fff}.cv .bl-a{border-color:var(--ap-line)}
+/* 下のタブ：押しているところを青で */
+.tabbar{background:rgba(255,255,255,.92)!important;backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:1px solid #d2d2d7}
+.tabbar .tb{color:#6e6e73!important}
+.tabbar .tb.on{color:var(--ap-btn)!important}
+.tabbar .tb.on .tb-i{background:transparent!important;color:var(--ap-btn)!important}
 </style>
 
 
@@ -2437,7 +2488,7 @@ function viewClient(){
   const banner=S.preview?`<div class="preview-banner"><span>お客様（${esc(c.name)} 様）の見え方</span> <button type="button" data-act="endPreview">${S.returnTo==="how"?"使い方に戻る":"白梅の画面に戻る"}</button></div>`:"";
   const todoCount=["video","image","live"].reduce((n,k)=>n+visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&(x.st.who==="you");}).length,0);
   return banner+header(c.name+" 様",`<span class="hd-plan" aria-label="ご契約プラン">${[hasSns(c)?esc(c.plan):"",hasMeo(c)?"MAP "+esc(c.meoPlan):""].filter(Boolean).join("・")}</span>${hasSns(c)?`<button class="hd-idea" type="button" data-act="ideaOpen" aria-label="ネタを送る">${ic("gift",16)}<span>ネタを送る</span></button>`:""}<a class="hd-line" href="${LINE_URL}" target="_blank" rel="noopener" aria-label="公式LINEで相談する">${lineLogo}<span>相談</span></a>`,svcName(c))
-    +DECO()+tabBar(c)+`<main class="wrap pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`+(S.preview?`<style>.sm,.sheet-bg{top:46px!important}.sheet{max-height:calc(88dvh - 46px)!important}</style>`:"")+ideaSheet(c)+bulkMatSheet(c)+(S.shoot&&S.itemId?(()=>{const it=db.items.find(i=>i.id===S.itemId);return it?shootMode(it,c):"";})():"");
+    +DECO()+tabBar(c)+`<main class="wrap cv pv-${esc(S.itemId?"detail":S.view)}" data-key="${esc((S.itemId||S.view)+"|"+(S.month||""))}">${body}</main>`+(S.preview?`<style>.sm,.sheet-bg{top:46px!important}.sheet{max-height:calc(88dvh - 46px)!important}</style>`:"")+ideaSheet(c)+bulkMatSheet(c)+(S.shoot&&S.itemId?(()=>{const it=db.items.find(i=>i.id===S.itemId);return it?shootMode(it,c):"";})():"");
 }
 function tabBar(c){
   const needs=k=>visible(c.id,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
