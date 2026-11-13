@@ -1794,6 +1794,45 @@ div.nx-1{cursor:default}
 .cv .hs-h{font-size:19px}
 .cv .dr-s{flex-wrap:wrap;gap:2px 10px}
 .tabbar .tb-n{background:#d93025!important}
+
+/* ===== Airbnb風：写真とイラストで選ぶ ===== */
+.hero-ph{padding:0 0 20px;overflow:hidden}
+.hero-ph>*:not(.hero-im){margin-left:20px;margin-right:20px}
+.hero-im{position:relative;display:block;width:100%;padding:0;border:0;background:#eee;cursor:pointer;aspect-ratio:16/9;overflow:hidden}
+.hero-im img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-im .hero-k{position:absolute;left:14px;top:14px;background:#fff;color:#1d1d1f;padding:5px 12px;border-radius:999px;font-size:12.5px;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.hero-ph .hero-top{margin-top:8px}.hero-ph .hero-b{width:calc(100% - 40px)}
+.hero-ph h2,.hero-ph p{margin-left:20px!important;margin-right:20px!important}
+.tr-l{display:grid;gap:10px}
+.tr{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:14px;align-items:center;text-align:left;font:inherit;color:var(--ap-ink);background:#fff;border:1px solid #e3e3e8;border-radius:18px;padding:10px 14px 10px 10px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.tr:hover{border-color:#b0b0b5;box-shadow:0 6px 16px -8px rgba(0,0,0,.2)}
+.tr-im{width:76px;height:76px;border-radius:12px;overflow:hidden;background:#eee}.tr-im img{width:100%;height:100%;object-fit:cover;display:block}
+.tr-x{display:grid;gap:3px;justify-items:start;min-width:0}.tr-x b{font-size:15.5px;line-height:1.45;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr-t{font-size:12.5px;color:var(--ap-2);font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tr-go svg,.sx-go svg{transform:rotate(180deg);color:#86868b}
+.mcs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:760px){.mcs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.mc{position:relative;display:grid;gap:10px;align-content:start;text-align:left;font:inherit;color:var(--ap-ink);background:#fff;border:1px solid #e3e3e8;border-radius:20px;padding:0 0 14px;overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .15s}
+.mc:hover{box-shadow:0 10px 22px -12px rgba(0,0,0,.28);transform:translateY(-2px)}
+.mc-im{display:grid;place-items:center;height:104px;background:#F7F5EF;padding:12px}
+.mc-im img,.mc-im svg{max-width:100%;max-height:100%;height:80px;object-fit:contain;display:block}
+.mc-t{display:grid;padding:0 14px}.mc-t b{font-size:16px}.mc-t small{font-size:12.5px;color:var(--ap-2);font-weight:600}
+.mc-n{position:absolute;left:10px;top:10px;font-style:normal;font-size:12px;font-weight:700;color:#fff;background:#d93025;padding:3px 10px;border-radius:999px}
+/* 台本：まず要点、選ぶと詳しく */
+.sx-l{display:grid;gap:10px}
+.sx{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;text-align:left;font:inherit;color:var(--ap-ink);background:#fff;border:1px solid #e3e3e8;border-radius:18px;padding:14px 16px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.sx:hover{border-color:#b0b0b5;box-shadow:0 6px 16px -8px rgba(0,0,0,.2)}
+.sx-i{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#E6F1EA;color:#127A4B}
+.sx-2 .sx-i{background:#f1f1f4;color:#424245}
+.sx-t{display:grid}.sx-t b{font-size:16.5px}.sx-t small{font-size:13px;color:var(--ap-2);font-weight:600}
+.dsub-t{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--ap-2);font-weight:600;margin:0}
+.dsub-t span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dnav{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dn{display:flex;align-items:center;gap:8px;font:inherit;font-weight:700;font-size:14.5px;color:var(--ap-ink);background:#fff;border:1px solid #d2d2d7;border-radius:16px;padding:12px 14px;cursor:pointer;text-align:left}
+.dn small{display:block;font-size:11.5px;color:var(--ap-2);font-weight:600}
+.dn-n{justify-content:flex-end;text-align:right;background:var(--ap-btn);border-color:var(--ap-btn);color:#fff}.dn-n small{color:rgba(255,255,255,.85)}
+.dn-n svg{transform:rotate(180deg)}
+.cv .title-area h1{font-size:25px;font-weight:700;line-height:1.45}
 </style>
 
 
@@ -2440,29 +2479,33 @@ function homePage(c){
   const doing=items.filter(i=>{const x=stateOf(i);return x&&!x.done&&!(x.st&&x.st.who==="you");}).sort((a,b)=>String(a.post||a.liveDate||"9").localeCompare(String(b.post||b.liveDate||"9")));
   const doneN=items.filter(i=>{const x=stateOf(i);return x&&x.done;}).length;
   const [f,...rest]=t;
-  const hero=f?`<section class="hero"><span class="hero-k">つぎにお願いしたいこと</span>
+  const hph=f?(f.k==="rv"?IMG.photo.review:thumbOf(f.i)||IMG.photo[f.i.kind]):"";
+  const hero=f?`<section class="hero hero-ph">${hph?`<button class="hero-im" type="button" ${go(f)} aria-label="開く"><img ${imgAttr(hph)} alt=""><span class="hero-k">つぎにお願いしたいこと</span></button>`:`<span class="hero-k">つぎにお願いしたいこと</span>`}
       <div class="hero-top">${badge(f)}${when(f.due)}</div>
       <h2>${esc(f.what)}</h2>${f.k==="rv"?"":`<p>${cTitle(f.i.title)}</p>`}
       <button class="hero-b" type="button" ${go(f)}>${f.k==="rv"?"振り返りを開く":"台本を開く"}</button></section>`
     :`<section class="hero hero-ok"><span class="ok-i">${ic("check",26)}</span><h2>いま、お願いはありません</h2><p>白梅デジタルが進めています。お願いが出たら、ここに出ます。</p></section>`;
-  const more=rest.length?`<section class="hs"><h2 class="hs-h">ほかのお願い<span class="hs-n">${rest.length}件</span></h2><div class="dr-l">${rest.map(o=>`<button class="dr" type="button" ${go(o)}>${badge(o)}<span class="dr-t">${esc(o.what)}</span><span class="dr-s">${o.k==="rv"?"":`<span>${cTitle(o.i.title)}</span>`}${when(o.due)}</span></button>`).join("")}</div>
+  const more=rest.length?`<section class="hs"><h2 class="hs-h">ほかのお願い<span class="hs-n">${rest.length}件</span></h2><div class="tr-l">${rest.map(o=>{const ph=o.k==="rv"?IMG.photo.review:thumbOf(o.i)||IMG.photo[o.i.kind];return `<button class="tr" type="button" ${go(o)}><span class="tr-im"><img ${imgAttr(ph)} alt=""></span><span class="tr-x">${badge(o)}<b>${esc(o.what)}</b>${o.k==="rv"?"":`<span class="tr-t">${cTitle(o.i.title)}</span>`}${when(o.due)}</span><span class="tr-go">${ic("back",15)}</span></button>`;}).join("")}</div>
     ${matWaitItems(c).length>=2?`<button class="hs-more" type="button" data-act="bulkMatOpen">撮ったものを、まとめて「入れました」にする</button>`:""}</section>`:"";
   const stat=(n,l,cls)=>`<div class="st ${cls}"><b>${n}</b><span>${l}</span></div>`;
   const stats=items.length?`<section class="sts" aria-label="いまの状況">${stat(t.filter(o=>o.k!=="rv").length,"お願い中","st-you")}${stat(doing.length,"白梅が進行中","st-us")}${stat(doneN,"投稿済み","st-done")}</section>`:"";
   const dateOf=i=>{const s=i.step||0;return s<=1&&i.shoot?["撮影",i.shoot]:i.kind==="live"?["配信",i.liveDate]:["投稿",i.post];};
-  const row=i=>{const x=stateOf(i);const [l,v]=dateOf(i);return `<button class="dr" type="button" data-act="open" data-id="${i.id}">${kindBadge(i.kind,i.no)}<span class="dr-t">${cTitle(i.title)}</span><span class="dr-s"><span class="dr-c">${esc(x.text)}</span>${v?`<span>${l} ${fmtDate(v)}</span>`:""}</span></button>`;};
-  const doingBox=doing.length?`<section class="hs"><h2 class="hs-h">白梅デジタルが進めていること<span class="hs-n">${doing.length}本</span></h2><div class="dr-l">${doing.slice(0,S.homeAll?99:3).map(row).join("")}</div>${doing.length>3&&!S.homeAll?`<button class="hs-more" type="button" data-act="homeAll">すべて見る（${doing.length}本）</button>`:""}</section>`:"";
+  const row=i=>{const x=stateOf(i);const [l,v]=dateOf(i);const ph=thumbOf(i)||IMG.photo[i.kind];return `<button class="tr" type="button" data-act="open" data-id="${i.id}"><span class="tr-im"><img ${imgAttr(ph)} alt=""></span><span class="tr-x">${kindBadge(i.kind,i.no)}<b>${cTitle(i.title)}</b><span class="tr-t"><span class="dr-c">${esc(x.text)}</span>${v?`　${l} ${fmtDate(v)}`:""}</span></span><span class="tr-go">${ic("back",15)}</span></button>`;};
+  const doingBox=doing.length?`<section class="hs"><h2 class="hs-h">白梅デジタルが進めていること<span class="hs-n">${doing.length}本</span></h2><div class="tr-l">${doing.slice(0,S.homeAll?99:3).map(row).join("")}</div>${doing.length>3&&!S.homeAll?`<button class="hs-more" type="button" data-act="homeAll">すべて見る（${doing.length}本）</button>`:""}</section>`:"";
   const sns=hasSns(c), meo=hasMeo(c);
   const needs=k=>visible(cid,k).filter(i=>{const x=stateOf(i);return x&&!x.done&&x.st&&x.st.who==="you";}).length;
-  const sc=(view,icon,title,cls,n)=>`<button class="sc" type="button" data-act="nav" data-k="${view}"><span class="sc-i ${cls}">${ic(icon,24)}${n?`<i>${n}</i>`:""}</span><span>${title}</span></button>`;
-  const grid=[sns?sc("video","video","動画の台本","c-v",needs("video")):"",sns?sc("image","image","画像の台本","c-i",needs("image")):"",
-    sns&&visible(cid,"live").length?sc("live","live","ライブ台本","c-l",0):"",sns?sc("review","review","振り返り","c-r",0):"",meo?sc("meo","map","マップ","c-m",0):"",
-    sc("drive","box","ドライブ","c-d",0),sc("plan","star","プラン","c-p",0),sc("me","user","お客様情報","c-u",0)].join("");
+  const ILL_D=`<svg viewBox="0 0 96 72" aria-hidden="true"><path d="M10 22c0-4 3-7 7-7h18l7 8h37c4 0 7 3 7 7v28c0 4-3 7-7 7H17c-4 0-7-3-7-7z" fill="#E9D39C"/><path d="M10 30h76v28c0 4-3 7-7 7H17c-4 0-7-3-7-7z" fill="#F4E6BF"/><rect x="24" y="36" width="22" height="18" rx="3" fill="#fff"/><path d="M27 51l6-7 4 4 3-3 4 6z" fill="#7FA98C"/><circle cx="40" cy="41" r="2" fill="#E0A030"/><rect x="52" y="36" width="22" height="18" rx="3" fill="#fff"/><path d="M60 41v8l7-4z" fill="#2C5641"/></svg>`;
+  const ILL_U=`<svg viewBox="0 0 96 72" aria-hidden="true"><rect x="12" y="12" width="72" height="50" rx="8" fill="#DCE9DF"/><rect x="12" y="12" width="72" height="12" rx="6" fill="#7FA98C"/><circle cx="34" cy="40" r="8" fill="#fff"/><path d="M22 58c1-8 6-11 12-11s11 3 12 11z" fill="#fff"/><rect x="54" y="34" width="22" height="4" rx="2" fill="#2C5641"/><rect x="54" y="43" width="18" height="4" rx="2" fill="#9DB8A6"/><rect x="54" y="52" width="14" height="4" rx="2" fill="#9DB8A6"/></svg>`;
+  const sc=(view,ill,title,sub,n)=>`<button class="mc" type="button" data-act="nav" data-k="${view}"><span class="mc-im">${ill}</span><span class="mc-t"><b>${title}</b><small>${sub}</small></span>${n?`<i class="mc-n">お願い ${n}</i>`:""}</button>`;
+  const im=src=>`<img src="${src}" alt="">`;
+  const grid=[sns?sc("video",im(IMG.emptyv),"動画の台本",`${visible(cid,"video").length}本`,needs("video")):"",sns?sc("image",im(IMG.hdesk),"画像の台本",`${visible(cid,"image").length}本`,needs("image")):"",
+    sns&&visible(cid,"live").length?sc("live",im(IMG.branch),"ライブ台本",`${visible(cid,"live").length}本`,0):"",sns?sc("review",im(IMG.growth),"振り返り","数字と毎月の結果",0):"",meo?sc("meo",im(IMG.photo.map),"Googleマップ","投稿・口コミ",0):"",
+    sc("drive",ILL_D,"Googleドライブ","写真・動画の送り方",0),sc("plan",im(IMG.stamp),"ご契約プラン",esc([sns?c.plan:"",meo?"MAP "+c.meoPlan:""].filter(Boolean).join("・")),0),sc("me",ILL_U,"お客様情報",c.profile&&c.profile.email?"入力済み":"メール・住所など",0)].join("");
   const sum=t.length?`お願いが <b>${t.length}件</b> あります。`:items.length?"いまは、白梅デジタルが進めています。":"これから台本をお届けします。";
   return `<div class="stack home3">
     <header class="h3h"><span class="h3d">${d.getMonth()+1}月${d.getDate()}日（${WD[d.getDay()]}）</span><h1>${esc(c.name)} 様</h1><p>${sum}</p></header>
     ${hero}${more}${stats}${doingBox}
-    <section class="hs"><h2 class="hs-h">メニュー</h2><nav class="scs">${grid}</nav></section>
+    <section class="hs"><h2 class="hs-h">見たいものを選ぶ</h2><nav class="mcs">${grid}</nav></section>
     <a class="h2line" href="${LINE_URL}" target="_blank" rel="noopener">${ic("chat",18)}わからないことは、公式LINEへ</a>
   </div>`;
 }
@@ -2683,26 +2726,42 @@ function printItem(id){
   let n=0; const go=()=>{if(ready()||n++>40){setTimeout(()=>{try{window.print();}catch(e){toast("このブラウザでは印刷できませんでした");}},150);}else setTimeout(go,150);};
   go();
 }
+const SEC_META={"sec-ask":["hand","撮影の前に、ここだけ確認",1],"sec-ang":["video","カメラの置き方を、写真で",1],"sec-flow":["layout","撮る順番と、話すこと",1],"sec-sl":["list","1枚ずつ、何をのせるか",1],
+  "sec-edit":["pen","仕上がりのイメージ",2],"sec-fin":["image","仕上がりの画像",2],"sec-pur":["target","誰に、何を届けるか",2],"sec-gain":["gift","この投稿で得られること",2],"sec-aim":["compass","今月の中での役割",2],"sec-ref":["link","まねするところ・変えるところ",2],"sec-cap":["chat","投稿の文章とハッシュタグ",2]};
+function drillView(it,head,top,secs,tail,mid){
+  secs=secs.filter(x=>x[2]&&String(x[2]).trim());
+  const cur=S.sec&&secs.find(x=>x[0]===S.sec);
+  const m=x=>SEC_META[x[0]]||["list","",2];
+  if(cur){const i=secs.indexOf(cur),pv=secs[i-1],nx=secs[i+1];
+    return `<div class="stack dv dsub"><button class="back" type="button" data-act="secBack">${ic("back",18)}この台本にもどる</button>
+      <p class="dsub-t">${kindBadge(it.kind,it.no)}<span>${cTitle(it.title)}</span></p>${cur[2]}
+      <div class="dnav">${pv?`<button type="button" class="dn dn-p" data-act="secOpen" data-s="${pv[0]}">${ic("back",15)}<span><small>まえ</small>${pv[1]}</span></button>`:"<span></span>"}${nx?`<button type="button" class="dn dn-n" data-act="secOpen" data-s="${nx[0]}"><span><small>つぎ</small>${nx[1]}</span>${ic("back",15)}</button>`:`<button type="button" class="dn dn-n" data-act="secBack"><span><small>おわり</small>台本にもどる</span>${ic("back",15)}</button>`}</div></div>`;}
+  const row=x=>`<button class="sx" type="button" data-act="secOpen" data-s="${x[0]}"><span class="sx-i">${ic(m(x)[0],22)}</span><span class="sx-t"><b>${x[1]}</b><small>${m(x)[1]}</small></span><span class="sx-go">${ic("back",15)}</span></button>`;
+  const g1=secs.filter(x=>m(x)[2]===1),g2=secs.filter(x=>m(x)[2]!==1);
+  return `<div class="stack dv">${head}${top}
+    ${g1.length?`<section class="hs"><h2 class="hs-h">撮る前に見る</h2><div class="sx-l">${g1.map(row).join("")}</div></section>`:""}
+    ${mid||""}
+    ${g2.length?`<section class="hs"><h2 class="hs-h">もっとくわしく</h2><div class="sx-l sx-2">${g2.map(row).join("")}</div></section>`:""}
+    ${tail}</div>`;
+}
 function detail(it,c){FLAT=true;try{return detail0(it,c);}finally{FLAT=false;}}
 function detail0(it,c){
   const isClient=true;
   const head=`<button class="back" type="button" data-act="back">${ic("back",18)}${KINDS[it.kind]}の一覧へ</button>
-    <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(it.title)}</h1>
+    <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(String(it.title||"").replace(/【仮】\s*/g,""))}</h1>
     <p class="meta-line">${(it.kind==="live"?[["配信",it.liveDate]]:it.kind==="image"?[["撮影",it.shoot],["投稿",it.post]]:[["撮影",it.shoot],["初稿",it.firstDraft],["投稿",it.post]]).filter(x=>x[1]).map(([k,v])=>`<span>${k} <b>${k==="投稿"&&it.postTime?postWhen(it,c):fmtDate(v)}</b></span>`).join("")}</p>
     ${it.oneLine?`<p class="lead-one">${esc(it.oneLine)}</p>`:""}
     <div class="hd-acts"><button class="link-btn print-link" type="button" data-act="print" data-id="${it.id}">${ic("layout",16)} PDFで保存・印刷</button>${it.kind==="video"&&shootCuts(it).length?`<button class="btn btn-p btn-s shoot-btn" type="button" data-act="shootOpen">${ic("video",16)}撮影モードで開く</button>`:""}</div></div>`;
   const one="";
   if(it.kind==="live") return `<div class="stack">${head}${flowBox(it,isClient)}${one}${liveBody(it)}${consultInline(it)}</div>`;
-  if(it.kind==="image") return `<div class="stack">${head}${resultBox(it,c)}${flowBox(it,isClient)}${one}
-    ${it.prep?box("hand","お客様にお願いすること",`<dl class="kv"><dt>準備するもの</dt><dd>${esc(it.prep)}</dd></dl>`,"ask"):""}
-    ${anglesSection(it,ic("image",16))}
-    ${materialBox(it,c,isClient)}
-    ${purpose(it,"投稿の目的")}
-    ${box("image","仕上がりのイメージ",gallery(it.finishImages,"4/5",2,"finishImages"))}
-    ${box("list","1枚ずつの中身",slidesHtml(it.slides))}
-    ${captionBox(it,c,isClient)}
-    ${box("link","参考にする投稿",ref(it))}
-    ${consultInline(it)}</div>`;
+  if(it.kind==="image") return drillView(it,head,`${resultBox(it,c)}${flowBox(it,isClient)}`,[
+    ["sec-ask","お願いすること",it.prep?box("hand","お客様にお願いすること",`<dl class="kv"><dt>準備するもの</dt><dd>${esc(it.prep)}</dd></dl>`,"ask"):""],
+    ["sec-ang","撮り方の見本",(it.angles||[]).length?anglesSection(it,ic("image",16)):""],
+    ["sec-sl","1枚ずつの中身",box("list","1枚ずつの中身",slidesHtml(it.slides))],
+    ["sec-fin","仕上がりのイメージ",box("image","仕上がりのイメージ",gallery(it.finishImages,"4/5",2,"finishImages"))],
+    ["sec-pur","投稿の目的",purpose(it,"投稿の目的")],
+    ["sec-cap","キャプション",captionBox(it,c,isClient)],
+    ["sec-ref","参考にする投稿",box("link","参考にする投稿",ref(it))]],consultInline(it),materialBox(it,c,isClient));
   const askRows=[["user","演者",it.cast],["map","撮影場所",it.place],["box","準備するもの",it.prep],["chat","事前アンケート",it.survey],["bell","注意点",it.caution]].filter(x=>x[2]);
   const sc=[["冒頭","最初の数秒",it.opening],["本編","中身",it.body],["締め","最後",it.ending]].filter(x=>x[2]);
   const eimgs=it.editImages||[];
@@ -2723,11 +2782,10 @@ function detail0(it,c){
   if(it.aim) secs.push(["sec-aim","今月の狙い",n=>`<section class="vc v2" id="sec-aim">${H(n,"compass","今月の中での、この動画の狙い")}<div class="aim">${lines(it.aim)}</div></section>`]);
   if(ref(it)) secs.push(["sec-ref","参考動画",n=>`<section class="vc v2" id="sec-ref">${H(n,"link","参考にする動画","まねするところと、変えるところ")}${ref(it)}</section>`]);
   if(has(it.caption,it.hashtags)||it.captionEnNeed) secs.push(["sec-cap","キャプション",n=>captionBox(it,c,isClient,n)]);
-  return `<div class="stack dv">${head}${resultBox(it,c)}${flowBox(it,isClient)}${materialBox(it,c,isClient)}
-    ${secs.length>1?`<nav class="jn" aria-label="この台本の中身">${secs.map(([id,l],i)=>`<button type="button" data-act="jump" data-to="${id}"><b>${i+1}</b>${l}</button>`).join("")}</nav>`:""}
-    ${it.deliveryUrl&&(it.step||0)!==3?`<a class="btn btn-g btn-s" style="width:max-content" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext",16)}初稿・納品の動画を開く</a>`:""}
-    ${secs.map(([, ,f],i)=>f(i+1)).join("")}
-    ${consultInline(it)}</div>`;
+  const ord=["sec-ask","sec-ang","sec-flow","sec-edit","sec-pur","sec-gain","sec-aim","sec-ref","sec-cap"];
+  secs.sort((x,y)=>ord.indexOf(x[0])-ord.indexOf(y[0]));
+  return drillView(it,head,`${resultBox(it,c)}${flowBox(it,isClient)}${it.deliveryUrl&&(it.step||0)!==3?`<a class="btn btn-g btn-s" style="width:max-content" href="${esc(it.deliveryUrl)}" target="_blank" rel="noopener">${ic("ext",16)}初稿・納品の動画を開く</a>`:""}`,
+    secs.map(([id,l,f],i)=>[id,l,f(i+1)]),consultInline(it),materialBox(it,c,isClient));
 }
 function slidesHtml(t){
   const sl=String(t||"").split("\n").map(s=>s.trim()).filter(Boolean); if(!sl.length) return "";
@@ -3819,8 +3877,10 @@ app.addEventListener("click",e=>{
       if(S.busy)break;S.busy=true;
       (LIVE?rpc("sns_client_save_profile",{p_token:getToken(),p_profile:p}):Promise.resolve()).then(()=>{c.profile=p;S.meDraft=null;if(!LIVE)save();S.busy=false;toast("保存しました。ありがとうございます");render();}).catch(e=>{S.busy=false;toast(e.message);});break;}
     case "month":set({month:b.dataset.m,cmtEdit:null,cmtDraft:null});break;
-    case "open":set({itemId:b.dataset.id,confirmStep:null});scrollTo(0,0);break;
-    case "back":set({itemId:null});break;
+    case "open":set({itemId:b.dataset.id,confirmStep:null,sec:null});scrollTo(0,0);break;
+    case "back":set({itemId:null,sec:null});break;
+    case "secOpen":set({sec:b.dataset.s});scrollTo(0,0);break;
+    case "secBack":set({sec:null});scrollTo(0,0);break;
     case "jump":{const t=document.getElementById(b.dataset.to);if(t){const y=t.getBoundingClientRect().top+scrollY-80;scrollTo({top:y,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});}break;}
     case "adv":{const it=find(b.dataset.id);advance(it,b.dataset.by);render();celebrate(stateOf(it).done);break;}
     case "undo":{undo(find(b.dataset.id));render();break;}
