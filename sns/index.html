@@ -1841,6 +1841,34 @@ div.nx-1{cursor:default}
 .lh-i{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;align-items:center}.lh-i img{width:76px;height:76px;object-fit:contain}
 .sx-i{width:60px!important;height:60px!important;background:#fff!important;border-radius:0!important}.sx-i img{width:60px;height:60px;object-fit:contain;display:block}
 .sx{padding:10px 16px 10px 10px!important}
+
+/* 撮影モード：画像と文字を重ねない */
+.sm{grid-template-rows:auto auto minmax(0,1fr) auto!important}
+.sm-body{min-height:0}
+.sm-cut{display:flex!important;flex-direction:column;align-items:center;gap:14px;justify-items:stretch}
+.sm-img2{all:unset;box-sizing:border-box;cursor:zoom-in;position:relative;display:block;width:100%;max-width:520px;background:#000;border-radius:14px;overflow:hidden;flex:none}
+.sm-img2 img{display:block;width:100%;height:auto;max-height:46vh;object-fit:contain}
+.sm-zm{position:absolute;right:8px;bottom:8px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px}
+.sm-cut .sm-t{font-size:22px!important;margin:0}
+.sm-ang2{display:flex;gap:12px;align-items:center;text-align:left;background:rgba(255,255,255,.08);border-radius:14px;padding:10px 14px;width:100%;max-width:520px}
+.sm-ang2 img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex:none}
+.sm-ang2 b{display:block;color:#8FD3A6;font-size:15px}.sm-ang2 span{font-size:13.5px;line-height:1.6;opacity:.9}
+.sm-pl{display:block;font-weight:800;line-height:1.6}
+.lb{z-index:95!important}
+.sb-n2{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;margin-right:6px;vertical-align:1px}
+.cutgl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0;padding:0;list-style:none}
+@media (min-width:700px){.cutgl{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cutgl button{all:unset;box-sizing:border-box;cursor:zoom-in;display:block;width:100%;border-radius:12px;overflow:hidden;background:#eee}
+.cutgl img{display:block;width:100%;aspect-ratio:9/16;object-fit:cover}
+.cutgl figure{margin:0;display:grid;gap:4px}.cutgl figcaption{font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+.cut-ed{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.cut-ed li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:8px 10px;background:#fff}
+.cut-no{width:26px;height:26px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.cut-tx{display:grid;min-width:0}.cut-tx small{font-size:11.5px;color:var(--ink-3);font-weight:700}.cut-tx span{font-size:13.5px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.cut-sl{display:flex;gap:6px;align-items:center}.cut-sl img{width:45px;height:80px;object-fit:cover;border-radius:6px;background:#eee}
+.cut-bt{display:grid;gap:4px}.cut-bt button{width:30px;height:24px;border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;font-size:13px}.cut-bt button[disabled]{opacity:.3}
+.cut-add{display:grid;place-items:center;width:64px;height:80px;border:1.5px dashed var(--line-2);border-radius:8px;font-size:11.5px;color:var(--ink-3);cursor:pointer;text-align:center}.cut-add span{font-size:18px;line-height:1}.cut-add input{display:none}
+.cut-mv{display:grid;gap:6px;background:var(--gold-soft);border-radius:10px;padding:10px 12px;font-size:13px}
 </style>
 
 
@@ -2256,9 +2284,9 @@ function hydrate(){
   });
 }
 async function uploadImages(it){
-  for(const key of ["editImages","angleImages","finishImages","postImages","materialImages","thumb"]){
+  for(const key of ["editImages","angleImages","finishImages","postImages","materialImages","thumb","cutImages"]){
     for(const im of (it[key]||[])){
-      if(/^data:image\/(jpeg|png|webp)/.test(im.src)){const id=await rpc("sns_staff_save_image",{p_token:getToken(),p_client:it.clientId,p_data:im.src});IMGC[id]=im.src;im.src="img:"+id;}
+      if(im&&/^data:image\/(jpeg|png|webp)/.test(im.src)){const id=await rpc("sns_staff_save_image",{p_token:getToken(),p_client:it.clientId,p_data:im.src});IMGC[id]=im.src;im.src="img:"+id;}
     }
   }
 }
@@ -2774,7 +2802,7 @@ function detail0(it,c){
   const sc=[["冒頭","最初の数秒",it.opening],["本編","中身",it.body],["締め","最後",it.ending]].filter(x=>x[2]);
   const eimgs=it.editImages||[];
   const pur=[["誰に",it.purposeWho],["いちばん伝えたいこと",it.purposeWhat],["見た人にどう思ってほしいか",it.purposeFeel]].filter(x=>x[1]);
-  const sb=eimgs.length?`<div class="sb" style="--n:${eimgs.length}">${eimgs.map((im,i)=>`<figure class="sb-f"><button type="button" data-act="lb" data-g="editImages" data-i="${i}" aria-label="場面${i+1}を大きく見る"><img ${imgAttr(im.src)} alt="${esc(im.cap||"場面"+(i+1))}"><span class="sb-n">${i+1}</span></button>${im.cap?`<figcaption>${esc(im.cap)}</figcaption>`:""}</figure>`).join("")}</div>`:"";
+  const sb=eimgs.length?`<div class="sb" style="--n:${eimgs.length}">${eimgs.map((im,i)=>`<figure class="sb-f"><button type="button" data-act="lb" data-g="editImages" data-i="${i}" aria-label="場面${i+1}を大きく見る"><img ${imgAttr(im.src)} alt="${esc(im.cap||"場面"+(i+1))}"></button><figcaption><b class="sb-n2">${i+1}</b>${esc(im.cap||"")}</figcaption></figure>`).join("")}</div>`:"";
   const angTag=h=>h.replace(/【([^】]+)】/g,(m,n)=>{const a=ANGLES.find(x=>x.l===n||x.l.replace(/（.*）/,"")===n);return a?`<span class="atag"><img src="${angleImg(a.k)}" alt="">${esc(a.l)}</span>`:`<span class="atag">${esc(n)}</span>`;});
   const tl=sc.length?`<ol class="tl3">${sc.map(([k,sub,v])=>`<li><div class="tl3-k"><b>${k}</b><small>${sub}</small></div><div class="tl3-v">${angTag(lines(v))}</div></li>`).join("")}</ol>`:"";
   const angle=has(it.angleImages)?`<figure class="ang"><button type="button" data-act="lb" data-g="angleImages" data-i="0" aria-label="画角を大きく見る"><img ${imgAttr(it.angleImages[0].src)} alt="画角のイメージ"></button><figcaption><b>画角</b>${esc(it.angleImages[0].cap||"")}</figcaption></figure>`:"";
@@ -2785,7 +2813,7 @@ function detail0(it,c){
   const tels=(it.telops||[]).filter(t=>t&&t.x!=null);
   if(eimgs.length||it.editRequest||tels.length) secs.push(["sec-edit","編集のイメージ",n=>`<section class="vc v2" id="sec-edit">${H(n,"pen","編集のイメージと指示","仕上がりはこうなります。白梅デジタルがこの通りに編集します")}${sb?`<div class="v2-sub"><h3>場面ごとの仕上がり<small>タップで大きく見られます</small></h3>${sb}</div>`:""}${it.editRequest?`<div class="v2-sub"><h3>編集の指示</h3><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></div>`:""}${tels.length?`<div class="v2-sub"><h3>テロップ（字幕）を入れる場所<small>番号の場所に入ります</small></h3><div class="tel-view">${telFrame(tels,false)}${telList(tels)}</div></div>`:""}</section>`]);
   if((it.angles||[]).length) secs.push(["sec-ang","撮り方の見本",n=>anglesSection(it,n)]);
-  if(tl||angle) secs.push(["sec-flow","構成と画角",n=>`<section class="vc v2" id="sec-flow">${H(n,"layout","大まかな構成と画角","撮る順番と、カメラの置き方")}<div class="bp-flow">${tl}${angle}</div></section>`]);
+  if(tl||angle||(it.cutImages||[]).some(x=>x&&x.src)) secs.push(["sec-flow","構成と画角",n=>`<section class="vc v2" id="sec-flow">${H(n,"layout","大まかな構成と画角","撮る順番と、カメラの置き方")}<div class="bp-flow">${tl}${angle}</div>${(()=>{const cs=shootCuts(it).filter(x=>x.g==="cutImages");return cs.length?`<div class="v2-sub"><h3>カットごとの見本<small>タップで大きく見られます</small></h3><ul class="cutgl">${cs.map(x=>`<li><figure><button type="button" data-act="lb" data-g="cutImages" data-i="${x.gi}" aria-label="カット${x.gi+1}の見本を大きく見る"><img ${imgAttr(x.img.src)} alt=""></button><figcaption><b class="sb-n2">${x.gi+1}</b>${esc(x.t)}</figcaption></figure></li>`).join("")}</ul></div>`:"";})()}</section>`]);
   if(has(it.benefitClient,it.benefitViewer)) secs.push(["sec-gain","得られること",n=>`<section class="vc v2" id="sec-gain">${H(n,"gift","この動画で得られること")}<div class="gain">${it.benefitClient?`<div><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)}</div>`:""}${it.benefitViewer?`<div><h3>見る人にとって</h3>${lines(it.benefitViewer)}</div>`:""}</div></section>`]);
   if(it.aim) secs.push(["sec-aim","今月の狙い",n=>`<section class="vc v2" id="sec-aim">${H(n,"compass","今月の中での、この動画の狙い")}<div class="aim">${lines(it.aim)}</div></section>`]);
   if(ref(it)) secs.push(["sec-ref","参考動画",n=>`<section class="vc v2" id="sec-ref">${H(n,"link","参考にする動画","まねするところと、変えるところ")}${ref(it)}</section>`]);
@@ -3044,22 +3072,25 @@ function shootCuts(it){
   const sec=(k,v)=>String(v||"").split("\n").map(x=>x.trim()).filter(Boolean).forEach(t=>cuts.push({k,t:t.replace(/^→\s*/,""),sub:/^→/.test(t)}));
   sec("冒頭",it.opening);sec("本編",it.body);sec("締め",it.ending);
   const main=cuts.filter(x=>!x.sub);
-  main.forEach((x,k)=>{if(eimgs[k])x.img=eimgs[k];const a=angleFor(x.t,it.angles);if(a){x.ang=a;x.t=x.t.replace("【"+a.l+"】","").trim();}});
-  return main.length?main:eimgs.map((im,k)=>({k:"場面"+(k+1),t:im.cap||"",img:im}));
+  const cimgs=it.cutImages||[];const hasC=cimgs.some(x=>x&&x.src);
+  main.forEach((x,k)=>{if(hasC){if(cimgs[k]&&cimgs[k].src){x.img=cimgs[k];x.g="cutImages";x.gi=k;}}else if(eimgs[k]){x.img=eimgs[k];x.g="editImages";x.gi=k;}const a=angleFor(x.t,it.angles);if(a){x.ang=a;x.t=x.t.replace("【"+a.l+"】","").trim();}});
+  return main.length?main:eimgs.map((im,k)=>({k:"場面"+(k+1),t:im.cap||"",img:im,g:"editImages",gi:k}));
 }
 function shootMode(it,c){
   const cuts=shootCuts(it); const n=cuts.length; const i=Math.max(0,Math.min(S.shoot.i||0,n-1));
   const ck=S.shoot.ck||{};
   const prep=[["演者",it.cast],["場所",it.place],["準備するもの",it.prep],["注意点",it.caution]].filter(x=>x[1]);
   if(S.shoot.i===-1||!n) return `<div class="sm" role="dialog" aria-modal="true" aria-label="撮影モード"><div class="sm-top"><b>撮影の前に</b><span class="spacer"></span><button class="sm-x" type="button" data-act="shootClose" aria-label="閉じる">×</button></div>
-    <div class="sm-body"><h2>${esc(it.title)}</h2>${prep.length?`<ul class="sm-prep">${prep.map(([k,v],q)=>`<li><button type="button" class="${ck["p"+q]?"on":""}" data-act="shootCk" data-k="p${q}"><span class="sm-c" aria-hidden="true"></span><span><small>${k}</small>${esc(v)}</span></button></li>`).join("")}</ul>`:""}
+    <div class="sm-body"><h2>${esc(it.title)}</h2>${prep.length?`<ul class="sm-prep">${prep.map(([k,v],q)=>`<li><button type="button" class="${ck["p"+q]?"on":""}" data-act="shootCk" data-k="p${q}"><span class="sm-c" aria-hidden="true"></span><span><small>${k}</small>${String(v).split("\n").map(l=>l.trim()).filter(Boolean).map((l,_,a)=>`<span class="sm-pl">${a.length>1?"・":""}${esc(l)}</span>`).join("")}</span></button></li>`).join("")}</ul>`:""}
     ${(it.angles||[]).length?`<div class="sm-angs">${it.angles.filter(angleOf).map(k=>`<figure><img src="${angleImg(k)}" alt=""><figcaption>${esc(angleOf(k).l)}</figcaption></figure>`).join("")}</div>`:""}
     ${n?`<button class="btn btn-p btn-big" type="button" data-act="shootGo" data-i="0">1カット目から始める（全${n}カット）</button>`:`<p>この台本には、カットの書き込みがまだありません。</p>`}</div></div>`;
   const x=cuts[i];
   return `<div class="sm" role="dialog" aria-modal="true" aria-label="撮影モード">
     <div class="sm-top"><b>${i+1} / ${n}</b><span class="sm-k">${esc(x.k)}</span><span class="spacer"></span><button class="sm-x" type="button" data-act="shootClose" aria-label="閉じる">×</button></div>
     <div class="sm-bar"><i style="width:${(Object.keys(ck).filter(k=>/^c/.test(k)&&ck[k]).length)/n*100}%"></i></div>
-    <div class="sm-body">${x.img?`<div class="sm-img"><img ${imgAttr(x.img.src)} alt=""></div>`:""}${x.ang?`<div class="sm-ang"><img src="${angleImg(x.ang.k)}" alt=""><div><b>${esc(x.ang.l)}</b><span>${esc(x.ang.how)}</span></div></div>`:""}<p class="sm-t">${esc(x.t)}</p>
+    <div class="sm-body sm-cut">${x.img?`<button class="sm-img2" type="button" data-act="lb" data-id="${it.id}" data-g="${x.g}" data-i="${x.gi}" aria-label="見本を大きく見る"><img ${imgAttr(x.img.src)} alt=""><span class="sm-zm">タップで拡大</span></button>`:""}
+      <p class="sm-t">${esc(x.t)}</p>
+      ${x.ang?`<div class="sm-ang2">${x.img?"":`<img src="${angleImg(x.ang.k)}" alt="">`}<div><b>${esc(x.ang.l)}</b><span>${esc(x.ang.how)}</span></div></div>`:""}
       <button type="button" class="sm-done ${ck["c"+i]?"on":""}" data-act="shootCk" data-k="c${i}"><span class="sm-c" aria-hidden="true"></span>${ck["c"+i]?"撮れました":"撮れたら押す"}</button></div>
     <div class="sm-nav"><button class="btn btn-g" type="button" data-act="shootGo" data-i="${i-1}" ${i===0?"disabled":""}>前へ</button>${i<n-1?`<button class="btn btn-p" type="button" data-act="shootGo" data-i="${i+1}">次のカットへ</button>`:`<button class="btn btn-p" type="button" data-act="shootEnd" data-id="${it.id}">全部撮れました</button>`}</div></div>`;
 }
@@ -3439,7 +3470,7 @@ const FIELDS={
     {t:"この動画で得られること",i:"gift",f:[["benefitClient","お客様にとって","area"],["benefitViewer","見る人にとって","area"]]},
     {t:"今月の中での、この動画の狙い",i:"compass",f:[["aim","狙い","area"]]},
     {t:"参考にする動画",i:"link",f:[["refTitle","動画のタイトル","text"],["refUrl","URL","url"],["refUse","まねするところ","area"],["refDiff","変えるところ","area"]]},
-    {t:"大まかな構成と画角",i:"layout",lead:"1行に1カットで書くと、お客様の「撮影モード」で1カットずつ大きく出ます。場面ごとの仕上がり画像は、同じ順番でカットに付きます。",f:[["angles","撮り方の見本（えらんだ写真がお客様の台本に出ます）","angles"],["angleImages","画角イメージ（自分で撮った写真を使うとき）","images","9/16",1],["opening","冒頭（タイトル・タイトルコールの有無）","area"],["body","本編（1行に1カット。「【手元のアップ】」のように撮り方の名前を入れると、撮影モードでその写真が出ます）","area"],["ending","締め","area"]]},
+    {t:"大まかな構成と画角",i:"layout",lead:"1行に1カットで書くと、お客様の「撮影モード」で1カットずつ大きく出ます。いちばん下の「カットごとの見本画像」で、カットごとに写真やガイド画像を付けられます（枚数の上限なし）。",f:[["angles","撮り方の見本（えらんだ写真がお客様の台本に出ます）","angles"],["angleImages","画角イメージ（自分で撮った写真を使うとき）","images","9/16",1],["opening","冒頭（タイトル・タイトルコールの有無）","area"],["body","本編（1行に1カット。「【手元のアップ】」のように撮り方の名前を入れると、撮影モードでその写真が出ます）","area"],["ending","締め","area"],["cutImages","カットごとの見本画像（撮影モードで、そのカットに出ます）","cuts"]]},
     {t:"投稿の情報（時刻・型・キャプション）",i:"pen",lead:"投稿日・時刻・どこ向けか（タイムゾーン・言語）は、いちばん上の「どこ向け？」で決めます。",f:[["pattern","型（ランキング・クイズ・密着・開封 など）","pattern"],["caption","キャプション（日本語の案）","area"],["captionEnNeed","英語のキャプションをお客様に書いてもらう","check"],["captionEn","英語のキャプション（お客様が書いたもの）","area","お客様が送ると、ここに入ります"],["hashtags","ハッシュタグ","text"],["hashtagSet","ハッシュタグの組み合わせの名前（例：A・B）","text"]]},
     {t:"素材（お客様から届いたもの）",i:"box",lead:"お客様がGoogleドライブに入れて「入れました」を押すと、ここに入ります。中身を確かめたら「確認しました」に印をつけてください。",f:[["materialAt","届いた日","text"],["materialUrl","素材のリンク","url"],["materialNote","お客様からのひとこと","area"],["materialOk","中身を確認しました","check"]]},
     {t:"投稿したあと（URLと数字）",i:"review",lead:"投稿のURLと数字を入れると、お客様の画面に「投稿の結果」が出て、振り返りの合計・型ごとの比較が自動で計算されます。",f:[["postUrl","投稿のURL","url"],["metricsAt","数字を見た日","date"],["m_views","再生数","number"],["m_reach","リーチ","number"],["m_likes","いいね","number"],["m_comments","コメント","number"],["m_saves","保存","number"],["m_shares","シェア","number"],["m_follows","フォロー","number"]]},
@@ -3723,6 +3754,13 @@ function slotsHtml(key,ar,max){
 }
 function inputFor([key,lab,type,a,b]){
   const id="f_"+key, v=draft[key]??"";
+  if(type==="cuts"){const cuts=shootCuts(Object.assign({},draft,{cutImages:[],editImages:[]}));const arr=draft.cutImages||[];const hasC=arr.some(x=>x&&x.src);const canMove=!hasC&&(draft.editImages||[]).length;
+    return `<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">${lab}</span>
+      <p class="tiny muted">上の「冒頭・本編・締め」の1行が1カットです（「→」で始まる行は数えません）。行を書きかえたら、ほかの欄を1回押すと、ここに反映されます。</p>
+      ${canMove?`<div class="cut-mv"><span>いまは「編集イメージ」の画像が、順番にカットへ出ています。</span><button type="button" class="btn btn-g btn-s" data-act="cutFromEdit">編集イメージを、見本画像に移す</button></div>`:""}
+      ${cuts.length?`<ol class="cut-ed">${cuts.map((x,k)=>{const im=arr[k]&&arr[k].src?arr[k]:null;return `<li><span class="cut-no">${k+1}</span><div class="cut-tx"><small>${esc(x.k)}${x.ang?"・"+esc(x.ang.l):""}</small><span>${esc(x.t)}</span></div>
+        <div class="cut-sl">${im?`<img ${imgAttr(im.src)} alt=""><div class="cut-bt"><button type="button" data-act="cutMv" data-i="${k}" data-d="-1" ${k===0?"disabled":""} aria-label="前のカットへ移す">↑</button><button type="button" data-act="cutMv" data-i="${k}" data-d="1" ${k===cuts.length-1?"disabled":""} aria-label="次のカットへ移す">↓</button><button type="button" data-act="cutRm" data-i="${k}" aria-label="この画像を外す">×</button></div>`:`<label class="cut-add"><span>＋</span>画像<input type="file" accept="image/*" data-cutimg="${k}"></label>`}</div></li>`;}).join("")}</ol>`:`<p class="tiny muted">まだカットがありません。上の欄に1行ずつ書いてください。</p>`}
+      ${arr.slice(cuts.length).some(x=>x&&x.src)?`<p class="tiny" style="color:#b3261e">カットの数より多い画像があります（行を消したため）。保存すると、あまった画像は外れます。</p>`:""}</div>`;}
   if(type==="images") return `<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">${lab}（${(draft[key]||[]).length}/${b}枚）</span>${slotsHtml(key,a,b)}</div>`;
   if(type==="telops"){const tl=draft.telops||[];return `<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">${lab}</span><p class="tiny muted">縦長の画面の、入れたい場所をタップすると番号が付きます。灰色の部分はInstagramのボタンや説明文で隠れやすい場所です。</p><div class="tel-ed">${telFrame(tl,true)}<div class="tel-rows">${tl.map((t,k)=>`<div class="tel-row"><span class="tf-n">${k+1}</span><input type="text" data-tel="${k}" data-tk="t" value="${esc(t.t||"")}" placeholder="入れる文字（例：3位）"><input type="text" data-tel="${k}" data-tk="when" value="${esc(t.when||"")}" placeholder="いつ（例：0:03〜）" class="tel-w"><button type="button" class="btn btn-g btn-s" data-act="telRm" data-i="${k}" aria-label="${k+1}番を消す">×</button></div>`).join("")||`<p class="tiny muted">まだありません。</p>`}</div></div></div>`;}
   if(type==="angles"){const sel=draft[key]||[];return `<div class="field"><span style="font-size:14px;font-weight:700;color:var(--ink-2)">${lab}</span><div class="angpick">${ANGLES.map(a=>`<button type="button" class="ap ${sel.includes(a.k)?"on":""}" data-act="angPick" data-k="${a.k}"><img src="${angleImg(a.k)}" alt=""><span>${esc(a.l)}</span></button>`).join("")}</div></div>`;}
@@ -3772,6 +3810,7 @@ function readImage(file,cb){
 function saveDraft(){
   if(!isRep(draft.kind)&&!String(draft.title||"").trim()){toast(draft.kind==="meo_review"?"お名前を入れてください":"お題を入れてください");document.getElementById("f_title")?.focus();return;}
   draft.no=+draft.no||1; draft.step=+draft.step||0;
+  if(draft.kind==="video"&&Array.isArray(draft.cutImages)){const n=shootCuts(Object.assign({},draft,{cutImages:[],editImages:[]})).length;draft.cutImages=draft.cutImages.slice(0,n);while(draft.cutImages.length&&!draft.cutImages[draft.cutImages.length-1])draft.cutImages.pop();}
   if(draft.published&&!draft.publishedAt) draft.publishedAt=todayISO();
   if(!draft.published) delete draft.publishedAt;
   {const cl=client(draft.clientId)||{};const tz=itemTz(draft,cl);if(!isRep(draft.kind)&&!isMeo(draft.kind)&&draft.post&&draft.postTime&&tz!=="Asia/Tokyo"&&S.tzOk!==draft.post+draft.postTime+tz){S.confirm="tz";render();setTimeout(()=>document.querySelector(".tzc")?.scrollIntoView({block:"center"}),30);return;}}
@@ -3858,6 +3897,7 @@ app.addEventListener("change",e=>{
   const t=e.target;
   if(t.dataset.act==="fsel"){set({[t.dataset.k]:t.value});return;}
   if(t.dataset.img&&t.files.length){const key=t.dataset.img,max=+t.dataset.max;draft[key]=draft[key]||[];const files=[...t.files].slice(0,max-draft[key].length);let left=files.length;files.forEach(f=>readImage(f,u=>{draft[key].push({src:u,cap:""});if(--left===0)render();}));return;}
+  if(t.dataset.cutimg&&t.files.length){const k=+t.dataset.cutimg;readImage(t.files[0],u=>{draft.cutImages=draft.cutImages||[];while(draft.cutImages.length<k)draft.cutImages.push(null);draft.cutImages[k]={src:u};render();});return;}
   if(t.dataset.matimg&&t.files.length){const id=t.dataset.matimg;S.matImgs=S.matImgs&&S.matImgs.id===id?S.matImgs:{id,list:[]};const files=[...t.files].slice(0,10-S.matImgs.list.length);let left=files.length;files.forEach(f=>readImage(f,u=>{S.matImgs.list.push(u);if(--left===0)render();}));return;}
   if(t.dataset.bmsel){const its=matWaitItems(client(S.preview?S.previewClient:S.clientId));S.bulkSel=S.bulkSel||Object.fromEntries(its.map(i=>[i.id,true]));S.bulkSel[t.dataset.bmsel]=t.checked;render();return;}
   if(t.dataset.bk&&S.bk){S.bk[t.dataset.bk]=t.value;if(t.tagName==="SELECT")render();return;}
@@ -3925,6 +3965,9 @@ app.addEventListener("click",e=>{
         db.items.push(it);if(!LIVE)save();S.busy=false;S.ideaTx="";S.ideaImgs=[];toast("ネタを送りました。ありがとうございます");render();}catch(e){S.busy=false;toast(e.message);}})();break;}
     case "shootOpen":set({shoot:{i:-1,ck:(()=>{try{return JSON.parse(localStorage.getItem("shoot_"+S.itemId)||"{}");}catch(_){return {};}})()}});break;
     case "shootClose":set({shoot:null});break;
+    case "cutRm":{if(!draft)break;draft.cutImages=draft.cutImages||[];draft.cutImages[+b.dataset.i]=null;render();break;}
+    case "cutMv":{if(!draft)break;const a=draft.cutImages=draft.cutImages||[];const i=+b.dataset.i,j=i+(+b.dataset.d);if(j<0)break;while(a.length<=Math.max(i,j))a.push(null);[a[i],a[j]]=[a[j],a[i]];render();break;}
+    case "cutFromEdit":{if(!draft)break;draft.cutImages=(draft.editImages||[]).map(im=>({src:im.src}));draft.editImages=[];toast("編集イメージを、カットごとの見本画像に移しました。保存すると反映されます");render();break;}
     case "shootGo":set({shoot:{...S.shoot,i:+b.dataset.i}});break;
     case "shootCk":{const ck={...(S.shoot.ck||{})};ck[b.dataset.k]=!ck[b.dataset.k];try{localStorage.setItem("shoot_"+S.itemId,JSON.stringify(ck));}catch(_){}set({shoot:{...S.shoot,ck}});break;}
     case "shootEnd":{const it=find(b.dataset.id);S.shoot=null;if((it.step||0)===1&&!it.shotAt&&S.role==="client"){it.shotAt=todayStr();it.turnAt=todayISO();persistItem(it,["shotAt","turnAt"]);toast("撮影おつかれさまでした。次は素材を送ってください");}render();setTimeout(()=>{const t=document.getElementById("mat_"+it.id);if(t)scrollTo({top:t.getBoundingClientRect().top+scrollY-80});},60);break;}
