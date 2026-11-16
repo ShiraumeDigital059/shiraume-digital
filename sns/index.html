@@ -1871,6 +1871,38 @@ div.nx-1{cursor:default}
 .cut-mv{display:grid;gap:6px;background:var(--gold-soft);border-radius:10px;padding:10px 12px;font-size:13px}
 .ask-ul{margin:2px 0 0!important;padding:0 0 0 1.2em!important;display:grid;gap:4px;font-size:16px;font-weight:700;line-height:1.6;list-style:disc}.ask-ul li{margin:0!important;padding:0!important}.ask-ul li::before{display:none!important}
 .kv dd{white-space:pre-line}
+
+/* カットごとのカード（編集の指示書） */
+.tl3,.tl3-v,.tl3-v li,.v2 p,.v2 li,.vc{overflow-wrap:anywhere;word-break:break-word;min-width:0}
+main.wrap{overflow-x:clip}
+.cc-sum{display:flex;gap:14px;align-items:baseline;font-size:13.5px;color:var(--ink-2);font-weight:700}.cc-sum b{font-size:22px;color:var(--ink);margin-right:2px}
+.cc-jump{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none;position:sticky;top:60px;z-index:4;background:var(--ap-bg,#f5f5f7)}
+.cc-jump::-webkit-scrollbar{display:none}
+.cc-jump button{flex:none;min-width:40px;height:34px;border-radius:999px;border:1px solid #d2d2d7;background:#fff;font:inherit;font-weight:700;font-size:13.5px;color:var(--ink);cursor:pointer}
+.cc-list{display:grid;gap:14px}
+.cc{background:#fff;border:1px solid #e3e3e8;border-radius:18px;overflow:hidden;scroll-margin-top:110px}
+.cc-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;background:#EEF4EF;border-bottom:1px solid #DCE8DF}
+.cc-no{background:#127A4B;color:#fff;font-weight:800;font-size:13.5px;padding:3px 11px;border-radius:999px;letter-spacing:.04em;white-space:nowrap}
+.cc-tm{display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}.cc-tm b{font-size:17px}.cc-tm small{font-size:12.5px;color:var(--ink-3);font-weight:600}
+.cc-sec{margin-left:auto;font-size:11.5px;font-weight:800;color:#3D6B52;border:1px solid #BFD8C8;border-radius:999px;padding:1px 9px;background:#fff}
+.cc-im{all:unset;display:block;cursor:zoom-in;background:#000;width:100%}.cc-im img{display:block;width:100%;max-height:300px;object-fit:contain}
+.cc-l{margin:0;display:grid}
+.cc-r{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;padding:11px 14px;border-top:1px solid #f0f0f2;align-items:start}
+.cc-r:first-child{border-top:0}
+.cc-r dt{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:var(--ink-3);padding-top:2px;white-space:nowrap}.cc-r dt .ico{flex:none}
+.cc-r dd{margin:0;font-size:15px;line-height:1.7;display:grid;gap:8px;justify-items:start;min-width:0;overflow-wrap:anywhere}
+.cc-r.is-tel dd span{font-weight:800;background:#FFF6E2;border-left:3px solid #E0A030;padding:6px 10px;border-radius:0 8px 8px 0;display:block}
+.cc-r.is-mat dd span{font-weight:700}
+.cc-open{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:#0B6B45!important;background:#E6F1EA;border-radius:999px;padding:6px 14px;text-decoration:none}
+.cc-a{color:#0B6B45;font-weight:700}
+.cc-note{margin:0;padding:11px 14px;border-top:1px dashed #e3e3e8;background:#FAFAF7;font-size:13.5px;line-height:1.7;color:var(--ink-2)}
+.cc-note b{display:inline-block;font-size:11.5px;color:#9C7A26;border:1px solid #E0CE9B;border-radius:999px;padding:0 8px;margin-right:8px}
+.cc-free{margin:0;padding:11px 14px;font-size:15px;line-height:1.7}
+@media (max-width:420px){.cc-r{grid-template-columns:1fr;gap:3px}}
+.sm-rows{margin:0;display:grid;gap:8px;width:100%;max-width:520px;text-align:left}
+.sm-rows div{background:rgba(255,255,255,.08);border-radius:12px;padding:10px 14px;display:grid;gap:2px}
+.sm-rows dt{font-size:12px;font-weight:800;color:#8FD3A6}.sm-rows dd{margin:0;font-size:16px;line-height:1.6;display:grid;gap:8px;justify-items:start;overflow-wrap:anywhere}
+.sm-note{margin:0;font-size:14px;opacity:.85;max-width:520px;text-align:left;line-height:1.6}
 </style>
 
 
@@ -2789,7 +2821,7 @@ function detail0(it,c){
     <div class="title-area"><div class="k">${esc(label(it))}${chip(it)}</div><h1>${esc(String(it.title||"").replace(/【仮】\s*/g,""))}</h1>
     <p class="meta-line">${(it.kind==="live"?[["配信",it.liveDate]]:it.kind==="image"?[["撮影",it.shoot],["投稿",it.post]]:[["撮影",it.shoot],["初稿",it.firstDraft],["投稿",it.post]]).filter(x=>x[1]).map(([k,v])=>`<span>${k} <b>${k==="投稿"&&it.postTime?postWhen(it,c):fmtDate(v)}</b></span>`).join("")}</p>
     ${it.oneLine?`<p class="lead-one">${esc(it.oneLine)}</p>`:""}
-    <div class="hd-acts"><button class="link-btn print-link" type="button" data-act="print" data-id="${it.id}">${ic("layout",16)} PDFで保存・印刷</button>${it.kind==="video"&&shootCuts(it).length?`<button class="btn btn-p btn-s shoot-btn" type="button" data-act="shootOpen">${ic("video",16)}撮影モードで開く</button>`:""}</div></div>`;
+    <div class="hd-acts"><button class="link-btn print-link" type="button" data-act="print" data-id="${it.id}">${ic("layout",16)} PDFで保存・印刷</button>${it.kind==="video"&&shootCuts(it).length?`<button class="btn btn-p btn-s shoot-btn" type="button" data-act="shootOpen">${ic("video",16)}${structCuts(it).length?"1カットずつ見る":"撮影モードで開く"}</button>`:""}</div></div>`;
   const one="";
   if(it.kind==="live") return `<div class="stack">${head}${flowBox(it,isClient)}${one}${liveBody(it)}${consultInline(it)}</div>`;
   if(it.kind==="image") return drillView(it,head,`${resultBox(it,c)}${flowBox(it,isClient)}`,[
@@ -2815,7 +2847,7 @@ function detail0(it,c){
   const tels=(it.telops||[]).filter(t=>t&&t.x!=null);
   if(eimgs.length||it.editRequest||tels.length) secs.push(["sec-edit","編集のイメージ",n=>`<section class="vc v2" id="sec-edit">${H(n,"pen","編集のイメージと指示","仕上がりはこうなります。白梅デジタルがこの通りに編集します")}${sb?`<div class="v2-sub"><h3>場面ごとの仕上がり<small>タップで大きく見られます</small></h3>${sb}</div>`:""}${it.editRequest?`<div class="v2-sub"><h3>編集の指示</h3><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></div>`:""}${tels.length?`<div class="v2-sub"><h3>テロップ（字幕）を入れる場所<small>番号の場所に入ります</small></h3><div class="tel-view">${telFrame(tels,false)}${telList(tels)}</div></div>`:""}</section>`]);
   if((it.angles||[]).length) secs.push(["sec-ang","撮り方の見本",n=>anglesSection(it,n)]);
-  if(tl||angle||(it.cutImages||[]).some(x=>x&&x.src)) secs.push(["sec-flow","構成と画角",n=>`<section class="vc v2" id="sec-flow">${H(n,"layout","大まかな構成と画角","撮る順番と、カメラの置き方")}<div class="bp-flow">${tl}${angle}</div>${(()=>{const cs=shootCuts(it).filter(x=>x.g==="cutImages");return cs.length?`<div class="v2-sub"><h3>カットごとの見本<small>タップで大きく見られます</small></h3><ul class="cutgl">${cs.map(x=>`<li><figure><button type="button" data-act="lb" data-g="cutImages" data-i="${x.gi}" aria-label="カット${x.gi+1}の見本を大きく見る"><img ${imgAttr(x.img.src)} alt=""></button><figcaption><b class="sb-n2">${x.gi+1}</b>${esc(x.t)}</figcaption></figure></li>`).join("")}</ul></div>`:"";})()}</section>`]);
+  if(tl||angle||(it.cutImages||[]).some(x=>x&&x.src)) secs.push(["sec-flow","構成と画角",n=>`<section class="vc v2" id="sec-flow">${H(n,"layout","大まかな構成と画角","撮る順番と、カメラの置き方")}${structCuts(it).length?cutCards(it)+(angle?`<div class="bp-flow">${angle}</div>`:""):`<div class="bp-flow">${tl}${angle}</div>`}${(()=>{const cs=structCuts(it).length?[]:shootCuts(it).filter(x=>x.g==="cutImages"&&x.img);return cs.length?`<div class="v2-sub"><h3>カットごとの見本<small>タップで大きく見られます</small></h3><ul class="cutgl">${cs.map(x=>`<li><figure><button type="button" data-act="lb" data-g="cutImages" data-i="${x.gi}" aria-label="カット${x.gi+1}の見本を大きく見る"><img ${imgAttr(x.img.src)} alt=""></button><figcaption><b class="sb-n2">${x.gi+1}</b>${esc(x.t)}</figcaption></figure></li>`).join("")}</ul></div>`:"";})()}</section>`]);
   if(has(it.benefitClient,it.benefitViewer)) secs.push(["sec-gain","得られること",n=>`<section class="vc v2" id="sec-gain">${H(n,"gift","この動画で得られること")}<div class="gain">${it.benefitClient?`<div><h3>${esc(c.name)} 様にとって</h3>${lines(it.benefitClient)}</div>`:""}${it.benefitViewer?`<div><h3>見る人にとって</h3>${lines(it.benefitViewer)}</div>`:""}</div></section>`]);
   if(it.aim) secs.push(["sec-aim","今月の狙い",n=>`<section class="vc v2" id="sec-aim">${H(n,"compass","今月の中での、この動画の狙い")}<div class="aim">${lines(it.aim)}</div></section>`]);
   if(ref(it)) secs.push(["sec-ref","参考動画",n=>`<section class="vc v2" id="sec-ref">${H(n,"link","参考にする動画","まねするところと、変えるところ")}${ref(it)}</section>`]);
@@ -3068,7 +3100,43 @@ function captionBox(it,c,isClient,n){
   </section>`;
 }
 /* 撮影モード：1カットずつ大きく出す */
+/* 「【カット01】…／素材｜…」の形で書かれた台本を、カットごとのカードにする */
+function structCuts(it){
+  const out=[];let any=false;
+  [["冒頭",it.opening],["本編",it.body],["締め",it.ending]].forEach(([sec,v])=>{
+    let cur=null;
+    String(v||"").split("\n").forEach(raw=>{const l=raw.replace(/^[\s　]+|[\s　]+$/g,"");if(!l)return;
+      const m=l.match(/^【カット\s*0*(\d+)】\s*(.*)$/);
+      if(m){any=true;cur={sec,no:+m[1],time:m[2],rows:[],notes:[],free:[]};out.push(cur);return;}
+      if(!cur){cur={sec,no:0,time:"",rows:[],notes:[],free:[]};out.push(cur);}
+      if(/^→/.test(l)){cur.notes.push(l.replace(/^→\s*/,""));return;}
+      if(/^https?:\/\/\S+$/.test(l)){const r=cur.rows[cur.rows.length-1];(r?r.urls:(cur.urls=cur.urls||[])).push(l);return;}
+      const kv=l.match(/^([^｜|：:]{1,8})[｜|]\s*(.*)$/);
+      if(kv){cur.rows.push({k:kv[1].trim(),v:kv[2],urls:[]});return;}
+      const r=cur.rows[cur.rows.length-1];if(r)r.v+=(r.v?"\n":"")+l;else cur.free.push(l);});});
+  return any?out.filter(c=>c.no||c.rows.length||c.free.length||c.notes.length):[];
+}
+const linkify=t=>esc(t).replace(/https?:\/\/[^\s<]+/g,u=>`<a class="cc-a" href="${u}" target="_blank" rel="noopener">リンクを開く</a>`);
+const CC_IC={"素材":"box","切る位置":"layout","動き":"compass","画角":"video","テロップ":"chat","音":"mic"};
+function cutCard(c,it,k){
+  const tm=String(c.time||"").match(/^(.*?)(（[^）]*）)?$/)||[];
+  const im=(it.cutImages||[])[k];
+  return `<article class="cc" id="cc_${k}"><header class="cc-h"><span class="cc-no">${c.no?"カット "+String(c.no).padStart(2,"0"):esc(c.sec)}</span><span class="cc-tm"><b>${esc((tm[1]||"").trim())}</b>${tm[2]?`<small>${esc(tm[2])}</small>`:""}</span><span class="cc-sec">${esc(c.sec)}</span></header>
+    ${im&&im.src?`<button type="button" class="cc-im" data-act="lb" data-id="${it.id}" data-g="cutImages" data-i="${k}" aria-label="見本を大きく見る"><img ${imgAttr(im.src)} alt=""></button>`:""}
+    ${c.free.length?`<p class="cc-free">${c.free.map(linkify).join("<br>")}</p>`:""}
+    ${c.rows.length?`<dl class="cc-l">${c.rows.map(r=>`<div class="cc-r ${r.k==="テロップ"?"is-tel":""} ${r.k==="素材"?"is-mat":""}"><dt>${ic(CC_IC[r.k]||"list",15)}${esc(r.k)}</dt><dd><span>${linkify(r.v).replace(/\n/g,"<br>")}</span>${r.urls.map(u=>`<a class="cc-open" href="${esc(u)}" target="_blank" rel="noopener">${ic("ext",15)}素材を開く</a>`).join("")}</dd></div>`).join("")}</dl>`:""}
+    ${c.notes.map(n=>`<p class="cc-note"><b>ねらい</b>${esc(n)}</p>`).join("")}</article>`;
+}
+function cutCards(it){
+  const cs=structCuts(it);if(!cs.length)return "";
+  const last=cs.map(c=>String(c.time).match(/〜\s*([\d.]+)\s*秒/)).filter(Boolean).pop();
+  return `<div class="cc-sum"><span><b>${cs.length}</b>カット</span>${last?`<span>合計 <b>${esc(last[1])}</b>秒</span>`:""}</div>
+    <nav class="cc-jump" aria-label="カットへ移動">${cs.map((c,k)=>`<button type="button" data-act="jump" data-to="cc_${k}">${c.no?String(c.no).padStart(2,"0"):k+1}</button>`).join("")}</nav>
+    <div class="cc-list">${cs.map((c,k)=>cutCard(c,it,k)).join("")}</div>`;
+}
 function shootCuts(it){
+  const sc=structCuts(it);
+  if(sc.length){const ci=it.cutImages||[];return sc.map((c,k)=>({k:c.sec,t:(c.no?"カット"+String(c.no).padStart(2,"0")+"　":"")+c.time,sc:c,img:ci[k]&&ci[k].src?ci[k]:null,g:"cutImages",gi:k}));}
   const cuts=[];
   const eimgs=it.editImages||[];
   const sec=(k,v)=>String(v||"").split("\n").map(x=>x.trim()).filter(Boolean).forEach(t=>cuts.push({k,t:t.replace(/^→\s*/,""),sub:/^→/.test(t)}));
@@ -3092,6 +3160,7 @@ function shootMode(it,c){
     <div class="sm-bar"><i style="width:${(Object.keys(ck).filter(k=>/^c/.test(k)&&ck[k]).length)/n*100}%"></i></div>
     <div class="sm-body sm-cut">${x.img?`<button class="sm-img2" type="button" data-act="lb" data-id="${it.id}" data-g="${x.g}" data-i="${x.gi}" aria-label="見本を大きく見る"><img ${imgAttr(x.img.src)} alt=""><span class="sm-zm">タップで拡大</span></button>`:""}
       <p class="sm-t">${esc(x.t)}</p>
+      ${x.sc?`<dl class="sm-rows">${x.sc.rows.map(r=>`<div><dt>${esc(r.k)}</dt><dd>${linkify(r.v).replace(/\n/g,"<br>")}${r.urls.map(u=>`<a class="cc-open" href="${esc(u)}" target="_blank" rel="noopener">${ic("ext",15)}素材を開く</a>`).join("")}</dd></div>`).join("")}</dl>${x.sc.notes.map(n=>`<p class="sm-note">${esc(n)}</p>`).join("")}`:""}
       ${x.ang?`<div class="sm-ang2">${x.img?"":`<img src="${angleImg(x.ang.k)}" alt="">`}<div><b>${esc(x.ang.l)}</b><span>${esc(x.ang.how)}</span></div></div>`:""}
       <button type="button" class="sm-done ${ck["c"+i]?"on":""}" data-act="shootCk" data-k="c${i}"><span class="sm-c" aria-hidden="true"></span>${ck["c"+i]?"撮れました":"撮れたら押す"}</button></div>
     <div class="sm-nav"><button class="btn btn-g" type="button" data-act="shootGo" data-i="${i-1}" ${i===0?"disabled":""}>前へ</button>${i<n-1?`<button class="btn btn-p" type="button" data-act="shootGo" data-i="${i+1}">次のカットへ</button>`:`<button class="btn btn-p" type="button" data-act="shootEnd" data-id="${it.id}">全部撮れました</button>`}</div></div>`;
