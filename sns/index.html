@@ -1869,6 +1869,8 @@ div.nx-1{cursor:default}
 .cut-bt{display:grid;gap:4px}.cut-bt button{width:30px;height:24px;border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;font-size:13px}.cut-bt button[disabled]{opacity:.3}
 .cut-add{display:grid;place-items:center;width:64px;height:80px;border:1.5px dashed var(--line-2);border-radius:8px;font-size:11.5px;color:var(--ink-3);cursor:pointer;text-align:center}.cut-add span{font-size:18px;line-height:1}.cut-add input{display:none}
 .cut-mv{display:grid;gap:6px;background:var(--gold-soft);border-radius:10px;padding:10px 12px;font-size:13px}
+.ask-ul{margin:2px 0 0!important;padding:0 0 0 1.2em!important;display:grid;gap:4px;font-size:16px;font-weight:700;line-height:1.6;list-style:disc}.ask-ul li{margin:0!important;padding:0!important}.ask-ul li::before{display:none!important}
+.kv dd{white-space:pre-line}
 </style>
 
 
@@ -2808,7 +2810,7 @@ function detail0(it,c){
   const angle=has(it.angleImages)?`<figure class="ang"><button type="button" data-act="lb" data-g="angleImages" data-i="0" aria-label="画角を大きく見る"><img ${imgAttr(it.angleImages[0].src)} alt="画角のイメージ"></button><figcaption><b>画角</b>${esc(it.angleImages[0].cap||"")}</figcaption></figure>`:"";
   const H=(n,icon,title,sub,cls)=>`<h2 class="vh"><span class="vh-n">${n}</span><span class="vh-t">${title}${sub?`<small>${sub}</small>`:""}</span>${cls||""}</h2>`;
   const secs=[];
-  if(askRows.length) secs.push(["sec-ask","お願いすること",n=>`<section class="vc v2 ask2" id="sec-ask">${H(n,"hand","お客様にお願いすること","撮影の前に、ここだけ確認してください",'<span class="you-tag">お願い</span>')}<div class="ask-g">${askRows.map(([i,k,v])=>`<div class="ask-i"><span class="ai">${ic(i,18)}</span><div><span class="ak">${k}</span><p>${esc(v)}</p></div></div>`).join("")}</div></section>`]);
+  if(askRows.length) secs.push(["sec-ask","お願いすること",n=>`<section class="vc v2 ask2" id="sec-ask">${H(n,"hand","お客様にお願いすること","撮影の前に、ここだけ確認してください",'<span class="you-tag">お願い</span>')}<div class="ask-g">${askRows.map(([i,k,v])=>`<div class="ask-i"><span class="ai">${ic(i,18)}</span><div><span class="ak">${k}</span>${(l=>l.length>1?`<ul class="ask-ul">${l.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:`<p>${esc(v)}</p>`)(String(v).split("\n").map(x=>x.trim()).filter(Boolean))}</div></div>`).join("")}</div></section>`]);
   if(pur.length) secs.push(["sec-pur","動画の目的",n=>`<section class="vc v2" id="sec-pur">${H(n,"target","動画の目的","この動画で、誰に何を届けるか")}<ol class="pur2">${pur.map(([k,v],i)=>`<li><span class="p2-k">${k}</span><p>${esc(v)}</p></li>`).join("")}</ol></section>`]);
   const tels=(it.telops||[]).filter(t=>t&&t.x!=null);
   if(eimgs.length||it.editRequest||tels.length) secs.push(["sec-edit","編集のイメージ",n=>`<section class="vc v2" id="sec-edit">${H(n,"pen","編集のイメージと指示","仕上がりはこうなります。白梅デジタルがこの通りに編集します")}${sb?`<div class="v2-sub"><h3>場面ごとの仕上がり<small>タップで大きく見られます</small></h3>${sb}</div>`:""}${it.editRequest?`<div class="v2-sub"><h3>編集の指示</h3><ul class="chk">${String(it.editRequest).split("\n").map(x=>x.trim()).filter(Boolean).map(x=>`<li>${esc(x.replace(/^→\s*/,""))}</li>`).join("")}</ul></div>`:""}${tels.length?`<div class="v2-sub"><h3>テロップ（字幕）を入れる場所<small>番号の場所に入ります</small></h3><div class="tel-view">${telFrame(tels,false)}${telList(tels)}</div></div>`:""}</section>`]);
@@ -3464,7 +3466,7 @@ const FIELDS={
   video:[
     {t:"ひとことで言うと",i:"chat",f:[["oneLine","ひとことで言うと","area","例：はい・いいえで答えられる質問をして、市町村を当てるクイズ"],["thumb","サムネイル（お客様の一覧に出る写真・1枚）","images","1/1",1]]},
     {t:"日程",i:"cal",f:[["shoot","撮影日","date"],["firstDraft","初稿の共有日","date"],["post","投稿予定日","date"],["deadline","納期","date"],["deliveryUrl","初稿・納品のURL","url"]]},
-    {t:"お客様にお願いすること",i:"hand",lead:"お客様の画面では、金色の枠で目立つように出ます。",f:[["cast","演者","text"],["place","撮影場所","text"],["prep","準備するもの","text"],["survey","事前アンケート","text"],["caution","注意点・懸念点","text"]]},
+    {t:"お客様にお願いすること",i:"hand",lead:"お客様の画面では、金色の枠で目立つように出ます。",f:[["cast","演者","text"],["place","撮影場所","text"],["prep","準備するもの（1行に1つ）","area"],["survey","事前アンケート","text"],["caution","注意点・懸念点（1行に1つ）","area"]]},
     {t:"動画の目的",i:"target",f:[["purposeWho","どんな状態の、誰に","text"],["purposeWhat","いちばん伝えたいこと","text"],["purposeFeel","見た人に、どう思ってほしいか","text"]]},
     {t:"編集のイメージと指示",i:"pen",lead:"画像は4枚まで。縦長（9:16）の枠に合わせて表示され、お客様はタップで拡大できます。",f:[["editImages","編集イメージ","images","9/16",4],["editRequest","編集の指示（1行ずつ。「→」で始まる行は補足）","area"],["telops","テロップ（字幕）を入れる場所","telops"]]},
     {t:"この動画で得られること",i:"gift",f:[["benefitClient","お客様にとって","area"],["benefitViewer","見る人にとって","area"]]},
@@ -3479,7 +3481,7 @@ const FIELDS={
   image:[
     {t:"ひとことで言うと",i:"chat",f:[["oneLine","ひとことで言うと","area"],["thumb","サムネイル（お客様の一覧に出る写真・1枚）","images","1/1",1],["makeCount","白梅が制作する枚数（プランの画像制作に数えます）","number"]]},
     {t:"日程",i:"cal",f:[["shoot","写真撮影日","date"],["post","投稿予定日","date"]]},
-    {t:"お客様にお願いすること",i:"hand",f:[["prep","準備するもの","text"],["angles","撮り方の見本（えらんだ写真がお客様の台本に出ます）","angles"]]},
+    {t:"お客様にお願いすること",i:"hand",f:[["prep","準備するもの（1行に1つ）","area"],["angles","撮り方の見本（えらんだ写真がお客様の台本に出ます）","angles"]]},
     {t:"投稿の目的",i:"target",f:[["purposeWho","どんな状態の、誰に","text"],["purposeWhat","いちばん伝えたいこと","text"],["purposeFeel","見た人に、どう思ってほしいか","text"]]},
     {t:"仕上がりのイメージ",i:"image",lead:"画像は4枚まで。投稿と同じ縦長（4:5）の枠に合わせて表示されます。",f:[["finishImages","仕上がりイメージ","images","4/5",4]]},
     {t:"1枚ずつの中身",i:"list",f:[["slides","1行に1枚（例：1枚目：表紙「…」）","area"]]},
@@ -3492,7 +3494,7 @@ const FIELDS={
   live:[
     {t:"ひとことで言うと",i:"chat",f:[["oneLine","ひとことで言うと","area"]]},
     {t:"日程",i:"cal",f:[["liveDate","配信日","date"],["liveTime","開始時間","time"],["duration","配信の長さ（分）","number"],["notice","告知の投稿日","date"]]},
-    {t:"お客様にお願いすること",i:"hand",f:[["cast","出演","text"],["place","配信場所","text"],["prep","準備するもの","text"],["caution","注意点","text"]]},
+    {t:"お客様にお願いすること",i:"hand",f:[["cast","出演","text"],["place","配信場所","text"],["prep","準備するもの（1行に1つ）","area"],["caution","注意点（1行に1つ）","area"]]},
     {t:"ライブの目的",i:"target",f:[["purposeWho","どんな状態の、誰に","text"],["purposeWhat","いちばん伝えたいこと","text"],["purposeFeel","見た人に、どう思ってほしいか","text"]]},
     {t:"当日の流れ",i:"clock",lead:"1行に1つ。「時間｜やること｜話すこと」の形で書くと、お客様の画面で時間割になります。",f:[["timeline","例：0:00｜オープニング｜あいさつと今日の内容","area"]]},
     {t:"紹介する商品",i:"box",f:[["products","1行に1つ","area"]]},
